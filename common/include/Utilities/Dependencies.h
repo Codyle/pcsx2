@@ -66,16 +66,16 @@
 	static __fi enumName& operator--	( enumName& src ) { src = (enumName)((int)src-1); return src; } \
 	static __fi enumName operator++	( enumName& src, int ) { enumName orig = src; src = (enumName)((int)src+1); return orig; } \
 	static __fi enumName operator--	( enumName& src, int ) { enumName orig = src; src = (enumName)((int)src-1); return orig; } \
- \
+	\
 	static __fi bool operator<	( const enumName& left, const pxEnumEnd_t& )	{ return (int)left < enumName##_COUNT; } \
 	static __fi bool operator!=( const enumName& left, const pxEnumEnd_t& )	{ return (int)left != enumName##_COUNT; } \
 	static __fi bool operator==( const enumName& left, const pxEnumEnd_t& )	{ return (int)left == enumName##_COUNT; } \
- \
+	\
 	static __fi bool EnumIsValid( enumName id ) { \
 		return ((int)id >= enumName##_FIRST) && ((int)id < enumName##_COUNT); } \
 	static __fi bool EnumAssert( enumName id ) { \
 		return pxAssert( EnumIsValid(id) ); } \
- \
+	\
 	extern const wxChar* EnumToString( enumName id )
 
 class pxEnumEnd_t { };
@@ -123,7 +123,7 @@ protected:
 	bool*	m_boolme;
 
 public:
-	ScopedBool(bool& boolme)
+	ScopedBool(bool &boolme)
 	{
 		boolme = true;
 		m_boolme = &boolme;
@@ -223,12 +223,12 @@ static const s64 _4gb		= _1gb * 4;
 #define pxE_dev(english)		pxExpandMsg( (english) )
 
 
-extern const wxChar* __fastcall pxExpandMsg( const wxChar* englishContent );
-extern const wxChar* __fastcall pxGetTranslation( const wxChar* message );
-extern bool pxIsEnglish( int id );
+extern const wxChar* __fastcall pxExpandMsg(const wxChar* englishContent);
+extern const wxChar* __fastcall pxGetTranslation(const wxChar* message);
+extern bool pxIsEnglish(int id);
 
-extern wxString fromUTF8( const char* src );
-extern wxString fromAscii( const char* src );
+extern wxString fromUTF8(const char* src);
+extern wxString fromAscii(const char* src);
 
 
 #include "Utilities/Assertions.h"

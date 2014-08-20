@@ -23,80 +23,95 @@
 #define wxACTION_SPIN_DEC    _T("dec")
 
 class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase,
-                                 public wxControlWithArrows
+	public wxControlWithArrows
 {
 public:
-    wxSpinButton();
-    wxSpinButton(wxWindow *parent,
-                 wxWindowID id = wxID_ANY,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
-                 const wxString& name = wxSPIN_BUTTON_NAME);
+	wxSpinButton();
+	wxSpinButton(wxWindow *parent,
+	             wxWindowID id = wxID_ANY,
+	             const wxPoint &pos = wxDefaultPosition,
+	             const wxSize &size = wxDefaultSize,
+	             long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
+	             const wxString &name = wxSPIN_BUTTON_NAME);
 
-    bool Create(wxWindow *parent,
-                wxWindowID id = wxID_ANY,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
-                const wxString& name = wxSPIN_BUTTON_NAME);
+	bool Create(wxWindow *parent,
+	            wxWindowID id = wxID_ANY,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
+	            const wxString &name = wxSPIN_BUTTON_NAME);
 
-    // implement wxSpinButtonBase methods
-    virtual int GetValue() const;
-    virtual void SetValue(int val);
-    virtual void SetRange(int minVal, int maxVal);
+	// implement wxSpinButtonBase methods
+	virtual int GetValue() const;
+	virtual void SetValue(int val);
+	virtual void SetRange(int minVal, int maxVal);
 
-    // implement wxControlWithArrows methods
-    virtual wxRenderer *GetRenderer() const { return m_renderer; }
-    virtual wxWindow *GetWindow() { return this; }
-    virtual bool IsVertical() const { return wxSpinButtonBase::IsVertical(); }
-    virtual int GetArrowState(wxScrollArrows::Arrow arrow) const;
-    virtual void SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set);
-    virtual bool OnArrow(wxScrollArrows::Arrow arrow);
-    virtual wxScrollArrows::Arrow HitTestArrow(const wxPoint& pt) const;
+	// implement wxControlWithArrows methods
+	virtual wxRenderer *GetRenderer() const
+	{
+		return m_renderer;
+	}
+	virtual wxWindow *GetWindow()
+	{
+		return this;
+	}
+	virtual bool IsVertical() const
+	{
+		return wxSpinButtonBase::IsVertical();
+	}
+	virtual int GetArrowState(wxScrollArrows::Arrow arrow) const;
+	virtual void SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set);
+	virtual bool OnArrow(wxScrollArrows::Arrow arrow);
+	virtual wxScrollArrows::Arrow HitTestArrow(const wxPoint &pt) const;
 
-    // for wxStdSpinButtonInputHandler
-    const wxScrollArrows& GetArrows() { return m_arrows; }
+	// for wxStdSpinButtonInputHandler
+	const wxScrollArrows &GetArrows()
+	{
+		return m_arrows;
+	}
 
-    virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = 0,
-                               const wxString& strArg = wxEmptyString);
+	virtual bool PerformAction(const wxControlAction &action,
+	                           long numArg = 0,
+	                           const wxString &strArg = wxEmptyString);
 
-    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
-    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
-    {
-        return GetStdInputHandler(handlerDef);
-    }
+	static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+	virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+	{
+		return GetStdInputHandler(handlerDef);
+	}
 
 protected:
-    virtual wxSize DoGetBestClientSize() const;
-    virtual void DoDraw(wxControlRenderer *renderer);
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+	virtual wxSize DoGetBestClientSize() const;
+	virtual void DoDraw(wxControlRenderer *renderer);
+	virtual wxBorder GetDefaultBorder() const
+	{
+		return wxBORDER_NONE;
+	}
 
-    // the common part of all ctors
-    void Init();
+	// the common part of all ctors
+	void Init();
 
-    // normalize the value to fit into min..max range
-    int NormalizeValue(int value) const;
+	// normalize the value to fit into min..max range
+	int NormalizeValue(int value) const;
 
-    // change the value by +1/-1 and send the event, return true if value was
-    // changed
-    bool ChangeValue(int inc);
+	// change the value by +1/-1 and send the event, return true if value was
+	// changed
+	bool ChangeValue(int inc);
 
-    // get the rectangles for our 2 arrows
-    void CalcArrowRects(wxRect *rect1, wxRect *rect2) const;
+	// get the rectangles for our 2 arrows
+	void CalcArrowRects(wxRect *rect1, wxRect *rect2) const;
 
-    // the current controls value
-    int m_value;
+	// the current controls value
+	int m_value;
 
 private:
-    // the object which manages our arrows
-    wxScrollArrows m_arrows;
+	// the object which manages our arrows
+	wxScrollArrows m_arrows;
 
-    // the state (combination of wxCONTROL_XXX flags) of the arrows
-    int m_arrowsState[wxScrollArrows::Arrow_Max];
+	// the state (combination of wxCONTROL_XXX flags) of the arrows
+	int m_arrowsState[wxScrollArrows::Arrow_Max];
 
-    DECLARE_DYNAMIC_CLASS(wxSpinButton)
+	DECLARE_DYNAMIC_CLASS(wxSpinButton)
 };
 
 // ----------------------------------------------------------------------------
@@ -107,15 +122,15 @@ private:
 class WXDLLEXPORT wxStdSpinButtonInputHandler : public wxStdInputHandler
 {
 public:
-    wxStdSpinButtonInputHandler(wxInputHandler *inphand);
+	wxStdSpinButtonInputHandler(wxInputHandler *inphand);
 
-    virtual bool HandleKey(wxInputConsumer *consumer,
-                           const wxKeyEvent& event,
-                           bool pressed);
-    virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxInputConsumer *consumer,
-                                 const wxMouseEvent& event);
+	virtual bool HandleKey(wxInputConsumer *consumer,
+	                       const wxKeyEvent &event,
+	                       bool pressed);
+	virtual bool HandleMouse(wxInputConsumer *consumer,
+	                         const wxMouseEvent &event);
+	virtual bool HandleMouseMove(wxInputConsumer *consumer,
+	                             const wxMouseEvent &event);
 };
 
 #endif // _WX_UNIV_SPINBUTT_H_

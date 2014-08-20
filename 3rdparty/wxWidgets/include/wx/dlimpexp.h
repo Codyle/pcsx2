@@ -17,10 +17,10 @@
 #define _WX_DLIMPEXP_H_
 
 #if defined(__WXMSW__)
-    /*
-       __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
-       as VC++ and gcc
-     */
+/*
+   __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
+   as VC++ and gcc
+ */
 #    if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__) || defined(__WATCOMC__)
 #        define WXEXPORT __declspec(dllexport)
 #        define WXIMPORT __declspec(dllimport)
@@ -31,10 +31,10 @@
 #elif defined(__WXPM__)
 #    if defined (__WATCOMC__)
 #        define WXEXPORT __declspec(dllexport)
-        /*
-           __declspec(dllimport) prepends __imp to imported symbols. We do NOT
-           want that!
-         */
+/*
+   __declspec(dllimport) prepends __imp to imported symbols. We do NOT
+   want that!
+ */
 #        define WXIMPORT
 #    elif defined(__EMX__)
 #        define WXEXPORT
@@ -242,33 +242,33 @@
    of macros for forward declarations to hide this difference:
  */
 #if defined(__WINDOWS__) && defined(__GNUC__)
-    #define WXDLLIMPEXP_FWD_BASE
-    #define WXDLLIMPEXP_FWD_NET
-    #define WXDLLIMPEXP_FWD_CORE
-    #define WXDLLIMPEXP_FWD_ADV
-    #define WXDLLIMPEXP_FWD_QA
-    #define WXDLLIMPEXP_FWD_HTML
-    #define WXDLLIMPEXP_FWD_GL
-    #define WXDLLIMPEXP_FWD_XML
-    #define WXDLLIMPEXP_FWD_XRC
-    #define WXDLLIMPEXP_FWD_AUI
-    #define WXDLLIMPEXP_FWD_RICHTEXT
-    #define WXDLLIMPEXP_FWD_MEDIA
-    #define WXDLLIMPEXP_FWD_STC
+#define WXDLLIMPEXP_FWD_BASE
+#define WXDLLIMPEXP_FWD_NET
+#define WXDLLIMPEXP_FWD_CORE
+#define WXDLLIMPEXP_FWD_ADV
+#define WXDLLIMPEXP_FWD_QA
+#define WXDLLIMPEXP_FWD_HTML
+#define WXDLLIMPEXP_FWD_GL
+#define WXDLLIMPEXP_FWD_XML
+#define WXDLLIMPEXP_FWD_XRC
+#define WXDLLIMPEXP_FWD_AUI
+#define WXDLLIMPEXP_FWD_RICHTEXT
+#define WXDLLIMPEXP_FWD_MEDIA
+#define WXDLLIMPEXP_FWD_STC
 #else
-    #define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
-    #define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
-    #define WXDLLIMPEXP_FWD_CORE      WXDLLIMPEXP_CORE
-    #define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_ADV
-    #define WXDLLIMPEXP_FWD_QA        WXDLLIMPEXP_QA
-    #define WXDLLIMPEXP_FWD_HTML      WXDLLIMPEXP_HTML
-    #define WXDLLIMPEXP_FWD_GL        WXDLLIMPEXP_GL
-    #define WXDLLIMPEXP_FWD_XML       WXDLLIMPEXP_XML
-    #define WXDLLIMPEXP_FWD_XRC       WXDLLIMPEXP_XRC
-    #define WXDLLIMPEXP_FWD_AUI       WXDLLIMPEXP_AUI
-    #define WXDLLIMPEXP_FWD_RICHTEXT  WXDLLIMPEXP_RICHTEXT
-    #define WXDLLIMPEXP_FWD_MEDIA     WXDLLIMPEXP_MEDIA
-    #define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
+#define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
+#define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
+#define WXDLLIMPEXP_FWD_CORE      WXDLLIMPEXP_CORE
+#define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_ADV
+#define WXDLLIMPEXP_FWD_QA        WXDLLIMPEXP_QA
+#define WXDLLIMPEXP_FWD_HTML      WXDLLIMPEXP_HTML
+#define WXDLLIMPEXP_FWD_GL        WXDLLIMPEXP_GL
+#define WXDLLIMPEXP_FWD_XML       WXDLLIMPEXP_XML
+#define WXDLLIMPEXP_FWD_XRC       WXDLLIMPEXP_XRC
+#define WXDLLIMPEXP_FWD_AUI       WXDLLIMPEXP_AUI
+#define WXDLLIMPEXP_FWD_RICHTEXT  WXDLLIMPEXP_RICHTEXT
+#define WXDLLIMPEXP_FWD_MEDIA     WXDLLIMPEXP_MEDIA
+#define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
 #endif
 
 #endif /* _WX_DLIMPEXP_H_ */

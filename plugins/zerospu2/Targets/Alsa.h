@@ -36,11 +36,10 @@
 extern int AlsaSetupSound();
 extern void AlsaRemoveSound();
 extern int AlsaSoundGetBytesBuffered();
-extern void AlsaSoundFeedVoiceData(unsigned char* pSound,long lBytes);
+extern void AlsaSoundFeedVoiceData(unsigned char* pSound, long lBytes);
 
 // Pull in from Alsa.cpp
-static SoundCallbacks AlsaCmds =
-{
+static SoundCallbacks AlsaCmds = {
 	(intFunction)AlsaSetupSound,
 	(voidFunction)AlsaRemoveSound,
 	(intFunction)AlsaSoundGetBytesBuffered,

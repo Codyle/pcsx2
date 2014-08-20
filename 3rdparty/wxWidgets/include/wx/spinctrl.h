@@ -58,25 +58,25 @@ protected:
 // ----------------------------------------------------------------------------
 
 #if defined(__WXUNIVERSAL__)
-    #include "wx/generic/spinctlg.h"
+#include "wx/generic/spinctlg.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/spinctrl.h"
+#include "wx/msw/spinctrl.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/spinctrl.h"
+#include "wx/os2/spinctrl.h"
 #elif defined(__WXGTK20__)
-    #include "wx/gtk/spinctrl.h"
+#include "wx/gtk/spinctrl.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/spinctrl.h"
+#include "wx/gtk1/spinctrl.h"
 #elif defined(__WXMOTIF__)
-    #include "wx/generic/spinctlg.h"
+#include "wx/generic/spinctlg.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/spinctrl.h"
+#include "wx/mac/spinctrl.h"
 #elif defined(__WXCOCOA__)
-    #include "wx/generic/spinctlg.h"
+#include "wx/generic/spinctlg.h"
 #endif // platform
 
 #define EVT_SPINCTRL(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SPINCTRL_UPDATED, id, wxSpinEventHandler(fn))
+	wx__DECLARE_EVT1(wxEVT_COMMAND_SPINCTRL_UPDATED, id, wxSpinEventHandler(fn))
 
 #endif // wxUSE_SPINCTRL
 

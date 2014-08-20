@@ -29,7 +29,7 @@
 //                       buffers are passed to the driver!
 //
 #define _NDIS_CONTROL_CODE(request,method) \
-			CTL_CODE(FILE_DEVICE_PHYSICAL_NETCARD, request, method, FILE_ANY_ACCESS)
+	CTL_CODE(FILE_DEVICE_PHYSICAL_NETCARD, request, method, FILE_ANY_ACCESS)
 #define IOCTL_NDIS_QUERY_GLOBAL_STATS	_NDIS_CONTROL_CODE( 0, METHOD_OUT_DIRECT )
 #define IOCTL_NDIS_QUERY_ALL_STATS		_NDIS_CONTROL_CODE( 1, METHOD_OUT_DIRECT )
 #define IOCTL_NDIS_ADD_DEVICE			_NDIS_CONTROL_CODE( 2, METHOD_BUFFERED )
@@ -52,9 +52,9 @@ typedef ULONG NDIS_OID, *PNDIS_OID;
 // four or eight bytes of data).
 //
 typedef struct _NDIS_STATISTICS_VALUE {
-    NDIS_OID Oid;
-    ULONG DataLength;
-    UCHAR Data[1];		// variable length
+	NDIS_OID Oid;
+	ULONG DataLength;
+	UCHAR Data[1];		// variable length
 
 } NDIS_STATISTICS_VALUE, *PNDIS_STATISTICS_VALUE;
 
@@ -62,24 +62,24 @@ typedef struct _NDIS_STATISTICS_VALUE {
 // Structure used by TRANSLATE_NAME IOCTL
 //
 typedef struct _NET_PNP_ID {
-    ULONG ClassId;
-    ULONG Token;
+	ULONG ClassId;
+	ULONG Token;
 } NET_PNP_ID, *PNET_PNP_ID;
 
 typedef struct _NET_PNP_TRANSLATE_LIST {
-    ULONG BytesNeeded;
-    NET_PNP_ID IdArray[ANYSIZE_ARRAY];
+	ULONG BytesNeeded;
+	NET_PNP_ID IdArray[ANYSIZE_ARRAY];
 } NET_PNP_TRANSLATE_LIST, *PNET_PNP_TRANSLATE_LIST;
 
 //
 // Structure used to define a self-contained variable data structure
 //
 typedef struct _NDIS_VAR_DATA_DESC {
-    USHORT Length;		// # of octects of data
+	USHORT Length;		// # of octects of data
 
-    USHORT MaximumLength;	// # of octects available
+	USHORT MaximumLength;	// # of octects available
 
-    LONG Offset;		// Offset of data relative to the descriptor
+	LONG Offset;		// Offset of data relative to the descriptor
 
 } NDIS_VAR_DATA_DESC, *PNDIS_VAR_DATA_DESC;
 
@@ -584,38 +584,38 @@ typedef struct _NDIS_VAR_DATA_DESC {
 // OID_GEN_MEDIA_IN_USE).
 //
 typedef enum _NDIS_MEDIUM {
-    NdisMedium802_3,
-    NdisMedium802_5,
-    NdisMediumFddi,
-    NdisMediumWan,
-    NdisMediumLocalTalk,
-    NdisMediumDix,		// defined for convenience, not a real medium
-     NdisMediumArcnetRaw,
-    NdisMediumArcnet878_2,
-    NdisMediumAtm,
-    NdisMediumWirelessWan,
-    NdisMediumIrda,
-    NdisMediumMax		// Not a real medium, defined as an upper-bound
+	NdisMedium802_3,
+	NdisMedium802_5,
+	NdisMediumFddi,
+	NdisMediumWan,
+	NdisMediumLocalTalk,
+	NdisMediumDix,		// defined for convenience, not a real medium
+	NdisMediumArcnetRaw,
+	NdisMediumArcnet878_2,
+	NdisMediumAtm,
+	NdisMediumWirelessWan,
+	NdisMediumIrda,
+	NdisMediumMax		// Not a real medium, defined as an upper-bound
 } NDIS_MEDIUM, *PNDIS_MEDIUM;
 
 //
 // Hardware status codes (OID_GEN_HARDWARE_STATUS).
 //
 typedef enum _NDIS_HARDWARE_STATUS {
-    NdisHardwareStatusReady,
-    NdisHardwareStatusInitializing,
-    NdisHardwareStatusReset,
-    NdisHardwareStatusClosing,
-    NdisHardwareStatusNotReady
+	NdisHardwareStatusReady,
+	NdisHardwareStatusInitializing,
+	NdisHardwareStatusReset,
+	NdisHardwareStatusClosing,
+	NdisHardwareStatusNotReady
 } NDIS_HARDWARE_STATUS, *PNDIS_HARDWARE_STATUS;
 
 //
 // this is the type passed in the OID_GEN_GET_TIME_CAPS request
 //
 typedef struct _GEN_GET_TIME_CAPS {
-    ULONG Flags;		// Bits defined below
+	ULONG Flags;		// Bits defined below
 
-    ULONG ClockPrecision;
+	ULONG ClockPrecision;
 } GEN_GET_TIME_CAPS, *PGEN_GET_TIME_CAPS;
 
 #define	READABLE_LOCAL_CLOCK					0x000000001
@@ -629,107 +629,107 @@ typedef struct _GEN_GET_TIME_CAPS {
 // this is the type passed in the OID_GEN_GET_NETCARD_TIME request
 //
 typedef struct _GEN_GET_NETCARD_TIME {
-    ULONG ReadTime;
+	ULONG ReadTime;
 } GEN_GET_NETCARD_TIME, *PGEN_GET_NETCARD_TIME;
 
 //
 // Defines the attachment types for FDDI (OID_FDDI_ATTACHMENT_TYPE).
 //
 typedef enum _NDIS_FDDI_ATTACHMENT_TYPE {
-    NdisFddiTypeIsolated = 1,
-    NdisFddiTypeLocalA,
-    NdisFddiTypeLocalB,
-    NdisFddiTypeLocalAB,
-    NdisFddiTypeLocalS,
-    NdisFddiTypeWrapA,
-    NdisFddiTypeWrapB,
-    NdisFddiTypeWrapAB,
-    NdisFddiTypeWrapS,
-    NdisFddiTypeCWrapA,
-    NdisFddiTypeCWrapB,
-    NdisFddiTypeCWrapS,
-    NdisFddiTypeThrough
+	NdisFddiTypeIsolated = 1,
+	NdisFddiTypeLocalA,
+	NdisFddiTypeLocalB,
+	NdisFddiTypeLocalAB,
+	NdisFddiTypeLocalS,
+	NdisFddiTypeWrapA,
+	NdisFddiTypeWrapB,
+	NdisFddiTypeWrapAB,
+	NdisFddiTypeWrapS,
+	NdisFddiTypeCWrapA,
+	NdisFddiTypeCWrapB,
+	NdisFddiTypeCWrapS,
+	NdisFddiTypeThrough
 } NDIS_FDDI_ATTACHMENT_TYPE, *PNDIS_FDDI_ATTACHMENT_TYPE;
 
 //
 // Defines the ring management states for FDDI (OID_FDDI_RING_MGT_STATE).
 //
 typedef enum _NDIS_FDDI_RING_MGT_STATE {
-    NdisFddiRingIsolated = 1,
-    NdisFddiRingNonOperational,
-    NdisFddiRingOperational,
-    NdisFddiRingDetect,
-    NdisFddiRingNonOperationalDup,
-    NdisFddiRingOperationalDup,
-    NdisFddiRingDirected,
-    NdisFddiRingTrace
+	NdisFddiRingIsolated = 1,
+	NdisFddiRingNonOperational,
+	NdisFddiRingOperational,
+	NdisFddiRingDetect,
+	NdisFddiRingNonOperationalDup,
+	NdisFddiRingOperationalDup,
+	NdisFddiRingDirected,
+	NdisFddiRingTrace
 } NDIS_FDDI_RING_MGT_STATE, *PNDIS_FDDI_RING_MGT_STATE;
 
 //
 // Defines the Lconnection state for FDDI (OID_FDDI_LCONNECTION_STATE).
 //
 typedef enum _NDIS_FDDI_LCONNECTION_STATE {
-    NdisFddiStateOff = 1,
-    NdisFddiStateBreak,
-    NdisFddiStateTrace,
-    NdisFddiStateConnect,
-    NdisFddiStateNext,
-    NdisFddiStateSignal,
-    NdisFddiStateJoin,
-    NdisFddiStateVerify,
-    NdisFddiStateActive,
-    NdisFddiStateMaintenance
+	NdisFddiStateOff = 1,
+	NdisFddiStateBreak,
+	NdisFddiStateTrace,
+	NdisFddiStateConnect,
+	NdisFddiStateNext,
+	NdisFddiStateSignal,
+	NdisFddiStateJoin,
+	NdisFddiStateVerify,
+	NdisFddiStateActive,
+	NdisFddiStateMaintenance
 } NDIS_FDDI_LCONNECTION_STATE, *PNDIS_FDDI_LCONNECTION_STATE;
 
 //
 // Defines the medium subtypes for WAN medium (OID_WAN_MEDIUM_SUBTYPE).
 //
 typedef enum _NDIS_WAN_MEDIUM_SUBTYPE {
-    NdisWanMediumHub,
-    NdisWanMediumX_25,
-    NdisWanMediumIsdn,
-    NdisWanMediumSerial,
-    NdisWanMediumFrameRelay,
-    NdisWanMediumAtm,
-    NdisWanMediumSonet,
-    NdisWanMediumSW56K
+	NdisWanMediumHub,
+	NdisWanMediumX_25,
+	NdisWanMediumIsdn,
+	NdisWanMediumSerial,
+	NdisWanMediumFrameRelay,
+	NdisWanMediumAtm,
+	NdisWanMediumSonet,
+	NdisWanMediumSW56K
 } NDIS_WAN_MEDIUM_SUBTYPE, *PNDIS_WAN_MEDIUM_SUBTYPE;
 
 //
 // Defines the header format for WAN medium (OID_WAN_HEADER_FORMAT).
 //
 typedef enum _NDIS_WAN_HEADER_FORMAT {
-    NdisWanHeaderNative,	// src/dest based on subtype, followed by NLPID
-     NdisWanHeaderEthernet	// emulation of ethernet header
+	NdisWanHeaderNative,	// src/dest based on subtype, followed by NLPID
+	NdisWanHeaderEthernet	// emulation of ethernet header
 } NDIS_WAN_HEADER_FORMAT, *PNDIS_WAN_HEADER_FORMAT;
 
 //
 // Defines the line quality on a WAN line (OID_WAN_QUALITY_OF_SERVICE).
 //
 typedef enum _NDIS_WAN_QUALITY {
-    NdisWanRaw,
-    NdisWanErrorControl,
-    NdisWanReliable
+	NdisWanRaw,
+	NdisWanErrorControl,
+	NdisWanReliable
 } NDIS_WAN_QUALITY, *PNDIS_WAN_QUALITY;
 
 //
 // Defines the state of a token-ring adapter (OID_802_5_CURRENT_RING_STATE).
 //
 typedef enum _NDIS_802_5_RING_STATE {
-    NdisRingStateOpened = 1,
-    NdisRingStateClosed,
-    NdisRingStateOpening,
-    NdisRingStateClosing,
-    NdisRingStateOpenFailure,
-    NdisRingStateRingFailure
+	NdisRingStateOpened = 1,
+	NdisRingStateClosed,
+	NdisRingStateOpening,
+	NdisRingStateClosing,
+	NdisRingStateOpenFailure,
+	NdisRingStateRingFailure
 } NDIS_802_5_RING_STATE, *PNDIS_802_5_RING_STATE;
 
 //
 // Defines the state of the LAN media
 //
 typedef enum _NDIS_MEDIA_STATE {
-    NdisMediaStateConnected,
-    NdisMediaStateDisconnected
+	NdisMediaStateConnected,
+	NdisMediaStateDisconnected
 } NDIS_MEDIA_STATE, *PNDIS_MEDIA_STATE;
 
 //
@@ -744,8 +744,8 @@ typedef ULONG Priority_802_3;	// 0-7 priority levels
 //
 
 typedef struct _NDIS_CO_LINK_SPEED {
-    ULONG Outbound;
-    ULONG Inbound;
+	ULONG Outbound;
+	ULONG Inbound;
 } NDIS_CO_LINK_SPEED,
 
 *PNDIS_CO_LINK_SPEED;
@@ -803,8 +803,8 @@ typedef struct _NDIS_CO_LINK_SPEED {
 // This is the per-packet info specified on a per-packet basis
 //
 typedef struct _NDIS_IRDA_PACKET_INFO {
-    UINT ExtraBOFs;
-    UINT MinTurnAroundTime;
+	UINT ExtraBOFs;
+	UINT MinTurnAroundTime;
 } NDIS_IRDA_PACKET_INFO, *PNDIS_IRDA_PACKET_INFO;
 
 #endif
@@ -816,59 +816,59 @@ typedef struct _NDIS_IRDA_PACKET_INFO {
 // currently defined Wireless network subtypes
 //
 typedef enum _NDIS_WW_NETWORK_TYPE {
-    NdisWWGeneric,
-    NdisWWMobitex,
-    NdisWWPinpoint,
-    NdisWWCDPD,
-    NdisWWArdis,
-    NdisWWDataTAC,
-    NdisWWMetricom,
-    NdisWWGSM,
-    NdisWWCDMA,
-    NdisWWTDMA,
-    NdisWWAMPS,
-    NdisWWInmarsat,
-    NdisWWpACT
+	NdisWWGeneric,
+	NdisWWMobitex,
+	NdisWWPinpoint,
+	NdisWWCDPD,
+	NdisWWArdis,
+	NdisWWDataTAC,
+	NdisWWMetricom,
+	NdisWWGSM,
+	NdisWWCDMA,
+	NdisWWTDMA,
+	NdisWWAMPS,
+	NdisWWInmarsat,
+	NdisWWpACT
 } NDIS_WW_NETWORK_TYPE;
 
 //
 // currently defined header formats
 //
 typedef enum _NDIS_WW_HEADER_FORMAT {
-    NdisWWDIXEthernetFrames,
-    NdisWWMPAKFrames,
-    NdisWWRDLAPFrames,
-    NdisWWMDC4800Frames
+	NdisWWDIXEthernetFrames,
+	NdisWWMPAKFrames,
+	NdisWWRDLAPFrames,
+	NdisWWMDC4800Frames
 } NDIS_WW_HEADER_FORMAT;
 
 //
 // currently defined encryption types
 //
 typedef enum _NDIS_WW_ENCRYPTION_TYPE {
-    NdisWWUnknownEncryption = -1,
-    NdisWWNoEncryption,
-    NdisWWDefaultEncryption
+	NdisWWUnknownEncryption = -1,
+	NdisWWNoEncryption,
+	NdisWWDefaultEncryption
 } NDIS_WW_ENCRYPTION_TYPE, *PNDIS_WW_ENCRYPTION_TYPE;
 
 //
 // OID_WW_GEN_INDICATION_REQUEST
 //
 typedef struct _NDIS_WW_INDICATION_REQUEST {
-    NDIS_OID Oid;		// IN
+	NDIS_OID Oid;		// IN
 
-    UINT uIndicationFlag;	// IN
+	UINT uIndicationFlag;	// IN
 
-    UINT uApplicationToken;	// IN OUT
+	UINT uApplicationToken;	// IN OUT
 
-    HANDLE hIndicationHandle;	// IN OUT
+	HANDLE hIndicationHandle;	// IN OUT
 
-    INT iPollingInterval;	// IN OUT
+	INT iPollingInterval;	// IN OUT
 
-    NDIS_VAR_DATA_DESC InitialValue;	// IN OUT
+	NDIS_VAR_DATA_DESC InitialValue;	// IN OUT
 
-    NDIS_VAR_DATA_DESC OIDIndicationValue;	// OUT - only valid after indication
+	NDIS_VAR_DATA_DESC OIDIndicationValue;	// OUT - only valid after indication
 
-    NDIS_VAR_DATA_DESC TriggerValue;	// IN
+	NDIS_VAR_DATA_DESC TriggerValue;	// IN
 
 } NDIS_WW_INDICATION_REQUEST, *PNDIS_WW_INDICATION_REQUEST;
 
@@ -878,54 +878,54 @@ typedef struct _NDIS_WW_INDICATION_REQUEST {
 // OID_WW_GEN_DEVICE_INFO
 //
 typedef struct _WW_DEVICE_INFO {
-    NDIS_VAR_DATA_DESC Manufacturer;
-    NDIS_VAR_DATA_DESC ModelNum;
-    NDIS_VAR_DATA_DESC SWVersionNum;
-    NDIS_VAR_DATA_DESC SerialNum;
+	NDIS_VAR_DATA_DESC Manufacturer;
+	NDIS_VAR_DATA_DESC ModelNum;
+	NDIS_VAR_DATA_DESC SWVersionNum;
+	NDIS_VAR_DATA_DESC SerialNum;
 } WW_DEVICE_INFO, *PWW_DEVICE_INFO;
 
 //
 // OID_WW_GEN_OPERATION_MODE
 //
 typedef INT WW_OPERATION_MODE;	//  0 = Normal mode
-												//  1 = Power saving mode
-												// -1 = mode unknown
+//  1 = Power saving mode
+// -1 = mode unknown
 //
 // OID_WW_GEN_LOCK_STATUS
 //
 
 typedef INT WW_LOCK_STATUS;	//  0 = unlocked
-												//  1 = locked
-												// -1 = unknown lock status
+//  1 = locked
+// -1 = unknown lock status
 //
 // OID_WW_GEN_DISABLE_TRANSMITTER
 //
 
 typedef INT WW_DISABLE_TRANSMITTER;	//  0 = transmitter enabled
-												//  1 = transmitter disabled
-												// -1 = unknown value
+//  1 = transmitter disabled
+// -1 = unknown value
 //
 // OID_WW_GEN_NETWORK_ID
 //
 
 typedef NDIS_VAR_DATA_DESC WW_NETWORK_ID;
 //
-// OID_WW_GEN_PERMANENT_ADDRESS 
+// OID_WW_GEN_PERMANENT_ADDRESS
 //
 typedef NDIS_VAR_DATA_DESC WW_PERMANENT_ADDRESS;
 //
-// OID_WW_GEN_CURRENT_ADDRESS   
+// OID_WW_GEN_CURRENT_ADDRESS
 //
 typedef struct _WW_CURRENT_ADDRESS {
-    NDIS_WW_HEADER_FORMAT Format;
-    NDIS_VAR_DATA_DESC Address;
+	NDIS_WW_HEADER_FORMAT Format;
+	NDIS_VAR_DATA_DESC Address;
 } WW_CURRENT_ADDRESS, *PWW_CURRENT_ADDRESS;
 
 //
 // OID_WW_GEN_SUSPEND_DRIVER
 //
 typedef BOOLEAN WW_SUSPEND_DRIVER;	// 0 = driver operational
-												// 1 = driver suspended
+// 1 = driver suspended
 //
 // OID_WW_GEN_BASESTATION_ID
 //
@@ -939,22 +939,22 @@ typedef NDIS_VAR_DATA_DESC WW_CHANNEL_ID;
 // OID_WW_GEN_ENCRYPTION_STATE
 //
 typedef BOOLEAN WW_ENCRYPTION_STATE;	// 0 = if encryption is disabled
-												// 1 = if encryption is enabled
+// 1 = if encryption is enabled
 //
 // OID_WW_GEN_CHANNEL_QUALITY
 //
 
 typedef INT WW_CHANNEL_QUALITY;	//  0 = Not in network contact,
-												// 1-100 = Quality of Channel (100 is highest quality).
-												// -1 = channel quality is unknown
+// 1-100 = Quality of Channel (100 is highest quality).
+// -1 = channel quality is unknown
 //
 // OID_WW_GEN_REGISTRATION_STATUS
 //
 
 typedef INT WW_REGISTRATION_STATUS;	//  0 = Registration denied
-												//  1 = Registration pending
-												//  2 = Registered
-												// -1 = unknown registration status
+//  1 = Registration pending
+//  2 = Registered
+// -1 = unknown registration status
 //
 // OID_WW_GEN_RADIO_LINK_SPEED
 //
@@ -970,15 +970,15 @@ typedef UINT WW_LATENCY;	//  milliseconds
 //
 
 typedef INT WW_BATTERY_LEVEL;	//  0-100 = battery level in percentage
-												//      (100=fully charged)
-												// -1 = unknown battery level.
+//      (100=fully charged)
+// -1 = unknown battery level.
 //
 // OID_WW_GEN_EXTERNAL_POWER
 //
 
 typedef INT WW_EXTERNAL_POWER;	//   0 = no external power connected
-												//   1 = external power connected
-												//  -1 = unknown
+//   1 = external power connected
+//  -1 = unknown
 //
 // OID_WW_MET_FUNCTION
 //
@@ -988,30 +988,30 @@ typedef NDIS_VAR_DATA_DESC WW_MET_FUNCTION;
 // OID_WW_TAC_COMPRESSION
 //
 typedef BOOLEAN WW_TAC_COMPRESSION;	// Determines whether or not network level compression
-												// is being used.
+// is being used.
 //
 // OID_WW_TAC_SET_CONFIG
 //
 
 typedef struct _WW_TAC_SETCONFIG {
-    NDIS_VAR_DATA_DESC RCV_MODE;
-    NDIS_VAR_DATA_DESC TX_CONTROL;
-    NDIS_VAR_DATA_DESC RX_CONTROL;
-    NDIS_VAR_DATA_DESC FLOW_CONTROL;
-    NDIS_VAR_DATA_DESC RESET_CNF;
-    NDIS_VAR_DATA_DESC READ_CNF;
+	NDIS_VAR_DATA_DESC RCV_MODE;
+	NDIS_VAR_DATA_DESC TX_CONTROL;
+	NDIS_VAR_DATA_DESC RX_CONTROL;
+	NDIS_VAR_DATA_DESC FLOW_CONTROL;
+	NDIS_VAR_DATA_DESC RESET_CNF;
+	NDIS_VAR_DATA_DESC READ_CNF;
 } WW_TAC_SETCONFIG, *PWW_TAC_SETCONFIG;
 
 //
 // OID_WW_TAC_GET_STATUS
 //
 typedef struct _WW_TAC_GETSTATUS {
-    BOOLEAN Action;		// Set = Execute command.
+	BOOLEAN Action;		// Set = Execute command.
 
-    NDIS_VAR_DATA_DESC Command;
-    NDIS_VAR_DATA_DESC Option;
-    NDIS_VAR_DATA_DESC Response;	// The response to the requested command
-    // - max. length of string is 256 octets.
+	NDIS_VAR_DATA_DESC Command;
+	NDIS_VAR_DATA_DESC Option;
+	NDIS_VAR_DATA_DESC Response;	// The response to the requested command
+	// - max. length of string is 256 octets.
 
 } WW_TAC_GETSTATUS, *PWW_TAC_GETSTATUS;
 
@@ -1024,11 +1024,11 @@ typedef NDIS_VAR_DATA_DESC WW_TAC_USERHEADER;	// This will hold the user header 
 //
 
 typedef struct _WW_ARD_SNDCP {
-    NDIS_VAR_DATA_DESC Version;	// The version of SNDCP protocol supported.
+	NDIS_VAR_DATA_DESC Version;	// The version of SNDCP protocol supported.
 
-    INT BlockSize;		// The block size used for SNDCP
+	INT BlockSize;		// The block size used for SNDCP
 
-    INT Window;			// The window size used in SNDCP
+	INT Window;			// The window size used in SNDCP
 
 } WW_ARD_SNDCP, *PWW_ARD_SNDCP;
 
@@ -1041,13 +1041,13 @@ typedef BOOLEAN WW_ARD_CHANNEL_STATUS;	// The current status of the inbound RF C
 //
 
 typedef struct _WW_ARD_DATAGRAM {
-    BOOLEAN LoadLevel;		// Byte that contains the load level info.
+	BOOLEAN LoadLevel;		// Byte that contains the load level info.
 
-    INT SessionTime;		// Datagram session time remaining.
+	INT SessionTime;		// Datagram session time remaining.
 
-    NDIS_VAR_DATA_DESC HostAddr;	// Host address.
+	NDIS_VAR_DATA_DESC HostAddr;	// Host address.
 
-    NDIS_VAR_DATA_DESC THostAddr;	// Test host address.
+	NDIS_VAR_DATA_DESC THostAddr;	// Test host address.
 
 } WW_ARD_DATAGRAM, *PWW_ARD_DATAGRAM;
 
@@ -1055,12 +1055,12 @@ typedef struct _WW_ARD_DATAGRAM {
 // OID_WW_CDPD_SPNI
 //
 typedef struct _WW_CDPD_SPNI {
-    UINT SPNI[10];		//10 16-bit service provider network IDs
+	UINT SPNI[10];		//10 16-bit service provider network IDs
 
-    INT OperatingMode;		// 0 = ignore SPNI,
-    // 1 = require SPNI from list,
-    // 2 = prefer SPNI from list.
-    // 3 = exclude SPNI from list.
+	INT OperatingMode;		// 0 = ignore SPNI,
+	// 1 = require SPNI from list,
+	// 2 = prefer SPNI from list.
+	// 3 = exclude SPNI from list.
 
 } WW_CDPD_SPNI, *PWW_CDPD_SPNI;
 
@@ -1068,12 +1068,12 @@ typedef struct _WW_CDPD_SPNI {
 // OID_WW_CDPD_WASI
 //
 typedef struct _WW_CDPD_WIDE_AREA_SERVICE_ID {
-    UINT WASI[10];		//10 16-bit wide area service IDs
+	UINT WASI[10];		//10 16-bit wide area service IDs
 
-    INT OperatingMode;		// 0 = ignore WASI,
-    // 1 = Require WASI from list,
-    // 2 = prefer WASI from list
-    // 3 = exclude WASI from list.
+	INT OperatingMode;		// 0 = ignore WASI,
+	// 1 = Require WASI from list,
+	// 2 = prefer WASI from list
+	// 3 = exclude WASI from list.
 
 } WW_CDPD_WIDE_AREA_SERVICE_ID, *PWW_CDPD_WIDE_AREA_SERVICE_ID;
 
@@ -1093,24 +1093,24 @@ typedef NDIS_VAR_DATA_DESC WW_CDPD_EID;
 // OID_WW_CDPD_HEADER_COMPRESSION
 //
 typedef INT WW_CDPD_HEADER_COMPRESSION;		//  0 = no header compression,
-												//  1 = always compress headers,
-												//  2 = compress headers if MD-IS does
-												// -1 = unknown
+//  1 = always compress headers,
+//  2 = compress headers if MD-IS does
+// -1 = unknown
 //
 // OID_WW_CDPD_DATA_COMPRESSION
 //
 
 typedef INT WW_CDPD_DATA_COMPRESSION;	// 0  = no data compression,
-												// 1  = data compression enabled
-												// -1 =  unknown
+// 1  = data compression enabled
+// -1 =  unknown
 //
 // OID_WW_CDPD_CHANNEL_SELECT
 //
 
 typedef struct _WW_CDPD_CHANNEL_SELECT {
-    UINT ChannelID;		// channel number
+	UINT ChannelID;		// channel number
 
-    UINT fixedDuration;		// duration in seconds
+	UINT fixedDuration;		// duration in seconds
 
 } WW_CDPD_CHANNEL_SELECT, *PWW_CDPD_CHANNEL_SELECT;
 
@@ -1118,84 +1118,84 @@ typedef struct _WW_CDPD_CHANNEL_SELECT {
 // OID_WW_CDPD_CHANNEL_STATE
 //
 typedef enum _WW_CDPD_CHANNEL_STATE {
-    CDPDChannelNotAvail,
-    CDPDChannelScanning,
-    CDPDChannelInitAcquired,
-    CDPDChannelAcquired,
-    CDPDChannelSleeping,
-    CDPDChannelWaking,
-    CDPDChannelCSDialing,
-    CDPDChannelCSRedial,
-    CDPDChannelCSAnswering,
-    CDPDChannelCSConnected,
-    CDPDChannelCSSuspended
+	CDPDChannelNotAvail,
+	CDPDChannelScanning,
+	CDPDChannelInitAcquired,
+	CDPDChannelAcquired,
+	CDPDChannelSleeping,
+	CDPDChannelWaking,
+	CDPDChannelCSDialing,
+	CDPDChannelCSRedial,
+	CDPDChannelCSAnswering,
+	CDPDChannelCSConnected,
+	CDPDChannelCSSuspended
 } WW_CDPD_CHANNEL_STATE, *PWW_CDPD_CHANNEL_STATE;
 
 //
 // OID_WW_CDPD_NEI
 //
 typedef enum _WW_CDPD_NEI_FORMAT {
-    CDPDNeiIPv4,
-    CDPDNeiCLNP,
-    CDPDNeiIPv6
+	CDPDNeiIPv4,
+	CDPDNeiCLNP,
+	CDPDNeiIPv6
 } WW_CDPD_NEI_FORMAT, *PWW_CDPD_NEI_FORMAT;
 typedef enum _WW_CDPD_NEI_TYPE {
-    CDPDNeiIndividual,
-    CDPDNeiMulticast,
-    CDPDNeiBroadcast
+	CDPDNeiIndividual,
+	CDPDNeiMulticast,
+	CDPDNeiBroadcast
 } WW_CDPD_NEI_TYPE;
 typedef struct _WW_CDPD_NEI {
-    UINT uNeiIndex;
-    WW_CDPD_NEI_FORMAT NeiFormat;
-    WW_CDPD_NEI_TYPE NeiType;
-    WORD NeiGmid;		// group member identifier, only
-    // meaningful if NeiType ==
-    // CDPDNeiMulticast
+	UINT uNeiIndex;
+	WW_CDPD_NEI_FORMAT NeiFormat;
+	WW_CDPD_NEI_TYPE NeiType;
+	WORD NeiGmid;		// group member identifier, only
+	// meaningful if NeiType ==
+	// CDPDNeiMulticast
 
-    NDIS_VAR_DATA_DESC NeiAddress;
+	NDIS_VAR_DATA_DESC NeiAddress;
 } WW_CDPD_NEI;
 
 //
 // OID_WW_CDPD_NEI_STATE
 //
 typedef enum _WW_CDPD_NEI_STATE {
-    CDPDUnknown,
-    CDPDRegistered,
-    CDPDDeregistered
+	CDPDUnknown,
+	CDPDRegistered,
+	CDPDDeregistered
 } WW_CDPD_NEI_STATE, *PWW_CDPD_NEI_STATE;
 typedef enum _WW_CDPD_NEI_SUB_STATE {
-    CDPDPending,		// Registration pending
-     CDPDNoReason,		// Registration denied - no reason given
-     CDPDMDISNotCapable,	// Registration denied - MD-IS not capable of
-    //  handling M-ES at this time
-     CDPDNEINotAuthorized,	// Registration denied - NEI is not authorized to
-    //  use this subnetwork
-     CDPDInsufficientAuth,	// Registration denied - M-ES gave insufficient
-    //  authentication credentials
-     CDPDUnsupportedAuth,	// Registration denied - M-ES gave unsupported
-    //  authentication credentials
-     CDPDUsageExceeded,		// Registration denied - NEI has exceeded usage
-    //  limitations
-     CDPDDeniedThisNetwork	// Registration denied on this network, service
-    //  may be obtained on alternate Service Provider
-    //  network
+	CDPDPending,		// Registration pending
+	CDPDNoReason,		// Registration denied - no reason given
+	CDPDMDISNotCapable,	// Registration denied - MD-IS not capable of
+	//  handling M-ES at this time
+	CDPDNEINotAuthorized,	// Registration denied - NEI is not authorized to
+	//  use this subnetwork
+	CDPDInsufficientAuth,	// Registration denied - M-ES gave insufficient
+	//  authentication credentials
+	CDPDUnsupportedAuth,	// Registration denied - M-ES gave unsupported
+	//  authentication credentials
+	CDPDUsageExceeded,		// Registration denied - NEI has exceeded usage
+	//  limitations
+	CDPDDeniedThisNetwork	// Registration denied on this network, service
+	//  may be obtained on alternate Service Provider
+	//  network
 } WW_CDPD_NEI_SUB_STATE;
 typedef struct _WW_CDPD_NEI_REG_STATE {
-    UINT uNeiIndex;
-    WW_CDPD_NEI_STATE NeiState;
-    WW_CDPD_NEI_SUB_STATE NeiSubState;
+	UINT uNeiIndex;
+	WW_CDPD_NEI_STATE NeiState;
+	WW_CDPD_NEI_SUB_STATE NeiSubState;
 } WW_CDPD_NEI_REG_STATE, *PWW_CDPD_NEI_REG_STATE;
 
 //
 // OID_WW_CDPD_SERVICE_PROVIDER_IDENTIFIER
 //
 typedef struct _WW_CDPD_SERVICE_PROVIDER_ID {
-    UINT SPI[10];		//10 16-bit service provider IDs
+	UINT SPI[10];		//10 16-bit service provider IDs
 
-    INT OperatingMode;		// 0 = ignore SPI,
-    // 1 = require SPI from list,
-    // 2 = prefer SPI from list.
-    // 3 = exclude SPI from list.
+	INT OperatingMode;		// 0 = ignore SPI,
+	// 1 = require SPI from list,
+	// 2 = prefer SPI from list.
+	// 3 = exclude SPI from list.
 
 } WW_CDPD_SERVICE_PROVIDER_ID, *PWW_CDPD_SERVICE_PROVIDER_ID;
 
@@ -1211,86 +1211,86 @@ typedef ULONG WW_CDPD_TEI;
 // OID_WW_CDPD_CIRCUIT_SWITCHED
 //
 typedef struct _WW_CDPD_CIRCUIT_SWITCHED {
-    INT service_preference;	// -1 = unknown,
-    //  0 = always use packet switched CDPD,
-    //  1 = always use CS CDPD via AMPS,
-    //  2 = always use CS CDPD via PSTN,
-    //  3 = use circuit switched via AMPS only
-    //      when packet switched is not available.
-    //  4 = use packet switched only when circuit
-    //   switched via AMPS is not available.
-    //  5 = device manuf. defined service
-    //   preference.
-    //  6 = device manuf. defined service
-    //   preference.
+	INT service_preference;	// -1 = unknown,
+	//  0 = always use packet switched CDPD,
+	//  1 = always use CS CDPD via AMPS,
+	//  2 = always use CS CDPD via PSTN,
+	//  3 = use circuit switched via AMPS only
+	//      when packet switched is not available.
+	//  4 = use packet switched only when circuit
+	//   switched via AMPS is not available.
+	//  5 = device manuf. defined service
+	//   preference.
+	//  6 = device manuf. defined service
+	//   preference.
 
-    INT service_status;		// -1 = unknown,
-    //  0 = packet switched CDPD,
-    //  1 = circuit switched CDPD via AMPS,
-    //  2 = circuit switched CDPD via PSTN.
+	INT service_status;		// -1 = unknown,
+	//  0 = packet switched CDPD,
+	//  1 = circuit switched CDPD via AMPS,
+	//  2 = circuit switched CDPD via PSTN.
 
-    INT connect_rate;		//  CS connection bit rate (bits per second).
-    //  0 = no active connection,
-    // -1 = unknown
-    //  Dial code last used to dial.
+	INT connect_rate;		//  CS connection bit rate (bits per second).
+	//  0 = no active connection,
+	// -1 = unknown
+	//  Dial code last used to dial.
 
-    NDIS_VAR_DATA_DESC dial_code[20];
+	NDIS_VAR_DATA_DESC dial_code[20];
 
-    UINT sid;			//  Current AMPS system ID
+	UINT sid;			//  Current AMPS system ID
 
-    INT a_b_side_selection;	// -1 = unknown,
-    //  0 = no AMPS service
-    //  1 = AMPS "A" side channels selected
-    //  2 = AMPS "B" side channels selected
+	INT a_b_side_selection;	// -1 = unknown,
+	//  0 = no AMPS service
+	//  1 = AMPS "A" side channels selected
+	//  2 = AMPS "B" side channels selected
 
-    INT AMPS_channel;		// -1= unknown
-    //  0 = no AMPS service.
-    //  1-1023 = AMPS channel number in use
+	INT AMPS_channel;		// -1= unknown
+	//  0 = no AMPS service.
+	//  1-1023 = AMPS channel number in use
 
-    UINT action;		//  0 = no action
-    //  1 = suspend (hangup)
-    //  2 = dial
+	UINT action;		//  0 = no action
+	//  1 = suspend (hangup)
+	//  2 = dial
 
-    //  Default dial code for CS CDPD service
-    //  encoded as specified in the CS CDPD
-    //  implementor guidelines.
-    NDIS_VAR_DATA_DESC default_dial[20];
+	//  Default dial code for CS CDPD service
+	//  encoded as specified in the CS CDPD
+	//  implementor guidelines.
+	NDIS_VAR_DATA_DESC default_dial[20];
 
-    //  Number for the CS CDPD network to call
-    //   back the mobile, encoded as specified in
-    //   the CS CDPD implementor guidelines.
-    NDIS_VAR_DATA_DESC call_back[20];
+	//  Number for the CS CDPD network to call
+	//   back the mobile, encoded as specified in
+	//   the CS CDPD implementor guidelines.
+	NDIS_VAR_DATA_DESC call_back[20];
 
-    UINT sid_list[10];		//  List of 10 16-bit preferred AMPS
-    //   system IDs for CS CDPD.
+	UINT sid_list[10];		//  List of 10 16-bit preferred AMPS
+	//   system IDs for CS CDPD.
 
-    UINT inactivity_timer;	//  Wait time after last data before dropping
-    //   call.
-    //  0-65535 = inactivity time limit (seconds).
+	UINT inactivity_timer;	//  Wait time after last data before dropping
+	//   call.
+	//  0-65535 = inactivity time limit (seconds).
 
-    UINT receive_timer;		//  secs. per CS-CDPD Implementor Guidelines.
+	UINT receive_timer;		//  secs. per CS-CDPD Implementor Guidelines.
 
-    UINT conn_resp_timer;	//  secs. per CS-CDPD Implementor Guidelines.
+	UINT conn_resp_timer;	//  secs. per CS-CDPD Implementor Guidelines.
 
-    UINT reconn_resp_timer;	//  secs. per CS-CDPD Implementor Guidelines.
+	UINT reconn_resp_timer;	//  secs. per CS-CDPD Implementor Guidelines.
 
-    UINT disconn_timer;		//  secs. per CS-CDPD Implementor Guidelines.
+	UINT disconn_timer;		//  secs. per CS-CDPD Implementor Guidelines.
 
-    UINT NEI_reg_timer;		//  secs. per CS-CDPD Implementor Guidelines.
+	UINT NEI_reg_timer;		//  secs. per CS-CDPD Implementor Guidelines.
 
-    UINT reconn_retry_timer;	//  secs. per CS-CDPD Implementor Guidelines.
+	UINT reconn_retry_timer;	//  secs. per CS-CDPD Implementor Guidelines.
 
-    UINT link_reset_timer;	//  secs. per CS-CDPD Implementor Guidelines.
+	UINT link_reset_timer;	//  secs. per CS-CDPD Implementor Guidelines.
 
-    UINT link_reset_ack_timer;	//  secs. per CS-CDPD Implementor Guidelines.
+	UINT link_reset_ack_timer;	//  secs. per CS-CDPD Implementor Guidelines.
 
-    UINT n401_retry_limit;	//  per CS-CDPD Implementor Guidelines.
+	UINT n401_retry_limit;	//  per CS-CDPD Implementor Guidelines.
 
-    UINT n402_retry_limit;	//  per CS-CDPD Implementor Guidelines.
+	UINT n402_retry_limit;	//  per CS-CDPD Implementor Guidelines.
 
-    UINT n404_retry_limit;	//  per CS-CDPD Implementor Guidelines.
+	UINT n404_retry_limit;	//  per CS-CDPD Implementor Guidelines.
 
-    UINT n405_retry_limit;	//  per CS-CDPD Implementor Guidelines.
+	UINT n405_retry_limit;	//  per CS-CDPD Implementor Guidelines.
 
 } WW_CDPD_CIRCUIT_SWITCHED, *WW_PCDPD_CIRCUIT_SWITCHED;
 typedef UINT WW_CDPD_RSSI;
@@ -1298,33 +1298,33 @@ typedef UINT WW_CDPD_RSSI;
 // OID_WW_PIN_LOC_AUTHORIZE
 //
 typedef INT WW_PIN_AUTHORIZED;	// 0  = unauthorized
-												// 1  = authorized
-												// -1 = unknown
+// 1  = authorized
+// -1 = unknown
 //
 // OID_WW_PIN_LAST_LOCATION
 // OID_WW_PIN_LOC_FIX
 //
 
 typedef struct _WW_PIN_LOCATION {
-    INT Latitude;		// Latitude in hundredths of a second
+	INT Latitude;		// Latitude in hundredths of a second
 
-    INT Longitude;		// Longitude in hundredths of a second
+	INT Longitude;		// Longitude in hundredths of a second
 
-    INT Altitude;		// Altitude in feet
+	INT Altitude;		// Altitude in feet
 
-    INT FixTime;		// Time of the location fix, since midnight,  local time (of the
-    // current day), in tenths of a second
+	INT FixTime;		// Time of the location fix, since midnight,  local time (of the
+	// current day), in tenths of a second
 
-    INT NetTime;		// Current local network time of the current day, since midnight,
-    // in tenths of a second
+	INT NetTime;		// Current local network time of the current day, since midnight,
+	// in tenths of a second
 
-    INT LocQuality;		// 0-100 = location quality
+	INT LocQuality;		// 0-100 = location quality
 
-    INT LatReg;			// Latitude registration offset, in hundredths of a second
+	INT LatReg;			// Latitude registration offset, in hundredths of a second
 
-    INT LongReg;		// Longitude registration offset, in hundredths of a second
+	INT LongReg;		// Longitude registration offset, in hundredths of a second
 
-    INT GMTOffset;		// Offset in minutes of the local time zone from GMT
+	INT GMTOffset;		// Offset in minutes of the local time zone from GMT
 
 } WW_PIN_LOCATION, *PWW_PIN_LOCATION;
 
@@ -1337,11 +1337,11 @@ typedef ULONG WW_MBX_MAILBOX_FLAG;	// 1 = set mailbox flag, 0 = do not set mailb
 //
 
 typedef struct _WW_MBX_PMAN {
-    BOOLEAN ACTION;		// 0 = Login PMAN,  1 = Logout PMAN
+	BOOLEAN ACTION;		// 0 = Login PMAN,  1 = Logout PMAN
 
-    UINT MAN;
-    UCHAR PASSWORD[8];		// Password should be null for Logout and indications.
-    // Maximum length of password is 8 chars.
+	UINT MAN;
+	UCHAR PASSWORD[8];		// Password should be null for Logout and indications.
+	// Maximum length of password is 8 chars.
 
 } WW_MBX_PMAN, *PWW_MBX_PMAN;
 
@@ -1349,10 +1349,10 @@ typedef struct _WW_MBX_PMAN {
 // OID_WW_MBX_FLEXLIST
 //
 typedef struct _WW_MBX_FLEXLIST {
-    INT count;			//  Number of MAN entries used.
-    // -1=unknown.
+	INT count;			//  Number of MAN entries used.
+	// -1=unknown.
 
-    UINT MAN[7];		//  List of MANs.
+	UINT MAN[7];		//  List of MANs.
 
 } WW_MBX_FLEXLIST;
 
@@ -1360,10 +1360,10 @@ typedef struct _WW_MBX_FLEXLIST {
 // OID_WW_MBX_GROUPLIST
 //
 typedef struct _WW_MBX_GROUPLIST {
-    INT count;			//  Number of MAN entries used.
-    // -1=unknown.
+	INT count;			//  Number of MAN entries used.
+	// -1=unknown.
 
-    UINT MAN[15];		//  List of MANs.
+	UINT MAN[15];		//  List of MANs.
 
 } WW_MBX_GROUPLIST;
 
@@ -1371,29 +1371,29 @@ typedef struct _WW_MBX_GROUPLIST {
 // OID_WW_MBX_TRAFFIC_AREA
 //
 typedef enum _WW_MBX_TRAFFIC_AREA {
-    unknown_traffic_area,	// The driver has no information about the current traffic area.
-     in_traffic_area,		// Mobile unit has entered a subscribed traffic area.
-     in_auth_traffic_area,	// Mobile unit is outside traffic area but is authorized.
-     unauth_traffic_area	// Mobile unit is outside traffic area but is un-authorized.
+	unknown_traffic_area,	// The driver has no information about the current traffic area.
+	in_traffic_area,		// Mobile unit has entered a subscribed traffic area.
+	in_auth_traffic_area,	// Mobile unit is outside traffic area but is authorized.
+	unauth_traffic_area	// Mobile unit is outside traffic area but is un-authorized.
 } WW_MBX_TRAFFIC_AREA;
 
 //
 // OID_WW_MBX_LIVE_DIE
 //
-typedef INT WW_MBX_LIVE_DIE;	//  0 = DIE last received       
-												//  1 = LIVE last received
-												// -1 = unknown
+typedef INT WW_MBX_LIVE_DIE;	//  0 = DIE last received
+//  1 = LIVE last received
+// -1 = unknown
 //
 // OID_WW_MBX_TEMP_DEFAULTLIST
 //
 
 typedef struct _WW_MBX_CHANNEL_PAIR {
-    UINT Mobile_Tx;
-    UINT Mobile_Rx;
+	UINT Mobile_Tx;
+	UINT Mobile_Rx;
 } WW_MBX_CHANNEL_PAIR, *PWW_MBX_CHANNEL_PAIR;
 typedef struct _WW_MBX_TEMPDEFAULTLIST {
-    UINT Length;
-    WW_MBX_CHANNEL_PAIR ChannelPair[1];
+	UINT Length;
+	WW_MBX_CHANNEL_PAIR ChannelPair[1];
 } WW_MBX_TEMPDEFAULTLIST, *WW_PMBX_TEMPDEFAULTLIST;
 
 #endif				// WIRELESS_WAN

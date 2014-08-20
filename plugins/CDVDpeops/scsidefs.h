@@ -192,25 +192,25 @@
 //***************************************************************************
 typedef struct {
 
-    BYTE    ErrorCode;          // Error Code (70H or 71H)
-    BYTE    SegmentNum;         // Number of current segment descriptor
-    BYTE    SenseKey;           // Sense Key(See bit definitions too)
-    BYTE    InfoByte0;          // Information MSB
-    BYTE    InfoByte1;          // Information MID
-    BYTE    InfoByte2;          // Information MID
-    BYTE    InfoByte3;          // Information LSB
-    BYTE    AddSenLen;          // Additional Sense Length
-    BYTE    ComSpecInf0;        // Command Specific Information MSB
-    BYTE    ComSpecInf1;        // Command Specific Information MID
-    BYTE    ComSpecInf2;        // Command Specific Information MID
-    BYTE    ComSpecInf3;        // Command Specific Information LSB
-    BYTE    AddSenseCode;       // Additional Sense Code
-    BYTE    AddSenQual;         // Additional Sense Code Qualifier
-    BYTE    FieldRepUCode;      // Field Replaceable Unit Code
-    BYTE    SenKeySpec15;       // Sense Key Specific 15th byte
-    BYTE    SenKeySpec16;       // Sense Key Specific 16th byte
-    BYTE    SenKeySpec17;       // Sense Key Specific 17th byte
-    BYTE    AddSenseBytes;      // Additional Sense Bytes
+	BYTE    ErrorCode;          // Error Code (70H or 71H)
+	BYTE    SegmentNum;         // Number of current segment descriptor
+	BYTE    SenseKey;           // Sense Key(See bit definitions too)
+	BYTE    InfoByte0;          // Information MSB
+	BYTE    InfoByte1;          // Information MID
+	BYTE    InfoByte2;          // Information MID
+	BYTE    InfoByte3;          // Information LSB
+	BYTE    AddSenLen;          // Additional Sense Length
+	BYTE    ComSpecInf0;        // Command Specific Information MSB
+	BYTE    ComSpecInf1;        // Command Specific Information MID
+	BYTE    ComSpecInf2;        // Command Specific Information MID
+	BYTE    ComSpecInf3;        // Command Specific Information LSB
+	BYTE    AddSenseCode;       // Additional Sense Code
+	BYTE    AddSenQual;         // Additional Sense Code Qualifier
+	BYTE    FieldRepUCode;      // Field Replaceable Unit Code
+	BYTE    SenKeySpec15;       // Sense Key Specific 15th byte
+	BYTE    SenKeySpec16;       // Sense Key Specific 16th byte
+	BYTE    SenKeySpec17;       // Sense Key Specific 17th byte
+	BYTE    AddSenseBytes;      // Additional Sense Bytes
 
 } SENSE_DATA_FMT;
 
@@ -278,85 +278,85 @@ typedef struct {
 ////////////////////////////////////////////////////////////////
 
 typedef struct {
-  USHORT Length;
-  UCHAR  ScsiStatus;
-  UCHAR  PathId;
-  UCHAR  TargetId;
-  UCHAR  Lun;
-  UCHAR  CdbLength;
-  UCHAR  SenseInfoLength;
-  UCHAR  DataIn;
-  ULONG  DataTransferLength;
-  ULONG  TimeOutValue;
-  ULONG  DataBufferOffset;
-  ULONG  SenseInfoOffset;
-  UCHAR  Cdb[16];
+	USHORT Length;
+	UCHAR  ScsiStatus;
+	UCHAR  PathId;
+	UCHAR  TargetId;
+	UCHAR  Lun;
+	UCHAR  CdbLength;
+	UCHAR  SenseInfoLength;
+	UCHAR  DataIn;
+	ULONG  DataTransferLength;
+	ULONG  TimeOutValue;
+	ULONG  DataBufferOffset;
+	ULONG  SenseInfoOffset;
+	UCHAR  Cdb[16];
 } SCSI_PASS_THROUGH, *PSCSI_PASS_THROUGH;
 
 
 typedef struct {
-  USHORT Length;
-  UCHAR  ScsiStatus;
-  UCHAR  PathId;
-  UCHAR  TargetId;
-  UCHAR  Lun;
-  UCHAR  CdbLength;
-  UCHAR  SenseInfoLength;
-  UCHAR  DataIn;
-  ULONG  DataTransferLength;
-  ULONG  TimeOutValue;
-  PVOID  DataBuffer;
-  ULONG  SenseInfoOffset;
-  UCHAR  Cdb[16];
+	USHORT Length;
+	UCHAR  ScsiStatus;
+	UCHAR  PathId;
+	UCHAR  TargetId;
+	UCHAR  Lun;
+	UCHAR  CdbLength;
+	UCHAR  SenseInfoLength;
+	UCHAR  DataIn;
+	ULONG  DataTransferLength;
+	ULONG  TimeOutValue;
+	PVOID  DataBuffer;
+	ULONG  SenseInfoOffset;
+	UCHAR  Cdb[16];
 } SCSI_PASS_THROUGH_DIRECT, *PSCSI_PASS_THROUGH_DIRECT;
 
 
 typedef struct {
-  SCSI_PASS_THROUGH spt;
-  ULONG Filler;
-  UCHAR ucSenseBuf[32];
-  UCHAR ucDataBuf[512];
+	SCSI_PASS_THROUGH spt;
+	ULONG Filler;
+	UCHAR ucSenseBuf[32];
+	UCHAR ucDataBuf[512];
 } SCSI_PASS_THROUGH_WITH_BUFFERS, *PSCSI_PASS_THROUGH_WITH_BUFFERS;
 
 
 typedef struct {
-  SCSI_PASS_THROUGH_DIRECT spt;
-  ULONG Filler;
-  UCHAR ucSenseBuf[32];
+	SCSI_PASS_THROUGH_DIRECT spt;
+	ULONG Filler;
+	UCHAR ucSenseBuf[32];
 } SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER, *PSCSI_PASS_THROUGH_DIRECT_WITH_BUFFER;
 
 
 
 typedef struct {
-  UCHAR NumberOfLogicalUnits;
-  UCHAR InitiatorBusId;
-  ULONG InquiryDataOffset;
+	UCHAR NumberOfLogicalUnits;
+	UCHAR InitiatorBusId;
+	ULONG InquiryDataOffset;
 } SCSI_BUS_DATA, *PSCSI_BUS_DATA;
 
 
 typedef struct {
-  UCHAR NumberOfBusses;
-  SCSI_BUS_DATA BusData[1];
+	UCHAR NumberOfBusses;
+	SCSI_BUS_DATA BusData[1];
 } SCSI_ADAPTER_BUS_INFO, *PSCSI_ADAPTER_BUS_INFO;
 
 
 typedef struct {
-  UCHAR PathId;
-  UCHAR TargetId;
-  UCHAR Lun;
-  BOOLEAN DeviceClaimed;
-  ULONG InquiryDataLength;
-  ULONG NextInquiryDataOffset;
-  UCHAR InquiryData[1];
+	UCHAR PathId;
+	UCHAR TargetId;
+	UCHAR Lun;
+	BOOLEAN DeviceClaimed;
+	ULONG InquiryDataLength;
+	ULONG NextInquiryDataOffset;
+	UCHAR InquiryData[1];
 } SCSI_INQUIRY_DATA, *PSCSI_INQUIRY_DATA;
 
 
 typedef struct {
-  ULONG Length;
-  UCHAR PortNumber;
-  UCHAR PathId;
-  UCHAR TargetId;
-  UCHAR Lun;
+	ULONG Length;
+	UCHAR PortNumber;
+	UCHAR PathId;
+	UCHAR TargetId;
+	UCHAR Lun;
 } SCSI_ADDRESS, *PSCSI_ADDRESS;
 
 
@@ -389,8 +389,8 @@ typedef struct {
  * Standard IOCTL define
  */
 #define CTL_CODE( DevType, Function, Method, Access ) (                 \
-    ((DevType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
-)
+                ((DevType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
+                                                      )
 
 #define IOCTL_SCSI_PASS_THROUGH         CTL_CODE( IOCTL_SCSI_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS )
 #define IOCTL_SCSI_MINIPORT             CTL_CODE( IOCTL_SCSI_BASE, 0x0402, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS )
@@ -419,9 +419,9 @@ typedef struct {
 #define IOCTL_CDROM_SEEK_AUDIO_MSF      CTL_CODE(IOCTL_CDROM_BASE, 0x0001, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 typedef struct _CDROM_SEEK_AUDIO_MSF {
-    UCHAR M;
-    UCHAR S;
-    UCHAR F;
+	UCHAR M;
+	UCHAR S;
+	UCHAR F;
 } CDROM_SEEK_AUDIO_MSF, *PCDROM_SEEK_AUDIO_MSF;
 
 //
@@ -434,51 +434,51 @@ typedef struct _CDROM_SEEK_AUDIO_MSF {
 #define IOCTL_CDROM_TRACK_ISRC       0x03
 
 typedef struct _CDROM_SUB_Q_DATA_FORMAT {
-    UCHAR Format;
-    UCHAR Track;
+	UCHAR Format;
+	UCHAR Track;
 } CDROM_SUB_Q_DATA_FORMAT, *PCDROM_SUB_Q_DATA_FORMAT;
 
 typedef struct _SUB_Q_HEADER {
-    UCHAR Reserved;
-    UCHAR AudioStatus;
-    UCHAR DataLength[2];
+	UCHAR Reserved;
+	UCHAR AudioStatus;
+	UCHAR DataLength[2];
 } SUB_Q_HEADER, *PSUB_Q_HEADER;
 
 typedef struct _SUB_Q_CURRENT_POSITION {
-    SUB_Q_HEADER Header;
-    UCHAR FormatCode;
-    UCHAR Control : 4;
-    UCHAR ADR : 4;
-    UCHAR TrackNumber;
-    UCHAR IndexNumber;
-    UCHAR AbsoluteAddress[4];
-    UCHAR TrackRelativeAddress[4];
+	SUB_Q_HEADER Header;
+	UCHAR FormatCode;
+	UCHAR Control : 4;
+	UCHAR ADR : 4;
+	UCHAR TrackNumber;
+	UCHAR IndexNumber;
+	UCHAR AbsoluteAddress[4];
+	UCHAR TrackRelativeAddress[4];
 } SUB_Q_CURRENT_POSITION, *PSUB_Q_CURRENT_POSITION;
 
 typedef struct _SUB_Q_MEDIA_CATALOG_NUMBER {
-    SUB_Q_HEADER Header;
-    UCHAR FormatCode;
-    UCHAR Reserved[3];
-    UCHAR Reserved1 : 7;
-    UCHAR Mcval : 1;
-    UCHAR MediaCatalog[15];
+	SUB_Q_HEADER Header;
+	UCHAR FormatCode;
+	UCHAR Reserved[3];
+	UCHAR Reserved1 : 7;
+	UCHAR Mcval : 1;
+	UCHAR MediaCatalog[15];
 } SUB_Q_MEDIA_CATALOG_NUMBER, *PSUB_Q_MEDIA_CATALOG_NUMBER;
 
 typedef struct _SUB_Q_TRACK_ISRC {
-    SUB_Q_HEADER Header;
-    UCHAR FormatCode;
-    UCHAR Reserved0;
-    UCHAR Track;
-    UCHAR Reserved1;
-    UCHAR Reserved2 : 7;
-    UCHAR Tcval : 1;
-    UCHAR TrackIsrc[15];
+	SUB_Q_HEADER Header;
+	UCHAR FormatCode;
+	UCHAR Reserved0;
+	UCHAR Track;
+	UCHAR Reserved1;
+	UCHAR Reserved2 : 7;
+	UCHAR Tcval : 1;
+	UCHAR TrackIsrc[15];
 } SUB_Q_TRACK_ISRC, *PSUB_Q_TRACK_ISRC;
 
 typedef union _SUB_Q_CHANNEL_DATA {
-    SUB_Q_CURRENT_POSITION CurrentPosition;
-    SUB_Q_MEDIA_CATALOG_NUMBER MediaCatalog;
-    SUB_Q_TRACK_ISRC TrackIsrc;
+	SUB_Q_CURRENT_POSITION CurrentPosition;
+	SUB_Q_MEDIA_CATALOG_NUMBER MediaCatalog;
+	SUB_Q_TRACK_ISRC TrackIsrc;
 } SUB_Q_CHANNEL_DATA, *PSUB_Q_CHANNEL_DATA;
 
 
@@ -496,9 +496,9 @@ typedef union _SUB_Q_CHANNEL_DATA {
 
 
 typedef enum {
-    EqualPriority,
-    KeepPrefetchedData,
-    KeepReadData
+	EqualPriority,
+	KeepPrefetchedData,
+	KeepReadData
 } DISK_CACHE_RETENTION_PRIORITY;
 
 #define FILE_DEVICE_DISK                0x00000007
@@ -508,72 +508,72 @@ typedef enum {
 
 typedef struct _DISK_CACHE_INFORMATION {
 
-    //
-    // on return indicates that the device is capable of saving any parameters
-    // in non-volatile storage.  On send indicates that the device should
-    // save the state in non-volatile storage.
-    //
+	//
+	// on return indicates that the device is capable of saving any parameters
+	// in non-volatile storage.  On send indicates that the device should
+	// save the state in non-volatile storage.
+	//
 
-    BOOLEAN ParametersSavable;
+	BOOLEAN ParametersSavable;
 
-    //
-    // Indicates whether the write and read caches are enabled.
-    //
+	//
+	// Indicates whether the write and read caches are enabled.
+	//
 
-    BOOLEAN ReadCacheEnabled;
-    BOOLEAN WriteCacheEnabled;
+	BOOLEAN ReadCacheEnabled;
+	BOOLEAN WriteCacheEnabled;
 
-    //
-    // Controls the likelyhood of data remaining in the cache depending on how
-    // it got there.  Data cached from a READ or WRITE operation may be given
-    // higher, lower or equal priority to data entered into the cache for other
-    // means (like prefetch)
-    //
+	//
+	// Controls the likelyhood of data remaining in the cache depending on how
+	// it got there.  Data cached from a READ or WRITE operation may be given
+	// higher, lower or equal priority to data entered into the cache for other
+	// means (like prefetch)
+	//
 
-    DISK_CACHE_RETENTION_PRIORITY ReadRetentionPriority;
-    DISK_CACHE_RETENTION_PRIORITY WriteRetentionPriority;
+	DISK_CACHE_RETENTION_PRIORITY ReadRetentionPriority;
+	DISK_CACHE_RETENTION_PRIORITY WriteRetentionPriority;
 
-    //
-    // Requests for a larger number of blocks than this may have prefetching
-    // disabled.  If this value is set to 0 prefetch will be disabled.
-    //
+	//
+	// Requests for a larger number of blocks than this may have prefetching
+	// disabled.  If this value is set to 0 prefetch will be disabled.
+	//
 
-    USHORT DisablePrefetchTransferLength;
+	USHORT DisablePrefetchTransferLength;
 
-    //
-    // If TRUE then ScalarPrefetch (below) will be valid.  If FALSE then
-    // the minimum and maximum values should be treated as a block count
-    // (BlockPrefetch)
-    //
+	//
+	// If TRUE then ScalarPrefetch (below) will be valid.  If FALSE then
+	// the minimum and maximum values should be treated as a block count
+	// (BlockPrefetch)
+	//
 
-    BOOLEAN PrefetchScalar;
+	BOOLEAN PrefetchScalar;
 
-    //
-    // Contains the minimum and maximum amount of data which will be
-    // will be prefetched into the cache on a disk operation.  This value
-    // may either be a scalar multiplier of the transfer length of the request,
-    // or an abolute number of disk blocks.  PrefetchScalar (above) indicates
-    // which interpretation is used.
-    //
+	//
+	// Contains the minimum and maximum amount of data which will be
+	// will be prefetched into the cache on a disk operation.  This value
+	// may either be a scalar multiplier of the transfer length of the request,
+	// or an abolute number of disk blocks.  PrefetchScalar (above) indicates
+	// which interpretation is used.
+	//
 
-    union {
-        struct {
-            USHORT Minimum;
-            USHORT Maximum;
+	union {
+		struct {
+			USHORT Minimum;
+			USHORT Maximum;
 
-            //
-            // The maximum number of blocks which will be prefetched - useful
-            // with the scalar limits to set definite upper limits.
-            //
+			//
+			// The maximum number of blocks which will be prefetched - useful
+			// with the scalar limits to set definite upper limits.
+			//
 
-            USHORT MaximumBlocks;
-        } ScalarPrefetch;
+			USHORT MaximumBlocks;
+		} ScalarPrefetch;
 
-        struct {
-            USHORT Minimum;
-            USHORT Maximum;
-        } BlockPrefetch;
-    };
+		struct {
+			USHORT Minimum;
+			USHORT Maximum;
+		} BlockPrefetch;
+	};
 
 } DISK_CACHE_INFORMATION, *PDISK_CACHE_INFORMATION;
 

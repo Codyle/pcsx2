@@ -50,8 +50,8 @@
 #endif
 
 int
-sem_close (sem_t * sem)
+sem_close(sem_t * sem)
 {
-  errno = ENOSYS;
-  return -1;
+	errno = ENOSYS;
+	return -1;
 }				/* sem_close */

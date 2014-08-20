@@ -26,8 +26,7 @@
 #include <gtk/gtkwidget.h>
 
 
-struct MessageBoxData
-{
+struct MessageBoxData {
 	GtkWidget *window; // GtkWindow
 	GtkWidget *desc; // GtkLabel
 

@@ -27,114 +27,122 @@ extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 class WXDLLEXPORT wxDialog : public wxDialogBase
 {
 public:
-    wxDialog() { Init(); }
+	wxDialog()
+	{
+		Init();
+	}
 
-    // full ctor
-    wxDialog(wxWindow *parent, wxWindowID id,
-             const wxString& title,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr)
-    {
-        Init();
+	// full ctor
+	wxDialog(wxWindow *parent, wxWindowID id,
+	         const wxString &title,
+	         const wxPoint &pos = wxDefaultPosition,
+	         const wxSize &size = wxDefaultSize,
+	         long style = wxDEFAULT_DIALOG_STYLE,
+	         const wxString &name = wxDialogNameStr)
+	{
+		Init();
+		(void)Create(parent, id, title, pos, size, style, name);
+	}
 
-        (void)Create(parent, id, title, pos, size, style, name);
-    }
+	bool Create(wxWindow *parent, wxWindowID id,
+	            const wxString &title,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxDEFAULT_DIALOG_STYLE,
+	            const wxString &name = wxDialogNameStr);
 
-    bool Create(wxWindow *parent, wxWindowID id,
-                const wxString& title,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_DIALOG_STYLE,
-                const wxString& name = wxDialogNameStr);
+	virtual ~wxDialog();
 
-    virtual ~wxDialog();
+	// return true if we're showing the dialog modally
+	virtual bool IsModal() const
+	{
+		return m_modalData != NULL;
+	}
 
-    // return true if we're showing the dialog modally
-    virtual bool IsModal() const { return m_modalData != NULL; }
+	// show the dialog modally and return the value passed to EndModal()
+	virtual int ShowModal();
 
-    // show the dialog modally and return the value passed to EndModal()
-    virtual int ShowModal();
-
-    // may be called to terminate the dialog with the given return code
-    virtual void EndModal(int retCode);
+	// may be called to terminate the dialog with the given return code
+	virtual void EndModal(int retCode);
 
 
-    // we treat dialog toolbars specially under Windows CE
+	// we treat dialog toolbars specially under Windows CE
 #if wxUSE_TOOLBAR && defined(__POCKETPC__)
-    // create main toolbar by calling OnCreateToolBar()
-    virtual wxToolBar* CreateToolBar(long style = -1,
-                                     wxWindowID winid = wxID_ANY,
-                                     const wxString& name = wxToolBarNameStr);
-    // return a new toolbar
-    virtual wxToolBar *OnCreateToolBar(long style,
-                                       wxWindowID winid,
-                                       const wxString& name );
+	// create main toolbar by calling OnCreateToolBar()
+	virtual wxToolBar* CreateToolBar(long style = -1,
+	                                 wxWindowID winid = wxID_ANY,
+	                                 const wxString &name = wxToolBarNameStr);
+	// return a new toolbar
+	virtual wxToolBar *OnCreateToolBar(long style,
+	                                   wxWindowID winid,
+	                                   const wxString &name);
 
-    // get the main toolbar
-    wxToolBar *GetToolBar() const { return m_dialogToolBar; }
+	// get the main toolbar
+	wxToolBar *GetToolBar() const
+	{
+		return m_dialogToolBar;
+	}
 #endif // wxUSE_TOOLBAR && __POCKETPC__
 
 
-    // implementation only from now on
-    // -------------------------------
+	// implementation only from now on
+	// -------------------------------
 
-    // override some base class virtuals
-    virtual bool Show(bool show = true);
+	// override some base class virtuals
+	virtual bool Show(bool show = true);
 
-    virtual void Raise();
+	virtual void Raise();
 
 #ifdef __POCKETPC__
-    // Responds to the OK button in a PocketPC titlebar. This
-    // can be overridden, or you can change the id used for
-    // sending the event with SetAffirmativeId. Returns false
-    // if the event was not processed.
-    virtual bool DoOK();
+	// Responds to the OK button in a PocketPC titlebar. This
+	// can be overridden, or you can change the id used for
+	// sending the event with SetAffirmativeId. Returns false
+	// if the event was not processed.
+	virtual bool DoOK();
 #endif
 
-    // Windows callbacks
-    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+	// Windows callbacks
+	WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 #if WXWIN_COMPATIBILITY_2_6
-    // use the other ctor
-    wxDEPRECATED( wxDialog(wxWindow *parent,
-             const wxString& title, bool modal,
-             int x = wxDefaultCoord, int y = wxDefaultCoord, int width = 500, int height = 500,
-             long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr) );
+	// use the other ctor
+	wxDEPRECATED(wxDialog(wxWindow *parent,
+	                      const wxString &title, bool modal,
+	                      int x = wxDefaultCoord, int y = wxDefaultCoord, int width = 500, int height = 500,
+	                      long style = wxDEFAULT_DIALOG_STYLE,
+	                      const wxString &name = wxDialogNameStr));
 
-    // just call Show() or ShowModal()
-    wxDEPRECATED( void SetModal(bool flag) );
+	// just call Show() or ShowModal()
+	wxDEPRECATED(void SetModal(bool flag));
 
-    // use IsModal()
-    wxDEPRECATED( bool IsModalShowing() const );
+	// use IsModal()
+	wxDEPRECATED(bool IsModalShowing() const);
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
-    // find the window to use as parent for this dialog if none has been
-    // specified explicitly by the user
-    //
-    // may return NULL
-    wxWindow *FindSuitableParent() const;
+	// find the window to use as parent for this dialog if none has been
+	// specified explicitly by the user
+	//
+	// may return NULL
+	wxWindow *FindSuitableParent() const;
 
-    // common part of all ctors
-    void Init();
+	// common part of all ctors
+	void Init();
 
 private:
-    wxWindow*   m_oldFocus;
-    bool        m_endModalCalled; // allow for closing within InitDialog
+	wxWindow*   m_oldFocus;
+	bool        m_endModalCalled; // allow for closing within InitDialog
 
 #if wxUSE_TOOLBAR && defined(__POCKETPC__)
-    wxToolBar*  m_dialogToolBar;
+	wxToolBar*  m_dialogToolBar;
 #endif
 
-    // this pointer is non-NULL only while the modal event loop is running
-    wxDialogModalData *m_modalData;
+	// this pointer is non-NULL only while the modal event loop is running
+	wxDialogModalData *m_modalData;
 
-    DECLARE_DYNAMIC_CLASS(wxDialog)
-    DECLARE_NO_COPY_CLASS(wxDialog)
+	DECLARE_DYNAMIC_CLASS(wxDialog)
+	DECLARE_NO_COPY_CLASS(wxDialog)
 };
 
 #endif
-    // _WX_DIALOG_H_
+// _WX_DIALOG_H_

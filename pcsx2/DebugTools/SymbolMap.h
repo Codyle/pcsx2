@@ -53,7 +53,8 @@ enum DataType {
 	DATATYPE_NONE, DATATYPE_BYTE, DATATYPE_HALFWORD, DATATYPE_WORD, DATATYPE_ASCII
 };
 
-class SymbolMap {
+class SymbolMap
+{
 public:
 	SymbolMap() {}
 	void Clear();
@@ -85,17 +86,20 @@ public:
 	void AddLabel(const char* name, u32 address, int moduleIndex = -1);
 	std::string GetLabelString(u32 address) const;
 	void SetLabelName(const char* name, u32 address, bool updateImmediately = true);
-	bool GetLabelValue(const char* name, u32& dest);
+	bool GetLabelValue(const char* name, u32 &dest);
 
 	void AddData(u32 address, u32 size, DataType type, int moduleIndex = -1);
 	u32 GetDataStart(u32 address) const;
 	u32 GetDataSize(u32 startAddress) const;
 	DataType GetDataType(u32 startAddress) const;
 
-	static const u32 INVALID_ADDRESS = (u32)-1;
+	static const u32 INVALID_ADDRESS = (u32) - 1;
 
 	void UpdateActiveSymbols();
-	bool IsEmpty() const { return activeFunctions.empty() && activeLabels.empty() && activeData.empty(); };
+	bool IsEmpty() const
+	{
+		return activeFunctions.empty() && activeLabels.empty() && activeData.empty();
+	};
 private:
 	void AssignFunctionIndices();
 	const char *GetLabelName(u32 address) const;

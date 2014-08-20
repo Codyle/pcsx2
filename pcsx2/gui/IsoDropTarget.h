@@ -28,14 +28,14 @@ protected:
 
 public:
 	virtual ~IsoDropTarget() throw() { }
-	IsoDropTarget( wxWindow* parent ) : wxFileDropTarget()
+	IsoDropTarget(wxWindow* parent) : wxFileDropTarget()
 	{
 		m_WindowBound = parent;
 	}
 
-	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
+	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &filenames);
 };
 
 
 extern wxString GetMsg_ConfirmSysReset();
-extern wxWindowID SwapOrReset_Iso( wxWindow* owner, IScopedCoreThread& core_control, const wxString& isoFilename, const wxString& descpart1 );
+extern wxWindowID SwapOrReset_Iso(wxWindow* owner, IScopedCoreThread &core_control, const wxString &isoFilename, const wxString &descpart1);

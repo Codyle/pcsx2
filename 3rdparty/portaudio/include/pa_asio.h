@@ -28,13 +28,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -67,8 +67,8 @@ extern "C"
  @note: this function used to be called PaAsio_GetAvailableLatencyValues. There is a
  #define that maps PaAsio_GetAvailableLatencyValues to this function for backwards compatibility.
 */
-PaError PaAsio_GetAvailableBufferSizes( PaDeviceIndex device,
-		long *minBufferSizeFrames, long *maxBufferSizeFrames, long *preferredBufferSizeFrames, long *granularity );
+PaError PaAsio_GetAvailableBufferSizes(PaDeviceIndex device,
+                                       long *minBufferSizeFrames, long *maxBufferSizeFrames, long *preferredBufferSizeFrames, long *granularity);
 
 
 /** Backwards compatibility alias for PaAsio_GetAvailableBufferSizes
@@ -84,7 +84,7 @@ PaError PaAsio_GetAvailableBufferSizes( PaDeviceIndex device,
   @param systemSpecific On Windows, the calling application's main window handle,
   on Macintosh this value should be zero.
 */
-PaError PaAsio_ShowControlPanel( PaDeviceIndex device, void* systemSpecific );
+PaError PaAsio_ShowControlPanel(PaDeviceIndex device, void* systemSpecific);
 
 
 
@@ -94,53 +94,53 @@ PaError PaAsio_ShowControlPanel( PaDeviceIndex device, void* systemSpecific );
 
  The string will be no longer than 32 characters including the null terminator.
 */
-PaError PaAsio_GetInputChannelName( PaDeviceIndex device, int channelIndex,
-        const char** channelName );
+PaError PaAsio_GetInputChannelName(PaDeviceIndex device, int channelIndex,
+                                   const char** channelName);
 
-        
+
 /** Retrieve a pointer to a string containing the name of the specified
  input channel. The string is valid until Pa_Terminate is called.
 
  The string will be no longer than 32 characters including the null terminator.
 */
-PaError PaAsio_GetOutputChannelName( PaDeviceIndex device, int channelIndex,
-        const char** channelName );
+PaError PaAsio_GetOutputChannelName(PaDeviceIndex device, int channelIndex,
+                                    const char** channelName);
 
 
 /** Set the sample rate of an open paASIO stream.
- 
- @param stream The stream to operate on.
- @param sampleRate The new sample rate. 
 
- Note that this function may fail if the stream is alredy running and the 
+ @param stream The stream to operate on.
+ @param sampleRate The new sample rate.
+
+ Note that this function may fail if the stream is alredy running and the
  ASIO driver does not support switching the sample rate of a running stream.
 
  Returns paIncompatibleStreamHostApi if stream is not a paASIO stream.
 */
-PaError PaAsio_SetStreamSampleRate( PaStream* stream, double sampleRate );
+PaError PaAsio_SetStreamSampleRate(PaStream* stream, double sampleRate);
 
 
 #define paAsioUseChannelSelectors      (0x01)
 
-typedef struct PaAsioStreamInfo{
-    unsigned long size;             /**< sizeof(PaAsioStreamInfo) */
-    PaHostApiTypeId hostApiType;    /**< paASIO */
-    unsigned long version;          /**< 1 */
+typedef struct PaAsioStreamInfo {
+	unsigned long size;             /**< sizeof(PaAsioStreamInfo) */
+	PaHostApiTypeId hostApiType;    /**< paASIO */
+	unsigned long version;          /**< 1 */
 
-    unsigned long flags;
+	unsigned long flags;
 
-    /* Support for opening only specific channels of an ASIO device.
-        If the paAsioUseChannelSelectors flag is set, channelSelectors is a
-        pointer to an array of integers specifying the device channels to use.
-        When used, the length of the channelSelectors array must match the
-        corresponding channelCount parameter to Pa_OpenStream() otherwise a
-        crash may result.
-        The values in the selectors array must specify channels within the
-        range of supported channels for the device or paInvalidChannelCount will
-        result.
-    */
-    int *channelSelectors;
-}PaAsioStreamInfo;
+	/* Support for opening only specific channels of an ASIO device.
+	    If the paAsioUseChannelSelectors flag is set, channelSelectors is a
+	    pointer to an array of integers specifying the device channels to use.
+	    When used, the length of the channelSelectors array must match the
+	    corresponding channelCount parameter to Pa_OpenStream() otherwise a
+	    crash may result.
+	    The values in the selectors array must specify channels within the
+	    range of supported channels for the device or paInvalidChannelCount will
+	    result.
+	*/
+	int *channelSelectors;
+} PaAsioStreamInfo;
 
 
 #ifdef __cplusplus

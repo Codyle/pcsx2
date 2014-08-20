@@ -34,17 +34,23 @@ protected:
 	PluginsEnum_t			m_pid;
 
 public:
-	wxString GetEventName() const { return L"SaveSinglePlugin"; }
+	wxString GetEventName() const
+	{
+		return L"SaveSinglePlugin";
+	}
 
 	virtual ~SysExecEvent_SaveSinglePlugin() throw() {}
-	SysExecEvent_SaveSinglePlugin* Clone() const { return new SysExecEvent_SaveSinglePlugin( *this ); }
+	SysExecEvent_SaveSinglePlugin* Clone() const
+	{
+		return new SysExecEvent_SaveSinglePlugin(*this);
+	}
 
-	SysExecEvent_SaveSinglePlugin( PluginsEnum_t pid=PluginId_GS )
+	SysExecEvent_SaveSinglePlugin(PluginsEnum_t pid = PluginId_GS)
 	{
 		m_pid = pid;
 	}
-	
-	SysExecEvent_SaveSinglePlugin& SetPluginId( PluginsEnum_t pid )
+
+	SysExecEvent_SaveSinglePlugin &SetPluginId(PluginsEnum_t pid)
 	{
 		m_pid = pid;
 		return *this;
@@ -56,12 +62,12 @@ protected:
 };
 
 
-extern void StateCopy_SaveToFile( const wxString& file );
-extern void StateCopy_LoadFromFile( const wxString& file );
-extern void StateCopy_SaveToSlot( uint num );
-extern void StateCopy_LoadFromSlot( uint slot, bool isFromBackup = false );
+extern void StateCopy_SaveToFile(const wxString &file);
+extern void StateCopy_LoadFromFile(const wxString &file);
+extern void StateCopy_SaveToSlot(uint num);
+extern void StateCopy_LoadFromSlot(uint slot, bool isFromBackup = false);
 
-extern void States_registerLoadBackupMenuItem( wxMenuItem* loadBackupMenuItem );
+extern void States_registerLoadBackupMenuItem(wxMenuItem* loadBackupMenuItem);
 
 extern bool States_isSlotUsed(int num);
 extern void States_DefrostCurrentSlotBackup();
@@ -70,5 +76,5 @@ extern void States_FreezeCurrentSlot();
 extern void States_CycleSlotForward();
 extern void States_CycleSlotBackward();
 
-extern void States_SetCurrentSlot( int slot );
+extern void States_SetCurrentSlot(int slot);
 extern int  States_GetCurrentSlot();

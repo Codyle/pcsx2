@@ -27,21 +27,21 @@ using namespace x86Emitter;
 #define aMin(x, y) std::min(x,y)
 
 // newVif_HashBucket.h uses this typedef, so it has to be declared first.
-typedef u32  (__fastcall *nVifCall)(void*, const void*);
+typedef u32(__fastcall *nVifCall)(void*, const void*);
 typedef void (__fastcall *nVifrecCall)(uptr dest, uptr src);
 
 #include "newVif_HashBucket.h"
 
-extern void  mVUmergeRegs(const xRegisterSSE& dest, const xRegisterSSE& src,  int xyzw, bool modXYZW = 0);
-extern void _nVifUnpack  (int idx, const u8* data, uint mode, bool isFill);
-extern void  dVifReserve (int idx);
-extern void  dVifReset   (int idx);
-extern void  dVifClose   (int idx);
-extern void  dVifRelease (int idx);
+extern void  mVUmergeRegs(const xRegisterSSE &dest, const xRegisterSSE &src,  int xyzw, bool modXYZW = 0);
+extern void _nVifUnpack(int idx, const u8* data, uint mode, bool isFill);
+extern void  dVifReserve(int idx);
+extern void  dVifReset(int idx);
+extern void  dVifClose(int idx);
+extern void  dVifRelease(int idx);
 extern void  VifUnpackSSE_Init();
 extern void  VifUnpackSSE_Destroy();
 
-_vifT extern void  dVifUnpack  (const u8* data, bool isFill);
+_vifT extern void  dVifUnpack(const u8* data, bool isFill);
 
 #define VUFT VIFUnpackFuncTable
 #define	_v0 0
@@ -78,7 +78,7 @@ struct nVifStruct {
 
 	// Buffer for partial transfers (should always be first to ensure alignment)
 	// Maximum buffer size is 256 (vifRegs.Num max range) * 16 (quadword)
-	__aligned16 u8			buffer[256*16];
+	__aligned16 u8			buffer[256 * 16];
 	u32						bSize;			// Size of 'buffer'
 	u32						bPtr;
 
@@ -102,7 +102,7 @@ extern void resetNewVif(int idx);
 extern void releaseNewVif(int idx);
 
 extern __aligned16 nVifStruct nVif[2];
-extern __aligned16 nVifCall nVifUpk[(2*2*16)*4]; // ([USN][Masking][Unpack Type]) [curCycle]
+extern __aligned16 nVifCall nVifUpk[(2 * 2 * 16) * 4]; // ([USN][Masking][Unpack Type]) [curCycle]
 extern __aligned16 u32		nVifMask[3][4][4];	 // [MaskNumber][CycleNumber][Vector]
 
 static const bool newVifDynaRec = 1; // Use code in newVif_Dynarec.inl

@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxBitmapButtonXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxBitmapButtonXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxBitmapButtonXmlHandler)
 
 public:
-    wxBitmapButtonXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxBitmapButtonXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_BMPBUTTON

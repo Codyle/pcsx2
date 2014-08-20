@@ -52,7 +52,10 @@
 #define sZero			0			// Zero program
 
 #define SAFE_RELEASE_PROG(x) 	{ if( (x) != NULL ) { cgDestroyProgram(x); x = NULL; } }
-inline bool ZZshActiveParameter(ZZshParameter param) {return (param !=NULL); }
+inline bool ZZshActiveParameter(ZZshParameter param)
+{
+	return (param != NULL);
+}
 
 #endif					// end NVIDIA cg-toolkit API
 
@@ -60,7 +63,7 @@ inline bool ZZshActiveParameter(ZZshParameter param) {return (param !=NULL); }
 
 enum ZZshShaderType {ZZ_SH_ZERO, ZZ_SH_REGULAR, ZZ_SH_REGULAR_FOG, ZZ_SH_TEXTURE, ZZ_SH_TEXTURE_FOG, ZZ_SH_CRTC};
 // We have "compatible" shaders, as RegularFogVS and RegularFogPS. if don't need to wory about incompatible shaders
-// It used only in GLSL mode. 
+// It used only in GLSL mode.
 
 // ------------------------- Variables -------------------------------
 
@@ -71,15 +74,14 @@ extern ZZshParameter 	g_vparamPosXY[2], g_fparamFogColor;
 #define MAX_ACTIVE_UNIFORMS 600
 #define MAX_ACTIVE_SHADERS 400
 
-struct FRAGMENTSHADER
-{
+struct FRAGMENTSHADER {
 	FRAGMENTSHADER() : prog(sZero), Shader(0), sMemory(pZero), sFinal(pZero), sBitwiseANDX(pZero), sBitwiseANDY(pZero), sInterlace(pZero), sCLUT(pZero), sOneColor(pZero), sBitBltZ(pZero),
 		fTexAlpha2(pZero), fTexOffset(pZero), fTexDims(pZero), fTexBlock(pZero), fClampExts(pZero), fTexWrapMode(pZero),
 		fRealTexDims(pZero), fTestBlack(pZero), fPageOffset(pZero), fTexAlpha(pZero)  {}
-	
+
 	ZZshShaderLink prog;						// it link to FRAGMENTSHADER structure, for compability between GLSL and CG
 	ZZshShader Shader;						// GLSL store shader's not as ready programs, but as shaders compilated object. VS and PS should be linked together to
-									// made a program.
+	// made a program.
 	ZZshShaderType ShaderType;					// Not every PS and VS are used together, only compatible ones.
 
 	ZZshParameter sMemory, sFinal, sBitwiseANDX, sBitwiseANDY, sInterlace, sCLUT;
@@ -96,77 +98,59 @@ struct FRAGMENTSHADER
 	{
 		ZZshParameter p;
 		p = cgGetNamedParameter(prog, name);
-
 		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) var = p;
 	}
 
 	bool set_texture(GLuint texobj, const char *name)
 	{
 		ZZshParameter p;
-
 		p = cgGetNamedParameter(prog, name);
-
-		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE)
-		{
+		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) {
 			cgGLSetTextureParameter(p, texobj);
 			cgGLEnableTextureParameter(p);
 			return true;
 		}
-
 		return false;
 	}
 
 	bool connect(ZZshParameter &tex, const char *name)
 	{
 		ZZshParameter p;
-
 		p = cgGetNamedParameter(prog, name);
-
-		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE)
-		{
+		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) {
 			cgConnectParameter(tex, p);
 			return true;
 		}
-
 		return false;
 	}
 
 	bool set_texture(ZZshParameter &tex, const char *name)
 	{
 		ZZshParameter p;
-
 		p = cgGetNamedParameter(prog, name);
-
-		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE)
-		{
+		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) {
 			//cgGLEnableTextureParameter(p);
 			tex = p;
 			return true;
 		}
-
 		return false;
 	}
 
 	bool set_shader_const(float4 v, const char *name)
 	{
 		ZZshParameter p;
-
 		p = cgGetNamedParameter(prog, name);
-
-		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE)
-		{
+		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) {
 			cgGLSetParameter4fv(p, v);
 			return true;
 		}
-
 		return false;
 	}
 };
 
-struct VERTEXSHADER
-{
+struct VERTEXSHADER {
 	VERTEXSHADER() : prog(sZero), Shader(0), sBitBltPos(pZero), sBitBltTex(pZero) {}
-	
+
 	ZZshShaderLink prog;
 	ZZshShader Shader;
 	ZZshShaderType ShaderType;
@@ -176,36 +160,48 @@ struct VERTEXSHADER
 	int ParametersStart, ParametersFinish;
 };
 
-	extern float4 g_vdepth;	
-	extern float4 vlogz;
-	extern VERTEXSHADER pvsBitBlt;
-	extern FRAGMENTSHADER ppsBitBlt[2], ppsBitBltDepth, ppsOne;					// ppsOne used to stop using shaders for draw
-	extern FRAGMENTSHADER ppsBaseTexture, ppsConvert16to32, ppsConvert32to16;
+extern float4 g_vdepth;
+extern float4 vlogz;
+extern VERTEXSHADER pvsBitBlt;
+extern FRAGMENTSHADER ppsBitBlt[2], ppsBitBltDepth, ppsOne;					// ppsOne used to stop using shaders for draw
+extern FRAGMENTSHADER ppsBaseTexture, ppsConvert16to32, ppsConvert32to16;
 
-	extern FRAGMENTSHADER ppsRegular[4], ppsTexture[NUM_SHADERS];
-	extern FRAGMENTSHADER ppsCRTC[2], ppsCRTC24[2], ppsCRTCTarg[2];
+extern FRAGMENTSHADER ppsRegular[4], ppsTexture[NUM_SHADERS];
+extern FRAGMENTSHADER ppsCRTC[2], ppsCRTC24[2], ppsCRTCTarg[2];
 
 // ------------------------- Functions -------------------------------
 
 #ifdef NVIDIA_CG_API
-inline bool ZZshExistProgram(FRAGMENTSHADER* pf) {return (pf->prog != NULL); };			// We don't check ps != NULL, so be warned,
-inline bool ZZshExistProgram(VERTEXSHADER* pf) {return (pf->prog != NULL); };
-inline bool ZZshExistProgram(ZZshShaderLink prog) {return (prog != NULL); };
+inline bool ZZshExistProgram(FRAGMENTSHADER* pf)
+{
+	return (pf->prog != NULL);
+};			// We don't check ps != NULL, so be warned,
+inline bool ZZshExistProgram(VERTEXSHADER* pf)
+{
+	return (pf->prog != NULL);
+};
+inline bool ZZshExistProgram(ZZshShaderLink prog)
+{
+	return (prog != NULL);
+};
 #endif
 
 extern const char* ShaderCallerName;
 extern const char* ShaderHandleName;
 
-inline void SetShaderCaller(const char* Name) {	
+inline void SetShaderCaller(const char* Name)
+{
 	ShaderCallerName = Name;
 }
 
-inline void SetHandleName(const char* Name) {
+inline void SetHandleName(const char* Name)
+{
 	ShaderHandleName = Name;
 }
-		
-inline void ResetShaderCounters() {
-//	g_vsprog = g_psprog = sZero;
+
+inline void ResetShaderCounters()
+{
+	//	g_vsprog = g_psprog = sZero;
 }
 
 extern bool ZZshCheckProfilesSupport();
@@ -218,14 +214,14 @@ extern void ZZshSetParameter4fv(ZZshParameter param, const float* v, const char*
 extern void ZZshSetParameter4fvWithRetry(ZZshParameter* param, ZZshShaderLink prog, const float* v, const char* name);
 extern void ZZshGLSetTextureParameter(ZZshShaderLink prog, ZZshParameter param, GLuint texobj, const char* name);
 extern void ZZshGLSetTextureParameter(ZZshParameter param, GLuint texobj, const char* name);
-extern void ZZshDefaultOneColor( FRAGMENTSHADER ptr );
+extern void ZZshDefaultOneColor(FRAGMENTSHADER ptr);
 extern void ZZshSetVertexShader(ZZshShaderLink prog);
 extern void ZZshSetPixelShader(ZZshShaderLink prog);
 extern bool ZZshLoadExtraEffects();
 
-extern FRAGMENTSHADER* ZZshLoadShadeEffect(int type, int texfilter, int fog, int testaem, int exactcolor, const clampInfo& clamp, int context, bool* pbFailed);
+extern FRAGMENTSHADER* ZZshLoadShadeEffect(int type, int texfilter, int fog, int testaem, int exactcolor, const clampInfo &clamp, int context, bool* pbFailed);
 
-	// only sets a limited amount of state (for Update)
-	void SetTexVariablesInt(int context, int bilinear, const tex0Info& tex0, bool CheckVB, FRAGMENTSHADER* pfragment, int force);
+// only sets a limited amount of state (for Update)
+void SetTexVariablesInt(int context, int bilinear, const tex0Info &tex0, bool CheckVB, FRAGMENTSHADER* pfragment, int force);
 
 #endif

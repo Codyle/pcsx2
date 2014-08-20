@@ -41,7 +41,6 @@ void InitLog()
 	// Token comment line
 #ifdef VERBOSE_LOGFILE
 	CreateDirectory("logs", NULL);
-
 	DeleteFile("logs\\CDVDlog.txt");
 	logfile = NULL;
 #endif /* VERBOSE LOGFILE */
@@ -59,14 +58,12 @@ int OpenLog()
 	                     CREATE_ALWAYS,
 	                     FILE_FLAG_SEQUENTIAL_SCAN,
 	                     NULL);
-	if (logfile == INVALID_HANDLE_VALUE)
-	{
+	if (logfile == INVALID_HANDLE_VALUE) {
 		logfile = NULL;
-		return(-1);
+		return (-1);
 	} // ENDIF- Failed to open? Say so.
 #endif /* VERBOSE LOGFILE */
-
-	return(0);
+	return (0);
 } // END OpenLog();
 
 
@@ -74,8 +71,7 @@ void CloseLog()
 {
 	// Token comment line
 #ifdef VERBOSE_LOGFILE
-	if (logfile != NULL)
-	{
+	if (logfile != NULL) {
 		CloseHandle(logfile);
 		logfile = NULL;
 	} // ENDIF- Is the log file actually open? Close it.
@@ -86,24 +82,19 @@ void CloseLog()
 void PrintLog(const char *fmt, ...)
 {
 	DWORD byteswritten;
-
 	// Token comment line
 #ifdef VERBOSE_LOGFILE
 	va_list list;
 	int len;
-
 	if (logfile == NULL)  return; // Log file not open... yet.
-
 	va_start(list, fmt);
 	vsprintf(logfiletemp, fmt, list);
 	va_end(list);
-
 	len = 0;
 	while ((len < 2048) && (logfiletemp[len] != 0))  len++;
-	if ((len > 0) && (logfiletemp[len-1] == '\n'))  len--;
-	if ((len > 0) && (logfiletemp[len-1] == '\r'))  len--;
+	if ((len > 0) && (logfiletemp[len - 1] == '\n'))  len--;
+	if ((len > 0) && (logfiletemp[len - 1] == '\r'))  len--;
 	logfiletemp[len] = 0; // Slice off the last "\r\n"...
-
 	WriteFile(logfile, logfiletemp, len, &byteswritten, NULL);
 	WriteFile(logfile, "\r\n", 2, &byteswritten, NULL);
 #endif /* VERBOSE LOGFILE */
@@ -113,7 +104,6 @@ void PrintError(const char *header, DWORD errcode)
 {
 #ifdef VERBOSE_LOGFILE
 	TCHAR errmsg[256];
-
 	FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | 80,
 	              NULL,
 	              errcode,

@@ -26,48 +26,77 @@
 class WXDLLEXPORT wxFontDialogBase : public wxDialog
 {
 public:
-    // create the font dialog
-    wxFontDialogBase() { }
-    wxFontDialogBase(wxWindow *parent) { m_parent = parent; }
-    wxFontDialogBase(wxWindow *parent, const wxFontData& data)
-        { m_parent = parent; InitFontData(&data); }
+	// create the font dialog
+	wxFontDialogBase() { }
+	wxFontDialogBase(wxWindow *parent)
+	{
+		m_parent = parent;
+	}
+	wxFontDialogBase(wxWindow *parent, const wxFontData &data)
+	{
+		m_parent = parent;
+		InitFontData(&data);
+	}
 
-    bool Create(wxWindow *parent)
-        { return DoCreate(parent); }
-    bool Create(wxWindow *parent, const wxFontData& data)
-        { InitFontData(&data); return Create(parent); }
+	bool Create(wxWindow *parent)
+	{
+		return DoCreate(parent);
+	}
+	bool Create(wxWindow *parent, const wxFontData &data)
+	{
+		InitFontData(&data);
+		return Create(parent);
+	}
 
-    virtual ~wxFontDialogBase();
+	virtual ~wxFontDialogBase();
 
-    // retrieve the font data
-    const wxFontData& GetFontData() const { return m_fontData; }
-    wxFontData& GetFontData() { return m_fontData; }
+	// retrieve the font data
+	const wxFontData &GetFontData() const
+	{
+		return m_fontData;
+	}
+	wxFontData &GetFontData()
+	{
+		return m_fontData;
+	}
 
 #if WXWIN_COMPATIBILITY_2_6
-    // deprecated interface, for compatibility only, don't use
-    wxDEPRECATED( wxFontDialogBase(wxWindow *parent, const wxFontData *data) );
+	// deprecated interface, for compatibility only, don't use
+	wxDEPRECATED(wxFontDialogBase(wxWindow *parent, const wxFontData *data));
 
-    wxDEPRECATED( bool Create(wxWindow *parent, const wxFontData *data) );
+	wxDEPRECATED(bool Create(wxWindow *parent, const wxFontData *data));
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
-    virtual bool DoCreate(wxWindow *parent) { m_parent = parent; return true; }
+	virtual bool DoCreate(wxWindow *parent)
+	{
+		m_parent = parent;
+		return true;
+	}
 
-    void InitFontData(const wxFontData *data = NULL)
-        { if ( data ) m_fontData = *data; }
+	void InitFontData(const wxFontData *data = NULL)
+	{
+		if (data) m_fontData = *data;
+	}
 
-    wxFontData m_fontData;
+	wxFontData m_fontData;
 
-    DECLARE_NO_COPY_CLASS(wxFontDialogBase)
+	DECLARE_NO_COPY_CLASS(wxFontDialogBase)
 };
 
 #if WXWIN_COMPATIBILITY_2_6
-    // deprecated interface, for compatibility only, don't use
+// deprecated interface, for compatibility only, don't use
 inline wxFontDialogBase::wxFontDialogBase(wxWindow *parent, const wxFontData *data)
-{ m_parent = parent; InitFontData(data); }
+{
+	m_parent = parent;
+	InitFontData(data);
+}
 
 inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
-{ InitFontData(data); return Create(parent); }
+{
+	InitFontData(data);
+	return Create(parent);
+}
 #endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
@@ -88,18 +117,18 @@ inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
     defined(__WXWINCE__)     || \
     defined(__WXGPE__)
 
-    #include "wx/generic/fontdlgg.h"
-    #define wxFontDialog wxGenericFontDialog
+#include "wx/generic/fontdlgg.h"
+#define wxFontDialog wxGenericFontDialog
 #elif defined(__WXMSW__)
-    #include "wx/msw/fontdlg.h"
+#include "wx/msw/fontdlg.h"
 #elif defined(__WXGTK20__)
-    #include "wx/gtk/fontdlg.h"
+#include "wx/gtk/fontdlg.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/fontdlg.h"
+#include "wx/gtk1/fontdlg.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/fontdlg.h"
+#include "wx/os2/fontdlg.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/fontdlg.h"
+#include "wx/mac/fontdlg.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -110,9 +139,9 @@ inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
 // cancelled
 wxFont WXDLLEXPORT
 wxGetFontFromUser(wxWindow *parent = (wxWindow *)NULL,
-                  const wxFont& fontInit = wxNullFont, const wxString& caption = wxEmptyString);
+                  const wxFont &fontInit = wxNullFont, const wxString &caption = wxEmptyString);
 
 #endif // wxUSE_FONTDLG
 
 #endif
-    // _WX_FONTDLG_H_BASE_
+// _WX_FONTDLG_H_BASE_

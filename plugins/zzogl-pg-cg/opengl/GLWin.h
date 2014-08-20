@@ -33,55 +33,53 @@ extern void OnFKey(int key, int shift);
 
 class GLWindow
 {
-	private:
+private:
 #ifdef GL_X11_WINDOW
-		Display *glDisplay;
-		GLXContext context;
-		XVisualInfo *vi;
-		
-		Window glWindow;
-		XSetWindowAttributes attr;
-		
-		bool CreateVisual();
-		void GetGLXVersion();
-		void GetWindowSize();
-        void UpdateGrabKey();
-        void Force43Ratio();
-		void CreateContextGL();
-#endif
-		bool fullScreen, doubleBuffered;
-		u32 width, height, depth;
+	Display *glDisplay;
+	GLXContext context;
+	XVisualInfo *vi;
 
-	public:
-		char title[256];
-		Size backbuffer;
-		
-		void SwapGLBuffers();
-		bool ReleaseContext();
+	Window glWindow;
+	XSetWindowAttributes attr;
+
+	bool CreateVisual();
+	void GetGLXVersion();
+	void GetWindowSize();
+	void UpdateGrabKey();
+	void Force43Ratio();
+	void CreateContextGL();
+#endif
+	bool fullScreen, doubleBuffered;
+	u32 width, height, depth;
+
+public:
+	char title[256];
+	Size backbuffer;
+
+	void SwapGLBuffers();
+	bool ReleaseContext();
 
 #ifdef GL_X11_WINDOW
-        void ToggleFullscreen();
+	void ToggleFullscreen();
 #endif
-		
-		bool CreateWindow(void *pDisplay);
-		void CloseWindow();
-		bool DisplayWindow(int _width, int _height);
-		void SetTitle(char *strtitle);
-		void ResizeCheck();
-		void ProcessEvents();
-	
-		void UpdateWindowSize(int nNewWidth, int nNewHeight)
-		{
-			FUNCLOG
-			backbuffer.w = std::max(nNewWidth, 16);
-			backbuffer.h = std::max(nNewHeight, 16);
 
-			if (!(conf.fullscreen()))
-			{
-				conf.width = nNewWidth;
-				conf.height = nNewHeight;
-			}
+	bool CreateWindow(void *pDisplay);
+	void CloseWindow();
+	bool DisplayWindow(int _width, int _height);
+	void SetTitle(char *strtitle);
+	void ResizeCheck();
+	void ProcessEvents();
+
+	void UpdateWindowSize(int nNewWidth, int nNewHeight)
+	{
+		FUNCLOG
+		backbuffer.w = std::max(nNewWidth, 16);
+		backbuffer.h = std::max(nNewHeight, 16);
+		if (!(conf.fullscreen())) {
+			conf.width = nNewWidth;
+			conf.height = nNewHeight;
 		}
+	}
 };
 
 extern GLWindow GLWin;

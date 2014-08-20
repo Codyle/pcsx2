@@ -37,90 +37,59 @@
 #include "ptw32pch.h"
 
 INLINE int
-pthread_mutex_lock (pthread_mutex_t * mutex)
+pthread_mutex_lock(pthread_mutex_t * mutex)
 {
-  int result = 0;
-  pthread_mutex_t mx;
-
-  /*
-   * Let the system deal with invalid pointers.
-   */
-  if (*mutex == NULL)
-    {
-      return EINVAL;
-    }
-
-  /*
-   * We do a quick check to see if we need to do more work
-   * to initialise a static mutex. We check
-   * again inside the guarded section of ptw32_mutex_check_need_init()
-   * to avoid race conditions.
-   */
-  if (ptw32_static_mutex_enable && (*mutex >= PTHREAD_ERRORCHECK_MUTEX_INITIALIZER))
-    {
-      if ((result = ptw32_mutex_check_need_init (mutex)) != 0)
-	{
-	  return (result);
+	int result = 0;
+	pthread_mutex_t mx;
+	/*
+	 * Let the system deal with invalid pointers.
+	 */
+	if (*mutex == NULL)
+		return EINVAL;
+	/*
+	 * We do a quick check to see if we need to do more work
+	 * to initialise a static mutex. We check
+	 * again inside the guarded section of ptw32_mutex_check_need_init()
+	 * to avoid race conditions.
+	 */
+	if (ptw32_static_mutex_enable && (*mutex >= PTHREAD_ERRORCHECK_MUTEX_INITIALIZER)) {
+		if ((result = ptw32_mutex_check_need_init(mutex)) != 0)
+			return (result);
 	}
-    }
-
-  mx = *mutex;
-
-  if (mx->kind == PTHREAD_MUTEX_NORMAL)
-    {
-      if (_InterlockedExchange( &mx->lock_idx, 1) != 0)
-	{
-	  while (_InterlockedExchange( &mx->lock_idx, -1) != 0)
-	    {
-	      if (WAIT_OBJECT_0 != WaitForSingleObject (mx->event, INFINITE))
-	        {
-	          result = EINVAL;
-		  break;
-	        }
-	    }
+	mx = *mutex;
+	if (mx->kind == PTHREAD_MUTEX_NORMAL) {
+		if (_InterlockedExchange(&mx->lock_idx, 1) != 0) {
+			while (_InterlockedExchange(&mx->lock_idx, -1) != 0) {
+				if (WAIT_OBJECT_0 != WaitForSingleObject(mx->event, INFINITE)) {
+					result = EINVAL;
+					break;
+				}
+			}
+		}
+	} else {
+		pthread_t self = pthread_self();
+		if (_InterlockedCompareExchange(&mx->lock_idx, 1, 0) == 0) {
+			mx->recursive_count = 1;
+			mx->ownerThread = self;
+		} else {
+			if (pthread_equal(mx->ownerThread, self)) {
+				if (mx->kind == PTHREAD_MUTEX_RECURSIVE)
+					mx->recursive_count++;
+				else
+					result = EDEADLK;
+			} else {
+				while (_InterlockedExchange(&mx->lock_idx, -1) != 0) {
+					if (WAIT_OBJECT_0 != WaitForSingleObject(mx->event, INFINITE)) {
+						result = EINVAL;
+						break;
+					}
+				}
+				if (0 == result) {
+					mx->recursive_count = 1;
+					mx->ownerThread = self;
+				}
+			}
+		}
 	}
-    }
-  else
-    {
-      pthread_t self = pthread_self();
-
-      if (_InterlockedCompareExchange(&mx->lock_idx, 1, 0) == 0)
-	{
-	  mx->recursive_count = 1;
-	  mx->ownerThread = self;
-	}
-      else
-	{
-	  if (pthread_equal (mx->ownerThread, self))
-	    {
-	      if (mx->kind == PTHREAD_MUTEX_RECURSIVE)
-		{
-		  mx->recursive_count++;
-		}
-	      else
-		{
-		  result = EDEADLK;
-		}
-	    }
-	  else
-	    {
-	      while (_InterlockedExchange(&mx->lock_idx, -1) != 0)
-		{
-	          if (WAIT_OBJECT_0 != WaitForSingleObject (mx->event, INFINITE))
-		    {
-	              result = EINVAL;
-		      break;
-		    }
-		}
-
-	      if (0 == result)
-		{
-		  mx->recursive_count = 1;
-		  mx->ownerThread = self;
-		}
-	    }
-	}
-    }
-
-  return (result);
+	return (result);
 }

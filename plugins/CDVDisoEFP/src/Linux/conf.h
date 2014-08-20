@@ -31,8 +31,7 @@
 
 // Configuration Data
 
-typedef struct
-{
+typedef struct {
 	u8 isoname[256];
 	u8 devicename[256];
 	unsigned int startconfigure;

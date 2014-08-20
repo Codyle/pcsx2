@@ -29,23 +29,38 @@ class WXDLLIMPEXP_CORE wxGDIRefData: public wxObjectRefData { };
 class WXDLLIMPEXP_CORE wxGDIObject: public wxObject
 {
 public:
-    bool IsNull() const { return m_refData == NULL; }
+	bool IsNull() const
+	{
+		return m_refData == NULL;
+	}
 
 #if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXPALMOS__)
-    // Creates the resource
-    virtual bool RealizeResource() { return false; }
+	// Creates the resource
+	virtual bool RealizeResource()
+	{
+		return false;
+	}
 
-    // Frees the resource
-    virtual bool FreeResource(bool WXUNUSED(force) = false) { return false; }
+	// Frees the resource
+	virtual bool FreeResource(bool WXUNUSED(force) = false)
+	{
+		return false;
+	}
 
-    virtual bool IsFree() const { return false; }
+	virtual bool IsFree() const
+	{
+		return false;
+	}
 
-    // Returns handle.
-    virtual WXHANDLE GetResourceHandle() const { return 0; }
+	// Returns handle.
+	virtual WXHANDLE GetResourceHandle() const
+	{
+		return 0;
+	}
 #endif // defined(__WXMSW__) || defined(__WXPM__)
 
-    DECLARE_DYNAMIC_CLASS(wxGDIObject)
+	DECLARE_DYNAMIC_CLASS(wxGDIObject)
 };
 
 #endif
-    // _WX_GDIOBJ_H_BASE_
+// _WX_GDIOBJ_H_BASE_

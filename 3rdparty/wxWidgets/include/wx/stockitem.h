@@ -26,14 +26,13 @@ WXDLLEXPORT bool wxIsStockID(wxWindowID id);
 
 // Returns true of the label is empty or label of a stock button with
 // given ID
-WXDLLEXPORT bool wxIsStockLabel(wxWindowID id, const wxString& label);
+WXDLLEXPORT bool wxIsStockLabel(wxWindowID id, const wxString &label);
 
-enum wxStockLabelQueryFlag
-{
-    wxSTOCK_NOFLAGS = 0,
+enum wxStockLabelQueryFlag {
+	wxSTOCK_NOFLAGS = 0,
 
-    wxSTOCK_WITH_MNEMONIC = 1,
-    wxSTOCK_WITH_ACCELERATOR = 2
+	wxSTOCK_WITH_MNEMONIC = 1,
+	wxSTOCK_WITH_ACCELERATOR = 2
 };
 
 // Returns label that should be used for given stock UI element (e.g. "&OK"
@@ -45,22 +44,21 @@ WXDLLEXPORT wxString wxGetStockLabel(wxWindowID id,
 
 #if wxUSE_ACCEL
 
-    // Returns the accelerator that should be used for given stock UI element
-    // (e.g. "Ctrl+x" for wxSTOCK_EXIT)
-    WXDLLEXPORT wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id);
+// Returns the accelerator that should be used for given stock UI element
+// (e.g. "Ctrl+x" for wxSTOCK_EXIT)
+WXDLLEXPORT wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id);
 
 #endif
 
 // wxStockHelpStringClient conceptually works like wxArtClient: it gives a hint to
 // wxGetStockHelpString() about the context where the help string is to be used
-enum wxStockHelpStringClient
-{
-    wxSTOCK_MENU        // help string to use for menu items
+enum wxStockHelpStringClient {
+	wxSTOCK_MENU        // help string to use for menu items
 };
 
 // Returns an help string for the given stock UI element and for the given "context".
 WXDLLEXPORT wxString wxGetStockHelpString(wxWindowID id,
-                                          wxStockHelpStringClient client = wxSTOCK_MENU);
+                wxStockHelpStringClient client = wxSTOCK_MENU);
 
 
 #ifdef __WXGTK20__

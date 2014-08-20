@@ -107,11 +107,11 @@
 
 #if defined(_WIN64)
 #    ifndef _WIN32
-        /*
-            a lot of code (mistakenly) uses #ifdef _WIN32 to either test for
-            Windows or to test for !__WIN16__, so we must define _WIN32 for
-            Win64 as well to ensure that the existing code continues to work.
-         */
+/*
+    a lot of code (mistakenly) uses #ifdef _WIN32 to either test for
+    Windows or to test for !__WIN16__, so we must define _WIN32 for
+    Win64 as well to ensure that the existing code continues to work.
+ */
 #       define _WIN32
 #   endif /* !_WIN32 */
 
@@ -201,27 +201,27 @@
    VC++ defines _M_xxx symbols.
  */
 #if defined(_M_IX86) || defined(i386) || defined(__i386) || defined(__i386__)
-    #ifndef __INTEL__
-        #define __INTEL__
-    #endif
+#ifndef __INTEL__
+#define __INTEL__
+#endif
 #endif /* x86 */
 
 #if defined(_M_IA64)
-    #ifndef __IA64__
-        #define __IA64__
-    #endif
+#ifndef __IA64__
+#define __IA64__
+#endif
 #endif /* ia64 */
 
 #if defined(_M_MPPC) || defined(__PPC__) || defined(__ppc__)
-    #ifndef __POWERPC__
-        #define __POWERPC__
-    #endif
+#ifndef __POWERPC__
+#define __POWERPC__
+#endif
 #endif /* alpha */
 
 #if defined(_M_ALPHA) || defined(__AXP__)
-    #ifndef __ALPHA__
-        #define __ALPHA__
-    #endif
+#ifndef __ALPHA__
+#define __ALPHA__
+#endif
 #endif /* alpha */
 
 
@@ -331,8 +331,8 @@
 #    ifndef __DOS__
 #        define __DOS__
 #    endif
-    /* size_t is the same as unsigned int for Watcom 11 compiler, */
-    /* so define it if it hadn't been done by configure yet */
+/* size_t is the same as unsigned int for Watcom 11 compiler, */
+/* so define it if it hadn't been done by configure yet */
 #    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
 #        ifdef __WATCOMC__
 #            define wxSIZE_T_IS_UINT
@@ -354,19 +354,19 @@
 
 #    define __UNIX_LIKE__
 
-    /* Helps SGI compilation, apparently */
+/* Helps SGI compilation, apparently */
 #    ifdef __SGI__
 #        ifdef __GNUG__
 #            define __need_wchar_t
 #        else /* !gcc */
-            /*
-               Note I use the term __SGI_CC__ for both cc and CC, its not a good
-               idea to mix gcc and cc/CC, the name mangling is different
-             */
+/*
+   Note I use the term __SGI_CC__ for both cc and CC, its not a good
+   idea to mix gcc and cc/CC, the name mangling is different
+ */
 #            define __SGI_CC__
 #        endif /* gcc/!gcc */
 
-        /* system headers use this symbol and not __cplusplus in some places */
+/* system headers use this symbol and not __cplusplus in some places */
 #       ifndef _LANGUAGE_C_PLUS_PLUS
 #           define _LANGUAGE_C_PLUS_PLUS
 #       endif
@@ -384,7 +384,7 @@
 #        define OS2EMX_PLAIN_CHAR
 #    endif
 
-    /* define __HPUX__ for HP-UX where standard macro is __hpux */
+/* define __HPUX__ for HP-UX where standard macro is __hpux */
 #    if defined(__hpux) && !defined(__HPUX__)
 #        define __HPUX__
 #    endif /* HP-UX */
@@ -395,10 +395,10 @@
 #        endif
 #    endif
 
-    /*  All of these should already be defined by including configure-
-        generated setup.h but we wish to support Xcode compilation without
-        requiring the user to define these himself.
-     */
+/*  All of these should already be defined by including configure-
+    generated setup.h but we wish to support Xcode compilation without
+    requiring the user to define these himself.
+ */
 #    if defined(__APPLE__) && defined(__MACH__)
 #        ifndef __UNIX__
 #            define __UNIX__ 1
@@ -406,15 +406,15 @@
 #        ifndef __BSD__
 #            define __BSD__ 1
 #        endif
-        /*  __DARWIN__ is our own define to mean OS X or pure Darwin */
+/*  __DARWIN__ is our own define to mean OS X or pure Darwin */
 #        ifndef __DARWIN__
 #            define __DARWIN__ 1
 #        endif
-        /*  NOTE: TARGET_CARBON is actually a 0/1 and must be 1 for OS X */
+/*  NOTE: TARGET_CARBON is actually a 0/1 and must be 1 for OS X */
 #        ifndef TARGET_CARBON
 #            define TARGET_CARBON 1
 #        endif
-        /* OS X uses unsigned long size_t for both ILP32 and LP64 modes. */
+/* OS X uses unsigned long size_t for both ILP32 and LP64 modes. */
 #        if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
 #            define wxSIZE_T_IS_ULONG
 #        endif
@@ -426,7 +426,7 @@
 #elif defined(applec) || \
       defined(THINK_C) || \
       (defined(__MWERKS__) && !defined(__INTEL__))
-      /* MacOS */
+/* MacOS */
 #    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
 #        define wxSIZE_T_IS_ULONG
 #    endif
@@ -436,7 +436,7 @@
  */
 #elif defined(__OS2__)
 
-    /* wxOS2 vs. non wxOS2 ports on OS2 platform */
+/* wxOS2 vs. non wxOS2 ports on OS2 platform */
 #    if !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
 #        ifndef __WXPM__
 #            define __WXPM__
@@ -447,9 +447,9 @@
 #        define __VISAGEAVER__ __IBMCPP__
 #    endif
 
-    /* Place other OS/2 compiler environment defines here */
+/* Place other OS/2 compiler environment defines here */
 #    if defined(__VISAGECPP__)
-        /* VisualAge is the only thing that understands _Optlink */
+/* VisualAge is the only thing that understands _Optlink */
 #        define LINKAGEMODE _Optlink
 #    endif
 #    define wxSIZE_T_IS_UINT
@@ -476,15 +476,15 @@
 #        define __WINDOWS__
 #    endif  /* Windows */
 
-    /* to be changed for Win64! */
+/* to be changed for Win64! */
 #    ifndef __WIN32__
 #        error "__WIN32__ should be defined for Win32 and Win64, Win16 is not supported"
 #    endif
 
-    /*
-       define another standard symbol for Microsoft Visual C++: the standard
-       one (_MSC_VER) is also defined by Metrowerks compiler
-     */
+/*
+   define another standard symbol for Microsoft Visual C++: the standard
+   one (_MSC_VER) is also defined by Metrowerks compiler
+ */
 #    if defined(_MSC_VER) && !defined(__MWERKS__)
 #        define __VISUALC__ _MSC_VER
 #    elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
@@ -494,8 +494,8 @@
 #        define __SYMANTECC__
 #    endif  /* compiler */
 
-    /* size_t is the same as unsigned int for all Windows compilers we know, */
-    /* so define it if it hadn't been done by configure yet */
+/* size_t is the same as unsigned int for all Windows compilers we know, */
+/* so define it if it hadn't been done by configure yet */
 #    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG) && !defined(__WIN64__)
 #        define wxSIZE_T_IS_UINT
 #    endif
@@ -550,11 +550,11 @@
 #    endif
 */
 #if defined(__GNUC__) && defined(__GNUC_MINOR__)
-    #define wxCHECK_GCC_VERSION( major, minor ) \
-        ( ( __GNUC__ > (major) ) \
-            || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) )
+#define wxCHECK_GCC_VERSION( major, minor ) \
+	( ( __GNUC__ > (major) ) \
+	  || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) )
 #else
-    #define wxCHECK_GCC_VERSION( major, minor ) 0
+#define wxCHECK_GCC_VERSION( major, minor ) 0
 #endif
 
 #if defined(__BORLANDC__) || (defined(__GNUC__) && __GNUC__ < 3)
@@ -656,7 +656,7 @@
     FIXME:  We need a better way to detect for 10.3 then including a system header
 */
 #ifdef __DARWIN__
-    #include <AvailabilityMacros.h>
+#include <AvailabilityMacros.h>
 #endif
 
 #endif /* _WX_PLATFORM_H_ */

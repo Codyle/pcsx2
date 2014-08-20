@@ -37,5 +37,5 @@ BOOL DoReadThreadEx(unsigned long addr);
 void GetREADThreadExPtr(void);
 void AllocDataCache(void);
 void FreeDataCache(void);
-void AddToDataCache(unsigned long addr,unsigned char * pB);
+void AddToDataCache(unsigned long addr, unsigned char * pB);
 BOOL CheckDataCache(unsigned long addr);

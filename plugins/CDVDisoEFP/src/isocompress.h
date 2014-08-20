@@ -29,16 +29,14 @@
 // #define VERBOSE_FUNCTION_ISOCOMPRESS
 // #define VERBOSE_WARNING_ISOCOMPRESS
 
-struct CompressExt
-{
+struct CompressExt {
 	const char *name;
 	int method;
 };
 #ifdef _WIN32
 #pragma pack(1)
 #endif /* _WIN32 */
-struct TableData
-{
+struct TableData {
 	off64_t offset;
 	unsigned short size;
 #ifdef _WIN32
@@ -47,8 +45,7 @@ struct TableData
 } __attribute__((packed));
 #endif /* _WIN32 */
 
-union TableMap
-{
+union TableMap {
 	struct TableData table;
 	char ch[sizeof(struct TableData)];
 };

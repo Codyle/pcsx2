@@ -63,23 +63,23 @@
 #ifdef _MSC_HAS_FIXED_INLINE_ASM_PGO
 
 #	define CallAddress( ptr ) \
-		__asm{ call offset ptr }
+	__asm{ call offset ptr }
 
 #	define FastCallAddress( ptr, param1 ) \
-		__asm{ __asm mov ecx, param1 __asm call offset ptr }
+	__asm{ __asm mov ecx, param1 __asm call offset ptr }
 
 #	define FastCallAddress2( ptr, param1, param2 ) \
-		__asm{ __asm mov ecx, param1 __asm mov edx, param2 __asm call offset ptr }
+	__asm{ __asm mov ecx, param1 __asm mov edx, param2 __asm call offset ptr }
 
 #else
 
 #	define CallAddress( ptr ) \
-		( (void (*)()) &(ptr)[0] )()
+	( (void (*)()) &(ptr)[0] )()
 
 #	define FastCallAddress( ptr, param1 ) \
-		( (void (*)( int )) &(ptr)[0] )( param1 )
+	( (void (*)( int )) &(ptr)[0] )( param1 )
 
 #	define FastCallAddress2( ptr, param1, param2 ) \
-		( (void (*)( int, int )) &(ptr)[0] )( param1, param2 )
+	( (void (*)( int, int )) &(ptr)[0] )( param1, param2 )
 
 #endif

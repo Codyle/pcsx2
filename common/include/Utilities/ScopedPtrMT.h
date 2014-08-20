@@ -22,7 +22,7 @@ using Threading::ScopedLock;
 //  ScopedPtrMT
 // --------------------------------------------------------------------------------------
 
-template< typename T >
+template<typename T>
 class ScopedPtrMT
 {
 	DeclareNoncopyableObject(ScopedPtrMT);
@@ -41,27 +41,29 @@ public:
 		m_ptr = ptr;
 	}
 
-	~ScopedPtrMT() throw() { _Delete_unlocked(); }
-
-	ScopedPtrMT& Reassign(T * ptr = NULL)
+	~ScopedPtrMT() throw()
 	{
-		TPtr doh = (TPtr)Threading::AtomicExchangePointer( m_ptr, ptr );
-		if ( ptr != doh ) delete doh;
+		_Delete_unlocked();
+	}
+
+	ScopedPtrMT &Reassign(T * ptr = NULL)
+	{
+		TPtr doh = (TPtr)Threading::AtomicExchangePointer(m_ptr, ptr);
+		if (ptr != doh) delete doh;
 		return *this;
 	}
 
-	ScopedPtrMT& Delete() throw()
+	ScopedPtrMT &Delete() throw()
 	{
-		ScopedLock lock( m_mtx );
+		ScopedLock lock(m_mtx);
 		_Delete_unlocked();
 	}
-	
+
 	// Removes the pointer from scoped management, but does not delete!
 	// (ScopedPtr will be NULL after this method)
 	T *DetachPtr()
 	{
-		ScopedLock lock( m_mtx );
-
+		ScopedLock lock(m_mtx);
 		T *ptr = m_ptr;
 		m_ptr = NULL;
 		return ptr;
@@ -74,9 +76,9 @@ public:
 		return m_ptr;
 	}
 
-	void SwapPtr(ScopedPtrMT& other)
+	void SwapPtr(ScopedPtrMT &other)
 	{
-		ScopedLock lock( m_mtx );
+		ScopedLock lock(m_mtx);
 		T * const tmp = other.m_ptr;
 		other.m_ptr = m_ptr;
 		m_ptr = tmp;
@@ -108,12 +110,12 @@ public:
 
 	// Convenient assignment operator.  ScopedPtrMT = NULL will issue an automatic deletion
 	// of the managed pointer.
-	ScopedPtrMT& operator=( T* src )
+	ScopedPtrMT &operator=(T* src)
 	{
-		return Reassign( src );
+		return Reassign(src);
 	}
 
-	#if 0
+#if 0
 	operator T*() const
 	{
 		return m_ptr;
@@ -121,7 +123,7 @@ public:
 
 	// Dereference operator, returns a handle to the managed pointer.
 	// Generates a debug assertion if the object is NULL!
-	T& operator*() const
+	T &operator*() const
 	{
 		pxAssert(m_ptr != NULL);
 		return *m_ptr;
@@ -132,7 +134,7 @@ public:
 		pxAssert(m_ptr != NULL);
 		return m_ptr;
 	}
-	#endif
+#endif
 
 protected:
 	void _Delete_unlocked() throw()

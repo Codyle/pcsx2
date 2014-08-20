@@ -26,29 +26,29 @@ WX_DECLARE_STRING_HASH_MAP(int, wxArchiveFilenameHashMap);
 class WXDLLIMPEXP_BASE wxArchiveFSHandler : public wxFileSystemHandler
 {
 public:
-    wxArchiveFSHandler();
-    virtual bool CanOpen(const wxString& location);
-    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
-    virtual wxString FindFirst(const wxString& spec, int flags = 0);
-    virtual wxString FindNext();
-    void Cleanup();
-    virtual ~wxArchiveFSHandler();
+	wxArchiveFSHandler();
+	virtual bool CanOpen(const wxString &location);
+	virtual wxFSFile* OpenFile(wxFileSystem &fs, const wxString &location);
+	virtual wxString FindFirst(const wxString &spec, int flags = 0);
+	virtual wxString FindNext();
+	void Cleanup();
+	virtual ~wxArchiveFSHandler();
 
 private:
-    class wxArchiveFSCache *m_cache;
-    wxFileSystem m_fs;
+	class wxArchiveFSCache *m_cache;
+	wxFileSystem m_fs;
 
-    // these vars are used by FindFirst/Next:
-    class wxArchiveFSCacheData *m_Archive;
-    struct wxArchiveFSEntry *m_FindEntry;
-    wxString m_Pattern, m_BaseDir, m_ZipFile;
-    bool m_AllowDirs, m_AllowFiles;
-    wxArchiveFilenameHashMap *m_DirsFound;
+	// these vars are used by FindFirst/Next:
+	class wxArchiveFSCacheData *m_Archive;
+	struct wxArchiveFSEntry *m_FindEntry;
+	wxString m_Pattern, m_BaseDir, m_ZipFile;
+	bool m_AllowDirs, m_AllowFiles;
+	wxArchiveFilenameHashMap *m_DirsFound;
 
-    wxString DoFind();
+	wxString DoFind();
 
-    DECLARE_NO_COPY_CLASS(wxArchiveFSHandler)
-    DECLARE_DYNAMIC_CLASS(wxArchiveFSHandler)
+	DECLARE_NO_COPY_CLASS(wxArchiveFSHandler)
+	DECLARE_DYNAMIC_CLASS(wxArchiveFSHandler)
 };
 
 #endif // wxUSE_FS_ARCHIVE

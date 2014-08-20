@@ -58,9 +58,9 @@ extern GLenum s_rgbeq, s_alphaeq;
 #ifdef _WIN32
 #define GL_LOADFN(name) { \
 		if( (*(void**)&name = (void*)wglGetProcAddress(#name)) == NULL ) { \
-		ZZLog::Error_Log("Failed to find %s, exiting.", #name); \
-	} \
-}
+			ZZLog::Error_Log("Failed to find %s, exiting.", #name); \
+		} \
+	}
 #else
 // let GLEW take care of it
 #define GL_LOADFN(name)
@@ -68,15 +68,15 @@ extern GLenum s_rgbeq, s_alphaeq;
 
 static __forceinline void GL_STENCILFUNC(GLenum func, GLint ref, GLuint mask)
 {
-	s_stencilfunc  = func; 
-	s_stencilref = ref; 
-	s_stencilmask = mask; 
-	glStencilFunc(func, ref, mask); 
+	s_stencilfunc  = func;
+	s_stencilref = ref;
+	s_stencilmask = mask;
+	glStencilFunc(func, ref, mask);
 }
 
 static __forceinline void GL_STENCILFUNC_SET()
 {
-	glStencilFunc(s_stencilfunc, s_stencilref, s_stencilmask); 
+	glStencilFunc(s_stencilfunc, s_stencilref, s_stencilmask);
 }
 
 #ifdef GLSL4_API
@@ -97,10 +97,10 @@ static __forceinline void SET_STREAM()
 
 //static __forceinline void SAFE_RELEASE_TEX(u32& x)
 //{
-//	if (x != 0) 
-//	{ 
+//	if (x != 0)
+//	{
 //		glDeleteTextures(1, &x);
-//		x = 0; 
+//		x = 0;
 //	}
 //}
 #define SAFE_RELEASE_TEX(x) { if( (x) != 0 ) { glDeleteTextures(1, &(x)); x = 0; } }
@@ -161,60 +161,57 @@ static __forceinline void DrawTriangleArray()
 
 static __forceinline void DrawBuffers(GLenum *buffer)
 {
-	if (glDrawBuffers != NULL) 
-	{
+	if (glDrawBuffers != NULL)
 		glDrawBuffers(1, buffer);
-	}
-
 	GL_REPORT_ERRORD();
 }
 
 
 namespace FB
-{	
-	extern u32 buf;
+{
+extern u32 buf;
 
-	static __forceinline void Create()
-	{
-		assert(buf == 0);
-		glGenFramebuffersEXT(1, &buf);
-		if (buf == 0)
-			ZZLog::Error_Log("Failed to create the renderbuffer.");
-	}
+static __forceinline void Create()
+{
+	assert(buf == 0);
+	glGenFramebuffersEXT(1, &buf);
+	if (buf == 0)
+		ZZLog::Error_Log("Failed to create the renderbuffer.");
+}
 
-	static __forceinline void Delete()
-	{
-		if (buf != 0) {
-			glDeleteFramebuffersEXT(1, &buf);
-			buf = 0;
-		}
+static __forceinline void Delete()
+{
+	if (buf != 0) {
+		glDeleteFramebuffersEXT(1, &buf);
+		buf = 0;
 	}
-	
-	static __forceinline void Bind()
-	{
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, buf);
-	}
-	
-	static __forceinline void Unbind()
-	{
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-	}
-		
-	static __forceinline GLenum State()
-	{
-		return glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-	}
+}
 
-	static __forceinline void Attach2D(int attach, int id = 0)
-	{
-		glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + attach, GL_TEXTURE_RECTANGLE_NV, id, 0);
-		GL_REPORT_ERRORD();
-	}
+static __forceinline void Bind()
+{
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, buf);
+}
 
-	static __forceinline void Attach(GLenum rend, GLuint id = 0)
-	{
-		glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, rend, GL_RENDERBUFFER_EXT, id);
-	}	
+static __forceinline void Unbind()
+{
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+}
+
+static __forceinline GLenum State()
+{
+	return glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+}
+
+static __forceinline void Attach2D(int attach, int id = 0)
+{
+	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + attach, GL_TEXTURE_RECTANGLE_NV, id, 0);
+	GL_REPORT_ERRORD();
+}
+
+static __forceinline void Attach(GLenum rend, GLuint id = 0)
+{
+	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, rend, GL_RENDERBUFFER_EXT, id);
+}
 };
 
 static __forceinline void ResetRenderTarget(int index)
@@ -236,7 +233,7 @@ static __forceinline void Texture2D(GLint iFormat, GLenum format, GLenum type, c
 {
 	TextureImage(GL_TEXTURE_2D, iFormat, BLOCK_TEXWIDTH, BLOCK_TEXHEIGHT, format, type, pixels);
 }
-	
+
 static __forceinline void TextureRect(GLint iFormat, GLint width, GLint height, GLenum format, GLenum type, const GLvoid* pixels)
 {
 	TextureImage(GL_TEXTURE_RECTANGLE_NV, iFormat, width, height, format, type, pixels);
@@ -325,17 +322,17 @@ static __forceinline void GL_BLEND_ALL(GLenum srcrgb, GLenum dstrgb, GLenum srca
 
 static __forceinline void GL_ZTEST(bool enable)
 {
-	if (enable) 
+	if (enable)
 		glEnable(GL_DEPTH_TEST);
-	else 
+	else
 		glDisable(GL_DEPTH_TEST);
 }
 
 static __forceinline void GL_ALPHATEST(bool enable)
 {
-	if (enable) 
+	if (enable)
 		glEnable(GL_ALPHA_TEST);
-	else 
+	else
 		glDisable(GL_ALPHA_TEST);
 }
 

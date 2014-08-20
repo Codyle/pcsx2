@@ -15,7 +15,7 @@
  * Olivier Tristan for feedback and testing
  * Glenn Zelniker and Z-Systems engineering for sponsoring the Blocking I/O
  * interface.
- * 
+ *
  *
  * Based on the Open Source API proposed by Ross Bencina
  * Copyright (c) 1999-2002 Ross Bencina, Phil Burk
@@ -41,13 +41,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -77,34 +77,34 @@
 */
 
 typedef struct {
-    PaUtilRingBuffer inputRingBuffer;
-    PaUtilRingBuffer outputRingBuffer;
-    size_t ringBufferFrames;
-    PaSampleFormat inputSampleFormat;
-    size_t inputSampleSizeActual;
-    size_t inputSampleSizePow2;
-    PaSampleFormat outputSampleFormat;
-    size_t outputSampleSizeActual;
-    size_t outputSampleSizePow2;
+	PaUtilRingBuffer inputRingBuffer;
+	PaUtilRingBuffer outputRingBuffer;
+	size_t ringBufferFrames;
+	PaSampleFormat inputSampleFormat;
+	size_t inputSampleSizeActual;
+	size_t inputSampleSizePow2;
+	PaSampleFormat outputSampleFormat;
+	size_t outputSampleSizeActual;
+	size_t outputSampleSizePow2;
 
-    size_t framesPerBuffer;
+	size_t framesPerBuffer;
 
-    int inChan;
-    int outChan;
+	int inChan;
+	int outChan;
 
-    //PaStreamCallbackFlags statusFlags;
-    uint32_t statusFlags;
-    PaError errors;
+	//PaStreamCallbackFlags statusFlags;
+	uint32_t statusFlags;
+	PaError errors;
 
-    /* Here we handle blocking, using condition variables. */
+	/* Here we handle blocking, using condition variables. */
 #ifdef  PA_MAC_BLIO_MUTEX
-    volatile bool isInputEmpty;
-    pthread_mutex_t inputMutex;
-    pthread_cond_t inputCond;
+	volatile bool isInputEmpty;
+	pthread_mutex_t inputMutex;
+	pthread_cond_t inputCond;
 
-    volatile bool isOutputFull;
-    pthread_mutex_t outputMutex;
-    pthread_cond_t outputCond;
+	volatile bool isOutputFull;
+	pthread_mutex_t outputMutex;
+	pthread_cond_t outputCond;
 #endif
 }
 PaMacBlio;
@@ -114,23 +114,23 @@ PaMacBlio;
  */
 
 PaError initializeBlioRingBuffers(
-                                       PaMacBlio *blio,
-                                       PaSampleFormat inputSampleFormat,
-                                       PaSampleFormat outputSampleFormat,
-                                       size_t framesPerBuffer,
-                                       long ringBufferSize,
-                                       int inChan,
-                                       int outChan );
-PaError destroyBlioRingBuffers( PaMacBlio *blio );
-PaError resetBlioRingBuffers( PaMacBlio *blio );
+        PaMacBlio *blio,
+        PaSampleFormat inputSampleFormat,
+        PaSampleFormat outputSampleFormat,
+        size_t framesPerBuffer,
+        long ringBufferSize,
+        int inChan,
+        int outChan);
+PaError destroyBlioRingBuffers(PaMacBlio *blio);
+PaError resetBlioRingBuffers(PaMacBlio *blio);
 
 int BlioCallback(
         const void *input, void *output,
         unsigned long frameCount,
         const PaStreamCallbackTimeInfo* timeInfo,
         PaStreamCallbackFlags statusFlags,
-        void *userData );
+        void *userData);
 
-void waitUntilBlioWriteBufferIsFlushed( PaMacBlio *blio );
+void waitUntilBlioWriteBufferIsFlushed(PaMacBlio *blio);
 
 #endif /*PA_MAC_CORE_BLOCKING_H_*/

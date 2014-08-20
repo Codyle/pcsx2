@@ -19,70 +19,73 @@ class WXDLLEXPORT wxEventLoop;
 class WXDLLEXPORT wxDialog : public wxDialogBase
 {
 public:
-    wxDialog() { Init(); }
+	wxDialog()
+	{
+		Init();
+	}
 
-    // Constructor with no modal flag - the new convention.
-    wxDialog(wxWindow *parent, wxWindowID id,
-             const wxString& title,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr)
-    {
-        Init();
-        Create(parent, id, title, pos, size, style, name);
-    }
+	// Constructor with no modal flag - the new convention.
+	wxDialog(wxWindow *parent, wxWindowID id,
+	         const wxString &title,
+	         const wxPoint &pos = wxDefaultPosition,
+	         const wxSize &size = wxDefaultSize,
+	         long style = wxDEFAULT_DIALOG_STYLE,
+	         const wxString &name = wxDialogNameStr)
+	{
+		Init();
+		Create(parent, id, title, pos, size, style, name);
+	}
 
-    bool Create(wxWindow *parent, wxWindowID id,
-                const wxString& title,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_DIALOG_STYLE,
-                const wxString& name = wxDialogNameStr);
+	bool Create(wxWindow *parent, wxWindowID id,
+	            const wxString &title,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxDEFAULT_DIALOG_STYLE,
+	            const wxString &name = wxDialogNameStr);
 
-    virtual ~wxDialog();
+	virtual ~wxDialog();
 
-    // is the dialog in modal state right now?
-    virtual bool IsModal() const;
+	// is the dialog in modal state right now?
+	virtual bool IsModal() const;
 
-    // For now, same as Show(true) but returns return code
-    virtual int ShowModal();
+	// For now, same as Show(true) but returns return code
+	virtual int ShowModal();
 
-    // may be called to terminate the dialog with the given return code
-    virtual void EndModal(int retCode);
+	// may be called to terminate the dialog with the given return code
+	virtual void EndModal(int retCode);
 
-    // returns true if we're in a modal loop
-    bool IsModalShowing() const;
+	// returns true if we're in a modal loop
+	bool IsModalShowing() const;
 
-    virtual bool Show(bool show = true);
+	virtual bool Show(bool show = true);
 
-    // implementation only from now on
-    // -------------------------------
+	// implementation only from now on
+	// -------------------------------
 
-    // event handlers
-    void OnCloseWindow(wxCloseEvent& event);
-    void OnOK(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
+	// event handlers
+	void OnCloseWindow(wxCloseEvent &event);
+	void OnOK(wxCommandEvent &event);
+	void OnApply(wxCommandEvent &event);
+	void OnCancel(wxCommandEvent &event);
 
 protected:
-    // common part of all ctors
-    void Init();
+	// common part of all ctors
+	void Init();
 
 private:
-    // while we are showing a modal dialog we disable the other windows using
-    // this object
-    wxWindowDisabler *m_windowDisabler;
+	// while we are showing a modal dialog we disable the other windows using
+	// this object
+	wxWindowDisabler *m_windowDisabler;
 
-    // modal dialog runs its own event loop
-    wxEventLoop *m_eventLoop;
+	// modal dialog runs its own event loop
+	wxEventLoop *m_eventLoop;
 
-    // is modal right now?
-    bool m_isShowingModal;
+	// is modal right now?
+	bool m_isShowingModal;
 
-    DECLARE_DYNAMIC_CLASS(wxDialog)
-    DECLARE_EVENT_TABLE()
+	DECLARE_DYNAMIC_CLASS(wxDialog)
+	DECLARE_EVENT_TABLE()
 };
 
 #endif
-    // _WX_UNIV_DIALOG_H_
+// _WX_UNIV_DIALOG_H_

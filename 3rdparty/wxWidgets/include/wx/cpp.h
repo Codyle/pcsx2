@@ -32,13 +32,13 @@
    differently for VC++
   */
 #if defined(__VISUALC__) && (__VISUALC__ >= 1300)
-    /*
-       __LINE__ handling is completely broken in VC++ when using "Edit and
-       Continue" (/ZI option) and results in preprocessor errors if we use it
-       inside the macros. Luckily VC7 has another standard macro which can be
-       used like this and is even better than __LINE__ because it is globally
-       unique.
-     */
+/*
+   __LINE__ handling is completely broken in VC++ when using "Edit and
+   Continue" (/ZI option) and results in preprocessor errors if we use it
+   inside the macros. Luckily VC7 has another standard macro which can be
+   used like this and is even better than __LINE__ because it is globally
+   unique.
+ */
 #   define wxCONCAT_LINE(text)         wxCONCAT(text, __COUNTER__)
 #else /* normal compilers */
 #   define wxCONCAT_LINE(text)         wxCONCAT(text, __LINE__)

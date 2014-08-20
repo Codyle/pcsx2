@@ -32,11 +32,8 @@ public:
 		: m_count(0)
 	{
 		m_base = _aligned_malloc(sizeof(Vertex) * countof(m_v), 32);
-
-		for(size_t i = 0; i < countof(m_v); i++)
-		{
+		for (size_t i = 0; i < countof(m_v); i++)
 			m_v[i] = &((Vertex*)m_base)[i];
-		}
 	}
 
 	virtual ~GSVertexList()
@@ -49,33 +46,28 @@ public:
 		m_count = 0;
 	}
 
-	__forceinline Vertex& AddTail()
+	__forceinline Vertex &AddTail()
 	{
 		ASSERT(m_count < 3);
-
 		return *m_v[m_count++];
 	}
 
 	__forceinline void RemoveAt(int pos, int keep)
 	{
-		if(keep == 1)
-		{
+		if (keep == 1) {
 			Vertex* tmp = m_v[pos + 0];
 			m_v[pos + 0] = m_v[pos + 1];
 			m_v[pos + 1] = tmp;
-		}
-		else if(keep == 2)
-		{
+		} else if (keep == 2) {
 			Vertex* tmp = m_v[pos + 0];
 			m_v[pos + 0] = m_v[pos + 1];
 			m_v[pos + 1] = m_v[pos + 2];
 			m_v[pos + 2] = tmp;
 		}
-
 		m_count = pos + keep;
 	}
 
-	__forceinline void GetAt(int i, Vertex& v)
+	__forceinline void GetAt(int i, Vertex &v)
 	{
 		v = *m_v[i];
 	}

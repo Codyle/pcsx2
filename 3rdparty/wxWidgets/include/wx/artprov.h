@@ -112,92 +112,92 @@ typedef wxString wxArtID;
 class WXDLLEXPORT wxArtProvider : public wxObject
 {
 public:
-    // Dtor removes the provider from providers stack if it's still on it
-    virtual ~wxArtProvider();
+	// Dtor removes the provider from providers stack if it's still on it
+	virtual ~wxArtProvider();
 
 
-    // Add new provider to the top of providers stack (i.e. the provider will
-    // be queried first of all).
-    static void Push(wxArtProvider *provider);
+	// Add new provider to the top of providers stack (i.e. the provider will
+	// be queried first of all).
+	static void Push(wxArtProvider *provider);
 
-    // Add new provider to the bottom of providers stack (i.e. the provider
-    // will be queried as the last one).
+	// Add new provider to the bottom of providers stack (i.e. the provider
+	// will be queried as the last one).
 #if wxABI_VERSION >= 20810
-    static void PushBack(wxArtProvider *provider);
+	static void PushBack(wxArtProvider *provider);
 #endif
-    // same as PushBack()
-    static void Insert(wxArtProvider *provider);
+	// same as PushBack()
+	static void Insert(wxArtProvider *provider);
 
-    // Remove latest added provider and delete it.
-    static bool Pop();
+	// Remove latest added provider and delete it.
+	static bool Pop();
 
-    // Remove provider from providers stack but don't delete it.
-    static bool Remove(wxArtProvider *provider);
+	// Remove provider from providers stack but don't delete it.
+	static bool Remove(wxArtProvider *provider);
 
-    // Delete the given provider and remove it from the providers stack.
-    static bool Delete(wxArtProvider *provider);
+	// Delete the given provider and remove it from the providers stack.
+	static bool Delete(wxArtProvider *provider);
 
 
-    // Query the providers for bitmap with given ID and return it. Return
-    // wxNullBitmap if no provider provides it.
-    static wxBitmap GetBitmap(const wxArtID& id,
-                              const wxArtClient& client = wxART_OTHER,
-                              const wxSize& size = wxDefaultSize);
+	// Query the providers for bitmap with given ID and return it. Return
+	// wxNullBitmap if no provider provides it.
+	static wxBitmap GetBitmap(const wxArtID &id,
+	                          const wxArtClient &client = wxART_OTHER,
+	                          const wxSize &size = wxDefaultSize);
 
-    // Query the providers for icon with given ID and return it. Return
-    // wxNullIcon if no provider provides it.
-    static wxIcon GetIcon(const wxArtID& id,
-                          const wxArtClient& client = wxART_OTHER,
-                          const wxSize& size = wxDefaultSize);
+	// Query the providers for icon with given ID and return it. Return
+	// wxNullIcon if no provider provides it.
+	static wxIcon GetIcon(const wxArtID &id,
+	                      const wxArtClient &client = wxART_OTHER,
+	                      const wxSize &size = wxDefaultSize);
 
-    // Get the size hint of an icon from a specific wxArtClient, queries
-    // the topmost provider if platform_dependent = false
-    static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
+	// Get the size hint of an icon from a specific wxArtClient, queries
+	// the topmost provider if platform_dependent = false
+	static wxSize GetSizeHint(const wxArtClient &client, bool platform_dependent = false);
 
 #if WXWIN_COMPATIBILITY_2_6
-    // use the corresponding methods without redundant "Provider" suffix
-    wxDEPRECATED( static void PushProvider(wxArtProvider *provider) );
-    wxDEPRECATED( static void InsertProvider(wxArtProvider *provider) );
-    wxDEPRECATED( static bool PopProvider() );
+	// use the corresponding methods without redundant "Provider" suffix
+	wxDEPRECATED(static void PushProvider(wxArtProvider *provider));
+	wxDEPRECATED(static void InsertProvider(wxArtProvider *provider));
+	wxDEPRECATED(static bool PopProvider());
 
-    // use Delete() if this is what you really need, or just delete the
-    // provider pointer, do not use Remove() as it does not delete the pointer
-    // unlike RemoveProvider() which does
-    wxDEPRECATED( static bool RemoveProvider(wxArtProvider *provider) );
+	// use Delete() if this is what you really need, or just delete the
+	// provider pointer, do not use Remove() as it does not delete the pointer
+	// unlike RemoveProvider() which does
+	wxDEPRECATED(static bool RemoveProvider(wxArtProvider *provider));
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
-    friend class wxArtProviderModule;
-    // Initializes default provider
-    static void InitStdProvider();
-    // Initializes platform's native provider, if available (e.g. GTK2)
-    static void InitNativeProvider();
-    // Destroy caches & all providers
-    static void CleanUpProviders();
+	friend class wxArtProviderModule;
+	// Initializes default provider
+	static void InitStdProvider();
+	// Initializes platform's native provider, if available (e.g. GTK2)
+	static void InitNativeProvider();
+	// Destroy caches & all providers
+	static void CleanUpProviders();
 
-    // Get the default size of an icon for a specific client
-    virtual wxSize DoGetSizeHint(const wxArtClient& client)
-    {
-        return GetSizeHint(client, true);
-    }
+	// Get the default size of an icon for a specific client
+	virtual wxSize DoGetSizeHint(const wxArtClient &client)
+	{
+		return GetSizeHint(client, true);
+	}
 
-    // Derived classes must override this method to create requested
-    // art resource. This method is called only once per instance's
-    // lifetime for each requested wxArtID.
-    virtual wxBitmap CreateBitmap(const wxArtID& WXUNUSED(id),
-                                  const wxArtClient& WXUNUSED(client),
-                                  const wxSize& WXUNUSED(size)) = 0;
-
-private:
-    static void CommonAddingProvider();
+	// Derived classes must override this method to create requested
+	// art resource. This method is called only once per instance's
+	// lifetime for each requested wxArtID.
+	virtual wxBitmap CreateBitmap(const wxArtID &WXUNUSED(id),
+	                              const wxArtClient &WXUNUSED(client),
+	                              const wxSize &WXUNUSED(size)) = 0;
 
 private:
-    // list of providers:
-    static wxArtProvidersList *sm_providers;
-    // art resources cache (so that CreateXXX is not called that often):
-    static wxArtProviderCache *sm_cache;
+	static void CommonAddingProvider();
 
-    DECLARE_ABSTRACT_CLASS(wxArtProvider)
+private:
+	// list of providers:
+	static wxArtProvidersList *sm_providers;
+	// art resources cache (so that CreateXXX is not called that often):
+	static wxArtProviderCache *sm_cache;
+
+	DECLARE_ABSTRACT_CLASS(wxArtProvider)
 };
 
 

@@ -38,25 +38,23 @@ without proper emulation of the cdvd status flag it also tends to break things.
 
 */
 
-enum CdvdIrqId
-{
+enum CdvdIrqId {
 	Irq_None = 0
-,	Irq_DataReady = 0
-,	Irq_CommandComplete
-,	Irq_Acknowledge
-,	Irq_EndOfData
-,	Irq_Error
-,	Irq_NotReady
+	           ,	Irq_DataReady = 0
+	                                   ,	Irq_CommandComplete
+	,	Irq_Acknowledge
+	,	Irq_EndOfData
+	,	Irq_Error
+	,	Irq_NotReady
 
 };
 
 /* is cdvd.Status only for NCMDS? (linuzappz) */
-/* cdvd.Status is a construction site as of now (rama)*/ 
-enum cdvdStatus
-{
+/* cdvd.Status is a construction site as of now (rama)*/
+enum cdvdStatus {
 	//CDVD_STATUS_NONE            = 0x00, // not sure ;)
 	//CDVD_STATUS_SEEK_COMPLETE   = 0x0A,
-	CDVD_STATUS_STOP            = 0x00, 
+	CDVD_STATUS_STOP            = 0x00,
 	CDVD_STATUS_TRAY_OPEN       = 0x01, // confirmed to be tray open
 	CDVD_STATUS_SPIN            = 0x02,
 	CDVD_STATUS_READ			= 0x06,
@@ -65,24 +63,22 @@ enum cdvdStatus
 	CDVD_STATUS_EMERGENCY		= 0x20,
 };
 
-enum cdvdready
-{
+enum cdvdready {
 	CDVD_NOTREADY = 0x00,
 	CDVD_READY1 = 0x40,
 	CDVD_READY2 = 0x4e // This is used in a few places for some reason.
-	//It would be worth checking if this was just a typo made at some point.
+	              //It would be worth checking if this was just a typo made at some point.
 };
 
 // Cdvd actions tell the emulator how and when to respond to certain requests.
 // Actions are handled by the cdvdInterrupt()
-enum cdvdActions
-{
+enum cdvdActions {
 	cdvdAction_None = 0
-,	cdvdAction_Seek
-,	cdvdAction_Standby
-,	cdvdAction_Stop
-,	cdvdAction_Break
-,	cdvdAction_Read			// note: not used yet.
+	                  ,	cdvdAction_Seek
+	,	cdvdAction_Standby
+	,	cdvdAction_Stop
+	,	cdvdAction_Break
+	,	cdvdAction_Read			// note: not used yet.
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -97,14 +93,12 @@ enum cdvdActions
 // that a contiguous sector read can reach the sector faster than initiating a full seek.
 // Typically this value is very low.
 
-enum CDVD_MODE_TYPE
-{
+enum CDVD_MODE_TYPE {
 	MODE_CDROM = 0,
 	MODE_DVDROM,
 };
 
-static const uint tbl_FastSeekDelta[3] =
-{
+static const uint tbl_FastSeekDelta[3] = {
 	4371,	// CD-ROM
 	14764,	// Single-layer DVD-ROM
 	13360	// dual-layer DVD-ROM [currently unused]
@@ -112,8 +106,7 @@ static const uint tbl_FastSeekDelta[3] =
 
 // if a seek is within this many blocks, read instead of seek.
 // These values are arbitrary assumptions.  Not sure what the real PS2 uses.
-static const uint tbl_ContigiousSeekDelta[3] =
-{
+static const uint tbl_ContigiousSeekDelta[3] = {
 	8,		// CD-ROM
 	16,		// single-layer DVD-ROM
 	16,		// dual-layer DVD-ROM [currently unused]
@@ -134,14 +127,14 @@ static const uint PSX_DVD_READSPEED = 1382400 + 256000; // normal is 1 Byte Time
 // Legacy Note: FullSeek timing causes many games to load very slow, but it likely not the real problem.
 // Games breaking with it set to PSXCLK*40 : "wrath unleashed" and "Shijou Saikyou no Deshi Kenichi".
 
-static const uint Cdvd_FullSeek_Cycles = (PSXCLK*100) / 1000;		// average number of cycles per fullseek (100ms)
-static const uint Cdvd_FastSeek_Cycles = (PSXCLK*30) / 1000;		// average number of cycles per fastseek (37ms)
+static const uint Cdvd_FullSeek_Cycles = (PSXCLK * 100) / 1000;		// average number of cycles per fullseek (100ms)
+static const uint Cdvd_FastSeek_Cycles = (PSXCLK * 30) / 1000;		// average number of cycles per fastseek (37ms)
 short DiscSwapTimerSeconds = 0;
 bool trayState = 0; // Used to check if the CD tray status has changed since the last time
 
 static const char *mg_zones[8] = {"Japan", "USA", "Europe", "Oceania", "Asia", "Russia", "China", "Mexico"};
 
-static const char *nCmdName[0x100]= {
+static const char *nCmdName[0x100] = {
 	"CdSync",
 	"CdNop",
 	"CdStandby",
@@ -160,8 +153,7 @@ static const char *nCmdName[0x100]= {
 	"sceCdChgSpdlCtrl",
 };
 
-enum nCmds
-{
+enum nCmds {
 	N_CD_SYNC = 0x00, // CdSync
 	N_CD_NOP = 0x01, // CdNop
 	N_CD_STANDBY = 0x02, // CdStandby
@@ -178,7 +170,7 @@ enum nCmds
 	N_CD_CHG_SPDL_CTRL = 0x0F, // CdChgSpdlCtrl
 };
 
-static const char *sCmdName[0x100]= {
+static const char *sCmdName[0x100] = {
 	"", "sceCdGetDiscType", "sceCdReadSubQ", "subcommands",//sceCdGetMecaconVersion, read/write console id, read renewal date
 	"", "sceCdTrayState", "sceCdTrayCtrl", "",
 	"sceCdReadClock", "sceCdWriteClock", "sceCdReadNVM", "sceCdWriteNVM",
@@ -236,8 +228,7 @@ struct NVMLayout {
 };
 
 #define NVM_FORMAT_MAX	2
-static NVMLayout nvmlayouts[NVM_FORMAT_MAX] =
-{
+static NVMLayout nvmlayouts[NVM_FORMAT_MAX] = {
 	{0x000,  0x280, 0x300, 0x200, 0x1C8, 0x1C0, 0x1A0, 0x180, 0x198},	// eeproms from bios v0.00 and up
 	{0x146,  0x270, 0x2B0, 0x200, 0x1C8, 0x1E0, 0x1B0, 0x180, 0x198},	// eeproms from bios v1.70 and up
 };

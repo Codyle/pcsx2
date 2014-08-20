@@ -21,10 +21,10 @@
 
 
 /* Audio Device Class Requests Callback Functions */
-extern BOOL ADC_IF_GetRequest (void);
-extern BOOL ADC_IF_SetRequest (void);
-extern BOOL ADC_EP_GetRequest (void);
-extern BOOL ADC_EP_SetRequest (void);
+extern BOOL ADC_IF_GetRequest(void);
+extern BOOL ADC_IF_SetRequest(void);
+extern BOOL ADC_EP_GetRequest(void);
+extern BOOL ADC_EP_SetRequest(void);
 
 
 #endif  /* __ADCUSER_H__ */

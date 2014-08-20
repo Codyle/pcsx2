@@ -22,8 +22,8 @@
 
 /* USB Endpoint Data Structure */
 typedef struct _USB_EP_DATA {
-  BYTE  *pData;
-  WORD   Count;
+	BYTE  *pData;
+	WORD   Count;
 } USB_EP_DATA;
 
 /* USB Core Global Variables */
@@ -44,7 +44,7 @@ extern USB_EP_DATA EP0Data;
 extern USB_SETUP_PACKET SetupPacket;
 
 /* USB Core Functions */
-extern void  USB_ResetCore (void);
+extern void  USB_ResetCore(void);
 
 
 #endif  /* __USBCORE_H__ */

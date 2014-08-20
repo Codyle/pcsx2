@@ -24,12 +24,12 @@
 //
 //*************************************************************************//
 
-void OpenIOCTLHandle(int iA,int iT,int iL);
+void OpenIOCTLHandle(int iA, int iT, int iL);
 void CloseIOCTLHandle(void);
-char MapIOCTLDriveLetter(int iA,int iT,int iL);
+char MapIOCTLDriveLetter(int iA, int iT, int iL);
 int  GetIOCTLCDDrives(char * pDList);
-HANDLE OpenIOCTLFile(char cLetter,BOOL bAsync);
-void GetIOCTLAdapter(HANDLE hF,int * iDA,int * iDT,int * iDL);
+HANDLE OpenIOCTLFile(char cLetter, BOOL bAsync);
+void GetIOCTLAdapter(HANDLE hF, int * iDA, int * iDT, int * iDL);
 DWORD IOCTLSendASPI32Command(LPSRB pSrb);
-DWORD ReadIOCTL_Raw(BOOL bWait,FRAMEBUF * f);
-DWORD ReadIOCTL_Raw_Sub(BOOL bWait,FRAMEBUF * f);
+DWORD ReadIOCTL_Raw(BOOL bWait, FRAMEBUF * f);
+DWORD ReadIOCTL_Raw_Sub(BOOL bWait, FRAMEBUF * f);

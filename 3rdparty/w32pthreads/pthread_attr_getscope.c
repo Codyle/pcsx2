@@ -42,12 +42,12 @@
 #endif
 
 int
-pthread_attr_getscope (const pthread_attr_t * attr, int *contentionscope)
+pthread_attr_getscope(const pthread_attr_t * attr, int *contentionscope)
 {
 #ifdef _POSIX_THREAD_PRIORITY_SCHEDULING
-  *contentionscope = (*attr)->contentionscope;
-  return 0;
+	*contentionscope = (*attr)->contentionscope;
+	return 0;
 #else
-  return ENOSYS;
+	return ENOSYS;
 #endif
 }

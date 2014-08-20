@@ -39,8 +39,7 @@ char progressboxline[256];
 
 void ProgressBoxDestroy()
 {
-	if (progressbox.window != NULL)
-	{
+	if (progressbox.window != NULL) {
 		gtk_widget_destroy(progressbox.window);
 		progressbox.window = NULL;
 		progressbox.desc = NULL;
@@ -50,7 +49,6 @@ void ProgressBoxDestroy()
 void ProgressBoxStart(char *description, off64_t maximum)
 {
 	gtk_label_set_text(GTK_LABEL(progressbox.desc), description);
-
 	progressbox.max = maximum;
 	progressbox.gmax = maximum;
 	progressbox.lastpct = 100;
@@ -69,12 +67,9 @@ void ProgressBoxTick(off64_t current)
 	                              gcur / progressbox.gmax);
 	sprintf(progressboxline, "%llu of %llu", current, progressbox.max);
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbox.bar), progressboxline);
-
-	if (progressbox.max >= 100)
-	{
+	if (progressbox.max >= 100) {
 		thispct = current / (progressbox.max / 100);
-		if (thispct != progressbox.lastpct)
-		{
+		if (thispct != progressbox.lastpct) {
 			sprintf(progressboxline, "%llu%% CDVDisoEFP Progress", thispct);
 			gtk_window_set_title(GTK_WINDOW(progressbox.window), progressboxline);
 			progressbox.lastpct = thispct;
@@ -92,8 +87,7 @@ void ProgressBoxStop()
 gint ProgressBoxCancelEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 {
 	progressbox.stop = 1;
-
-	return(TRUE);
+	return (TRUE);
 } // END ProgressBoxCancelEvent()
 
 void ProgressBoxDisplay()
@@ -108,7 +102,6 @@ void ProgressBoxDisplay()
 	gtk_window_set_resizable(GTK_WINDOW(progressbox.window), FALSE);
 	g_signal_connect(G_OBJECT(progressbox.window), "delete_event",
 	                 G_CALLBACK(ProgressBoxCancelEvent), NULL);
-
 	vbox1 = gtk_vbox_new(FALSE, 5);
 	gtk_container_add(GTK_CONTAINER(progressbox.window), vbox1);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox1), 5);

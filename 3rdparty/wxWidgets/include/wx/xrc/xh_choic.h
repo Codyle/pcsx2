@@ -17,16 +17,16 @@
 
 class WXDLLIMPEXP_XRC wxChoiceXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxChoiceXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxChoiceXmlHandler)
 
 public:
-    wxChoiceXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxChoiceXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_insideBox;
-    wxArrayString strList;
+	bool m_insideBox;
+	wxArrayString strList;
 };
 
 #endif // wxUSE_XRC && wxUSE_CHOICE

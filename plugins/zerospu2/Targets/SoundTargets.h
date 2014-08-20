@@ -26,8 +26,7 @@ typedef int (*intFunction)();
 typedef bool (*boolFunction)();
 typedef void (*soundFeedFunction)(unsigned char *, long);
 
-struct SoundCallbacks
-{
+struct SoundCallbacks {
 	intFunction SetupSound;
 	voidFunction RemoveSound;
 	intFunction SoundGetBytesBuffered;
@@ -78,6 +77,6 @@ extern void InitPortAudio();
 extern int SetupSound();
 extern void RemoveSound();
 extern int SoundGetBytesBuffered();
-extern void SoundFeedVoiceData(unsigned char* pSound,long lBytes);
+extern void SoundFeedVoiceData(unsigned char* pSound, long lBytes);
 
 #endif // SOUNDTARGETS_H_INCLUDED

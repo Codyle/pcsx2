@@ -34,13 +34,31 @@ class CpuTabPage: public wxPanel
 {
 public:
 	CpuTabPage(wxWindow* parent, DebugInterface* _cpu);
-	DebugInterface* getCpu() { return cpu; };
-	CtrlDisassemblyView* getDisassembly() { return disassembly; };
-	CtrlRegisterList* getRegisterList() { return registerList; };
-	CtrlMemView* getMemoryView() { return memory; };
-	wxNotebook* getBottomTabs() { return bottomTabs; };
+	DebugInterface* getCpu()
+	{
+		return cpu;
+	};
+	CtrlDisassemblyView* getDisassembly()
+	{
+		return disassembly;
+	};
+	CtrlRegisterList* getRegisterList()
+	{
+		return registerList;
+	};
+	CtrlMemView* getMemoryView()
+	{
+		return memory;
+	};
+	wxNotebook* getBottomTabs()
+	{
+		return bottomTabs;
+	};
 	void update();
-	void showMemoryView() { setBottomTabPage(memory); };
+	void showMemoryView()
+	{
+		setBottomTabPage(memory);
+	};
 private:
 	void setBottomTabPage(wxWindow* win);
 	DebugInterface* cpu;
@@ -54,29 +72,35 @@ private:
 class DisassemblyDialog : public wxFrame
 {
 public:
-	DisassemblyDialog( wxWindow* parent=NULL );
+	DisassemblyDialog(wxWindow* parent = NULL);
 	virtual ~DisassemblyDialog() throw() {}
 
-	static wxString GetNameStatic() { return L"DisassemblyDialog"; }
-	wxString GetDialogName() const { return GetNameStatic(); }
-	
+	static wxString GetNameStatic()
+	{
+		return L"DisassemblyDialog";
+	}
+	wxString GetDialogName() const
+	{
+		return GetNameStatic();
+	}
+
 	void update();
 	void reset();
 	void setDebugMode(bool debugMode, bool switchPC);
-	
+
 #ifdef WIN32
 	WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 #endif
 
 	DECLARE_EVENT_TABLE()
 protected:
-	void onBreakRunClicked(wxCommandEvent& evt);
-	void onStepOverClicked(wxCommandEvent& evt);
-	void onStepIntoClicked(wxCommandEvent& evt);
-	void onDebuggerEvent(wxCommandEvent& evt);
-	void onPageChanging(wxCommandEvent& evt);
-	void onBreakpointClick(wxCommandEvent& evt);
-	void onClose(wxCloseEvent& evt);
+	void onBreakRunClicked(wxCommandEvent &evt);
+	void onStepOverClicked(wxCommandEvent &evt);
+	void onStepIntoClicked(wxCommandEvent &evt);
+	void onDebuggerEvent(wxCommandEvent &evt);
+	void onPageChanging(wxCommandEvent &evt);
+	void onBreakpointClick(wxCommandEvent &evt);
+	void onClose(wxCloseEvent &evt);
 	void stepOver();
 	void stepInto();
 	void gotoPc();

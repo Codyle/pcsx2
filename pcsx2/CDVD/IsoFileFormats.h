@@ -19,8 +19,7 @@
 #include "wx/wfstream.h"
 #include "AsyncFileReader.h"
 
-enum isoType
-{
+enum isoType {
 	ISOTYPE_ILLEGAL = 0,
 	ISOTYPE_CD,
 	ISOTYPE_DVD,
@@ -35,12 +34,12 @@ static const int CD_FRAMESIZE_RAW	= 2448;
 // --------------------------------------------------------------------------------------
 class InputIsoFile
 {
-	DeclareNoncopyableObject( InputIsoFile );
-	
-	 static const uint MaxReadUnit = 128;
+	DeclareNoncopyableObject(InputIsoFile);
+
+	static const uint MaxReadUnit = 128;
 
 protected:
-	 uint ReadUnit;
+	uint ReadUnit;
 
 protected:
 	wxString	m_filename;
@@ -58,37 +57,46 @@ protected:
 
 	// total number of blocks in the ISO image (including all parts)
 	u32			m_blocks;
-		
+
 	bool		m_read_inprogress;
 	uint		m_read_lsn;
 	uint		m_read_count;
 	u8			m_readbuffer[MaxReadUnit * CD_FRAMESIZE_RAW];
-	
-public:	
+
+public:
 	InputIsoFile();
 	virtual ~InputIsoFile() throw();
 
 	bool IsOpened() const;
-	
-	isoType GetType() const		{ return m_type; }
-	uint GetBlockCount() const	{ return m_blocks; }	
-	int GetBlockOffset() const	{ return m_blockofs; }
-	
-	const wxString& GetFilename() const
+
+	isoType GetType() const
+	{
+		return m_type;
+	}
+	uint GetBlockCount() const
+	{
+		return m_blocks;
+	}
+	int GetBlockOffset() const
+	{
+		return m_blockofs;
+	}
+
+	const wxString &GetFilename() const
 	{
 		return m_filename;
 	}
 
-	bool Test( const wxString& srcfile );
-	bool Open( const wxString& srcfile, bool testOnly = false );
+	bool Test(const wxString &srcfile);
+	bool Open(const wxString &srcfile, bool testOnly = false);
 	void Close();
-	bool Detect( bool readType=true );
+	bool Detect(bool readType = true);
 
 	int ReadSync(u8* dst, uint lsn);
 
 	void BeginRead2(uint lsn);
 	int FinishRead3(u8* dest, uint mode);
-	
+
 protected:
 	void _init();
 
@@ -98,8 +106,8 @@ protected:
 
 class OutputIsoFile
 {
-	DeclareNoncopyableObject( OutputIsoFile );
-	
+	DeclareNoncopyableObject(OutputIsoFile);
+
 protected:
 	wxString	m_filename;
 
@@ -117,34 +125,34 @@ protected:
 	int					m_dtablesize;
 
 	ScopedPtr<wxFileOutputStream>	m_outstream;
-		
-public:	
+
+public:
 	OutputIsoFile();
 	virtual ~OutputIsoFile() throw();
 
 	bool IsOpened() const;
-	
-	
-	const wxString& GetFilename() const
+
+
+	const wxString &GetFilename() const
 	{
 		return m_filename;
 	}
 
-	void Create(const wxString& filename, int mode);
+	void Create(const wxString &filename, int mode);
 	void Close();
 
 	void WriteHeader(int blockofs, uint blocksize, uint blocks);
 
 	void WriteSector(const u8* src, uint lsn);
-	
+
 protected:
 	void _init();
 
-	void WriteBuffer( const void* src, size_t size );
+	void WriteBuffer(const void* src, size_t size);
 
-	template< typename T >
-	void WriteValue( const T& data )
+	template<typename T>
+	void WriteValue(const T &data)
 	{
-		WriteBuffer( &data, sizeof(data) );
+		WriteBuffer(&data, sizeof(data));
 	}
 };

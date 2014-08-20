@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxGenericDirCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler)
 
 public:
-    wxGenericDirCtrlXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxGenericDirCtrlXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_DIRDLG

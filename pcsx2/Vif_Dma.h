@@ -19,11 +19,11 @@
 #include "Vif_Unpack.h"
 
 struct vifCode {
-   u32 addr;
-   u32 size;
-   u32 cmd;
-   u16 wl;
-   u16 cl;
+	u32 addr;
+	u32 size;
+	u32 cmd;
+	u16 wl;
+	u16 cl;
 };
 
 union tBITBLTBUF {
@@ -55,8 +55,8 @@ union tTRXREG {
 };
 
 struct tVIF_CTRL {
-   bool enabled;
-   u32 value;
+	bool enabled;
+	u32 value;
 };
 
 // NOTE, if debugging vif stalls, use sega classics, spyro, gt4, and taito
@@ -118,8 +118,7 @@ __fi static int _limit(int a, int max)
 	return ((a > max) ? max : a);
 }
 
-enum VifModes
-{
+enum VifModes {
 	VIF_NORMAL_TO_MEM_MODE = 0,
 	VIF_NORMAL_FROM_MEM_MODE = 1,
 	VIF_CHAIN_MODE = 2

@@ -9,7 +9,7 @@ typedef struct romdir_entry {
 	char	name[10];		//+00
 	short	extSize;		//+0A
 	int		fileSize;		//+0C
-} __attribute__ ((packed)) ROMDIR_ENTRY;
+} __attribute__((packed)) ROMDIR_ENTRY;
 
 
 // info about a file in a romdir

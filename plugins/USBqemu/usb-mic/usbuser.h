@@ -21,13 +21,13 @@
 
 
 /* USB Device Events Callback Functions */
-extern void USB_Power_Event     (BOOL  power);
-extern void USB_Reset_Event     (void);
-extern void USB_Suspend_Event   (void);
-extern void USB_Resume_Event    (void);
-extern void USB_WakeUp_Event    (void);
-extern void USB_SOF_Event       (void);
-extern void USB_Error_Event     (DWORD error);
+extern void USB_Power_Event(BOOL  power);
+extern void USB_Reset_Event(void);
+extern void USB_Suspend_Event(void);
+extern void USB_Resume_Event(void);
+extern void USB_WakeUp_Event(void);
+extern void USB_SOF_Event(void);
+extern void USB_Error_Event(DWORD error);
 
 /* USB Endpoint Callback Events */
 #define USB_EVT_SETUP       1   /* Setup Packet */
@@ -48,27 +48,27 @@ extern void USB_Error_Event     (DWORD error);
 extern void (* const USB_P_EP[16])(DWORD event);
 
 /* USB Endpoint Events Callback Functions */
-extern void USB_EndPoint0  (DWORD event);
-extern void USB_EndPoint1  (DWORD event);
-extern void USB_EndPoint2  (DWORD event);
-extern void USB_EndPoint3  (DWORD event);
-extern void USB_EndPoint4  (DWORD event);
-extern void USB_EndPoint5  (DWORD event);
-extern void USB_EndPoint6  (DWORD event);
-extern void USB_EndPoint7  (DWORD event);
-extern void USB_EndPoint8  (DWORD event);
-extern void USB_EndPoint9  (DWORD event);
-extern void USB_EndPoint10 (DWORD event);
-extern void USB_EndPoint11 (DWORD event);
-extern void USB_EndPoint12 (DWORD event);
-extern void USB_EndPoint13 (DWORD event);
-extern void USB_EndPoint14 (DWORD event);
-extern void USB_EndPoint15 (DWORD event);
+extern void USB_EndPoint0(DWORD event);
+extern void USB_EndPoint1(DWORD event);
+extern void USB_EndPoint2(DWORD event);
+extern void USB_EndPoint3(DWORD event);
+extern void USB_EndPoint4(DWORD event);
+extern void USB_EndPoint5(DWORD event);
+extern void USB_EndPoint6(DWORD event);
+extern void USB_EndPoint7(DWORD event);
+extern void USB_EndPoint8(DWORD event);
+extern void USB_EndPoint9(DWORD event);
+extern void USB_EndPoint10(DWORD event);
+extern void USB_EndPoint11(DWORD event);
+extern void USB_EndPoint12(DWORD event);
+extern void USB_EndPoint13(DWORD event);
+extern void USB_EndPoint14(DWORD event);
+extern void USB_EndPoint15(DWORD event);
 
 /* USB Core Events Callback Functions */
-extern void USB_Configure_Event (void);
-extern void USB_Interface_Event (void);
-extern void USB_Feature_Event   (void);
+extern void USB_Configure_Event(void);
+extern void USB_Interface_Event(void);
+extern void USB_Feature_Event(void);
 
 
 #endif  /* __USBUSER_H__ */

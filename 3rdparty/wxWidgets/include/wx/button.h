@@ -56,51 +56,54 @@ extern WXDLLEXPORT_DATA(const wxChar) wxButtonNameStr[];
 class WXDLLEXPORT wxButtonBase : public wxControl
 {
 public:
-    wxButtonBase() { }
+	wxButtonBase() { }
 
-    // show the image in the button in addition to the label
-    virtual void SetImageLabel(const wxBitmap& WXUNUSED(bitmap)) { }
+	// show the image in the button in addition to the label
+	virtual void SetImageLabel(const wxBitmap &WXUNUSED(bitmap)) { }
 
-    // set the margins around the image
-    virtual void SetImageMargins(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y)) { }
+	// set the margins around the image
+	virtual void SetImageMargins(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y)) { }
 
-    // this wxButton method is called when the button becomes the default one
-    // on its panel
-    virtual void SetDefault() { }
+	// this wxButton method is called when the button becomes the default one
+	// on its panel
+	virtual void SetDefault() { }
 
-    // Buttons on MSW can look bad if they are not native colours, because
-    // then they become owner-drawn and not theme-drawn.  Disable it here
-    // in wxButtonBase to make it consistent.
-    virtual bool ShouldInheritColours() const { return false; }
+	// Buttons on MSW can look bad if they are not native colours, because
+	// then they become owner-drawn and not theme-drawn.  Disable it here
+	// in wxButtonBase to make it consistent.
+	virtual bool ShouldInheritColours() const
+	{
+		return false;
+	}
 
-    // returns the default button size for this platform
-    static wxSize GetDefaultSize();
+	// returns the default button size for this platform
+	static wxSize GetDefaultSize();
 
 protected:
-    DECLARE_NO_COPY_CLASS(wxButtonBase)
+	DECLARE_NO_COPY_CLASS(wxButtonBase)
 };
 
 #if defined(__WXUNIVERSAL__)
-    #include "wx/univ/button.h"
+#include "wx/univ/button.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/button.h"
+#include "wx/msw/button.h"
 #elif defined(__WXMOTIF__)
-    #include "wx/motif/button.h"
+#include "wx/motif/button.h"
 #elif defined(__WXGTK20__)
-    #include "wx/gtk/button.h"
+#include "wx/gtk/button.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/button.h"
+#include "wx/gtk1/button.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/button.h"
+#include "wx/mac/button.h"
 #elif defined(__WXCOCOA__)
-    #include "wx/cocoa/button.h"
+#include "wx/cocoa/button.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/button.h"
+#include "wx/os2/button.h"
 #elif defined(__WXPALMOS__)
-    #include "wx/palmos/button.h"
+#include "wx/palmos/button.h"
 #endif
 
 #endif // wxUSE_BUTTON
 
 #endif
-    // _WX_BUTTON_H_BASE_
+// _WX_BUTTON_H_BASE_

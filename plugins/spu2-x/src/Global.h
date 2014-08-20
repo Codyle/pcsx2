@@ -28,7 +28,7 @@ struct V_Core;
 
 namespace soundtouch
 {
-	class SoundTouch;
+class SoundTouch;
 }
 
 #include <assert.h>
@@ -41,14 +41,14 @@ namespace soundtouch
 
 // This will be brought in later anyways, but if we bring it in now, it'll avoid
 // warnings about redefining __LINUX__.
-#include "Utilities/Dependencies.h" 
+#include "Utilities/Dependencies.h"
 #include "Pcsx2Defs.h"
 #include "Pcsx2Types.h"
 
 namespace VersionInfo
 {
-	static const u8 Release  = 2;
-	static const u8 Revision = 0;	// increase that with each version
+static const u8 Release  = 2;
+static const u8 Revision = 0;	// increase that with each version
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -58,16 +58,16 @@ namespace VersionInfo
 #undef min
 #undef max
 
-template< typename T >
-static __forceinline void Clampify( T& src, T min, T max )
+template<typename T>
+static __forceinline void Clampify(T &src, T min, T max)
 {
-	src = std::min( std::max( src, min ), max );
+	src = std::min(std::max(src, min), max);
 }
 
-template< typename T >
-static __forceinline T GetClamped( T src, T min, T max )
+template<typename T>
+static __forceinline T GetClamped(T src, T min, T max)
 {
-	return std::min( std::max( src, min ), max );
+	return std::min(std::max(src, min), max);
 }
 
 extern void SysMessage(const char *fmt, ...);

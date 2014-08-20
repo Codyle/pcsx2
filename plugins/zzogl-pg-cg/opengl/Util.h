@@ -72,45 +72,37 @@ extern "C" char* CALLBACK PS2EgetLibName(void);
 
 extern wxString s_strIniPath; // Air's new (r2361) new constant for ini file path
 
-typedef struct
-{
+typedef struct {
 	int x, y, w, h;
 } Rect;
 
-typedef struct
-{
+typedef struct {
 	int x, y;
 } Point;
 
-typedef struct
-{
+typedef struct {
 	int w, h;
 } Size;
 
-typedef struct
-{
+typedef struct {
 	int x0, y0;
 	int x1, y1;
 } Rect2;
 
-typedef struct
-{
+typedef struct {
 	int x, y, c;
 } PointC;
 
-enum GSWindowDim
-{
-	
+enum GSWindowDim {
+
 	GSDim_640 = 0,
 	GSDim_800,
 	GSDim_1024,
 	GSDim_1280,
 };
 
-typedef union
-{
-	struct
-	{
+typedef union {
+	struct {
 		u32 fullscreen : 1;
 		u32 tga_snap : 1;
 		u32 capture_avi : 1;
@@ -120,12 +112,13 @@ typedef union
 		u32 dimensions : 2;
 	};
 	u32 _u32;
-	
-	void ZZOptions(u32 value) { _u32 = value; }
+
+	void ZZOptions(u32 value) {
+		_u32 = value;
+	}
 } ZZOptions;
 
-typedef struct
-{
+typedef struct {
 	u8 mrtdepth; // write color in render target
 	u8 interlace; // intelacing mode 0, 1, 3-off
 	u8 aa;	// antialiasing 0 - off, 1 - 2x, 2 - 4x, 3 - 8x, 4 - 16x
@@ -140,100 +133,114 @@ typedef struct
 	u32 log;
 	u32 disableHacks;
 	int dump;
-	
-	void incAA() { aa++; if (aa > 4) aa = 0; }
-	void decAA() { aa--; if (aa > 4) aa = 4; } // u8 is unsigned, so negative value is 255.
-	
-	gameHacks settings() 
+
+	void incAA()
+	{
+		aa++;
+		if (aa > 4) aa = 0;
+	}
+	void decAA()
+	{
+		aa--;        // u8 is unsigned, so negative value is 255.
+		if (aa > 4) aa = 4;
+	}
+
+	gameHacks settings()
 	{
 		if (disableHacks)
-		{
 			return hacks;
-		}
-		else
-		{
+		else {
 			gameHacks tempHack;
 			tempHack._u32 = (hacks._u32 | def_hacks._u32);
 			return tempHack;
 		}
 	}
-	
-	bool fullscreen() { return !!(zz_options.fullscreen); }
-	bool wireframe() { return !!(zz_options.wireframe); }
-	bool widescreen() { return !!(zz_options.widescreen); }
-	bool captureAvi() { return !!(zz_options.capture_avi); }
-	bool loaded() {  return !!(zz_options.loaded); }
-	
+
+	bool fullscreen()
+	{
+		return !!(zz_options.fullscreen);
+	}
+	bool wireframe()
+	{
+		return !!(zz_options.wireframe);
+	}
+	bool widescreen()
+	{
+		return !!(zz_options.widescreen);
+	}
+	bool captureAvi()
+	{
+		return !!(zz_options.capture_avi);
+	}
+	bool loaded()
+	{
+		return !!(zz_options.loaded);
+	}
+
 	void setFullscreen(bool flag)
 	{
 		zz_options.fullscreen = (flag) ? 1 : 0;
 	}
-	
+
 	void setWireframe(bool flag)
 	{
 		zz_options.wireframe = (flag) ? 1 : 0;
 	}
-	
+
 	void setCaptureAvi(bool flag)
 	{
 		zz_options.capture_avi = (flag) ? 1 : 0;
 	}
-	
+
 	void setLoaded(bool flag)
 	{
 		zz_options.loaded = (flag) ? 1 : 0;
 	}
 	void set_dimensions(u32 dim)
 	{
-		switch (dim)
-		{
-
+		switch (dim) {
 			case GSDim_640:
 				width = 640;
 				height = isWideScreen ? 360 : 480;
 				break;
-
 			case GSDim_800:
 				width = 800;
 				height = isWideScreen ? 450 : 600;
 				break;
-
 			case GSDim_1024:
 				width = 1024;
 				height = isWideScreen ? 576 : 768;
 				break;
-
 			case GSDim_1280:
 				width = 1280;
 				height = isWideScreen ? 720 : 960;
 				break;
-				
 			default:
 				width = 800;
 				height = 600;
 				break;
 		}
 	}
-	
+
 } GSconf;
 extern GSconf conf;
 
 // ----------------------- Defines
 
 #define REG64(name) \
-union name			\
-{					\
-	u64 i64;		\
-	u32 ai32[2];	\
-	struct {		\
- 
+	union name			\
+	{					\
+		u64 i64;		\
+		u32 ai32[2];	\
+		struct {		\
+			 
 #define REG128(name)\
-union name			\
-{					\
-	u64 ai64[2];	\
-	u32 ai32[4];	\
-	struct {		\
- 
+	union name			\
+	{					\
+		u64 ai64[2];	\
+		u32 ai32[4];	\
+		struct {		\
+			 
 #define REG64_(prefix, name) REG64(prefix##name)
 #define REG128_(prefix, name) REG128(prefix##name)
 
@@ -241,17 +248,17 @@ union name			\
 #define REG_END2 };
 
 #define REG64_SET(name) \
-union name			\
-{					\
-	u64 i64;		\
-	u32 ai32[2];	\
- 
+	union name			\
+	{					\
+		u64 i64;		\
+		u32 ai32[2];	\
+		 
 #define REG128_SET(name)\
-union name			\
-{					\
-	u64 ai64[2];	\
-	u32 ai32[4];	\
- 
+	union name			\
+	{					\
+		u64 ai64[2];	\
+		u32 ai32[4];	\
+		 
 #define REG_SET_END };
 
 #define FORIT(it, v) for(it = (v).begin(); it != (v).end(); ++(it))

@@ -27,8 +27,7 @@
 #include "logfile.h"
 #include "device.h" // FinishCommand()
 
-struct
-{
+struct {
 	DVD_DESCRIPTOR_HEADER h;
 	DVD_LAYER_DESCRIPTOR d;
 } layer;
@@ -51,11 +50,9 @@ s32 DVDGetStructures()
 	BOOL boolresult;
 	DWORD errcode;
 	s32 retval;
-
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVDiso DVD: DVDgetStructures()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-
 	boolresult = DeviceIoControl(devicehandle,
 	                             IOCTL_DVD_START_SESSION,
 	                             NULL,
@@ -65,13 +62,12 @@ s32 DVDGetStructures()
 	                             &byteswritten,
 	                             &waitevent);
 	errcode = FinishCommand(boolresult);
-	if (errcode != 0)
-	{
+	if (errcode != 0) {
 #ifdef VERBOSE_WARNING_DEVICE
 		PrintLog("CDVDiso DVD:   Couldn't start session!");
 		PrintError("CDVDiso DVD", errcode);
 #endif /* VERBOSE_WARNING_DEVICE */
-		return(-1);
+		return (-1);
 	} // ENDIF- Couldn't start a user session on the DVD drive? Fail.
 	request.BlockByteOffset.QuadPart = 0;
 	request.Format = DvdPhysicalDescriptor;
@@ -87,8 +83,7 @@ s32 DVDGetStructures()
 	                             &byteswritten,
 	                             &waitevent);
 	errcode = FinishCommand(boolresult);
-	if (errcode != 0)
-	{
+	if (errcode != 0) {
 #ifdef VERBOSE_WARNING_DEVICE
 		PrintLog("CDVDiso DVD:   Couldn't get layer data!");
 		PrintError("CDVDiso DVD", errcode);
@@ -96,8 +91,7 @@ s32 DVDGetStructures()
 		retval = -1;
 	} // ENDIF- Couldn't get layer data? (Including DVD size) Abort.
 #ifdef VERBOSE_DISC_INFO
-	switch (layer.d.BookType)
-	{
+	switch (layer.d.BookType) {
 		case 0:
 			PrintLog("CDVDiso DVD:   Book Type: DVD-ROM");
 			break;
@@ -118,8 +112,7 @@ s32 DVDGetStructures()
 			break;
 	} // ENDSWITCH- Displaying the Book Type
 	PrintLog("CDVDiso DVD:   Book Version %i", layer.d.BookVersion);
-	switch (layer.d.MinimumRate)
-	{
+	switch (layer.d.MinimumRate) {
 		case 0:
 			PrintLog("CDVDiso DVD:   Use Minimum Rate for: DVD-ROM");
 			break;
@@ -139,8 +132,7 @@ s32 DVDGetStructures()
 			PrintLog("CDVDiso DVD:   Use Minimum Rate for: Unknown (%i)", layer.d.MinimumRate);
 			break;
 	} // ENDSWITCH- Displaying the Minimum (Spin?) Rate
-	switch (layer.d.DiskSize)
-	{
+	switch (layer.d.DiskSize) {
 		case 0:
 			PrintLog("CDVDiso DVD:   Physical Disk Size: 120mm");
 			break;
@@ -151,8 +143,7 @@ s32 DVDGetStructures()
 			PrintLog("CDVDiso DVD:   Physical Disk Size: Unknown (%i)", layer.d.DiskSize);
 			break;
 	} // ENDSWITCH- What's the Disk Size?
-	switch (layer.d.LayerType)
-	{
+	switch (layer.d.LayerType) {
 		case 1:
 			PrintLog("CDVDiso DVD:   Layer Type: Read-Only");
 			break;
@@ -166,8 +157,7 @@ s32 DVDGetStructures()
 			PrintLog("CDVDiso DVD:   Layer Type: Unknown (%i)", layer.d.LayerType);
 			break;
 	} // ENDSWITCH- Displaying the Layer Type
-	switch (layer.d.TrackPath)
-	{
+	switch (layer.d.TrackPath) {
 		case 0:
 			PrintLog("CDVDiso DVD:   Track Path: PTP");
 			break;
@@ -179,8 +169,7 @@ s32 DVDGetStructures()
 			break;
 	} // ENDSWITCH- What's Track Path Layout?
 	PrintLog("CDVDiso DVD:   Number of Layers: %i", layer.d.NumberOfLayers + 1);
-	switch (layer.d.TrackDensity)
-	{
+	switch (layer.d.TrackDensity) {
 		case 0:
 			PrintLog("CDVDiso DVD:   Track Density: .74 m/track");
 			break;
@@ -194,8 +183,7 @@ s32 DVDGetStructures()
 			PrintLog("CDVDiso DVD:   Track Density: Unknown (%i)", layer.d.TrackDensity);
 			break;
 	} // ENDSWITCH- Displaying the Layer Type
-	switch (layer.d.LinearDensity)
-	{
+	switch (layer.d.LinearDensity) {
 		case 0:
 			PrintLog("CDVDiso DVD:   Linear Density: .267 m/bit");
 			break;
@@ -215,25 +203,18 @@ s32 DVDGetStructures()
 			PrintLog("CDVDiso DVD:   Linear Density: Unknown (%i)", layer.d.LinearDensity);
 			break;
 	} // ENDSWITCH- Displaying the Book Type
-	if (layer.d.StartingDataSector == 0x30000)
-	{
+	if (layer.d.StartingDataSector == 0x30000) {
 		PrintLog("CDVDiso DVD:   Starting Sector: %lu (DVD-ROM, DVD-R, DVD-RW)",
 		         layer.d.StartingDataSector);
-	}
-	else if (layer.d.StartingDataSector == 0x31000)
-	{
+	} else if (layer.d.StartingDataSector == 0x31000) {
 		PrintLog("CDVDiso DVD:   Starting Sector: %lu (DVD-RAM, DVD+RW)",
 		         layer.d.StartingDataSector);
-	}
-	else
-	{
-		PrintLog("CDVDiso DVD:   Starting Sector: %lu", layer.d.StartingDataSector);
-	} // ENDLONGIF- What does the starting sector tell us?
+	} else
+		PrintLog("CDVDiso DVD:   Starting Sector: %lu", layer.d.StartingDataSector); // ENDLONGIF- What does the starting sector tell us?
 	PrintLog("CDVDiso DVD:   End of Layer 0: %lu", layer.d.EndLayerZeroSector);
 	PrintLog("CDVDiso DVD:   Ending Sector: %lu", layer.d.EndDataSector);
 	if (layer.d.BCAFlag != 0)  PrintLog("CDVDiso DVD:   BCA data present");
 #endif /* VERBOSE_DISC_INFO */
-
 	boolresult = DeviceIoControl(devicehandle,
 	                             IOCTL_DVD_END_SESSION,
 	                             &sessionid,
@@ -243,15 +224,13 @@ s32 DVDGetStructures()
 	                             &byteswritten,
 	                             &waitevent);
 	errcode = FinishCommand(boolresult);
-	if (errcode != 0)
-	{
+	if (errcode != 0) {
 #ifdef VERBOSE_WARNING_DEVICE
 		PrintLog("CDVDiso DVD:   Couldn't end the session!");
 		PrintError("CDVDiso DVD", errcode);
 #endif /* VERBOSE_WARNING_DEVICE */
 	} // ENDIF- Couldn't end the user session? Report it.
-
-	return(retval);
+	return (retval);
 } // END DVDGetStructures()
 
 s32 DVDreadTrack(u32 lsn, int mode, u8 *buffer)
@@ -260,48 +239,42 @@ s32 DVDreadTrack(u32 lsn, int mode, u8 *buffer)
 	DWORD byteswritten;
 	BOOL boolresult;
 	DWORD errcode;
-
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVDiso DVD: DVDreadTrack(%lu)", lsn);
 #endif /* VERBOSE_FUNCTION_DEVICE */
-
 	targetpos.QuadPart = lsn * 2048;
 	waitevent.Offset = targetpos.LowPart;
 	waitevent.OffsetHigh = targetpos.HighPart;
-
 	boolresult = ReadFile(devicehandle,
 	                      buffer,
 	                      2048,
 	                      &byteswritten,
 	                      &waitevent);
 	errcode = FinishCommand(boolresult);
-	if (errcode != 0)
-	{
+	if (errcode != 0) {
 #ifdef VERBOSE_WARNING_DEVICE
 		PrintLog("CDVDiso DVD:   Couldn't read sector!");
 		PrintError("CDVDiso DVD", errcode);
 #endif /* VERBOSE_WARNING_DEVICE */
-		return(-1);
+		return (-1);
 	} // ENDIF- Trouble with the command? Report it.
-	if (boolresult == FALSE)
-	{
+	if (boolresult == FALSE) {
 		boolresult = GetOverlappedResult(devicehandle,
 		                                 &waitevent,
 		                                 &byteswritten,
 		                                 FALSE);
 	} // ENDIF- Did the initial call not complete? Get byteswritten for
 	//   the completed call.
-	if (byteswritten < 2048)
-	{
+	if (byteswritten < 2048) {
 #ifdef VERBOSE_WARNING_DEVICE
 		errcode = GetLastError();
 		PrintLog("CDVDiso CD:   Short block! only got %u out of %u bytes",
 		         byteswritten, 2048);
 		PrintError("CDVDiso CD", errcode);
 #endif /* VERBOSE_WARNING_DEVICE */
-		return(-1);
+		return (-1);
 	} // ENDIF- Didn't get enough bytes? Report and Abort!
-	return(0);
+	return (0);
 } // END DVDreadTrack()
 
 s32 DVDgetTN(cdvdTN *cdvdtn)
@@ -309,13 +282,11 @@ s32 DVDgetTN(cdvdTN *cdvdtn)
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVDiso DVD: DVDgetTN()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-
-	if (cdvdtn != NULL)
-	{
+	if (cdvdtn != NULL) {
 		cdvdtn->strack = 1;
 		cdvdtn->etrack = 1;
 	} // ENDIF- Does the user really want this data?
-	return(0);
+	return (0);
 } // END DVDgetTN()
 
 s32 DVDgetTD(u8 newtrack, cdvdTD *cdvdtd)
@@ -323,13 +294,12 @@ s32 DVDgetTD(u8 newtrack, cdvdTD *cdvdtd)
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVDiso DVD: DVDgetTD()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-	if ((newtrack >= 2) && (newtrack != 0xAA))  return(-1); // Wrong track
-	if (cdvdtd != NULL)
-	{
+	if ((newtrack >= 2) && (newtrack != 0xAA))  return (-1); // Wrong track
+	if (cdvdtd != NULL) {
 		cdvdtd->type = 0;
 		cdvdtd->lsn = layer.d.EndDataSector - layer.d.StartingDataSector + 1;
 	} // ENDIF- Does the user really want this data?
-	return(0);
+	return (0);
 } // END DVDgetTD()
 
 s32 DVDgetDiskType()
@@ -339,62 +309,47 @@ s32 DVDgetDiskType()
 	s32 tempdisctype;
 	char tempbuffer[2048];
 	int i;
-
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVDiso DVD: DVDgetDiskType()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-
 	retval = DVDGetStructures();
-	if (retval < 0)  return(-1); // Can't get DVD structures? Not a DVD then.
-	if (layer.d.EndDataSector == 0)  return(-1); // Missing info? Abort.
-
+	if (retval < 0)  return (-1); // Can't get DVD structures? Not a DVD then.
+	if (layer.d.EndDataSector == 0)  return (-1); // Missing info? Abort.
 	retval = DVDreadTrack(16, CDVD_MODE_2048, tempbuffer);
 	if (retval < 0)
-	{
-		return(-1);
-	} // ENDIF- Couldn't read the ISO9660 volume track? Fail.
+		return (-1); // ENDIF- Couldn't read the ISO9660 volume track? Fail.
 	tempdisctype = CDVD_TYPE_UNKNOWN;
-	if (layer.d.NumberOfLayers == 0)
-	{
+	if (layer.d.NumberOfLayers == 0) {
 #ifdef VERBOSE_DISC_INFO
 		PrintLog("CDVDiso DVD:   Found Single-Sided DVD.");
 #endif /* VERBOSE_DISC_INFO */
 		disctype = CDVD_TYPE_DETCTDVDS;
-	}
-	else
-	{
+	} else {
 #ifdef VERBOSE_DISC_INFO
 		PrintLog("CDVDiso DVD:   Found Dual-Sided DVD.");
 #endif /* VERBOSE_DISC_INFO */
 		disctype = CDVD_TYPE_DETCTDVDD;
 	} // ENDIF- Are we looking at a single layer DVD? (NumberOfLayers + 1)
-
 	i = 0;
 	while ((playstationname[i] != 0) &&
-	        (playstationname[i] == tempbuffer[8 + i]))  i++;
-	if (playstationname[i] == 0)
-	{
+	       (playstationname[i] == tempbuffer[8 + i]))  i++;
+	if (playstationname[i] == 0) {
 #ifdef VERBOSE_DISC_TYPE
 		PrintLog("CDVDiso DVD:   Found Playstation 2 DVD.");
 #endif /* VERBOSE_DISC_TYPE */
 		tempdisctype = CDVD_TYPE_PS2DVD;
-	}
-	else
-	{
+	} else {
 #ifdef VERBOSE_DISC_TYPE
 		PrintLog("CDVDiso DVD:   Guessing it's a Video DVD.");
 #endif /* VERBOSE_DISC_TYPE */
 		tempdisctype = CDVD_TYPE_DVDV;
 	} // ENDIF- Is this a playstation disc?
 	for (i = 0; i < 2048; i++)  tocbuffer[i] = 0;
-	if (layer.d.NumberOfLayers == 0)
-	{
+	if (layer.d.NumberOfLayers == 0) {
 		tocbuffer[0] = 0x04;
 		tocbuffer[4] = 0x86;
 		tocbuffer[5] = 0x72;
-	}
-	else
-	{
+	} else {
 		tocbuffer[0] = 0x24;
 		tocbuffer[4] = 0x41;
 		tocbuffer[5] = 0x95;
@@ -406,7 +361,6 @@ s32 DVDgetDiskType()
 	tocbuffer[17] = 0x03;
 	tocbuffer[18] = 0x00;
 	tocbuffer[19] = 0x00;
-
 	disctype = tempdisctype;
-	return(disctype);
+	return (disctype);
 } // END DVDgetDiskType()

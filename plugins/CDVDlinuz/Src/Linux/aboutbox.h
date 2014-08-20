@@ -56,7 +56,7 @@
 
 struct AboutBoxData {
 
-  GtkWidget *window; // GtkWindow - About Box
+	GtkWidget *window; // GtkWindow - About Box
 
 };
 

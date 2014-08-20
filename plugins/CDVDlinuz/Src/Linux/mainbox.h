@@ -56,11 +56,11 @@
 
 struct MainBoxData {
 
-  GtkWidget *window; // GtkWindow
+	GtkWidget *window; // GtkWindow
 
-  GtkWidget *device; // GtkEntry
+	GtkWidget *device; // GtkEntry
 
-  GtkWidget *desc; // GtkLabel
+	GtkWidget *desc; // GtkLabel
 
 };
 

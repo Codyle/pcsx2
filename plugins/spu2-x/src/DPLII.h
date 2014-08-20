@@ -35,17 +35,17 @@ protected:
 	LPF_data lpf_r;
 
 	u8 bufdone;
-	s32 Gfl,Gfr;
+	s32 Gfl, Gfr;
 
 	s32 spdif_data[6];
-	s32 LMax,RMax;
+	s32 LMax, RMax;
 
 	s32 LBuff[128];
 	s32 RBuff[128];
 
 public:
-	DPLII( s32 lowpass_freq, s32 samplerate );
-	void Convert( s16 *obuffer, s32 ValL, s32 ValR );
+	DPLII(s32 lowpass_freq, s32 samplerate);
+	void Convert(s16 *obuffer, s32 ValL, s32 ValR);
 };
 
 #endif

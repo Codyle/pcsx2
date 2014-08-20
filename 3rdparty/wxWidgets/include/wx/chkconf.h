@@ -89,8 +89,8 @@
  */
 
 #ifndef wxUSE_CRASHREPORT
-    /* this one is special: as currently it is Windows-only, don't force it
-       to be defined on other platforms */
+/* this one is special: as currently it is Windows-only, don't force it
+   to be defined on other platforms */
 #   if defined(wxABORT_ON_CONFIG_ERROR) && defined(__WXMSW__)
 #       error "wxUSE_CRASHREPORT must be defined."
 #   else
@@ -616,7 +616,7 @@
 
 #ifndef wxUSE_LIBMSPACK
 #   ifndef __UNIX__
-        /* set to 0 on platforms that don't have libmspack */
+/* set to 0 on platforms that don't have libmspack */
 #       define wxUSE_LIBMSPACK 0
 #   else
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -1203,7 +1203,7 @@
 #endif /* wxUSE_ZIPSTREAM */
 
 #if wxUSE_TARSTREAM
-    /* wxTar doesn't currently compile without wchar_t */
+/* wxTar doesn't currently compile without wchar_t */
 #   if !wxUSE_WCHAR_T
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxTar requires wchar_t"
@@ -1406,7 +1406,7 @@
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 #   if wxUSE_FONTDLG || wxUSE_FILEDLG || wxUSE_CHOICEDLG
-        /* all common controls are needed by these dialogs */
+/* all common controls are needed by these dialogs */
 #       if !defined(wxUSE_CHOICE) || \
            !defined(wxUSE_TEXTCTRL) || \
            !defined(wxUSE_BUTTON) || \
@@ -1507,11 +1507,11 @@
 #endif /* wxUSE_HELP */
 
 #if wxUSE_MS_HTML_HELP
-    /*
-        this doesn't make sense for platforms other than MSW but we still
-        define it in wx/setup_inc.h so don't complain if it happens to be
-        defined under another platform but just silently fix it.
-     */
+/*
+    this doesn't make sense for platforms other than MSW but we still
+    define it in wx/setup_inc.h so don't complain if it happens to be
+    defined under another platform but just silently fix it.
+ */
 #   ifndef __WXMSW__
 #       undef wxUSE_MS_HTML_HELP
 #       define wxUSE_MS_HTML_HELP 0
@@ -1761,7 +1761,7 @@
 
 #if !wxUSE_MSGDLG
 #   ifdef wxABORT_ON_CONFIG_ERROR
-        /* FIXME: should compile without it, of course, but doesn't */
+/* FIXME: should compile without it, of course, but doesn't */
 #       error "wxMessageBox is always needed"
 #   else
 #       undef wxUSE_MSGDLG

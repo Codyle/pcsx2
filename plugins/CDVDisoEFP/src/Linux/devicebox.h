@@ -23,8 +23,7 @@
 
 #include <gtk/gtkwidget.h>
 
-struct DeviceBoxData
-{
+struct DeviceBoxData {
 	GtkWidget *window; // GtkWindow
 	GtkWidget *device; // GtkEntry
 	GtkWidget *devicedesc; // GtkLabel

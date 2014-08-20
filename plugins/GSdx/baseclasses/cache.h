@@ -31,43 +31,47 @@
 #define __CACHE__
 
 
-class CCache : CBaseObject {
+class CCache : CBaseObject
+{
 
-    /* Make copy constructor and assignment operator inaccessible */
+	/* Make copy constructor and assignment operator inaccessible */
 
-    CCache(const CCache &refCache);
-    CCache &operator=(const CCache &refCache);
+	CCache(const CCache &refCache);
+	CCache &operator=(const CCache &refCache);
 
 private:
 
-    /* These are initialised in the constructor. The first variable points to
-       an array of pointers, each of which points to a CBaseObject derived
-       object. The m_iCacheSize is the static fixed size for the cache and the
-       m_iUsed defines the number of places filled with objects at any time.
-       We fill the array of pointers from the start (ie m_ppObjects[0] first)
-       and then only add and remove objects from the end position, so in this
-       respect the array of object pointers should be treated as a stack */
+	/* These are initialised in the constructor. The first variable points to
+	   an array of pointers, each of which points to a CBaseObject derived
+	   object. The m_iCacheSize is the static fixed size for the cache and the
+	   m_iUsed defines the number of places filled with objects at any time.
+	   We fill the array of pointers from the start (ie m_ppObjects[0] first)
+	   and then only add and remove objects from the end position, so in this
+	   respect the array of object pointers should be treated as a stack */
 
-    CBaseObject **m_ppObjects;
-    const INT m_iCacheSize;
-    INT m_iUsed;
+	CBaseObject **m_ppObjects;
+	const INT m_iCacheSize;
+	INT m_iUsed;
 
 public:
 
-    CCache(TCHAR *pName,INT iItems);
-    virtual ~CCache();
+	CCache(TCHAR *pName, INT iItems);
+	virtual ~CCache();
 
-    /* Add an item to the cache */
-    CBaseObject *AddToCache(CBaseObject *pObject);
+	/* Add an item to the cache */
+	CBaseObject *AddToCache(CBaseObject *pObject);
 
-    /* Remove an item from the cache */
-    CBaseObject *RemoveFromCache();
+	/* Remove an item from the cache */
+	CBaseObject *RemoveFromCache();
 
-    /* Delete all the objects held in the cache */
-    void RemoveAll(void);
+	/* Delete all the objects held in the cache */
+	void RemoveAll(void);
 
-    /* Return the cache size which is set during construction */
-    INT GetCacheSize(void) const {return m_iCacheSize;};
+	/* Return the cache size which is set during construction */
+	INT GetCacheSize(void) const
+	{
+		return m_iCacheSize;
+	};
 };
 
 #endif /* __CACHE__ */

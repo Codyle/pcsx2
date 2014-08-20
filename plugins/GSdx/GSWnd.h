@@ -34,10 +34,13 @@ public:
 	GSWnd() : m_managed(false) {};
 	virtual ~GSWnd() {};
 
-	virtual bool Create(const string& title, int w, int h) = 0;
+	virtual bool Create(const string &title, int w, int h) = 0;
 	virtual bool Attach(void* handle, bool managed = true) = 0;
 	virtual void Detach() = 0;
-	bool IsManaged() const {return m_managed;}
+	bool IsManaged() const
+	{
+		return m_managed;
+	}
 
 	virtual void* GetDisplay() = 0;
 	virtual void* GetHandle() = 0;
@@ -61,13 +64,16 @@ class GSWndGL : public GSWnd
 protected:
 	bool m_ctx_attached;
 
-	bool IsContextAttached() const { return m_ctx_attached; }
+	bool IsContextAttached() const
+	{
+		return m_ctx_attached;
+	}
 
 public:
 	GSWndGL() : m_ctx_attached(false) {};
 	virtual ~GSWndGL() {};
 
-	virtual bool Create(const string& title, int w, int h) = 0;
+	virtual bool Create(const string &title, int w, int h) = 0;
 	virtual bool Attach(void* handle, bool managed = true) = 0;
 	virtual void Detach() = 0;
 

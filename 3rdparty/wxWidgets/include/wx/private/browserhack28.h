@@ -12,7 +12,7 @@
 #ifndef _WX_PRIVATE_BROWSERHACK28_H_
 #define _WX_PRIVATE_BROWSERHACK28_H_
 
-typedef bool (*wxLaunchDefaultBrowserImpl_t)(const wxString& url, int flags);
+typedef bool (*wxLaunchDefaultBrowserImpl_t)(const wxString &url, int flags);
 
 // Function the GUI library can call to provide a better implementation
 WXDLLIMPEXP_BASE void wxSetLaunchDefaultBrowserImpl(wxLaunchDefaultBrowserImpl_t newImpl);

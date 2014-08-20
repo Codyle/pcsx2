@@ -28,20 +28,20 @@ class DmaBcrReg
 public:
 	union {
 		struct {
-			u32 size:16;
-			u32 count:16;
+			u32 size: 16;
+			u32 count: 16;
 		};
 		u32 whole;
 	};
 
-	DmaBcrReg(u32& value)
+	DmaBcrReg(u32 &value)
 	{
-		whole=value;
+		whole = value;
 	}
 
 	u32 Bytes()
 	{
-		return 4*size*count;
+		return 4 * size * count;
 	}
 };
 
@@ -82,7 +82,7 @@ extern void usbIrq(int cycles);
 extern void fwIrq();
 extern void spu2Irq();
 
-extern void iopIntcIrq( uint irqType );
+extern void iopIntcIrq(uint irqType);
 extern void iopTestIntc();
 
 extern DEV9handler dev9Handler;

@@ -21,9 +21,10 @@
 
 #pragma once
 
-class GSShaderOGL {
+class GSShaderOGL
+{
 	GLuint m_pipeline;
-	hash_map<uint64, GLuint > m_single_prog;
+	hash_map<uint64, GLuint> m_single_prog;
 	const bool m_debug_shader;
 	GLuint m_vs_sub_count;
 	GLuint m_ps_sub_count;
@@ -42,10 +43,10 @@ class GSShaderOGL {
 	bool ValidateProgram(GLuint p);
 	bool ValidatePipeline(GLuint p);
 
-	std::string GenGlslHeader(const std::string& entry, GLenum type, const std::string& macro);
+	std::string GenGlslHeader(const std::string &entry, GLenum type, const std::string &macro);
 	GLuint LinkNewProgram();
 
-	public:
+public:
 	GSShaderOGL(bool debug);
 	~GSShaderOGL();
 
@@ -58,6 +59,6 @@ class GSShaderOGL {
 
 	void UseProgram();
 
-	GLuint Compile(const std::string& glsl_file, const std::string& entry, GLenum type, const char* glsl_h_code, const std::string& macro_sel = "");
+	GLuint Compile(const std::string &glsl_file, const std::string &entry, GLenum type, const char* glsl_h_code, const std::string &macro_sel = "");
 	void Delete(GLuint s);
 };

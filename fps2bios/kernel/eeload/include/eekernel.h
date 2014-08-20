@@ -112,17 +112,17 @@
 //#define DMAC_14		14		//not used
 #define DMAC_ERROR		15
 
- ///////////////////////
- // DMA TAG REGISTERS //
- ///////////////////////
- #define DMA_TAG_REFE	0x00
- #define DMA_TAG_CNT	0x01
- #define DMA_TAG_NEXT	0x02
- #define DMA_TAG_REF	0x03
- #define DMA_TAG_REFS	0x04
- #define DMA_TAG_CALL	0x05
- #define DMA_TAG_RET	0x06
- #define DMA_TAG_END	0x07
+///////////////////////
+// DMA TAG REGISTERS //
+///////////////////////
+#define DMA_TAG_REFE	0x00
+#define DMA_TAG_CNT	0x01
+#define DMA_TAG_NEXT	0x02
+#define DMA_TAG_REF	0x03
+#define DMA_TAG_REFS	0x04
+#define DMA_TAG_CALL	0x05
+#define DMA_TAG_RET	0x06
+#define DMA_TAG_END	0x07
 
 // Modes for DMA transfers
 #define SIF_DMA_FROM_IOP	0x0
@@ -185,22 +185,22 @@ struct TCB { //internal struct
 	struct TCB	*next; //+00
 	struct TCB	*prev; //+04
 	int 		status;//+08
-	void		(*entry)(void*); //+0C
+	void	(*entry)(void*);  //+0C
 	void		*stack_res;		//+10 initial $sp
 	void		*gpReg; //+14
 	short		currentPriority; //+18
 	short		initPriority; //+1A
 	int			waitSema, //+1C waitType?
-                semaId, //+20
-                wakeupCount, //+24
-                attr, //+28
-                option; //+2C
-	void		(*entry_)(void*); //+30
+	                        semaId, //+20
+	                        wakeupCount, //+24
+	                        attr, //+28
+	                        option; //+2C
+	void	(*entry_)(void*);  //+30
 	int			argc; //+34
 	char		*argstring;//+38
 	void		*stack;//+3C
 	int			stackSize; //+40
-	int			(*root)(); //+44
+	int	(*root)();   //+44
 	void*		heap_base; //+48
 };
 
@@ -219,7 +219,7 @@ struct threadCtx {
 	u32 fpr[32];//+200
 };
 
-typedef struct tag_ARGS{
+typedef struct tag_ARGS {
 	int	  argc;
 	char *argv[16];
 	char  args[256];
@@ -242,15 +242,17 @@ struct kSema { // internal struct
 	int 			option;//+10
 	int 			wait_threads;//+14
 	struct TCB		*wait_next,//+18
-                    *wait_prev;//+1C
+			*wait_prev;//+1C
 };
 
-struct ll { struct ll *next, *prev; };			//linked list
+struct ll {
+	struct ll *next, *prev;
+};			//linked list
 
 //internal struct
 struct IDhandl { //intc dmac handler
 	struct ll *next, //+00
-        *prev; //+04
+			*prev; //+04
 	int (*handler)(int); //+08
 	u32 gp; //+0C
 	void *arg; //+10
@@ -258,7 +260,7 @@ struct IDhandl { //intc dmac handler
 };
 
 //internal struct
-struct HCinfo{ //handler cause info
+struct HCinfo { //handler cause info
 	int		count;
 	struct ll	l;
 };
@@ -273,7 +275,7 @@ extern eeRegs SavedRegs;
 extern u32  excepRA;
 extern u32  excepSP;
 
-extern u32 (*table_CpuConfig[6])(u32);
+extern u32(*table_CpuConfig[6])(u32);
 extern void (*table_SYSCALL[0x80])();
 
 extern void (*VCRTable[14])();
@@ -320,12 +322,12 @@ extern struct kSema	semas_array[256];
 
 extern char		tagindex;
 extern short		transferscount;
-extern struct TAG{
+extern struct TAG {
 	int id_qwc;
 	int addr;
 	int unk[2];
 }		tadrptr[31];
-extern int	extrastorage[(16/4) * 8][31];
+extern int	extrastorage[(16 / 4) * 8][31];
 
 extern int	osdConfigParam;
 
@@ -384,7 +386,7 @@ int  _PollSema(int sid);
 int  _ReferSemaStatus(int sid, struct SemaParam *sema);
 int  _DeleteEventFlag();
 void*_InitializeMainThread(u32 gp, void *stack, int stack_size,
-						char *args, int root);
+                           char *args, int root);
 void *_InitializeHeapArea(void *heap_base, int heap_size);
 void *_EndOfHeap();
 int _LoadPS2Exe(char *filename, int argc, char **argv);

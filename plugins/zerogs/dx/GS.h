@@ -59,8 +59,7 @@ typedef int BOOL;
 #endif
 #endif
 
-struct Vector_16F
-{
+struct Vector_16F {
 	u16 x, y, z, w;
 };
 
@@ -99,19 +98,19 @@ struct Vector_16F
 #endif
 
 #define REG64(name) \
-union name			\
-{					\
-	u64 i64;		\
-	u32 ai32[2];	\
-	struct {		\
-
+	union name			\
+	{					\
+		u64 i64;		\
+		u32 ai32[2];	\
+		struct {		\
+			 
 #define REG128(name)\
-union name			\
-{					\
-	u64 ai64[2];	\
-	u32 ai32[4];	\
-	struct {		\
-
+	union name			\
+	{					\
+		u64 ai64[2];	\
+		u32 ai32[4];	\
+		struct {		\
+			 
 #define REG64_(prefix, name) REG64(prefix##name)
 #define REG128_(prefix, name) REG128(prefix##name)
 
@@ -119,167 +118,167 @@ union name			\
 #define REG_END2 };
 
 #define REG64_SET(name) \
-union name			\
-{					\
-	u64 i64;		\
-	u32 ai32[2];	\
-
+	union name			\
+	{					\
+		u64 i64;		\
+		u32 ai32[2];	\
+		 
 #define REG128_SET(name)\
-union name			\
-{					\
-	u64 ai64[2];	\
-	u32 ai32[4];	\
-
+	union name			\
+	{					\
+		u64 ai64[2];	\
+		u32 ai32[4];	\
+		 
 #define REG_SET_END };
 
 REG64_(GSReg, BGCOLOR)
-	u32 R:8;
-	u32 G:8;
-	u32 B:8;
-	u32 _PAD1:8;
-	u32 _PAD2:32;
+u32 R: 8;
+u32 G: 8;
+u32 B: 8;
+u32 _PAD1: 8;
+u32 _PAD2: 32;
 REG_END
 
 REG64_(GSReg, BUSDIR)
-	u32 DIR:1;
-	u32 _PAD1:31;
-	u32 _PAD2:32;
+u32 DIR: 1;
+u32 _PAD1: 31;
+u32 _PAD2: 32;
 REG_END
 
 REG64_(GSReg, CSR)
-	u32 SIGNAL:1;
-	u32 FINISH:1;
-	u32 HSINT:1;
-	u32 VSINT:1;
-	u32 EDWINT:1;
-	u32 ZERO1:1;
-	u32 ZERO2:1;
-	u32 _PAD1:1;
-	u32 FLUSH:1;
-	u32 RESET:1;
-	u32 _PAD2:2;
-	u32 NFIELD:1;
-	u32 FIELD:1;
-	u32 FIFO:2;
-	u32 REV:8;
-	u32 ID:8;
-	u32 _PAD3:32;
+u32 SIGNAL: 1;
+u32 FINISH: 1;
+u32 HSINT: 1;
+u32 VSINT: 1;
+u32 EDWINT: 1;
+u32 ZERO1: 1;
+u32 ZERO2: 1;
+u32 _PAD1: 1;
+u32 FLUSH: 1;
+u32 RESET: 1;
+u32 _PAD2: 2;
+u32 NFIELD: 1;
+u32 FIELD: 1;
+u32 FIFO: 2;
+u32 REV: 8;
+u32 ID: 8;
+u32 _PAD3: 32;
 REG_END
 
 REG64_(GSReg, DISPFB) // (-1/2)
-	u32 FBP:9;
-	u32 FBW:6;
-	u32 PSM:5;
-	u32 _PAD:12;
-	u32 DBX:11;
-	u32 DBY:11;
-	u32 _PAD2:10;
+u32 FBP: 9;
+u32 FBW: 6;
+u32 PSM: 5;
+u32 _PAD: 12;
+u32 DBX: 11;
+u32 DBY: 11;
+u32 _PAD2: 10;
 REG_END
 
 REG64_(GSReg, DISPLAY) // (-1/2)
-	u32 DX:12;
-	u32 DY:11;
-	u32 MAGH:4;
-	u32 MAGV:2;
-	u32 _PAD:3;
-	u32 DW:12;
-	u32 DH:11;
-	u32 _PAD2:9;
+u32 DX: 12;
+u32 DY: 11;
+u32 MAGH: 4;
+u32 MAGV: 2;
+u32 _PAD: 3;
+u32 DW: 12;
+u32 DH: 11;
+u32 _PAD2: 9;
 REG_END
 
 REG64_(GSReg, EXTBUF)
-	u32 EXBP:14;
-	u32 EXBW:6;
-	u32 FBIN:2;
-	u32 WFFMD:1;
-	u32 EMODA:2;
-	u32 EMODC:2;
-	u32 _PAD1:5;
-	u32 WDX:11;
-	u32 WDY:11;
-	u32 _PAD2:10;
+u32 EXBP: 14;
+u32 EXBW: 6;
+u32 FBIN: 2;
+u32 WFFMD: 1;
+u32 EMODA: 2;
+u32 EMODC: 2;
+u32 _PAD1: 5;
+u32 WDX: 11;
+u32 WDY: 11;
+u32 _PAD2: 10;
 REG_END
 
 REG64_(GSReg, EXTDATA)
-	u32 SX:12;
-	u32 SY:11;
-	u32 SMPH:4;
-	u32 SMPV:2;
-	u32 _PAD1:3;
-	u32 WW:12;
-	u32 WH:11;
-	u32 _PAD2:9;
+u32 SX: 12;
+u32 SY: 11;
+u32 SMPH: 4;
+u32 SMPV: 2;
+u32 _PAD1: 3;
+u32 WW: 12;
+u32 WH: 11;
+u32 _PAD2: 9;
 REG_END
 
 REG64_(GSReg, EXTWRITE)
-	u32 WRITE;
-	u32 _PAD2:32;
+u32 WRITE;
+u32 _PAD2: 32;
 REG_END
 
 REG64_(GSReg, IMR)
-	u32 _PAD1:8;
-	u32 SIGMSK:1;
-	u32 FINISHMSK:1;
-	u32 HSMSK:1;
-	u32 VSMSK:1;
-	u32 EDWMSK:1;
-	u32 _PAD2:19;
-	u32 _PAD3:32;
+u32 _PAD1: 8;
+u32 SIGMSK: 1;
+u32 FINISHMSK: 1;
+u32 HSMSK: 1;
+u32 VSMSK: 1;
+u32 EDWMSK: 1;
+u32 _PAD2: 19;
+u32 _PAD3: 32;
 REG_END
 
 REG64_(GSReg, PMODE)
-	u32 EN1:1;
-	u32 EN2:1;
-	u32 CRTMD:3;
-	u32 MMOD:1;
-	u32 AMOD:1;
-	u32 SLBG:1;
-	u32 ALP:8;
-	u32 _PAD:16;
-	u32 _PAD1:32;
+u32 EN1: 1;
+u32 EN2: 1;
+u32 CRTMD: 3;
+u32 MMOD: 1;
+u32 AMOD: 1;
+u32 SLBG: 1;
+u32 ALP: 8;
+u32 _PAD: 16;
+u32 _PAD1: 32;
 REG_END
 
 REG64_(GSReg, SIGLBLID)
-	u32 SIGID:32;
-	u32 LBLID:32;
+u32 SIGID: 32;
+u32 LBLID: 32;
 REG_END
 
 REG64_(GSReg, SMODE1)
-	u32 RC:3;
-	u32 LC:7;
-	u32 T1248:2;
-	u32 SLCK:1;
-	u32 CMOD:2;
-	u32 EX:1;
-	u32 PRST:1;
-	u32 SINT:1;
-	u32 XPCK:1;
-	u32 PCK2:2;
-	u32 SPML:4;
-	u32 GCONT:1;
-	u32 PHS:1;
-	u32 PVS:1;
-	u32 PEHS:1;
-	u32 PEVS:1;
-	u32 CLKSEL:2;
-	u32 NVCK:1;
-	u32 SLCK2:1;
-	u32 VCKSEL:2;
-	u32 VHP:1;
-	u32 _PAD1:27;
+u32 RC: 3;
+u32 LC: 7;
+u32 T1248: 2;
+u32 SLCK: 1;
+u32 CMOD: 2;
+u32 EX: 1;
+u32 PRST: 1;
+u32 SINT: 1;
+u32 XPCK: 1;
+u32 PCK2: 2;
+u32 SPML: 4;
+u32 GCONT: 1;
+u32 PHS: 1;
+u32 PVS: 1;
+u32 PEHS: 1;
+u32 PEVS: 1;
+u32 CLKSEL: 2;
+u32 NVCK: 1;
+u32 SLCK2: 1;
+u32 VCKSEL: 2;
+u32 VHP: 1;
+u32 _PAD1: 27;
 REG_END
 
 REG64_(GSReg, SMODE2)
-	u32 INT:1;
-	u32 FFMD:1;
-	u32 DPMS:2;
-	u32 _PAD2:28;
-	u32 _PAD3:32;
+u32 INT: 1;
+u32 FFMD: 1;
+u32 DPMS: 2;
+u32 _PAD2: 28;
+u32 _PAD3: 32;
 REG_END
 
 REG64_(GSReg, SIGBLID)
-	u32 SIGID;
-	u32 LBLID;
+u32 SIGID;
+u32 LBLID;
 REG_END
 
 extern int g_LastCRC;
@@ -320,15 +319,15 @@ extern u8* g_pBasePS2Mem;
 //
 // GIFTag
 REG128(GIFTag)
-	u32 NLOOP:15;
-	u32 EOP:1;
-	u32 _PAD1:16;
-	u32 _PAD2:14;
-	u32 PRE:1;
-	u32 PRIM:11;
-	u32 FLG:2; // enum GIF_FLG
-	u32 NREG:4;
-	u64 REGS:64;
+u32 NLOOP: 15;
+u32 EOP: 1;
+u32 _PAD1: 16;
+u32 _PAD2: 14;
+u32 PRE: 1;
+u32 PRIM: 11;
+u32 FLG: 2; // enum GIF_FLG
+u32 NREG: 4;
+u64 REGS: 64;
 REG_END
 
 typedef struct {
@@ -384,14 +383,14 @@ typedef struct {
 	{ \
 		struct \
 		{ \
-		u16 x, y, f, resv0;		/* note: xy is 12d3*/ \
-		u32 rgba; \
-		u32 z; \
+			u16 x, y, f, resv0;		/* note: xy is 12d3*/ \
+			u32 rgba; \
+			u32 z; \
 		}; \
 	}; \
 	\
 	float s, t, q; \
-
+	 
 typedef struct {
 	s16 x, y, f, resv0;		/* note: xy is 12d3*/ \
 	u32 rgba;
@@ -655,27 +654,56 @@ class CInterfacePtr
 {
 public:
 	inline CInterfacePtr() : ptr(NULL) {}
-	inline explicit CInterfacePtr(T* newptr) : ptr(newptr) { if ( ptr != NULL ) ptr->AddRef(); }
-	inline ~CInterfacePtr() { if( ptr != NULL ) ptr->Release(); }
-
-	inline T* operator* () { assert( ptr != NULL); return *ptr; }
-	inline T* operator->() { return ptr; }
-	inline T* get() { return ptr; }
-
-	inline void release() {
-		if( ptr != NULL ) { ptr->Release(); ptr = NULL; }
+	inline explicit CInterfacePtr(T* newptr) : ptr(newptr)
+	{
+		if (ptr != NULL) ptr->AddRef();
+	}
+	inline ~CInterfacePtr()
+	{
+		if (ptr != NULL) ptr->Release();
 	}
 
-	inline operator T*() { return ptr; }
+	inline T* operator* ()
+	{
+		assert(ptr != NULL);
+		return *ptr;
+	}
+	inline T* operator->()
+	{
+		return ptr;
+	}
+	inline T* get()
+	{
+		return ptr;
+	}
 
-	inline bool operator==(T* rhs) { return ptr == rhs; }
-	inline bool operator!=(T* rhs) { return ptr != rhs; }
+	inline void release()
+	{
+		if (ptr != NULL) {
+			ptr->Release();
+			ptr = NULL;
+		}
+	}
 
-	inline CInterfacePtr& operator= (T* newptr) {
-		if( ptr != NULL ) ptr->Release();
+	inline operator T*()
+	{
+		return ptr;
+	}
+
+	inline bool operator==(T* rhs)
+	{
+		return ptr == rhs;
+	}
+	inline bool operator!=(T* rhs)
+	{
+		return ptr != rhs;
+	}
+
+	inline CInterfacePtr &operator= (T* newptr)
+	{
+		if (ptr != NULL) ptr->Release();
 		ptr = newptr;
-
-		if( ptr != NULL ) ptr->AddRef();
+		if (ptr != NULL) ptr->AddRef();
 		return *this;
 	}
 
@@ -685,33 +713,33 @@ private:
 
 #define RGBA32to16(c) \
 	(u16)((((c) & 0x000000f8) >>  3) | \
-	(((c) & 0x0000f800) >>  6) | \
-	(((c) & 0x00f80000) >>  9) | \
-	(((c) & 0x80000000) >> 16)) \
-
+	      (((c) & 0x0000f800) >>  6) | \
+	      (((c) & 0x00f80000) >>  9) | \
+	      (((c) & 0x80000000) >> 16)) \
+	 
 #define RGBA16to32(c) \
 	(((c) & 0x001f) <<  3) | \
 	(((c) & 0x03e0) <<  6) | \
 	(((c) & 0x7c00) <<  9) | \
 	(((c) & 0x8000) ? 0xff000000 : 0) \
-
+	 
 // converts float16 [0,1] to BYTE [0,255] (assumes value is in range, otherwise will take lower 8bits)
 // f is a u16
-__forceinline u16 Float16ToBYTE(u16 f) {
+__forceinline u16 Float16ToBYTE(u16 f)
+{
 	//assert( !(f & 0x8000) );
-	if( f & 0x8000 ) return 0;
-
-	u16 d = ((((f&0x3ff)|0x400)*255)>>(10-((f>>10)&0x1f)+15));
+	if (f & 0x8000) return 0;
+	u16 d = ((((f & 0x3ff) | 0x400) * 255) >> (10 - ((f >> 10) & 0x1f) + 15));
 	return d > 255 ? 255 : d;
 }
 
-__forceinline u16 Float16ToALPHA(u16 f) {
+__forceinline u16 Float16ToALPHA(u16 f)
+{
 	//assert( !(f & 0x8000) );
-	if( f & 0x8000 ) return 0;
-
+	if (f & 0x8000) return 0;
 	// round up instead of down (crash and burn), too much and charlie breaks
-	u16 d = (((((f&0x3ff)|0x400))*255)>>(10-((f>>10)&0x1f)+15));
-	d = (d)>>1;
+	u16 d = (((((f & 0x3ff) | 0x400)) * 255) >> (10 - ((f >> 10) & 0x1f) + 15));
+	d = (d) >> 1;
 	return d > 255 ? 255 : d;
 }
 
@@ -739,7 +767,7 @@ __forceinline u16 Float16ToALPHA(u16 f) {
 
 inline float Clamp(float fx, float fmin, float fmax)
 {
-	if( fx < fmin ) return fmin;
+	if (fx < fmin) return fmin;
 	return fx > fmax ? fmax : fx;
 }
 

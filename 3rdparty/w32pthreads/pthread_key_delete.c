@@ -38,95 +38,80 @@
 
 
 int
-pthread_key_delete (pthread_key_t key)
-     /*
-      * ------------------------------------------------------
-      * DOCPUBLIC
-      *      This function deletes a thread-specific data key. This
-      *      does not change the value of the thread specific data key
-      *      for any thread and does not run the key's destructor
-      *      in any thread so it should be used with caution.
-      *
-      * PARAMETERS
-      *      key
-      *              pointer to an instance of pthread_key_t
-      *
-      *
-      * DESCRIPTION
-      *      This function deletes a thread-specific data key. This
-      *      does not change the value of the thread specific data key
-      *      for any thread and does not run the key's destructor
-      *      in any thread so it should be used with caution.
-      *
-      * RESULTS
-      *              0               successfully deleted the key,
-      *              EINVAL          key is invalid,
-      *
-      * ------------------------------------------------------
-      */
+pthread_key_delete(pthread_key_t key)
+/*
+ * ------------------------------------------------------
+ * DOCPUBLIC
+ *      This function deletes a thread-specific data key. This
+ *      does not change the value of the thread specific data key
+ *      for any thread and does not run the key's destructor
+ *      in any thread so it should be used with caution.
+ *
+ * PARAMETERS
+ *      key
+ *              pointer to an instance of pthread_key_t
+ *
+ *
+ * DESCRIPTION
+ *      This function deletes a thread-specific data key. This
+ *      does not change the value of the thread specific data key
+ *      for any thread and does not run the key's destructor
+ *      in any thread so it should be used with caution.
+ *
+ * RESULTS
+ *              0               successfully deleted the key,
+ *              EINVAL          key is invalid,
+ *
+ * ------------------------------------------------------
+ */
 {
-  int result = 0;
-
-  if (key != NULL)
-    {
-      if (key->threads != NULL &&
-	  key->destructor != NULL &&
-	  pthread_mutex_lock (&(key->keyLock)) == 0)
-	{
-	  ThreadKeyAssoc *assoc;
-	  /*
-	   * Run through all Thread<-->Key associations
-	   * for this key.
-	   *
-	   * While we hold at least one of the locks guarding
-	   * the assoc, we know that the assoc pointed to by
-	   * key->threads is valid.
-	   */
-	  while ((assoc = (ThreadKeyAssoc *) key->threads) != NULL)
-	    {
-	      ptw32_thread_t * thread = assoc->thread;
-
-	      if (assoc == NULL)
-		{
-		  /* Finished */
-		  break;
+	int result = 0;
+	if (key != NULL) {
+		if (key->threads != NULL &&
+		    key->destructor != NULL &&
+		    pthread_mutex_lock(&(key->keyLock)) == 0) {
+			ThreadKeyAssoc *assoc;
+			/*
+			 * Run through all Thread<-->Key associations
+			 * for this key.
+			 *
+			 * While we hold at least one of the locks guarding
+			 * the assoc, we know that the assoc pointed to by
+			 * key->threads is valid.
+			 */
+			while ((assoc = (ThreadKeyAssoc *) key->threads) != NULL) {
+				ptw32_thread_t * thread = assoc->thread;
+				if (assoc == NULL) {
+					/* Finished */
+					break;
+				}
+				if (pthread_mutex_lock(&(thread->threadLock)) == 0) {
+					/*
+					 * Since we are starting at the head of the key's threads
+					 * chain, this will also point key->threads at the next assoc.
+					 * While we hold key->keyLock, no other thread can insert
+					 * a new assoc via pthread_setspecific.
+					 */
+					ptw32_tkAssocDestroy(assoc);
+					(void) pthread_mutex_unlock(&(thread->threadLock));
+				} else {
+					/* Thread or lock is no longer valid? */
+					ptw32_tkAssocDestroy(assoc);
+				}
+			}
+			pthread_mutex_unlock(&(key->keyLock));
 		}
-
-	      if (pthread_mutex_lock (&(thread->threadLock)) == 0)
-		{
-		  /*
-		   * Since we are starting at the head of the key's threads
-		   * chain, this will also point key->threads at the next assoc.
-		   * While we hold key->keyLock, no other thread can insert
-		   * a new assoc via pthread_setspecific.
-		   */
-		  ptw32_tkAssocDestroy (assoc);
-		  (void) pthread_mutex_unlock (&(thread->threadLock));
+		TlsFree(key->key);
+		if (key->destructor != NULL) {
+			/* A thread could be holding the keyLock */
+			while (EBUSY == pthread_mutex_destroy(&(key->keyLock))) {
+				Sleep(1); // Ugly.
+			}
 		}
-	      else
-		{
-		  /* Thread or lock is no longer valid? */
-		  ptw32_tkAssocDestroy (assoc);
-		}
-	    }
-	  pthread_mutex_unlock (&(key->keyLock));
-	}
-
-      TlsFree (key->key);
-      if (key->destructor != NULL)
-	{
-	  /* A thread could be holding the keyLock */
-	  while (EBUSY == pthread_mutex_destroy (&(key->keyLock)))
-	    {
-	      Sleep(1); // Ugly.
-	    }
-	}
-
 #if defined( _DEBUG )
-      memset ((char *) key, 0, sizeof (*key));
+		memset((char *) key, 0, sizeof(*key));
 #endif
-      free (key);
-    }
-
-  return (result);
+		free(key);
+	}
+	return (result);
 }

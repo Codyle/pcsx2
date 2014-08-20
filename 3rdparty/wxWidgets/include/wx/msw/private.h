@@ -17,8 +17,8 @@
 #include "wx/msw/wrapwin.h"
 
 #ifdef __WXMICROWIN__
-    // Extra prototypes and symbols not defined by MicroWindows
-    #include "wx/msw/microwin.h"
+// Extra prototypes and symbols not defined by MicroWindows
+#include "wx/msw/microwin.h"
 #endif
 
 #include "wx/log.h"
@@ -33,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
 // 260 was taken from windef.h
 #ifndef MAX_PATH
-    #define MAX_PATH  260
+#define MAX_PATH  260
 #endif
 
 // ---------------------------------------------------------------------------
@@ -64,16 +64,19 @@ extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
 
 #if defined(__WXWINCE__) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
 #ifndef ZeroMemory
-    inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
+inline void ZeroMemory(void *buf, size_t len)
+{
+	memset(buf, 0, len);
+}
 #endif
 #endif // old mingw32
 
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
 // window proc
 #if defined(STRICT) || defined(__GNUC__)
-    typedef WNDPROC WndProcCast;
+typedef WNDPROC WndProcCast;
 #else
-    typedef FARPROC WndProcCast;
+typedef FARPROC WndProcCast;
 #endif
 
 
@@ -86,22 +89,22 @@ extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
 // ---------------------------------------------------------------------------
 
 #if !defined(APIENTRY)  // NT defines APIENTRY, 3.x not
-    #define APIENTRY FAR PASCAL
+#define APIENTRY FAR PASCAL
 #endif
 
 #ifdef __WIN32__
-    #define _EXPORT
+#define _EXPORT
 #else
-    #define _EXPORT _export
+#define _EXPORT _export
 #endif
 
 #ifndef __WIN32__
-    typedef signed short int SHORT;
+typedef signed short int SHORT;
 #endif
 
 #if !defined(__WIN32__)  // 3.x uses FARPROC for dialogs
 #ifndef STRICT
-    #define DLGPROC FARPROC
+#define DLGPROC FARPROC
 #endif
 #endif
 
@@ -143,7 +146,7 @@ extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
 extern LONG APIENTRY _EXPORT
-  wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 // ---------------------------------------------------------------------------
 // useful macros and functions
@@ -162,49 +165,56 @@ extern LONG APIENTRY _EXPORT
 // Cygwin has get_osfhandle. Others are currently unknown, e.g. Salford,
 // Intel, Visual Age.
 #if defined(__WXWINCE__)
-    #define wxGetOSFHandle(fd) ((HANDLE)fd)
-    #define wxOpenOSFHandle(h, flags) ((int)wxPtrToUInt(h))
+#define wxGetOSFHandle(fd) ((HANDLE)fd)
+#define wxOpenOSFHandle(h, flags) ((int)wxPtrToUInt(h))
 #elif defined(__CYGWIN__)
-    #define wxGetOSFHandle(fd) ((HANDLE)get_osfhandle(fd))
+#define wxGetOSFHandle(fd) ((HANDLE)get_osfhandle(fd))
 #elif defined(__VISUALC__) \
    || defined(__BORLANDC__) \
    || defined(__DMC__) \
    || defined(__WATCOMC__) \
    || defined(__MINGW32__) \
    || (defined(__MWERKS__) && defined(__MSL__))
-    #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
-    #define wxOpenOSFHandle(h, flags) (_open_osfhandle(wxPtrToUInt(h), flags))
-    #define wx_fdopen _fdopen
+#define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
+#define wxOpenOSFHandle(h, flags) (_open_osfhandle(wxPtrToUInt(h), flags))
+#define wx_fdopen _fdopen
 #endif
 
 // close the handle in the class dtor
 class AutoHANDLE
 {
 public:
-    wxEXPLICIT AutoHANDLE(HANDLE handle) : m_handle(handle) { }
+	wxEXPLICIT AutoHANDLE(HANDLE handle) : m_handle(handle) { }
 
-    bool IsOk() const { return m_handle != INVALID_HANDLE_VALUE; }
-    operator HANDLE() const { return m_handle; }
+	bool IsOk() const
+	{
+		return m_handle != INVALID_HANDLE_VALUE;
+	}
+	operator HANDLE() const
+	{
+		return m_handle;
+	}
 
-    ~AutoHANDLE() { if ( IsOk() ) ::CloseHandle(m_handle); }
+	~AutoHANDLE()
+	{
+		if (IsOk()) ::CloseHandle(m_handle);
+	}
 
 protected:
-    HANDLE m_handle;
+	HANDLE m_handle;
 };
 
 // a template to make initializing Windows styructs less painful: it zeroes all
 // the struct fields and also sets cbSize member to the correct value (and so
 // can be only used with structures which have this member...)
 template <class T>
-struct WinStruct : public T
-{
-    WinStruct()
-    {
-        ::ZeroMemory(this, sizeof(T));
-
-        // explicit qualification is required here for this to be valid C++
-        this->cbSize = sizeof(T);
-    }
+struct WinStruct : public T {
+	WinStruct()
+	{
+		::ZeroMemory(this, sizeof(T));
+		// explicit qualification is required here for this to be valid C++
+		this->cbSize = sizeof(T);
+	}
 };
 
 
@@ -214,24 +224,24 @@ struct WinStruct : public T
 #include "wx/colour.h"
 
 // make conversion from wxColour and COLORREF a bit less painful
-inline COLORREF wxColourToRGB(const wxColour& c)
+inline COLORREF wxColourToRGB(const wxColour &c)
 {
-    return RGB(c.Red(), c.Green(), c.Blue());
+	return RGB(c.Red(), c.Green(), c.Blue());
 }
 
-inline COLORREF wxColourToPalRGB(const wxColour& c)
+inline COLORREF wxColourToPalRGB(const wxColour &c)
 {
-    return PALETTERGB(c.Red(), c.Green(), c.Blue());
+	return PALETTERGB(c.Red(), c.Green(), c.Blue());
 }
 
 inline wxColour wxRGBToColour(COLORREF rgb)
 {
-    return wxColour(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
+	return wxColour(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
 }
 
-inline void wxRGBToColour(wxColour& c, COLORREF rgb)
+inline void wxRGBToColour(wxColour &c, COLORREF rgb)
 {
-    c.Set(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
+	c.Set(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
 }
 
 // get the standard colour map for some standard colours - see comment in this
@@ -242,44 +252,42 @@ inline void wxRGBToColour(wxColour& c, COLORREF rgb)
 //
 // NB: if you change these colours, update wxBITMAP_STD_COLOURS in the
 //     resources as well: it must have the same number of pixels!
-enum wxSTD_COLOUR
-{
-    wxSTD_COL_BTNTEXT,
-    wxSTD_COL_BTNSHADOW,
-    wxSTD_COL_BTNFACE,
-    wxSTD_COL_BTNHIGHLIGHT,
-    wxSTD_COL_MAX
+enum wxSTD_COLOUR {
+	wxSTD_COL_BTNTEXT,
+	wxSTD_COL_BTNSHADOW,
+	wxSTD_COL_BTNFACE,
+	wxSTD_COL_BTNHIGHLIGHT,
+	wxSTD_COL_MAX
 };
 
-struct WXDLLEXPORT wxCOLORMAP
-{
-    COLORREF from, to;
+struct WXDLLEXPORT wxCOLORMAP {
+	COLORREF from, to;
 };
 
 // this function is implemented in src/msw/window.cpp
 extern wxCOLORMAP *wxGetStdColourMap();
 
 // create a wxRect from Windows RECT
-inline wxRect wxRectFromRECT(const RECT& rc)
+inline wxRect wxRectFromRECT(const RECT &rc)
 {
-    return wxRect(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+	return wxRect(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 }
 
 // copy Windows RECT to our wxRect
-inline void wxCopyRECTToRect(const RECT& rc, wxRect& rect)
+inline void wxCopyRECTToRect(const RECT &rc, wxRect &rect)
 {
-    rect = wxRectFromRECT(rc);
+	rect = wxRectFromRECT(rc);
 }
 
 // and vice versa
-inline void wxCopyRectToRECT(const wxRect& rect, RECT& rc)
+inline void wxCopyRectToRECT(const wxRect &rect, RECT &rc)
 {
-    // note that we don't use wxRect::GetRight() as it is one of compared to
-    // wxRectFromRECT() above
-    rc.top = rect.y;
-    rc.left = rect.x;
-    rc.right = rect.x + rect.width;
-    rc.bottom = rect.y + rect.height;
+	// note that we don't use wxRect::GetRight() as it is one of compared to
+	// wxRectFromRECT() above
+	rc.top = rect.y;
+	rc.left = rect.x;
+	rc.right = rect.x + rect.width;
+	rc.bottom = rect.y + rect.height;
 }
 
 // translations between HIMETRIC units (which OLE likes) and pixels (which are
@@ -295,59 +303,55 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 //
 // The bitmap must be valid and it should have a mask. If it doesn't, a default
 // mask is created using light grey as the transparent colour.
-extern HICON wxBitmapToHICON(const wxBitmap& bmp);
+extern HICON wxBitmapToHICON(const wxBitmap &bmp);
 
 // Same requirments as above apply and the bitmap must also have the correct
 // size.
 extern
-HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
+HCURSOR wxBitmapToHCURSOR(const wxBitmap &bmp, int hotSpotX, int hotSpotY);
 
 // get (x, y) from DWORD - notice that HI/LOWORD can *not* be used because they
 // will fail on system with multiple monitors where the coords may be negative
 //
 // these macros are standard now (Win98) but some older headers don't have them
 #ifndef GET_X_LPARAM
-    #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
-    #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
+#define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
+#define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
 #endif // GET_X_LPARAM
 
 // get the current state of SHIFT/CTRL keys
 inline bool wxIsShiftDown()
 {
-//    return (::GetKeyState(VK_SHIFT) & 0x100) != 0;
-    // Returns different negative values on WinME and WinNT,
-    // so simply test for negative value.
-    return ::GetKeyState(VK_SHIFT) < 0;
+	//    return (::GetKeyState(VK_SHIFT) & 0x100) != 0;
+	// Returns different negative values on WinME and WinNT,
+	// so simply test for negative value.
+	return ::GetKeyState(VK_SHIFT) < 0;
 }
 
 inline bool wxIsCtrlDown()
 {
-//    return (::GetKeyState(VK_CONTROL) & 0x100) != 0;
-    // Returns different negative values on WinME and WinNT,
-    // so simply test for negative value.
-    return ::GetKeyState(VK_CONTROL) < 0;
+	//    return (::GetKeyState(VK_CONTROL) & 0x100) != 0;
+	// Returns different negative values on WinME and WinNT,
+	// so simply test for negative value.
+	return ::GetKeyState(VK_CONTROL) < 0;
 }
 
 // wrapper around GetWindowRect() and GetClientRect() APIs doing error checking
 // for Win32
 inline RECT wxGetWindowRect(HWND hwnd)
 {
-    RECT rect;
-
-    if ( !::GetWindowRect(hwnd, &rect) )
-        wxLogLastError(_T("GetWindowRect"));
-
-    return rect;
+	RECT rect;
+	if (!::GetWindowRect(hwnd, &rect))
+		wxLogLastError(_T("GetWindowRect"));
+	return rect;
 }
 
 inline RECT wxGetClientRect(HWND hwnd)
 {
-    RECT rect;
-
-    if ( !::GetClientRect(hwnd, &rect) )
-        wxLogLastError(_T("GetClientRect"));
-
-    return rect;
+	RECT rect;
+	if (!::GetClientRect(hwnd, &rect))
+		wxLogLastError(_T("GetClientRect"));
+	return rect;
 }
 
 // ---------------------------------------------------------------------------
@@ -359,31 +363,49 @@ inline RECT wxGetClientRect(HWND hwnd)
 class ScreenHDC
 {
 public:
-    ScreenHDC() { m_hdc = ::GetDC(NULL);    }
-   ~ScreenHDC() { ::ReleaseDC(NULL, m_hdc); }
+	ScreenHDC()
+	{
+		m_hdc = ::GetDC(NULL);
+	}
+	~ScreenHDC()
+	{
+		::ReleaseDC(NULL, m_hdc);
+	}
 
-    operator HDC() const { return m_hdc; }
+	operator HDC() const
+	{
+		return m_hdc;
+	}
 
 private:
-    HDC m_hdc;
+	HDC m_hdc;
 
-    DECLARE_NO_COPY_CLASS(ScreenHDC)
+	DECLARE_NO_COPY_CLASS(ScreenHDC)
 };
 
 // the same as ScreenHDC but for window DCs
 class WindowHDC
 {
 public:
-    WindowHDC(HWND hwnd) { m_hdc = ::GetDC(m_hwnd = hwnd); }
-   ~WindowHDC() { ::ReleaseDC(m_hwnd, m_hdc); }
+	WindowHDC(HWND hwnd)
+	{
+		m_hdc = ::GetDC(m_hwnd = hwnd);
+	}
+	~WindowHDC()
+	{
+		::ReleaseDC(m_hwnd, m_hdc);
+	}
 
-    operator HDC() const { return m_hdc; }
+	operator HDC() const
+	{
+		return m_hdc;
+	}
 
 private:
-   HWND m_hwnd;
-   HDC m_hdc;
+	HWND m_hwnd;
+	HDC m_hdc;
 
-   DECLARE_NO_COPY_CLASS(WindowHDC)
+	DECLARE_NO_COPY_CLASS(WindowHDC)
 };
 
 // the same as ScreenHDC but for memory DCs: creates the HDC compatible with
@@ -391,15 +413,24 @@ private:
 class MemoryHDC
 {
 public:
-    MemoryHDC(HDC hdc = 0) { m_hdc = ::CreateCompatibleDC(hdc); }
-   ~MemoryHDC() { ::DeleteDC(m_hdc); }
+	MemoryHDC(HDC hdc = 0)
+	{
+		m_hdc = ::CreateCompatibleDC(hdc);
+	}
+	~MemoryHDC()
+	{
+		::DeleteDC(m_hdc);
+	}
 
-    operator HDC() const { return m_hdc; }
+	operator HDC() const
+	{
+		return m_hdc;
+	}
 
 private:
-    HDC m_hdc;
+	HDC m_hdc;
 
-    DECLARE_NO_COPY_CLASS(MemoryHDC)
+	DECLARE_NO_COPY_CLASS(MemoryHDC)
 };
 
 // a class which selects a GDI object into a DC in its ctor and deselects in
@@ -407,52 +438,70 @@ private:
 class SelectInHDC
 {
 private:
-    void DoInit(HGDIOBJ hgdiobj) { m_hgdiobj = ::SelectObject(m_hdc, hgdiobj); }
+	void DoInit(HGDIOBJ hgdiobj)
+	{
+		m_hgdiobj = ::SelectObject(m_hdc, hgdiobj);
+	}
 
 public:
-    SelectInHDC() : m_hdc(NULL) { }
-    SelectInHDC(HDC hdc, HGDIOBJ hgdiobj) : m_hdc(hdc) { DoInit(hgdiobj); }
+	SelectInHDC() : m_hdc(NULL) { }
+	SelectInHDC(HDC hdc, HGDIOBJ hgdiobj) : m_hdc(hdc)
+	{
+		DoInit(hgdiobj);
+	}
 
-    void Init(HDC hdc, HGDIOBJ hgdiobj)
-    {
-        wxASSERT_MSG( !m_hdc, _T("initializing twice?") );
+	void Init(HDC hdc, HGDIOBJ hgdiobj)
+	{
+		wxASSERT_MSG(!m_hdc, _T("initializing twice?"));
+		m_hdc = hdc;
+		DoInit(hgdiobj);
+	}
 
-        m_hdc = hdc;
+	~SelectInHDC()
+	{
+		if (m_hdc) ::SelectObject(m_hdc, m_hgdiobj);
+	}
 
-        DoInit(hgdiobj);
-    }
-
-    ~SelectInHDC() { if ( m_hdc ) ::SelectObject(m_hdc, m_hgdiobj); }
-
-    // return true if the object was successfully selected
-    operator bool() const { return m_hgdiobj != 0; }
+	// return true if the object was successfully selected
+	operator bool() const
+	{
+		return m_hgdiobj != 0;
+	}
 
 private:
-    HDC m_hdc;
-    HGDIOBJ m_hgdiobj;
+	HDC m_hdc;
+	HGDIOBJ m_hgdiobj;
 
-    DECLARE_NO_COPY_CLASS(SelectInHDC)
+	DECLARE_NO_COPY_CLASS(SelectInHDC)
 };
 
 // a class which cleans up any GDI object
 class AutoGDIObject
 {
 protected:
-    AutoGDIObject() { m_gdiobj = NULL; }
-    AutoGDIObject(HGDIOBJ gdiobj) : m_gdiobj(gdiobj) { }
-    ~AutoGDIObject() { if ( m_gdiobj ) ::DeleteObject(m_gdiobj); }
+	AutoGDIObject()
+	{
+		m_gdiobj = NULL;
+	}
+	AutoGDIObject(HGDIOBJ gdiobj) : m_gdiobj(gdiobj) { }
+	~AutoGDIObject()
+	{
+		if (m_gdiobj) ::DeleteObject(m_gdiobj);
+	}
 
-    void InitGdiobj(HGDIOBJ gdiobj)
-    {
-        wxASSERT_MSG( !m_gdiobj, _T("initializing twice?") );
+	void InitGdiobj(HGDIOBJ gdiobj)
+	{
+		wxASSERT_MSG(!m_gdiobj, _T("initializing twice?"));
+		m_gdiobj = gdiobj;
+	}
 
-        m_gdiobj = gdiobj;
-    }
-
-    HGDIOBJ GetObject() const { return m_gdiobj; }
+	HGDIOBJ GetObject() const
+	{
+		return m_gdiobj;
+	}
 
 private:
-    HGDIOBJ m_gdiobj;
+	HGDIOBJ m_gdiobj;
 };
 
 // TODO: all this asks for using a AutoHandler<T, CreateFunc> template...
@@ -461,10 +510,13 @@ private:
 class AutoHBRUSH : private AutoGDIObject
 {
 public:
-    AutoHBRUSH(COLORREF col)
-        : AutoGDIObject(::CreateSolidBrush(col)) { }
+	AutoHBRUSH(COLORREF col)
+		: AutoGDIObject(::CreateSolidBrush(col)) { }
 
-    operator HBRUSH() const { return (HBRUSH)GetObject(); }
+	operator HBRUSH() const
+	{
+		return (HBRUSH)GetObject();
+	}
 };
 
 // a class for temporary fonts
@@ -472,83 +524,98 @@ class AutoHFONT : private AutoGDIObject
 {
 private:
 public:
-    AutoHFONT()
-        : AutoGDIObject() { }
+	AutoHFONT()
+		: AutoGDIObject() { }
 
-    AutoHFONT(const LOGFONT& lf)
-        : AutoGDIObject(::CreateFontIndirect(&lf)) { }
+	AutoHFONT(const LOGFONT &lf)
+		: AutoGDIObject(::CreateFontIndirect(&lf)) { }
 
-    void Init(const LOGFONT& lf) { InitGdiobj(::CreateFontIndirect(&lf)); }
+	void Init(const LOGFONT &lf)
+	{
+		InitGdiobj(::CreateFontIndirect(&lf));
+	}
 
-    operator HFONT() const { return (HFONT)GetObject(); }
+	operator HFONT() const
+	{
+		return (HFONT)GetObject();
+	}
 };
 
 // a class for temporary pens
 class AutoHPEN : private AutoGDIObject
 {
 public:
-    AutoHPEN(COLORREF col)
-        : AutoGDIObject(::CreatePen(PS_SOLID, 0, col)) { }
+	AutoHPEN(COLORREF col)
+		: AutoGDIObject(::CreatePen(PS_SOLID, 0, col)) { }
 
-    operator HPEN() const { return (HPEN)GetObject(); }
+	operator HPEN() const
+	{
+		return (HPEN)GetObject();
+	}
 };
 
 // classes for temporary bitmaps
 class AutoHBITMAP : private AutoGDIObject
 {
 public:
-    AutoHBITMAP(HBITMAP hbmp) : AutoGDIObject(hbmp) { }
+	AutoHBITMAP(HBITMAP hbmp) : AutoGDIObject(hbmp) { }
 
-    operator HBITMAP() const { return (HBITMAP)GetObject(); }
+	operator HBITMAP() const
+	{
+		return (HBITMAP)GetObject();
+	}
 };
 
 class CompatibleBitmap : public AutoHBITMAP
 {
 public:
-    CompatibleBitmap(HDC hdc, int w, int h)
-        : AutoHBITMAP(::CreateCompatibleBitmap(hdc, w, h))
-    {
-    }
+	CompatibleBitmap(HDC hdc, int w, int h)
+		: AutoHBITMAP(::CreateCompatibleBitmap(hdc, w, h))
+	{
+	}
 };
 
 class MonoBitmap : public AutoHBITMAP
 {
 public:
-    MonoBitmap(int w, int h)
-        : AutoHBITMAP(::CreateBitmap(w, h, 1, 1, 0))
-    {
-    }
+	MonoBitmap(int w, int h)
+		: AutoHBITMAP(::CreateBitmap(w, h, 1, 1, 0))
+	{
+	}
 };
 
 // class automatically destroys the region object
 class AutoHRGN : private AutoGDIObject
 {
 public:
-    AutoHRGN(HRGN hrgn) : AutoGDIObject(hrgn) { }
+	AutoHRGN(HRGN hrgn) : AutoGDIObject(hrgn) { }
 
-    operator HRGN() const { return (HRGN)GetObject(); }
+	operator HRGN() const
+	{
+		return (HRGN)GetObject();
+	}
 };
 
 // class sets the specified clipping region during its life time
 class HDCClipper
 {
 public:
-    HDCClipper(HDC hdc, HRGN hrgn)
-        : m_hdc(hdc)
-    {
-        if ( !::SelectClipRgn(hdc, hrgn) )
-            wxLogLastError(_T("SelectClipRgn"));
-    }
+	HDCClipper(HDC hdc, HRGN hrgn)
+		: m_hdc(hdc)
+	{
+		if (!::SelectClipRgn(hdc, hrgn))
+			wxLogLastError(_T("SelectClipRgn"));
+	}
 
-    ~HDCClipper()
-    {
-        ::SelectClipRgn(m_hdc, NULL);
-    }
+	~HDCClipper()
+	{
+		::SelectClipRgn(m_hdc, NULL);
+	}
 
 private:
-    HDC m_hdc;
+	HDC m_hdc;
 
-    DECLARE_NO_COPY_CLASS(HDCClipper)
+	DECLARE_NO_COPY_CLASS(HDCClipper)
 };
 
 // set the given map mode for the life time of this object
@@ -556,61 +623,64 @@ private:
 // NB: SetMapMode() is not supported by CE so we also define a helper macro
 //     to avoid using it there
 #ifdef __WXWINCE__
-    #define wxCHANGE_HDC_MAP_MODE(hdc, mm)
+#define wxCHANGE_HDC_MAP_MODE(hdc, mm)
 #else // !__WXWINCE__
-    class HDCMapModeChanger
-    {
-    public:
-        HDCMapModeChanger(HDC hdc, int mm)
-            : m_hdc(hdc)
-        {
-            m_modeOld = ::SetMapMode(hdc, mm);
-            if ( !m_modeOld )
-                wxLogLastError(_T("SelectClipRgn"));
-        }
+class HDCMapModeChanger
+{
+public:
+	HDCMapModeChanger(HDC hdc, int mm)
+		: m_hdc(hdc)
+	{
+		m_modeOld = ::SetMapMode(hdc, mm);
+		if (!m_modeOld)
+			wxLogLastError(_T("SelectClipRgn"));
+	}
 
-        ~HDCMapModeChanger()
-        {
-            if ( m_modeOld )
-                ::SetMapMode(m_hdc, m_modeOld);
-        }
+	~HDCMapModeChanger()
+	{
+		if (m_modeOld)
+			::SetMapMode(m_hdc, m_modeOld);
+	}
 
-    private:
-        HDC m_hdc;
-        int m_modeOld;
+private:
+	HDC m_hdc;
+	int m_modeOld;
 
-        DECLARE_NO_COPY_CLASS(HDCMapModeChanger)
-    };
+	DECLARE_NO_COPY_CLASS(HDCMapModeChanger)
+};
 
-    #define wxCHANGE_HDC_MAP_MODE(hdc, mm) \
-        HDCMapModeChanger wxMAKE_UNIQUE_NAME(wxHDCMapModeChanger)(hdc, mm)
+#define wxCHANGE_HDC_MAP_MODE(hdc, mm) \
+	HDCMapModeChanger wxMAKE_UNIQUE_NAME(wxHDCMapModeChanger)(hdc, mm)
 #endif // __WXWINCE__/!__WXWINCE__
 
 // smart buffeer using GlobalAlloc/GlobalFree()
 class GlobalPtr
 {
 public:
-    // allocates a block of given size
-    GlobalPtr(size_t size, unsigned flags = GMEM_MOVEABLE)
-    {
-        m_hGlobal = ::GlobalAlloc(flags, size);
-        if ( !m_hGlobal )
-            wxLogLastError(_T("GlobalAlloc"));
-    }
+	// allocates a block of given size
+	GlobalPtr(size_t size, unsigned flags = GMEM_MOVEABLE)
+	{
+		m_hGlobal = ::GlobalAlloc(flags, size);
+		if (!m_hGlobal)
+			wxLogLastError(_T("GlobalAlloc"));
+	}
 
-    ~GlobalPtr()
-    {
-        if ( m_hGlobal && ::GlobalFree(m_hGlobal) )
-            wxLogLastError(_T("GlobalFree"));
-    }
+	~GlobalPtr()
+	{
+		if (m_hGlobal && ::GlobalFree(m_hGlobal))
+			wxLogLastError(_T("GlobalFree"));
+	}
 
-    // implicit conversion
-    operator HGLOBAL() const { return m_hGlobal; }
+	// implicit conversion
+	operator HGLOBAL() const
+	{
+		return m_hGlobal;
+	}
 
 private:
-    HGLOBAL m_hGlobal;
+	HGLOBAL m_hGlobal;
 
-    DECLARE_NO_COPY_CLASS(GlobalPtr)
+	DECLARE_NO_COPY_CLASS(GlobalPtr)
 };
 
 // when working with global pointers (which is unfortunately still necessary
@@ -619,93 +689,96 @@ private:
 class GlobalPtrLock
 {
 public:
-    GlobalPtrLock(HGLOBAL hGlobal) : m_hGlobal(hGlobal)
-    {
-        m_ptr = GlobalLock(hGlobal);
-        if ( !m_ptr )
-            wxLogLastError(_T("GlobalLock"));
-    }
+	GlobalPtrLock(HGLOBAL hGlobal) : m_hGlobal(hGlobal)
+	{
+		m_ptr = GlobalLock(hGlobal);
+		if (!m_ptr)
+			wxLogLastError(_T("GlobalLock"));
+	}
 
-    ~GlobalPtrLock()
-    {
-        if ( !GlobalUnlock(m_hGlobal) )
-        {
+	~GlobalPtrLock()
+	{
+		if (!GlobalUnlock(m_hGlobal)) {
 #ifdef __WXDEBUG__
-            // this might happen simply because the block became unlocked
-            DWORD dwLastError = ::GetLastError();
-            if ( dwLastError != NO_ERROR )
-            {
-                wxLogApiError(_T("GlobalUnlock"), dwLastError);
-            }
+			// this might happen simply because the block became unlocked
+			DWORD dwLastError = ::GetLastError();
+			if (dwLastError != NO_ERROR)
+				wxLogApiError(_T("GlobalUnlock"), dwLastError);
 #endif // __WXDEBUG__
-        }
-    }
+		}
+	}
 
-    operator void *() const { return m_ptr; }
+	operator void *() const
+	{
+		return m_ptr;
+	}
 
 private:
-    HGLOBAL m_hGlobal;
-    void *m_ptr;
+	HGLOBAL m_hGlobal;
+	void *m_ptr;
 
-    DECLARE_NO_COPY_CLASS(GlobalPtrLock)
+	DECLARE_NO_COPY_CLASS(GlobalPtrLock)
 };
 
 // register the class when it is first needed and unregister it in dtor
 class ClassRegistrar
 {
 public:
-    // ctor doesn't register the class, call Initialize() for this
-    ClassRegistrar() { m_registered = -1; }
+	// ctor doesn't register the class, call Initialize() for this
+	ClassRegistrar()
+	{
+		m_registered = -1;
+	}
 
-    // return true if the class is already registered
-    bool IsInitialized() const { return m_registered != -1; }
+	// return true if the class is already registered
+	bool IsInitialized() const
+	{
+		return m_registered != -1;
+	}
 
-    // return true if the class had been already registered
-    bool IsRegistered() const { return m_registered == 1; }
+	// return true if the class had been already registered
+	bool IsRegistered() const
+	{
+		return m_registered == 1;
+	}
 
-    // try to register the class if not done yet, return true on success
-    bool Register(const WNDCLASS& wc)
-    {
-        // we should only be called if we hadn't been initialized yet
-        wxASSERT_MSG( m_registered == -1,
-                        _T("calling ClassRegistrar::Register() twice?") );
+	// try to register the class if not done yet, return true on success
+	bool Register(const WNDCLASS &wc)
+	{
+		// we should only be called if we hadn't been initialized yet
+		wxASSERT_MSG(m_registered == -1,
+		             _T("calling ClassRegistrar::Register() twice?"));
+		m_registered = ::RegisterClass(&wc) ? 1 : 0;
+		if (!IsRegistered())
+			wxLogLastError(_T("RegisterClassEx()"));
+		else
+			m_clsname = wc.lpszClassName;
+		return m_registered == 1;
+	}
 
-        m_registered = ::RegisterClass(&wc) ? 1 : 0;
-        if ( !IsRegistered() )
-        {
-            wxLogLastError(_T("RegisterClassEx()"));
-        }
-        else
-        {
-            m_clsname = wc.lpszClassName;
-        }
+	// get the name of the registered class (returns empty string if not
+	// registered)
+	const wxString &GetName() const
+	{
+		return m_clsname;
+	}
 
-        return m_registered == 1;
-    }
-
-    // get the name of the registered class (returns empty string if not
-    // registered)
-    const wxString& GetName() const { return m_clsname; }
-
-    // unregister the class if it had been registered
-    ~ClassRegistrar()
-    {
-        if ( IsRegistered() )
-        {
-            if ( !::UnregisterClass(m_clsname, wxhInstance) )
-            {
-                wxLogLastError(_T("UnregisterClass"));
-            }
-        }
-    }
+	// unregister the class if it had been registered
+	~ClassRegistrar()
+	{
+		if (IsRegistered()) {
+			if (!::UnregisterClass(m_clsname, wxhInstance))
+				wxLogLastError(_T("UnregisterClass"));
+		}
+	}
 
 private:
-    // initial value is -1 which means that we hadn't tried registering the
-    // class yet, it becomes true or false (1 or 0) when Initialize() is called
-    int m_registered;
+	// initial value is -1 which means that we hadn't tried registering the
+	// class yet, it becomes true or false (1 or 0) when Initialize() is called
+	int m_registered;
 
-    // the name of the class, only non empty if it had been registered
-    wxString m_clsname;
+	// the name of the class, only non empty if it had been registered
+	wxString m_clsname;
 };
 
 // ---------------------------------------------------------------------------
@@ -764,7 +837,7 @@ private:
 
 extern "C"
 {
-    WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
+	WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
 }
 
 WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
@@ -772,24 +845,21 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // return the full path of the given module
 inline wxString wxGetFullModuleName(HMODULE hmod)
 {
-    wxString fullname;
-    if ( !::GetModuleFileName
-            (
-                hmod,
-                wxStringBuffer(fullname, MAX_PATH),
-                MAX_PATH
-            ) )
-    {
-        wxLogLastError(_T("GetModuleFileName"));
-    }
-
-    return fullname;
+	wxString fullname;
+	if (!::GetModuleFileName
+	    (
+	            hmod,
+	            wxStringBuffer(fullname, MAX_PATH),
+	            MAX_PATH
+	    ))
+		wxLogLastError(_T("GetModuleFileName"));
+	return fullname;
 }
 
 // return the full path of the program file
 inline wxString wxGetFullModuleName()
 {
-    return wxGetFullModuleName((HMODULE)wxGetInstance());
+	return wxGetFullModuleName((HMODULE)wxGetInstance());
 }
 
 // return the run-time version of the OS in a format similar to
@@ -804,27 +874,26 @@ inline wxString wxGetFullModuleName()
 //      0x0600      Longhorn
 //
 // for the other Windows versions 0 is currently returned
-enum wxWinVersion
-{
-    wxWinVersion_Unknown = 0,
+enum wxWinVersion {
+	wxWinVersion_Unknown = 0,
 
-    wxWinVersion_3 = 0x0300,
-    wxWinVersion_NT3 = wxWinVersion_3,
+	wxWinVersion_3 = 0x0300,
+	wxWinVersion_NT3 = wxWinVersion_3,
 
-    wxWinVersion_4 = 0x0400,
-    wxWinVersion_95 = wxWinVersion_4,
-    wxWinVersion_NT4 = wxWinVersion_4,
-    wxWinVersion_98 = 0x0410,
+	wxWinVersion_4 = 0x0400,
+	wxWinVersion_95 = wxWinVersion_4,
+	wxWinVersion_NT4 = wxWinVersion_4,
+	wxWinVersion_98 = 0x0410,
 
-    wxWinVersion_5 = 0x0500,
-    wxWinVersion_ME = wxWinVersion_5,
-    wxWinVersion_NT5 = wxWinVersion_5,
-    wxWinVersion_2000 = wxWinVersion_5,
-    wxWinVersion_XP = 0x0501,
-    wxWinVersion_2003 = 0x0502,
+	wxWinVersion_5 = 0x0500,
+	wxWinVersion_ME = wxWinVersion_5,
+	wxWinVersion_NT5 = wxWinVersion_5,
+	wxWinVersion_2000 = wxWinVersion_5,
+	wxWinVersion_XP = 0x0501,
+	wxWinVersion_2003 = 0x0502,
 
-    wxWinVersion_6 = 0x0600,
-    wxWinVersion_NT6 = 0x0600
+	wxWinVersion_6 = 0x0600,
+	wxWinVersion_NT6 = 0x0600
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
@@ -835,7 +904,7 @@ WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
 extern HCURSOR wxGetCurrentBusyCursor();    // from msw/utils.cpp
 extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 
-WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
+WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont &the_font);
 WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
 WXDLLEXPORT wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
 WXDLLEXPORT wxFontEncoding wxGetFontEncFromCharSet(int charset);
@@ -863,8 +932,8 @@ extern WXDLLEXPORT bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc);
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
 {
-    return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
-                     wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
+	return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
+	                 wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -891,9 +960,9 @@ WXDLLEXPORT void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
 // fill the client rect of the given window on the provided dc using this brush
 inline void wxFillRect(HWND hwnd, HDC hdc, HBRUSH hbr)
 {
-    RECT rc;
-    ::GetClientRect(hwnd, &rc);
-    ::FillRect(hdc, &rc, hbr);
+	RECT rc;
+	::GetClientRect(hwnd, &rc);
+	::FillRect(hdc, &rc, hbr);
 }
 
 // ----------------------------------------------------------------------------
@@ -904,22 +973,22 @@ inline void wxFillRect(HWND hwnd, HDC hdc, HBRUSH hbr)
 
 inline void *wxGetWindowProc(HWND hwnd)
 {
-    return (void *)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
+	return (void *)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
 }
 
 inline void *wxGetWindowUserData(HWND hwnd)
 {
-    return (void *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	return (void *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 }
 
 inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
 {
-    return (WNDPROC)::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)func);
+	return (WNDPROC)::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)func);
 }
 
 inline void *wxSetWindowUserData(HWND hwnd, void *data)
 {
-    return (void *)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
+	return (void *)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
 }
 
 #else // __WIN32__
@@ -928,22 +997,22 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
 // for the 64-bit warning mode of later versions of MSVC (C4311/4312)
 inline WNDPROC wxGetWindowProc(HWND hwnd)
 {
-    return (WNDPROC)(LONG_PTR)::GetWindowLong(hwnd, GWL_WNDPROC);
+	return (WNDPROC)(LONG_PTR)::GetWindowLong(hwnd, GWL_WNDPROC);
 }
 
 inline void *wxGetWindowUserData(HWND hwnd)
 {
-    return (void *)(LONG_PTR)::GetWindowLong(hwnd, GWL_USERDATA);
+	return (void *)(LONG_PTR)::GetWindowLong(hwnd, GWL_USERDATA);
 }
 
 inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
 {
-    return (WNDPROC)(LONG_PTR)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG_PTR)func);
+	return (WNDPROC)(LONG_PTR)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG_PTR)func);
 }
 
 inline void *wxSetWindowUserData(HWND hwnd, void *data)
 {
-    return (void *)(LONG_PTR)::SetWindowLong(hwnd, GWL_USERDATA, (LONG_PTR)data);
+	return (void *)(LONG_PTR)::SetWindowLong(hwnd, GWL_USERDATA, (LONG_PTR)data);
 }
 
 #endif // __WIN64__/__WIN32__

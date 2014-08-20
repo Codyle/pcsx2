@@ -98,8 +98,8 @@ EXPORT_C_(u32) PADquery();
 EXPORT_C_(void) PADabout();
 EXPORT_C_(s32) PADtest();
 EXPORT_C_(keyEvent*) PADkeyEvent();
-EXPORT_C_(u32) PADreadPort1 (PadDataS* pads);
-EXPORT_C_(u32) PADreadPort2 (PadDataS* pads);
+EXPORT_C_(u32) PADreadPort1(PadDataS* pads);
+EXPORT_C_(u32) PADreadPort2(PadDataS* pads);
 EXPORT_C_(u32) PSEgetLibType();
 EXPORT_C_(u32) PSEgetLibVersion();
 EXPORT_C_(void) PADconfigure();
@@ -112,26 +112,28 @@ EXPORT_C_(s32) PADqueryMtap(u8 port);
 #define wcsdup MyWcsdup
 #define wcsicmp MyWcsicmp
 
-inline void * malloc(size_t size) {
+inline void * malloc(size_t size)
+{
 	return HeapAlloc(GetProcessHeap(), 0, size);
 }
 
-inline void * calloc(size_t num, size_t size) {
+inline void * calloc(size_t num, size_t size)
+{
 	size *= num;
 	void *out = malloc(size);
 	if (out) memset(out, 0, size);
 	return out;
 }
 
-inline void free(void * mem) {
+inline void free(void * mem)
+{
 	if (mem) HeapFree(GetProcessHeap(), 0, mem);
 }
 
-inline void * realloc(void *mem, size_t size) {
-	if (!mem) {
+inline void * realloc(void *mem, size_t size)
+{
+	if (!mem)
 		return malloc(size);
-	}
-
 	if (!size) {
 		free(mem);
 		return 0;
@@ -139,25 +141,29 @@ inline void * realloc(void *mem, size_t size) {
 	return HeapReAlloc(GetProcessHeap(), 0, mem, size);
 }
 
-inline void * __cdecl operator new(size_t lSize) {
+inline void * __cdecl operator new(size_t lSize)
+{
 	return HeapAlloc(GetProcessHeap(), 0, lSize);
 }
 
-inline void __cdecl operator delete(void *pBlock) {
+inline void __cdecl operator delete(void *pBlock)
+{
 	HeapFree(GetProcessHeap(), 0, pBlock);
 }
 
-inline wchar_t * __cdecl wcsdup(const wchar_t *in) {
-	size_t size = sizeof(wchar_t) * (1+wcslen(in));
+inline wchar_t * __cdecl wcsdup(const wchar_t *in)
+{
+	size_t size = sizeof(wchar_t) * (1 + wcslen(in));
 	wchar_t *out = (wchar_t*) malloc(size);
 	if (out)
 		memcpy(out, in, size);
 	return out;
 }
 
-inline int __cdecl wcsicmp(const wchar_t *s1, const wchar_t *s2) {
+inline int __cdecl wcsicmp(const wchar_t *s1, const wchar_t *s2)
+{
 	int res = CompareStringW(LOCALE_USER_DEFAULT, NORM_IGNORECASE, s1, -1, s2, -1);
-	if (res) return res-2;
+	if (res) return res - 2;
 	return res;
 }
 

@@ -18,20 +18,18 @@
 // power management constants
 // ----------------------------------------------------------------------------
 
-enum wxPowerType
-{
-    wxPOWER_SOCKET,
-    wxPOWER_BATTERY,
-    wxPOWER_UNKNOWN
+enum wxPowerType {
+	wxPOWER_SOCKET,
+	wxPOWER_BATTERY,
+	wxPOWER_UNKNOWN
 };
 
-enum wxBatteryState
-{
-    wxBATTERY_NORMAL_STATE,    // system is fully usable
-    wxBATTERY_LOW_STATE,       // start to worry
-    wxBATTERY_CRITICAL_STATE,  // save quickly
-    wxBATTERY_SHUTDOWN_STATE,  // too late
-    wxBATTERY_UNKNOWN_STATE
+enum wxBatteryState {
+	wxBATTERY_NORMAL_STATE,    // system is fully usable
+	wxBATTERY_LOW_STATE,       // start to worry
+	wxBATTERY_CRITICAL_STATE,  // save quickly
+	wxBATTERY_SHUTDOWN_STATE,  // too late
+	wxBATTERY_UNKNOWN_STATE
 };
 
 // ----------------------------------------------------------------------------
@@ -49,53 +47,62 @@ enum wxBatteryState
 class WXDLLIMPEXP_BASE wxPowerEvent : public wxEvent
 {
 public:
-    wxPowerEvent(wxEventType evtType) : wxEvent(wxID_NONE, evtType)
-    {
-        m_veto = false;
-    }
+	wxPowerEvent(wxEventType evtType) : wxEvent(wxID_NONE, evtType)
+	{
+		m_veto = false;
+	}
 
-    // Veto the operation (only makes sense with EVT_POWER_SUSPENDING)
-    void Veto() { m_veto = true; }
+	// Veto the operation (only makes sense with EVT_POWER_SUSPENDING)
+	void Veto()
+	{
+		m_veto = true;
+	}
 
-    bool IsVetoed() const { return m_veto; }
+	bool IsVetoed() const
+	{
+		return m_veto;
+	}
 
 
-    // default copy ctor, assignment operator and dtor are ok
+	// default copy ctor, assignment operator and dtor are ok
 
-    virtual wxEvent *Clone() const { return new wxPowerEvent(*this); }
+	virtual wxEvent *Clone() const
+	{
+		return new wxPowerEvent(*this);
+	}
 
 private:
-    bool m_veto;
+	bool m_veto;
 
 #if wxABI_VERSION >= 20806
-    DECLARE_ABSTRACT_CLASS(wxPowerEvent)
+	DECLARE_ABSTRACT_CLASS(wxPowerEvent)
 #endif
 };
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDING, 406)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDED, 407)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPEND_CANCEL, 408)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_POWER_RESUME, 444)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDING, 406)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDED, 407)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPEND_CANCEL, 408)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_POWER_RESUME, 444)
 END_DECLARE_EVENT_TYPES()
 
-typedef void (wxEvtHandler::*wxPowerEventFunction)(wxPowerEvent&);
+typedef void (wxEvtHandler::*wxPowerEventFunction)(wxPowerEvent &);
 
 #define wxPowerEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction) \
-        wxStaticCastEvent(wxPowerEventFunction, &func)
+	(wxObjectEventFunction)(wxEventFunction) \
+	wxStaticCastEvent(wxPowerEventFunction, &func)
 
 #define EVT_POWER_SUSPENDING(func) \
-    wx__DECLARE_EVT0(wxEVT_POWER_SUSPENDING, wxPowerEventHandler(func))
+	wx__DECLARE_EVT0(wxEVT_POWER_SUSPENDING, wxPowerEventHandler(func))
 #define EVT_POWER_SUSPENDED(func) \
-    wx__DECLARE_EVT0(wxEVT_POWER_SUSPENDED, wxPowerEventHandler(func))
+	wx__DECLARE_EVT0(wxEVT_POWER_SUSPENDED, wxPowerEventHandler(func))
 #define EVT_POWER_SUSPEND_CANCEL(func) \
-    wx__DECLARE_EVT0(wxEVT_POWER_SUSPEND_CANCEL, wxPowerEventHandler(func))
+	wx__DECLARE_EVT0(wxEVT_POWER_SUSPEND_CANCEL, wxPowerEventHandler(func))
 #define EVT_POWER_RESUME(func) \
-    wx__DECLARE_EVT0(wxEVT_POWER_RESUME, wxPowerEventHandler(func))
+	wx__DECLARE_EVT0(wxEVT_POWER_RESUME, wxPowerEventHandler(func))
 
 #else // no support for power events
-    #undef wxHAS_POWER_EVENTS
+#undef wxHAS_POWER_EVENTS
 #endif // support for power events/no support
 
 // ----------------------------------------------------------------------------

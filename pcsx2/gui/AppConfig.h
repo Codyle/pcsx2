@@ -19,13 +19,12 @@
 #include "PathDefs.h"
 #include "CDVD/CDVDaccess.h"
 
-enum DocsModeType
-{
+enum DocsModeType {
 	// uses /home/user or /cwd for the program data.  This is the default mode and is the most
 	// friendly to modern computing security requirements; as it isolates all file modification
 	// to a zone of the hard drive that has granted write permissions to the user.
 	DocsFolder_User,
-	
+
 	// uses a custom location for program data. Typically the custom folder is either the
 	// absolute or relative location of the program -- absolute is preferred because it is
 	// considered more secure by MSW standards, due to DLL search rules.
@@ -37,19 +36,19 @@ enum DocsModeType
 
 namespace PathDefs
 {
-	// complete pathnames are returned by these functions.
-	// These are used for initial default values when first configuring PCSX2, or when the
-	// user checks "Use Default paths" option provided on most path selectors.  These are not
-	// used otherwise, in favor of the user-configurable specifications in the ini files.
+// complete pathnames are returned by these functions.
+// These are used for initial default values when first configuring PCSX2, or when the
+// user checks "Use Default paths" option provided on most path selectors.  These are not
+// used otherwise, in favor of the user-configurable specifications in the ini files.
 
-	extern wxDirName GetUserLocalDataDir();
-	extern wxDirName GetProgramDataDir();
-	extern wxDirName GetDocuments();
-	extern wxDirName GetDocuments( DocsModeType mode );
-	extern wxDirName GetThemes();
+extern wxDirName GetUserLocalDataDir();
+extern wxDirName GetProgramDataDir();
+extern wxDirName GetDocuments();
+extern wxDirName GetDocuments(DocsModeType mode);
+extern wxDirName GetThemes();
 }
 
-extern DocsModeType		DocsFolderMode;				// 
+extern DocsModeType		DocsFolderMode;				//
 extern bool				UseDefaultSettingsFolder;	// when TRUE, pcsx2 derives the settings folder from the DocsFolderMode
 extern bool				UseDefaultPluginsFolder;
 extern bool				UseDefaultThemesFolder;
@@ -68,8 +67,7 @@ extern wxString  GetUiKeysFilename();
 
 extern wxDirName GetLogFolder();
 
-enum InstallationModeType
-{
+enum InstallationModeType {
 	// Use the user defined folder selections.  These can be anywhere on a user's hard drive,
 	// though by default the binaries (plugins, themes) are located in Install_Dir (registered
 	// by the installer), and the user files (screenshots, inis) are in the user's documents
@@ -88,8 +86,7 @@ bool IsPortable();
 
 extern InstallationModeType	InstallationMode;
 
-enum AspectRatioType
-{
+enum AspectRatioType {
 	AspectRatio_Stretch,
 	AspectRatio_4_3,
 	AspectRatio_16_9,
@@ -97,15 +94,14 @@ enum AspectRatioType
 };
 
 // =====================================================================================================
-//  Pcsx2 Application Configuration. 
+//  Pcsx2 Application Configuration.
 // =====================================================================================================
 
 class AppConfig
 {
 public:
 	// ------------------------------------------------------------------------
-	struct ConsoleLogOptions
-	{
+	struct ConsoleLogOptions {
 		bool		Visible;
 		// if true, DisplayPos is ignored and the console is automatically docked to the main window.
 		bool		AutoDock;
@@ -120,64 +116,61 @@ public:
 		wxString	Theme;
 
 		ConsoleLogOptions();
-		void LoadSave( IniInterface& conf, const wxChar* title );
+		void LoadSave(IniInterface &conf, const wxChar* title);
 	};
 
 	// ------------------------------------------------------------------------
-	struct FolderOptions
-	{
+	struct FolderOptions {
 		BITFIELD32()
-			bool
-				UseDefaultBios:1,
-				UseDefaultSnapshots:1,
-				UseDefaultSavestates:1,
-				UseDefaultMemoryCards:1,
-				UseDefaultLogs:1,
-				UseDefaultLangs:1,
-				UseDefaultCheats:1,
-				UseDefaultCheatsWS:1;
+		bool
+		UseDefaultBios: 1,
+		                UseDefaultSnapshots: 1,
+		                UseDefaultSavestates: 1,
+		                UseDefaultMemoryCards: 1,
+		                UseDefaultLogs: 1,
+		                UseDefaultLangs: 1,
+		                UseDefaultCheats: 1,
+		                UseDefaultCheatsWS: 1;
 		BITFIELD_END
 
 		wxDirName
-			Bios,
-			Snapshots,
-			Savestates,
-			MemoryCards,
-			Langs,
-			Logs,
-			Cheats,
-			CheatsWS;
+		Bios,
+		Snapshots,
+		Savestates,
+		MemoryCards,
+		Langs,
+		Logs,
+		Cheats,
+		CheatsWS;
 
 		wxDirName RunIso;		// last used location for Iso loading.
 		wxDirName RunELF;		// last used location for ELF loading.
 
 		FolderOptions();
-		void LoadSave( IniInterface& conf );
+		void LoadSave(IniInterface &conf);
 		void ApplyDefaults();
 
-		void Set( FoldersEnum_t folderidx, const wxString& src, bool useDefault );
+		void Set(FoldersEnum_t folderidx, const wxString &src, bool useDefault);
 
-		const wxDirName& operator[]( FoldersEnum_t folderidx ) const;
-		wxDirName& operator[]( FoldersEnum_t folderidx );
-		bool IsDefault( FoldersEnum_t folderidx ) const;
+		const wxDirName &operator[](FoldersEnum_t folderidx) const;
+		wxDirName &operator[](FoldersEnum_t folderidx);
+		bool IsDefault(FoldersEnum_t folderidx) const;
 	};
 
 	// ------------------------------------------------------------------------
-	struct FilenameOptions
-	{
+	struct FilenameOptions {
 		wxFileName Bios;
 		wxFileName Plugins[PluginId_Count];
 
-		void LoadSave( IniInterface& conf );
+		void LoadSave(IniInterface &conf);
 
-		const wxFileName& operator[]( PluginsEnum_t pluginidx ) const;
+		const wxFileName &operator[](PluginsEnum_t pluginidx) const;
 	};
 
 	// ------------------------------------------------------------------------
 	// Options struct for each memory card.
 	//
-	struct McdOptions
-	{
+	struct McdOptions {
 		wxFileName	Filename;	// user-configured location of this memory card
 		bool		Enabled;	// memory card enabled (if false, memcard will not show up in-game)
 	};
@@ -185,11 +178,10 @@ public:
 	// ------------------------------------------------------------------------
 	// The GS window receives much love from the land of Options and Settings.
 	//
-	struct GSWindowOptions
-	{
+	struct GSWindowOptions {
 		// Closes the GS/Video port on escape (good for fullscreen activity)
 		bool		CloseOnEsc;
-		
+
 		bool		DefaultToFullscreen;
 		bool		AlwaysHideMouse;
 		bool		DisableResizeBorders;
@@ -211,12 +203,11 @@ public:
 
 		GSWindowOptions();
 
-		void LoadSave( IniInterface& conf );
+		void LoadSave(IniInterface &conf);
 		void SanityCheck();
 	};
 
-	struct FramerateOptions
-	{
+	struct FramerateOptions {
 		bool		SkipOnLimit;
 		bool		SkipOnTurbo;
 
@@ -225,8 +216,8 @@ public:
 		Fixed100	SlomoScalar;
 
 		FramerateOptions();
-		
-		void LoadSave( IniInterface& conf );
+
+		void LoadSave(IniInterface &conf);
 		void SanityCheck();
 	};
 
@@ -293,13 +284,13 @@ public:
 	// Memorycard options - first 2 are default slots, last 6 are multitap 1 and 2
 	// slots (3 each)
 	McdOptions				Mcd[8];
-	
+
 	ConsoleLogOptions		ProgLogBox;
 	FolderOptions			Folders;
 	FilenameOptions			BaseFilenames;
 	GSWindowOptions			GSWindow;
 	FramerateOptions		Framerate;
-	
+
 	// PCSX2-core emulation options, which are passed to the emu core prior to initiating
 	// an emulation session.  Note these are the options saved into the GUI ini file and
 	// which are shown as options in the gui preferences, but *not* necessarily the options
@@ -310,23 +301,23 @@ public:
 	AppConfig();
 
 	wxString FullpathToBios() const;
-	wxString FullpathToMcd( uint slot ) const;
-	wxString FullpathTo( PluginsEnum_t pluginId ) const;
+	wxString FullpathToMcd(uint slot) const;
+	wxString FullpathTo(PluginsEnum_t pluginId) const;
 
-	bool FullpathMatchTest( PluginsEnum_t pluginId, const wxString& cmpto ) const;
+	bool FullpathMatchTest(PluginsEnum_t pluginId, const wxString &cmpto) const;
 
-	void LoadSave( IniInterface& ini );
-	void LoadSaveRootItems( IniInterface& ini );
-	void LoadSaveMemcards( IniInterface& ini );
+	void LoadSave(IniInterface &ini);
+	void LoadSaveRootItems(IniInterface &ini);
+	void LoadSaveMemcards(IniInterface &ini);
 
 	static int  GetMaxPresetIndex();
-    static bool isOkGetPresetTextAndColor(int n, wxString& label, wxColor& c);
-	
+	static bool isOkGetPresetTextAndColor(int n, wxString &label, wxColor &c);
+
 	bool        IsOkApplyPreset(int n);
 
 
 	//The next 2 flags are used with ApplyConfigToGui which the presets system use:
-	
+
 	//Indicates that the scope is only for preset-related items.
 	static const int APPLY_FLAG_FROM_PRESET			= 0x01;
 
@@ -338,19 +329,19 @@ public:
 
 extern void AppLoadSettings();
 extern void AppSaveSettings();
-extern void AppApplySettings( const AppConfig* oldconf=NULL );
+extern void AppApplySettings(const AppConfig* oldconf = NULL);
 
-extern void App_LoadSaveInstallSettings( IniInterface& ini );
-extern void App_SaveInstallSettings( wxConfigBase* ini );
-extern void App_LoadInstallSettings( wxConfigBase* ini );
+extern void App_LoadSaveInstallSettings(IniInterface &ini);
+extern void App_SaveInstallSettings(wxConfigBase* ini);
+extern void App_LoadInstallSettings(wxConfigBase* ini);
 
-extern void ConLog_LoadSaveSettings( IniInterface& ini );
-extern void SysTraceLog_LoadSaveSettings( IniInterface& ini );
+extern void ConLog_LoadSaveSettings(IniInterface &ini);
+extern void SysTraceLog_LoadSaveSettings(IniInterface &ini);
 
 
-extern wxFileConfig* OpenFileConfig( const wxString& filename );
+extern wxFileConfig* OpenFileConfig(const wxString &filename);
 extern void RelocateLogfile();
-extern void AppConfig_OnChangedSettingsFolder( bool overwrite =  false );
+extern void AppConfig_OnChangedSettingsFolder(bool overwrite =  false);
 extern wxConfigBase* GetAppConfig();
 
 extern ScopedPtr<AppConfig> g_Conf;

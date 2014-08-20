@@ -22,7 +22,7 @@ WX_DECLARE_USER_EXPORTED_LIST(wxModule, wxModuleList, WXDLLIMPEXP_BASE);
 
 // and an array of class info objects
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxClassInfo *, wxArrayClassInfo,
-                                    class WXDLLIMPEXP_BASE);
+                                  class WXDLLIMPEXP_BASE);
 
 
 // declaring a class derived from wxModule will automatically create an
@@ -31,73 +31,80 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxClassInfo *, wxArrayClassInfo,
 class WXDLLIMPEXP_BASE wxModule : public wxObject
 {
 public:
-    wxModule() {}
-    virtual ~wxModule() {}
+	wxModule() {}
+	virtual ~wxModule() {}
 
-    // if module init routine returns false the application
-    // will fail to startup
+	// if module init routine returns false the application
+	// will fail to startup
 
-    bool Init() { return OnInit(); }
-    void Exit() { OnExit(); }
+	bool Init()
+	{
+		return OnInit();
+	}
+	void Exit()
+	{
+		OnExit();
+	}
 
-    // Override both of these
+	// Override both of these
 
-        // called on program startup
+	// called on program startup
 
-    virtual bool OnInit() = 0;
+	virtual bool OnInit() = 0;
 
-        // called just before program termination, but only if OnInit()
-        // succeeded
+	// called just before program termination, but only if OnInit()
+	// succeeded
 
-    virtual void OnExit() = 0;
+	virtual void OnExit() = 0;
 
-    static void RegisterModule(wxModule *module);
-    static void RegisterModules();
-    static bool InitializeModules();
-    static void CleanUpModules() { DoCleanUpModules(m_modules); }
+	static void RegisterModule(wxModule *module);
+	static void RegisterModules();
+	static bool InitializeModules();
+	static void CleanUpModules()
+	{
+		DoCleanUpModules(m_modules);
+	}
 
-    // used by wxObjectLoader when unloading shared libs's
+	// used by wxObjectLoader when unloading shared libs's
 
-    static void UnregisterModule(wxModule *module);
+	static void UnregisterModule(wxModule *module);
 
 protected:
-    static wxModuleList m_modules;
+	static wxModuleList m_modules;
 
-    // the function to call from constructor of a deriving class add module
-    // dependency which will be initialized before the module and unloaded
-    // after that
-    void AddDependency(wxClassInfo *dep)
-    {
-        wxCHECK_RET( dep, _T("NULL module dependency") );
-
-        m_dependencies.Add(dep);
-    }
+	// the function to call from constructor of a deriving class add module
+	// dependency which will be initialized before the module and unloaded
+	// after that
+	void AddDependency(wxClassInfo *dep)
+	{
+		wxCHECK_RET(dep, _T("NULL module dependency"));
+		m_dependencies.Add(dep);
+	}
 
 private:
-    // initialize module and Append it to initializedModules list recursively
-    // calling itself to satisfy module dependencies if needed
-    static bool
-    DoInitializeModule(wxModule *module, wxModuleList &initializedModules);
+	// initialize module and Append it to initializedModules list recursively
+	// calling itself to satisfy module dependencies if needed
+	static bool
+	DoInitializeModule(wxModule *module, wxModuleList &initializedModules);
 
-    // cleanup the modules in the specified list (which may not contain all
-    // modules if we're called during initialization because not all modules
-    // could be initialized) and also empty m_modules itself
-    static void DoCleanUpModules(const wxModuleList& modules);
-
-
-    // module dependencies: contains
-    wxArrayClassInfo m_dependencies;
-
-    // used internally while initiliazing/cleaning up modules
-    enum
-    {
-        State_Registered,   // module registered but not initialized yet
-        State_Initializing, // we're initializing this module but not done yet
-        State_Initialized   // module initialized successfully
-    } m_state;
+	// cleanup the modules in the specified list (which may not contain all
+	// modules if we're called during initialization because not all modules
+	// could be initialized) and also empty m_modules itself
+	static void DoCleanUpModules(const wxModuleList &modules);
 
 
-    DECLARE_CLASS(wxModule)
+	// module dependencies: contains
+	wxArrayClassInfo m_dependencies;
+
+	// used internally while initiliazing/cleaning up modules
+	enum {
+		State_Registered,   // module registered but not initialized yet
+		State_Initializing, // we're initializing this module but not done yet
+		State_Initialized   // module initialized successfully
+	} m_state;
+
+
+	DECLARE_CLASS(wxModule)
 };
 
 #endif // _WX_MODULE_H_

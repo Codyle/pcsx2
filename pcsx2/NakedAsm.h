@@ -13,7 +13,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 
- //  Externs for various routines that are defined in assembly files on Linux.
+//  Externs for various routines that are defined in assembly files on Linux.
 #ifndef NAKED_ASM_H
 #define NAKED_ASM_H
 

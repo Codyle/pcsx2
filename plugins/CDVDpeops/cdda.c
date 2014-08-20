@@ -36,29 +36,22 @@
 
 BOOL DoCDDAPlay(unsigned long addr)
 {
- DWORD dw;
-
- LockGenCDAccess();
-
- if(addr) dw=PlaySCSIAudio(addr,lMaxAddr-addr);        // start playing (til end of cd)
-// mmm... this stop doesn't work right
-// else     dw=PlayFunc(0,1);
- else                                                  // funny stop... but seems to work
-  {
-   unsigned char cdb[3000];
-   FRAMEBUF * f=(FRAMEBUF *)cdb;
-
-   f->dwFrame     = 16;                                // -> use an existing address (16 will ever exist on ps2 cds/dvds)
-   f->dwFrameCnt  = 1;
-   f->dwBufLen    = 2352;
-
-   dw=pReadFunc(1,f);                                  // -> do a simply sync read... seems to stop all audio playing
-  }
-
- UnlockGenCDAccess();
-
- if(dw!=SS_COMP) return FALSE;
- return TRUE;
+	DWORD dw;
+	LockGenCDAccess();
+	if (addr) dw = PlaySCSIAudio(addr, lMaxAddr - addr);  // start playing (til end of cd)
+	// mmm... this stop doesn't work right
+	// else     dw=PlayFunc(0,1);
+	else {                                                // funny stop... but seems to work
+		unsigned char cdb[3000];
+		FRAMEBUF * f = (FRAMEBUF *)cdb;
+		f->dwFrame     = 16;                                // -> use an existing address (16 will ever exist on ps2 cds/dvds)
+		f->dwFrameCnt  = 1;
+		f->dwBufLen    = 2352;
+		dw = pReadFunc(1, f);                               // -> do a simply sync read... seems to stop all audio playing
+	}
+	UnlockGenCDAccess();
+	if (dw != SS_COMP) return FALSE;
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////
@@ -66,15 +59,11 @@ BOOL DoCDDAPlay(unsigned long addr)
 
 unsigned char * GetCDDAPlayPosition(void)
 {
- unsigned char * pos;
-
- LockGenCDAccess();
-
- pos=GetSCSIAudioSub();                                // get the pos (scsi command)
-
- UnlockGenCDAccess();
-
- return pos;
+	unsigned char * pos;
+	LockGenCDAccess();
+	pos = GetSCSIAudioSub();                              // get the pos (scsi command)
+	UnlockGenCDAccess();
+	return pos;
 }
 
 /////////////////////////////////////////////////////////

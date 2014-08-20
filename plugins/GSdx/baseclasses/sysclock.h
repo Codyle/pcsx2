@@ -20,20 +20,20 @@
 class CSystemClock : public CBaseReferenceClock, public IAMClockAdjust, public IPersist
 {
 public:
-    // We must be able to create an instance of ourselves
-    static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
-    CSystemClock(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr);
+	// We must be able to create an instance of ourselves
+	static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
+	CSystemClock(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr);
 
-    DECLARE_IUNKNOWN
+	DECLARE_IUNKNOWN
 
-    STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void ** ppv);
+	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // Yield up our class id so that we can be persisted
-    // Implement required Ipersist method
-    STDMETHODIMP GetClassID(CLSID *pClsID);
+	// Yield up our class id so that we can be persisted
+	// Implement required Ipersist method
+	STDMETHODIMP GetClassID(CLSID *pClsID);
 
-    //  IAMClockAdjust methods
-    STDMETHODIMP SetClockDelta(REFERENCE_TIME rtDelta);
+	//  IAMClockAdjust methods
+	STDMETHODIMP SetClockDelta(REFERENCE_TIME rtDelta);
 }; //CSystemClock
 
 #endif /* __SYSTEMCLOCK__ */

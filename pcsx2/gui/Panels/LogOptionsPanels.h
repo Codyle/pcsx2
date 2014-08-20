@@ -20,77 +20,80 @@
 
 namespace Panels
 {
-	class LogOptionsPanel;
+class LogOptionsPanel;
 
-	class BaseCpuLogOptionsPanel : public CheckedStaticBox
+class BaseCpuLogOptionsPanel : public CheckedStaticBox
+{
+protected:
+	wxStaticBoxSizer*	m_miscGroup;
+
+public:
+	BaseCpuLogOptionsPanel(wxWindow* parent, const wxString &title, wxOrientation orient = wxVERTICAL)
+		: CheckedStaticBox(parent, orient, title) {}
+
+	virtual wxStaticBoxSizer* GetMiscGroup() const
 	{
-	protected:
-		wxStaticBoxSizer*	m_miscGroup;
+		return m_miscGroup;
+	}
+	virtual CheckedStaticBox* GetStaticBox(const wxString &subgroup) const = 0;
+};
 
-	public:
-		BaseCpuLogOptionsPanel( wxWindow* parent, const wxString& title, wxOrientation orient=wxVERTICAL )
-			: CheckedStaticBox( parent, orient, title ) {}
+class eeLogOptionsPanel : public BaseCpuLogOptionsPanel
+{
+protected:
+	CheckedStaticBox*	m_disasmPanel;
+	CheckedStaticBox*	m_hwPanel;
+	CheckedStaticBox*	m_evtPanel;
 
-		virtual wxStaticBoxSizer* GetMiscGroup() const { return m_miscGroup; }
-		virtual CheckedStaticBox* GetStaticBox( const wxString& subgroup ) const=0;
-	};
+public:
+	eeLogOptionsPanel(LogOptionsPanel* parent);
+	virtual ~eeLogOptionsPanel() throw() {}
 
-	class eeLogOptionsPanel : public BaseCpuLogOptionsPanel
-	{
-	protected:
-		CheckedStaticBox*	m_disasmPanel;
-		CheckedStaticBox*	m_hwPanel;
-		CheckedStaticBox*	m_evtPanel;
+	CheckedStaticBox* GetStaticBox(const wxString &subgroup) const;
 
-	public:
-		eeLogOptionsPanel( LogOptionsPanel* parent );
-		virtual ~eeLogOptionsPanel() throw() {}
-
-		CheckedStaticBox* GetStaticBox( const wxString& subgroup ) const;
-
-		void OnSettingsChanged();
-		void Apply();
-	};
+	void OnSettingsChanged();
+	void Apply();
+};
 
 
-	class iopLogOptionsPanel : public BaseCpuLogOptionsPanel
-	{
-	protected:
-		CheckedStaticBox*	m_disasmPanel;
-		CheckedStaticBox*	m_hwPanel;
-		CheckedStaticBox*	m_evtPanel;
+class iopLogOptionsPanel : public BaseCpuLogOptionsPanel
+{
+protected:
+	CheckedStaticBox*	m_disasmPanel;
+	CheckedStaticBox*	m_hwPanel;
+	CheckedStaticBox*	m_evtPanel;
 
-	public:
-		iopLogOptionsPanel( LogOptionsPanel* parent );
-		virtual ~iopLogOptionsPanel() throw() {}
+public:
+	iopLogOptionsPanel(LogOptionsPanel* parent);
+	virtual ~iopLogOptionsPanel() throw() {}
 
-		CheckedStaticBox* GetStaticBox( const wxString& subgroup ) const;
+	CheckedStaticBox* GetStaticBox(const wxString &subgroup) const;
 
-		void OnSettingsChanged();
-		void Apply();
-	};
+	void OnSettingsChanged();
+	void Apply();
+};
 
-	class LogOptionsPanel : public BaseApplicableConfigPanel
-	{
-	protected:
-		eeLogOptionsPanel*	m_eeSection;
-		iopLogOptionsPanel*	m_iopSection;
-		bool				m_IsDirty;		// any settings modified since last apply will flag this "true"
+class LogOptionsPanel : public BaseApplicableConfigPanel
+{
+protected:
+	eeLogOptionsPanel*	m_eeSection;
+	iopLogOptionsPanel*	m_iopSection;
+	bool				m_IsDirty;		// any settings modified since last apply will flag this "true"
 
-		pxCheckBox*			m_masterEnabler;
+	pxCheckBox*			m_masterEnabler;
 
-		ScopedArray<pxCheckBox*> m_checks;
+	ScopedArray<pxCheckBox*> m_checks;
 
-	public:
-		LogOptionsPanel( wxWindow* parent );
-		virtual ~LogOptionsPanel() throw() {}
+public:
+	LogOptionsPanel(wxWindow* parent);
+	virtual ~LogOptionsPanel() throw() {}
 
-		void AppStatusEvent_OnSettingsApplied();
-		void OnUpdateEnableAll();
-		void OnCheckBoxClicked(wxCommandEvent &event);
-		void Apply();
-		
-	protected:
-		BaseCpuLogOptionsPanel* GetCpuPanel( const wxString& token ) const;
-	};
+	void AppStatusEvent_OnSettingsApplied();
+	void OnUpdateEnableAll();
+	void OnCheckBoxClicked(wxCommandEvent &event);
+	void Apply();
+
+protected:
+	BaseCpuLogOptionsPanel* GetCpuPanel(const wxString &token) const;
+};
 }

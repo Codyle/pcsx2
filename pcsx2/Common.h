@@ -29,8 +29,8 @@ static const u32 PS2CLK = 294912000;	//hz	/* 294.912 mhz */
 #include "SaveState.h"
 #include "DebugTools/Debug.h"
 
-extern wxString ShiftJIS_ConvertString( const char* src );
-extern wxString ShiftJIS_ConvertString( const char* src, int maxlen );
+extern wxString ShiftJIS_ConvertString(const char* src);
+extern wxString ShiftJIS_ConvertString(const char* src, int maxlen);
 
 // Some homeless externs.  This is as good a spot as any for now...
 

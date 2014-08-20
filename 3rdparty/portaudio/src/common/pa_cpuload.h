@@ -29,13 +29,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -54,19 +54,19 @@ extern "C"
 
 
 typedef struct {
-    double samplingPeriod;
-    double measurementStartTime;
-    double averageLoad;
+	double samplingPeriod;
+	double measurementStartTime;
+	double averageLoad;
 } PaUtilCpuLoadMeasurer; /**< @todo need better name than measurer */
 
-void PaUtil_InitializeCpuLoadMeasurer( PaUtilCpuLoadMeasurer* measurer, double sampleRate );
-void PaUtil_BeginCpuLoadMeasurement( PaUtilCpuLoadMeasurer* measurer );
-void PaUtil_EndCpuLoadMeasurement( PaUtilCpuLoadMeasurer* measurer, unsigned long framesProcessed );
-void PaUtil_ResetCpuLoadMeasurer( PaUtilCpuLoadMeasurer* measurer );
-double PaUtil_GetCpuLoad( PaUtilCpuLoadMeasurer* measurer );
+void PaUtil_InitializeCpuLoadMeasurer(PaUtilCpuLoadMeasurer* measurer, double sampleRate);
+void PaUtil_BeginCpuLoadMeasurement(PaUtilCpuLoadMeasurer* measurer);
+void PaUtil_EndCpuLoadMeasurement(PaUtilCpuLoadMeasurer* measurer, unsigned long framesProcessed);
+void PaUtil_ResetCpuLoadMeasurer(PaUtilCpuLoadMeasurer* measurer);
+double PaUtil_GetCpuLoad(PaUtilCpuLoadMeasurer* measurer);
 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */     
+#endif /* __cplusplus */
 #endif /* PA_CPULOAD_H */

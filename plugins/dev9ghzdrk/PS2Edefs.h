@@ -25,7 +25,7 @@
  */
 
 /*
- Notes: 
+ Notes:
  * Since this is still beta things may change.
 
  * OSflags:
@@ -39,7 +39,7 @@
  * reserved keys:
 	F1 to F10 are reserved for the emulator
 
- * plugins should NOT change the current 
+ * plugins should NOT change the current
    working directory.
    (on win32, add flag OFN_NOCHANGEDIR for
     GetOpenFileName)
@@ -142,7 +142,7 @@ typedef struct {
 
 // cdvdLoc:track type
 #define CDVD_AUDIO_TRACK	0x01
-#define CDVD_MODE1_TRACK	0x41	
+#define CDVD_MODE1_TRACK	0x41
 #define CDVD_MODE2_TRACK	0x61
 
 #define CDVD_AUDIO_MASK		0x00
@@ -150,10 +150,10 @@ typedef struct {
 //	CDROM_DATA_TRACK	0x04	//do not enable this! (from linux kernel)
 
 typedef void (*DEV9callback)(int cycles);
-typedef int  (*DEV9handler)(void);
+typedef int (*DEV9handler)(void);
 
 typedef void (*USBcallback)(int cycles);
-typedef int  (*USBhandler)(void);
+typedef int (*USBhandler)(void);
 
 // freeze modes:
 #define FREEZE_LOAD			0
@@ -402,20 +402,20 @@ s32  CALLBACK FireWiretest();
 // might be useful for emulators
 #ifdef PLUGINtypedefs
 
-typedef u32  (CALLBACK* _PS2EgetLibType)(void);
-typedef u32  (CALLBACK* _PS2EgetLibVersion2)(u32 type);
+typedef u32(CALLBACK* _PS2EgetLibType)(void);
+typedef u32(CALLBACK* _PS2EgetLibVersion2)(u32 type);
 typedef char*(CALLBACK* _PS2EgetLibName)(void);
 
 // GS
-typedef s32  (CALLBACK* _GSinit)();
-typedef s32  (CALLBACK* _GSopen)(void *pDsp, char *Title);
+typedef s32(CALLBACK* _GSinit)();
+typedef s32(CALLBACK* _GSopen)(void *pDsp, char *Title);
 typedef void (CALLBACK* _GSclose)();
 typedef void (CALLBACK* _GSshutdown)();
 typedef void (CALLBACK* _GSvsync)();
 typedef void (CALLBACK* _GSwrite32)(u32 mem, u32 value);
 typedef void (CALLBACK* _GSwrite64)(u32 mem, u64 value);
-typedef u32  (CALLBACK* _GSread32)(u32 mem);
-typedef u64  (CALLBACK* _GSread64)(u32 mem);
+typedef u32(CALLBACK* _GSread32)(u32 mem);
+typedef u64(CALLBACK* _GSread64)(u32 mem);
 typedef void (CALLBACK* _GSgifTransfer1)(u32 *pMem);
 typedef void (CALLBACK* _GSgifTransfer2)(u32 *pMem, u32 size);
 typedef void (CALLBACK* _GSgifTransfer3)(u32 *pMem, u32 size);
@@ -426,36 +426,36 @@ typedef void (CALLBACK* _GSirqCallback)(void (*callback)());
 typedef void (CALLBACK* _GSprintf)(int timeout, char *fmt, ...);
 typedef void (CALLBACK* _GSgetDriverInfo)(GSdriverInfo *info);
 #ifdef __WIN32__
-typedef s32  (CALLBACK* _GSsetWindowInfo)(winInfo *info);
+typedef s32(CALLBACK* _GSsetWindowInfo)(winInfo *info);
 #endif
 typedef void (CALLBACK* _GSmakeSnapshot)(char *path);
-typedef s32  (CALLBACK* _GSfreeze)(int mode, freezeData *data);
+typedef s32(CALLBACK* _GSfreeze)(int mode, freezeData *data);
 typedef void (CALLBACK* _GSconfigure)();
-typedef s32  (CALLBACK* _GStest)();
+typedef s32(CALLBACK* _GStest)();
 typedef void (CALLBACK* _GSabout)();
 
 // PAD
-typedef s32  (CALLBACK* _PADinit)(u32 flags);
-typedef s32  (CALLBACK* _PADopen)(void *pDsp);
+typedef s32(CALLBACK* _PADinit)(u32 flags);
+typedef s32(CALLBACK* _PADopen)(void *pDsp);
 typedef void (CALLBACK* _PADclose)();
 typedef void (CALLBACK* _PADshutdown)();
 typedef keyEvent* (CALLBACK* _PADkeyEvent)();
-typedef u8   (CALLBACK* _PADstartPoll)(int pad);
-typedef u8   (CALLBACK* _PADpoll)(u8 value);
-typedef u32  (CALLBACK* _PADquery)();
+typedef u8(CALLBACK* _PADstartPoll)(int pad);
+typedef u8(CALLBACK* _PADpoll)(u8 value);
+typedef u32(CALLBACK* _PADquery)();
 
 typedef void (CALLBACK* _PADgsDriverInfo)(GSdriverInfo *info);
 typedef void (CALLBACK* _PADconfigure)();
-typedef s32  (CALLBACK* _PADtest)();
+typedef s32(CALLBACK* _PADtest)();
 typedef void (CALLBACK* _PADabout)();
 
 // SPU2
-typedef s32  (CALLBACK* _SPU2init)();
-typedef s32  (CALLBACK* _SPU2open)(void *pDsp);
+typedef s32(CALLBACK* _SPU2init)();
+typedef s32(CALLBACK* _SPU2open)(void *pDsp);
 typedef void (CALLBACK* _SPU2close)();
 typedef void (CALLBACK* _SPU2shutdown)();
 typedef void (CALLBACK* _SPU2write)(u32 mem, u16 value);
-typedef u16  (CALLBACK* _SPU2read)(u32 mem);
+typedef u16(CALLBACK* _SPU2read)(u32 mem);
 typedef void (CALLBACK* _SPU2readDMA4Mem)(u16 *pMem, int size);
 typedef void (CALLBACK* _SPU2writeDMA4Mem)(u16 *pMem, int size);
 typedef void (CALLBACK* _SPU2interruptDMA4)();
@@ -465,80 +465,80 @@ typedef void (CALLBACK* _SPU2interruptDMA7)();
 typedef void (CALLBACK* _SPU2irqCallback)(void (*callback)());
 
 typedef void (CALLBACK* _SPU2async)(u32 cycles);
-typedef s32  (CALLBACK* _SPU2freeze)(int mode, freezeData *data);
+typedef s32(CALLBACK* _SPU2freeze)(int mode, freezeData *data);
 typedef void (CALLBACK* _SPU2configure)();
-typedef s32  (CALLBACK* _SPU2test)();
+typedef s32(CALLBACK* _SPU2test)();
 typedef void (CALLBACK* _SPU2about)();
 
 // CDVD
-typedef s32  (CALLBACK* _CDVDinit)();
-typedef s32  (CALLBACK* _CDVDopen)();
+typedef s32(CALLBACK* _CDVDinit)();
+typedef s32(CALLBACK* _CDVDopen)();
 typedef void (CALLBACK* _CDVDclose)();
 typedef void (CALLBACK* _CDVDshutdown)();
-typedef s32  (CALLBACK* _CDVDreadTrack)(u32 lsn, int mode);
+typedef s32(CALLBACK* _CDVDreadTrack)(u32 lsn, int mode);
 typedef u8*  (CALLBACK* _CDVDgetBuffer)();
-typedef s32  (CALLBACK* _CDVDgetTN)(cdvdTN *Buffer);
-typedef s32  (CALLBACK* _CDVDgetTD)(u8 Track, cdvdTD *Buffer);
-typedef s32  (CALLBACK* _CDVDgetType)();
-typedef s32  (CALLBACK* _CDVDgetTrayStatus)();
+typedef s32(CALLBACK* _CDVDgetTN)(cdvdTN *Buffer);
+typedef s32(CALLBACK* _CDVDgetTD)(u8 Track, cdvdTD *Buffer);
+typedef s32(CALLBACK* _CDVDgetType)();
+typedef s32(CALLBACK* _CDVDgetTrayStatus)();
 
 typedef void (CALLBACK* _CDVDconfigure)();
-typedef s32  (CALLBACK* _CDVDtest)();
+typedef s32(CALLBACK* _CDVDtest)();
 typedef void (CALLBACK* _CDVDabout)();
 
 // DEV9
-typedef s32  (CALLBACK* _DEV9init)();
-typedef s32  (CALLBACK* _DEV9open)(void *pDsp);
+typedef s32(CALLBACK* _DEV9init)();
+typedef s32(CALLBACK* _DEV9open)(void *pDsp);
 typedef void (CALLBACK* _DEV9close)();
 typedef void (CALLBACK* _DEV9shutdown)();
-typedef u8   (CALLBACK* _DEV9read8)(u32 mem);
-typedef u16  (CALLBACK* _DEV9read16)(u32 mem);
-typedef u32  (CALLBACK* _DEV9read32)(u32 mem);
+typedef u8(CALLBACK* _DEV9read8)(u32 mem);
+typedef u16(CALLBACK* _DEV9read16)(u32 mem);
+typedef u32(CALLBACK* _DEV9read32)(u32 mem);
 typedef void (CALLBACK* _DEV9write8)(u32 mem, u8 value);
 typedef void (CALLBACK* _DEV9write16)(u32 mem, u16 value);
 typedef void (CALLBACK* _DEV9write32)(u32 mem, u32 value);
 typedef void (CALLBACK* _DEV9readDMA8Mem)(u32 *pMem, int size);
 typedef void (CALLBACK* _DEV9writeDMA8Mem)(u32 *pMem, int size);
 typedef void (CALLBACK* _DEV9irqCallback)(DEV9callback callback);
-typedef DEV9handler (CALLBACK* _DEV9irqHandler)(void);
+typedef DEV9handler(CALLBACK* _DEV9irqHandler)(void);
 
-typedef s32  (CALLBACK* _DEV9freeze)(int mode, freezeData *data);
+typedef s32(CALLBACK* _DEV9freeze)(int mode, freezeData *data);
 typedef void (CALLBACK* _DEV9configure)();
-typedef s32  (CALLBACK* _DEV9test)();
+typedef s32(CALLBACK* _DEV9test)();
 typedef void (CALLBACK* _DEV9about)();
 
 // USB
-typedef s32  (CALLBACK* _USBinit)();
-typedef s32  (CALLBACK* _USBopen)(void *pDsp);
+typedef s32(CALLBACK* _USBinit)();
+typedef s32(CALLBACK* _USBopen)(void *pDsp);
 typedef void (CALLBACK* _USBclose)();
 typedef void (CALLBACK* _USBshutdown)();
-typedef u8   (CALLBACK* _USBread8)(u32 mem);
-typedef u16  (CALLBACK* _USBread16)(u32 mem);
-typedef u32  (CALLBACK* _USBread32)(u32 mem);
+typedef u8(CALLBACK* _USBread8)(u32 mem);
+typedef u16(CALLBACK* _USBread16)(u32 mem);
+typedef u32(CALLBACK* _USBread32)(u32 mem);
 typedef void (CALLBACK* _USBwrite8)(u32 mem, u8 value);
 typedef void (CALLBACK* _USBwrite16)(u32 mem, u16 value);
 typedef void (CALLBACK* _USBwrite32)(u32 mem, u32 value);
 typedef void (CALLBACK* _USBirqCallback)(USBcallback callback);
-typedef USBhandler (CALLBACK* _USBirqHandler)(void);
+typedef USBhandler(CALLBACK* _USBirqHandler)(void);
 typedef void (CALLBACK* _USBsetRAM)(void *mem);
 
-typedef s32  (CALLBACK* _USBfreeze)(int mode, freezeData *data);
+typedef s32(CALLBACK* _USBfreeze)(int mode, freezeData *data);
 typedef void (CALLBACK* _USBconfigure)();
-typedef s32  (CALLBACK* _USBtest)();
+typedef s32(CALLBACK* _USBtest)();
 typedef void (CALLBACK* _USBabout)();
 
 //FireWire
-typedef s32  (CALLBACK* _FireWireinit)();
-typedef s32  (CALLBACK* _FireWireopen)(void *pDsp);
+typedef s32(CALLBACK* _FireWireinit)();
+typedef s32(CALLBACK* _FireWireopen)(void *pDsp);
 typedef void (CALLBACK* _FireWireclose)();
 typedef void (CALLBACK* _FireWireshutdown)();
-typedef u32  (CALLBACK* _FireWireread32)(u32 mem);
+typedef u32(CALLBACK* _FireWireread32)(u32 mem);
 typedef void (CALLBACK* _FireWirewrite32)(u32 mem, u32 value);
 typedef void (CALLBACK* _FireWireirqCallback)(void (*callback)());
 
-typedef s32  (CALLBACK* _FireWirefreeze)(int mode, freezeData *data);
+typedef s32(CALLBACK* _FireWirefreeze)(int mode, freezeData *data);
 typedef void (CALLBACK* _FireWireconfigure)();
-typedef s32  (CALLBACK* _FireWiretest)();
+typedef s32(CALLBACK* _FireWiretest)();
 typedef void (CALLBACK* _FireWireabout)();
 
 #endif

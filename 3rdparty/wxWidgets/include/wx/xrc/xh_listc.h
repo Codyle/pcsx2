@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxListCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxListCtrlXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxListCtrlXmlHandler)
 
 public:
-    wxListCtrlXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxListCtrlXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_LISTCTRL

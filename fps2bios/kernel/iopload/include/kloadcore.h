@@ -31,7 +31,7 @@ struct func_stub {
 #define INS_JR_RA 0x03E00008
 #define INS_J     0x08000000
 
-enum tag_BOOTUPCB_PRIO{
+enum tag_BOOTUPCB_PRIO {
 	BOOTUPCB_FIRST    = 0,
 	BOOTUPCB_RUN_UDNL = 1,
 	BOOTUPCB_NORMAL   = 2,
@@ -55,10 +55,10 @@ struct export {
 	short	flags;		//=0
 	char	name[8];
 	func	func[45];	//usually module entry point (allways?)
-//		func1
-//		func2
-//		func3
-//		funcs	  	// more functions: the services provided my module
+	//		func1
+	//		func2
+	//		func3
+	//		funcs	  	// more functions: the services provided my module
 };
 
 struct bootmode {
@@ -84,6 +84,6 @@ void	FlushDcache();				//5 (14,21,26)
 int	RegisterLibraryEntries(struct export*);	//6 (05,06,07,13,14,17,18,28)
 u32*	QueryBootMode(int code);		//12(11,21,25,26,28)
 int	loadcore_call20_registerFunc(int (*function)(int *, int), int a1, int *result);
-						//20(28)
+//20(28)
 
 #endif//__LOADCORE_H__

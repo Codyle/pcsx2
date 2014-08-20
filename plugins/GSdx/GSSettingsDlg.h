@@ -34,7 +34,7 @@ class GSShadeBostDlg : public GSDialog
 
 protected:
 	void OnInit();
-	bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam);	
+	bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam);
 
 public:
 	GSShadeBostDlg();
@@ -45,7 +45,7 @@ class GSHacksDlg : public GSDialog
 	unsigned short cb2msaa[17];
 	unsigned short msaa2cb[17];
 	std::string adapter_id;
-	
+
 	bool isdx9;
 
 	HWND hovered_window;
@@ -69,8 +69,7 @@ public:
 class GSSettingsDlg : public GSDialog
 {
 	list<D3DDISPLAYMODE> m_modes;
-	struct Adapter
-	{
+	struct Adapter {
 		std::string name;
 		std::string id;
 		D3D_FEATURE_LEVEL level;

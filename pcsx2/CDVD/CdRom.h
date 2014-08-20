@@ -34,8 +34,7 @@ typedef struct {
 	s16			pcm[16384];
 } xa_decode_t;
 
-struct cdrStruct
-{
+struct cdrStruct {
 	u8 OCUP;
 	u8 Reg1Mode;
 	u8 Reg2;

@@ -19,8 +19,7 @@
 #include "Common.h"
 
 
-union _u8bit_128
-{
+union _u8bit_128 {
 	u8 _u8[16];
 	u16 _u16[8];
 	u32 _u32[4];

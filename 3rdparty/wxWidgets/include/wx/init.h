@@ -27,7 +27,7 @@
 //
 // note that the parameters may be modified, this is why we pass them by
 // reference!
-extern bool WXDLLIMPEXP_BASE wxEntryStart(int& argc, wxChar **argv);
+extern bool WXDLLIMPEXP_BASE wxEntryStart(int &argc, wxChar **argv);
 
 // free the resources allocated by the library in wxEntryStart() and shut it
 // down (wxEntryStart() may be called again afterwards if necessary)
@@ -43,13 +43,13 @@ extern void WXDLLIMPEXP_BASE wxEntryCleanup();
 // but this one always exists under all platforms
 //
 // returns the program exit code
-extern int WXDLLIMPEXP_BASE wxEntry(int& argc, wxChar **argv);
+extern int WXDLLIMPEXP_BASE wxEntry(int &argc, wxChar **argv);
 
 // we overload wxEntry[Start]() to take "char **" pointers too
 #if wxUSE_UNICODE
 
-extern bool WXDLLIMPEXP_BASE wxEntryStart(int& argc, char **argv);
-extern int WXDLLIMPEXP_BASE wxEntry(int& argc, char **argv);
+extern bool WXDLLIMPEXP_BASE wxEntryStart(int &argc, char **argv);
+extern int WXDLLIMPEXP_BASE wxEntry(int &argc, char **argv);
 
 #endif// wxUSE_UNICODE
 
@@ -72,23 +72,32 @@ extern void WXDLLIMPEXP_BASE wxUninitialize();
 class WXDLLIMPEXP_BASE wxInitializer
 {
 public:
-    // initialize the library
-    wxInitializer(int argc = 0, wxChar **argv = NULL)
-    {
-        m_ok = wxInitialize(argc, argv);
-    }
+	// initialize the library
+	wxInitializer(int argc = 0, wxChar **argv = NULL)
+	{
+		m_ok = wxInitialize(argc, argv);
+	}
 
-    // has the initialization been successful? (explicit test)
-    bool IsOk() const { return m_ok; }
+	// has the initialization been successful? (explicit test)
+	bool IsOk() const
+	{
+		return m_ok;
+	}
 
-    // has the initialization been successful? (implicit test)
-    operator bool() const { return m_ok; }
+	// has the initialization been successful? (implicit test)
+	operator bool() const
+	{
+		return m_ok;
+	}
 
-    // dtor only does clean up if we initialized the library properly
-    ~wxInitializer() { if ( m_ok ) wxUninitialize(); }
+	// dtor only does clean up if we initialized the library properly
+	~wxInitializer()
+	{
+		if (m_ok) wxUninitialize();
+	}
 
 private:
-    bool m_ok;
+	bool m_ok;
 };
 
 #endif // _WX_INIT_H_

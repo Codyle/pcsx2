@@ -34,37 +34,37 @@ struct IDataObject;
 class WXDLLEXPORT wxDropTarget : public wxDropTargetBase
 {
 public:
-    // ctor & dtor
-    wxDropTarget(wxDataObject *dataObject = NULL);
-    virtual ~wxDropTarget();
+	// ctor & dtor
+	wxDropTarget(wxDataObject *dataObject = NULL);
+	virtual ~wxDropTarget();
 
-    // normally called by wxWindow on window creation/destruction, but might be
-    // called `manually' as well. Register() returns true on success.
-    bool Register(WXHWND hwnd);
-    void Revoke(WXHWND hwnd);
+	// normally called by wxWindow on window creation/destruction, but might be
+	// called `manually' as well. Register() returns true on success.
+	bool Register(WXHWND hwnd);
+	void Revoke(WXHWND hwnd);
 
-    // provide default implementation for base class pure virtuals
-    virtual bool OnDrop(wxCoord x, wxCoord y);
-    virtual bool GetData();
+	// provide default implementation for base class pure virtuals
+	virtual bool OnDrop(wxCoord x, wxCoord y);
+	virtual bool GetData();
 
-    // implementation only from now on
-    // -------------------------------
+	// implementation only from now on
+	// -------------------------------
 
-    // do we accept this kind of data?
-    bool IsAcceptedData(IDataObject *pIDataSource) const;
+	// do we accept this kind of data?
+	bool IsAcceptedData(IDataObject *pIDataSource) const;
 
-    // give us the data source from IDropTarget::Drop() - this is later used by
-    // GetData() when it's called from inside OnData()
-    void SetDataSource(IDataObject *pIDataSource);
+	// give us the data source from IDropTarget::Drop() - this is later used by
+	// GetData() when it's called from inside OnData()
+	void SetDataSource(IDataObject *pIDataSource);
 
 private:
-    // helper used by IsAcceptedData() and GetData()
-    wxDataFormat GetSupportedFormat(IDataObject *pIDataSource) const;
+	// helper used by IsAcceptedData() and GetData()
+	wxDataFormat GetSupportedFormat(IDataObject *pIDataSource) const;
 
-    wxIDropTarget *m_pIDropTarget; // the pointer to our COM interface
-    IDataObject   *m_pIDataSource; // the pointer to the source data object
+	wxIDropTarget *m_pIDropTarget; // the pointer to our COM interface
+	IDataObject   *m_pIDataSource; // the pointer to the source data object
 
-    DECLARE_NO_COPY_CLASS(wxDropTarget)
+	DECLARE_NO_COPY_CLASS(wxDropTarget)
 };
 
 #endif  //wxUSE_DRAG_AND_DROP

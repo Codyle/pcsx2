@@ -41,16 +41,14 @@ inline unsigned long timeGetTime()
 {
 	timeb t;
 	ftime(&t);
-
-	return (unsigned long)(t.time*1000 + t.millitm);
+	return (unsigned long)(t.time * 1000 + t.millitm);
 }
 
 inline unsigned long timeGetPreciseTime()
 {
-    timespec t;
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &t);
-
-    return t.tv_nsec;
+	timespec t;
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &t);
+	return t.tv_nsec;
 }
 
 static __forceinline void InitCPUTicks()
@@ -64,10 +62,9 @@ static __forceinline u64 GetTickFrequency()
 
 static __forceinline u64 GetCPUTicks()
 {
-
 	struct timeval t;
 	gettimeofday(&t, NULL);
-	return ((u64)t.tv_sec*GetTickFrequency()) + t.tv_usec;
+	return ((u64)t.tv_sec * GetTickFrequency()) + t.tv_usec;
 }
 
 #else
@@ -76,7 +73,7 @@ static __aligned16 LARGE_INTEGER lfreq;
 inline unsigned long timeGetPreciseTime()
 {
 	// Implement later.
-    return 0;
+	return 0;
 }
 
 static __forceinline void InitCPUTicks()
@@ -109,11 +106,21 @@ void DVProfClear();						// clears all the profilers
 
 class DVProfileFunc
 {
-	public:
-		u32 dwUserData;
-		DVProfileFunc(char* pname) { DVProfRegister(pname); dwUserData = 0; }
-		DVProfileFunc(char* pname, u32 dwUserData) : dwUserData(dwUserData) { DVProfRegister(pname); }
-		~DVProfileFunc() { DVProfEnd(dwUserData); }
+public:
+	u32 dwUserData;
+	DVProfileFunc(char* pname)
+	{
+		DVProfRegister(pname);
+		dwUserData = 0;
+	}
+	DVProfileFunc(char* pname, u32 dwUserData) : dwUserData(dwUserData)
+	{
+		DVProfRegister(pname);
+	}
+	~DVProfileFunc()
+	{
+		DVProfEnd(dwUserData);
+	}
 };
 
 #else
@@ -121,11 +128,11 @@ class DVProfileFunc
 class DVProfileFunc
 {
 
-	public:
-		u32 dwUserData;
-		static __forceinline DVProfileFunc(char* pname) {}
-		static __forceinline DVProfileFunc(char* pname, u32 dwUserData) { }
-		~DVProfileFunc() {}
+public:
+	u32 dwUserData;
+	static __forceinline DVProfileFunc(char* pname) {}
+	static __forceinline DVProfileFunc(char* pname, u32 dwUserData) { }
+	~DVProfileFunc() {}
 };
 
 #endif
@@ -135,36 +142,61 @@ template <typename T>
 class CInterfacePtr
 {
 
-	public:
-		inline CInterfacePtr() : ptr(NULL) {}
-		inline explicit CInterfacePtr(T* newptr) : ptr(newptr) { if (ptr != NULL) ptr->AddRef(); }
-		inline ~CInterfacePtr() { if (ptr != NULL) ptr->Release(); }
-		inline T* operator*() { assert(ptr != NULL); return *ptr; }
-		inline T* operator->() { return ptr; }
-		inline T* get() { return ptr; }
+public:
+	inline CInterfacePtr() : ptr(NULL) {}
+	inline explicit CInterfacePtr(T* newptr) : ptr(newptr)
+	{
+		if (ptr != NULL) ptr->AddRef();
+	}
+	inline ~CInterfacePtr()
+	{
+		if (ptr != NULL) ptr->Release();
+	}
+	inline T* operator*()
+	{
+		assert(ptr != NULL);
+		return *ptr;
+	}
+	inline T* operator->()
+	{
+		return ptr;
+	}
+	inline T* get()
+	{
+		return ptr;
+	}
 
-		inline void release()
-		{
-			if (ptr != NULL) { ptr->Release(); ptr = NULL; }
+	inline void release()
+	{
+		if (ptr != NULL) {
+			ptr->Release();
+			ptr = NULL;
 		}
+	}
 
-		inline operator T*() { return ptr; }
-		inline bool operator==(T* rhs) { return ptr == rhs; }
-		inline bool operator!=(T* rhs) { return ptr != rhs; }
+	inline operator T*()
+	{
+		return ptr;
+	}
+	inline bool operator==(T* rhs)
+	{
+		return ptr == rhs;
+	}
+	inline bool operator!=(T* rhs)
+	{
+		return ptr != rhs;
+	}
 
-		inline CInterfacePtr& operator= (T* newptr)
-		{
-			if (ptr != NULL) ptr->Release();
+	inline CInterfacePtr &operator= (T* newptr)
+	{
+		if (ptr != NULL) ptr->Release();
+		ptr = newptr;
+		if (ptr != NULL) ptr->AddRef();
+		return *this;
+	}
 
-			ptr = newptr;
-
-			if (ptr != NULL) ptr->AddRef();
-
-			return *this;
-		}
-
-	private:
-		T* ptr;
+private:
+	T* ptr;
 };
 
 extern void InitProfile();

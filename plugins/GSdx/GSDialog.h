@@ -40,7 +40,10 @@ public:
 	GSDialog(UINT id);
 	virtual ~GSDialog() {}
 
-	int GetId() const {return m_id;}
+	int GetId() const
+	{
+		return m_id;
+	}
 
 	INT_PTR DoModal();
 
@@ -50,7 +53,7 @@ public:
 	void SetText(UINT id, const char* str);
 	void SetTextAsInt(UINT id, int i);
 
-	void ComboBoxInit(UINT id, const vector<GSSetting>& settings, uint32 selid, uint32 maxid = ~0);
+	void ComboBoxInit(UINT id, const vector<GSSetting> &settings, uint32 selid, uint32 maxid = ~0);
 	int ComboBoxAppend(UINT id, const char* str, LPARAM data = 0, bool select = false);
-	bool ComboBoxGetSelData(UINT id, INT_PTR& data);
+	bool ComboBoxGetSelData(UINT id, INT_PTR &data);
 };

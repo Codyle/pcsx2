@@ -15,10 +15,10 @@
 #include "wx/defs.h"
 
 #if wxUSE_STL
-    #include "wx/beforestd.h"
-    #include <vector>
-    #include <algorithm>
-    #include "wx/afterstd.h"
+#include "wx/beforestd.h"
+#include <vector>
+#include <algorithm>
+#include "wx/afterstd.h"
 #endif
 
 /*
@@ -66,7 +66,7 @@
  */
 extern "C"
 {
-typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
+	typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 }
 
 // ----------------------------------------------------------------------------
@@ -85,172 +85,176 @@ template<class T>
 class WXDLLIMPEXP_BASE wxArray_SortFunction
 {
 public:
-    typedef int (wxCMPFUNC_CONV *CMPFUNC)(T* pItem1, T* pItem2);
+	typedef int (wxCMPFUNC_CONV *CMPFUNC)(T* pItem1, T* pItem2);
 
-    wxArray_SortFunction(CMPFUNC f) : m_f(f) { }
-    bool operator()(const T& i1, const T& i2)
-      { return m_f((T*)&i1, (T*)&i2) < 0; }
+	wxArray_SortFunction(CMPFUNC f) : m_f(f) { }
+	bool operator()(const T &i1, const T &i2)
+	{
+		return m_f((T*)&i1, (T*)&i2) < 0;
+	}
 private:
-    CMPFUNC m_f;
+	CMPFUNC m_f;
 };
 
 template<class T, typename F>
 class WXDLLIMPEXP_BASE wxSortedArray_SortFunction
 {
 public:
-    typedef F CMPFUNC;
+	typedef F CMPFUNC;
 
-    wxSortedArray_SortFunction(CMPFUNC f) : m_f(f) { }
-    bool operator()(const T& i1, const T& i2)
-      { return m_f(i1, i2) < 0; }
+	wxSortedArray_SortFunction(CMPFUNC f) : m_f(f) { }
+	bool operator()(const T &i1, const T &i2)
+	{
+		return m_f(i1, i2) < 0;
+	}
 private:
-    CMPFUNC m_f;
+	CMPFUNC m_f;
 };
 
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
-   typedef int (wxCMPFUNC_CONV *CMPFUN##name)(T pItem1, T pItem2);  \
-   typedef wxSortedArray_SortFunction<T, CMPFUN##name> name##_Predicate; \
-   _WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
+	typedef int (wxCMPFUNC_CONV *CMPFUN##name)(T pItem1, T pItem2);  \
+	typedef wxSortedArray_SortFunction<T, CMPFUN##name> name##_Predicate; \
+	_WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
 
 #define  _WX_DECLARE_BASEARRAY_2(T, name, predicate, classexp)      \
-classexp name : public std::vector< T,wxStringAllocator< T > >                               \
-{                                                                   \
-  typedef predicate Predicate;                                      \
-  typedef predicate::CMPFUNC SCMPFUNC;                              \
-public:                                                             \
-  typedef wxArray_SortFunction<T>::CMPFUNC CMPFUNC;                 \
-public:                                                             \
-  void Empty() { clear(); }                                         \
-  void Clear() { clear(); }                                         \
-  void Alloc(size_t uiSize) { reserve(uiSize); }                    \
-  void Shrink();                                                    \
-                                                                    \
-  size_t GetCount() const { return size(); }                        \
-  void SetCount(size_t n, T v = T()) { resize(n, v); }              \
-  bool IsEmpty() const { return empty(); }                          \
-  size_t Count() const { return size(); }                           \
-                                                                    \
-  typedef T base_type;                                              \
-                                                                    \
-protected:                                                          \
-  T& Item(size_t uiIndex) const                                     \
-    { wxASSERT( uiIndex < size() ); return (T&)operator[](uiIndex); }   \
-                                                                    \
-  int Index(T e, bool bFromEnd = false) const;                      \
-  int Index(T lItem, CMPFUNC fnCompare) const;                      \
-  size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
-  void Add(T lItem, size_t nInsert = 1)                             \
-    { insert(end(), nInsert, lItem); }                              \
-  size_t Add(T lItem, CMPFUNC fnCompare);                           \
-  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)          \
-    { insert(begin() + uiIndex, nInsert, lItem); }                  \
-  void Remove(T lItem);                                             \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                 \
-    { erase(begin() + uiIndex, begin() + uiIndex + nRemove); }      \
-                                                                    \
-  void Sort(CMPFUNC fCmp)                                           \
-  {                                                                 \
-    wxArray_SortFunction<T> p(fCmp);                                \
-    std::sort(begin(), end(), p);                                   \
-  }                                                                 \
-}
+	classexp name : public std::vector< T,wxStringAllocator< T > >                               \
+	{                                                                   \
+		typedef predicate Predicate;                                      \
+		typedef predicate::CMPFUNC SCMPFUNC;                              \
+	public:                                                             \
+		typedef wxArray_SortFunction<T>::CMPFUNC CMPFUNC;                 \
+	public:                                                             \
+		void Empty() { clear(); }                                         \
+		void Clear() { clear(); }                                         \
+		void Alloc(size_t uiSize) { reserve(uiSize); }                    \
+		void Shrink();                                                    \
+		\
+		size_t GetCount() const { return size(); }                        \
+		void SetCount(size_t n, T v = T()) { resize(n, v); }              \
+		bool IsEmpty() const { return empty(); }                          \
+		size_t Count() const { return size(); }                           \
+		\
+		typedef T base_type;                                              \
+		\
+	protected:                                                          \
+		T& Item(size_t uiIndex) const                                     \
+		{ wxASSERT( uiIndex < size() ); return (T&)operator[](uiIndex); }   \
+		\
+		int Index(T e, bool bFromEnd = false) const;                      \
+		int Index(T lItem, CMPFUNC fnCompare) const;                      \
+		size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
+		void Add(T lItem, size_t nInsert = 1)                             \
+		{ insert(end(), nInsert, lItem); }                              \
+		size_t Add(T lItem, CMPFUNC fnCompare);                           \
+		void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)          \
+		{ insert(begin() + uiIndex, nInsert, lItem); }                  \
+		void Remove(T lItem);                                             \
+		void RemoveAt(size_t uiIndex, size_t nRemove = 1)                 \
+		{ erase(begin() + uiIndex, begin() + uiIndex + nRemove); }      \
+		\
+		void Sort(CMPFUNC fCmp)                                           \
+		{                                                                 \
+			wxArray_SortFunction<T> p(fCmp);                                \
+			std::sort(begin(), end(), p);                                   \
+		}                                                                 \
+	}
 
 #else // if !wxUSE_STL
 
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
-classexp name                                                       \
-{                                                                   \
-  typedef CMPFUNC SCMPFUNC; /* for compatibility wuth wxUSE_STL */  \
-public:                                                             \
-  name();                                                           \
-  name(const name& array);                                          \
-  name& operator=(const name& src);                                 \
-  ~name();                                                          \
-                                                                    \
-  void Empty() { m_nCount = 0; }                                    \
-  void Clear();                                                     \
-  void Alloc(size_t n) { if ( n > m_nSize ) Realloc(n); }           \
-  void Shrink();                                                    \
-                                                                    \
-  size_t GetCount() const { return m_nCount; }                      \
-  void SetCount(size_t n, T defval = T());                          \
-  bool IsEmpty() const { return m_nCount == 0; }                    \
-  size_t Count() const { return m_nCount; }                         \
-                                                                    \
-  typedef T base_type;                                              \
-                                                                    \
-protected:                                                          \
-  T& Item(size_t uiIndex) const                                     \
-    { wxASSERT( uiIndex < m_nCount ); return m_pItems[uiIndex]; }   \
-  T& operator[](size_t uiIndex) const { return Item(uiIndex); }     \
-                                                                    \
-  int Index(T lItem, bool bFromEnd = false) const;                  \
-  int Index(T lItem, CMPFUNC fnCompare) const;                      \
-  size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
-  void Add(T lItem, size_t nInsert = 1);                            \
-  size_t Add(T lItem, CMPFUNC fnCompare);                           \
-  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1);         \
-  void Remove(T lItem);                                             \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1);                \
-                                                                    \
-  void Sort(CMPFUNC fnCompare);                                     \
-                                                                    \
-  /* *minimal* STL-ish interface, for derived classes */            \
-  typedef T value_type;                                             \
-  typedef value_type* iterator;                                     \
-  typedef const value_type* const_iterator;                         \
-  typedef value_type& reference;                                    \
-  typedef const value_type& const_reference;                        \
-  typedef int difference_type;                                      \
-  typedef size_t size_type;                                         \
-                                                                    \
-  void assign(const_iterator first, const_iterator last);           \
-  void assign(size_type n, const_reference v);                      \
-  size_type capacity() const { return m_nSize; }                    \
-  iterator erase(iterator first, iterator last)                     \
-  {                                                                 \
-    size_type idx = first - begin();                                \
-    RemoveAt(idx, last - first);                                    \
-    return begin() + idx;                                           \
-  }                                                                 \
-  iterator erase(iterator it) { return erase(it, it + 1); }         \
-  void insert(iterator it, size_type n, const value_type& v)        \
-    { Insert(v, it - begin(), n); }                                 \
-  iterator insert(iterator it, const value_type& v = value_type())  \
-  {                                                                 \
-    size_type idx = it - begin();                                   \
-    Insert(v, idx);                                                 \
-    return begin() + idx;                                           \
-  }                                                                 \
-  void insert(iterator it, const_iterator first, const_iterator last);\
-  void pop_back() { RemoveAt(size() - 1); }                         \
-  void push_back(const value_type& v) { Add(v); }                   \
-  void reserve(size_type n) { Alloc(n); }                           \
-  void resize(size_type n, value_type v = value_type())             \
-    { SetCount(n, v); }                                             \
-                                                                    \
-  iterator begin() { return m_pItems; }                             \
-  iterator end() { return m_pItems + m_nCount; }                    \
-  const_iterator begin() const { return m_pItems; }                 \
-  const_iterator end() const { return m_pItems + m_nCount; }        \
-                                                                    \
-  /* the following functions may be made directly public because */ \
-  /* they don't use the type of the elements at all */              \
-public:                                                             \
-  void clear() { Clear(); }                                         \
-  bool empty() const { return IsEmpty(); }                          \
-  size_type max_size() const { return INT_MAX; }                    \
-  size_type size() const { return GetCount(); }                     \
-                                                                    \
-private:                                                            \
-  void Grow(size_t nIncrement = 0);                                 \
-  bool Realloc(size_t nSize);                                       \
-                                                                    \
-  size_t  m_nSize,                                                  \
-          m_nCount;                                                 \
-                                                                    \
-  T      *m_pItems;                                                 \
-}
+	classexp name                                                       \
+	{                                                                   \
+		typedef CMPFUNC SCMPFUNC; /* for compatibility wuth wxUSE_STL */  \
+	public:                                                             \
+		name();                                                           \
+		name(const name& array);                                          \
+		name& operator=(const name& src);                                 \
+		~name();                                                          \
+		\
+		void Empty() { m_nCount = 0; }                                    \
+		void Clear();                                                     \
+		void Alloc(size_t n) { if ( n > m_nSize ) Realloc(n); }           \
+		void Shrink();                                                    \
+		\
+		size_t GetCount() const { return m_nCount; }                      \
+		void SetCount(size_t n, T defval = T());                          \
+		bool IsEmpty() const { return m_nCount == 0; }                    \
+		size_t Count() const { return m_nCount; }                         \
+		\
+		typedef T base_type;                                              \
+		\
+	protected:                                                          \
+		T& Item(size_t uiIndex) const                                     \
+		{ wxASSERT( uiIndex < m_nCount ); return m_pItems[uiIndex]; }   \
+		T& operator[](size_t uiIndex) const { return Item(uiIndex); }     \
+		\
+		int Index(T lItem, bool bFromEnd = false) const;                  \
+		int Index(T lItem, CMPFUNC fnCompare) const;                      \
+		size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
+		void Add(T lItem, size_t nInsert = 1);                            \
+		size_t Add(T lItem, CMPFUNC fnCompare);                           \
+		void Insert(T lItem, size_t uiIndex, size_t nInsert = 1);         \
+		void Remove(T lItem);                                             \
+		void RemoveAt(size_t uiIndex, size_t nRemove = 1);                \
+		\
+		void Sort(CMPFUNC fnCompare);                                     \
+		\
+		/* *minimal* STL-ish interface, for derived classes */            \
+		typedef T value_type;                                             \
+		typedef value_type* iterator;                                     \
+		typedef const value_type* const_iterator;                         \
+		typedef value_type& reference;                                    \
+		typedef const value_type& const_reference;                        \
+		typedef int difference_type;                                      \
+		typedef size_t size_type;                                         \
+		\
+		void assign(const_iterator first, const_iterator last);           \
+		void assign(size_type n, const_reference v);                      \
+		size_type capacity() const { return m_nSize; }                    \
+		iterator erase(iterator first, iterator last)                     \
+		{                                                                 \
+			size_type idx = first - begin();                                \
+			RemoveAt(idx, last - first);                                    \
+			return begin() + idx;                                           \
+		}                                                                 \
+		iterator erase(iterator it) { return erase(it, it + 1); }         \
+		void insert(iterator it, size_type n, const value_type& v)        \
+		{ Insert(v, it - begin(), n); }                                 \
+		iterator insert(iterator it, const value_type& v = value_type())  \
+		{                                                                 \
+			size_type idx = it - begin();                                   \
+			Insert(v, idx);                                                 \
+			return begin() + idx;                                           \
+		}                                                                 \
+		void insert(iterator it, const_iterator first, const_iterator last);\
+		void pop_back() { RemoveAt(size() - 1); }                         \
+		void push_back(const value_type& v) { Add(v); }                   \
+		void reserve(size_type n) { Alloc(n); }                           \
+		void resize(size_type n, value_type v = value_type())             \
+		{ SetCount(n, v); }                                             \
+		\
+		iterator begin() { return m_pItems; }                             \
+		iterator end() { return m_pItems + m_nCount; }                    \
+		const_iterator begin() const { return m_pItems; }                 \
+		const_iterator end() const { return m_pItems + m_nCount; }        \
+		\
+		/* the following functions may be made directly public because */ \
+		/* they don't use the type of the elements at all */              \
+	public:                                                             \
+		void clear() { Clear(); }                                         \
+		bool empty() const { return IsEmpty(); }                          \
+		size_type max_size() const { return INT_MAX; }                    \
+		size_type size() const { return GetCount(); }                     \
+		\
+	private:                                                            \
+		void Grow(size_t nIncrement = 0);                                 \
+		bool Realloc(size_t nSize);                                       \
+		\
+		size_t  m_nSize,                                                  \
+		m_nCount;                                                 \
+		\
+		T      *m_pItems;                                                 \
+	}
 
 #endif // !wxUSE_STL
 
@@ -278,212 +282,212 @@ private:                                                            \
 #if wxUSE_STL
 
 #define  _WX_DEFINE_TYPEARRAY(T, name, base, classexp)                \
-typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
-classexp name : public base                                           \
-{                                                                     \
-public:                                                               \
-  T& operator[](size_t uiIndex) const                                 \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Item(size_t uiIndex) const                                       \
-    { return (T&)/*const cast*/base::operator[](uiIndex); }           \
-  T& Last() const                                                     \
-    { return Item(Count() - 1); }                                     \
-                                                                      \
-  int Index(T e, bool bFromEnd = false) const                         \
-    { return base::Index(e, bFromEnd); }                              \
-                                                                      \
-  void Add(T lItem, size_t nInsert = 1)                               \
-    { insert(end(), nInsert, lItem); }                                \
-  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)            \
-    { insert(begin() + uiIndex, nInsert, lItem); }                    \
-                                                                      \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
-    { base::RemoveAt(uiIndex, nRemove); }                             \
-  void Remove(T lItem)                                                \
-    { int iIndex = Index(lItem);                                      \
-      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
-         _WX_ERROR_REMOVE);                                           \
-      RemoveAt((size_t)iIndex); }                                     \
-                                                                      \
-  void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
-}
+	typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
+	classexp name : public base                                           \
+	{                                                                     \
+	public:                                                               \
+		T& operator[](size_t uiIndex) const                                 \
+		{ return (T&)(base::operator[](uiIndex)); }                       \
+		T& Item(size_t uiIndex) const                                       \
+		{ return (T&)/*const cast*/base::operator[](uiIndex); }           \
+		T& Last() const                                                     \
+		{ return Item(Count() - 1); }                                     \
+		\
+		int Index(T e, bool bFromEnd = false) const                         \
+		{ return base::Index(e, bFromEnd); }                              \
+		\
+		void Add(T lItem, size_t nInsert = 1)                               \
+		{ insert(end(), nInsert, lItem); }                                \
+		void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)            \
+		{ insert(begin() + uiIndex, nInsert, lItem); }                    \
+		\
+		void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
+		{ base::RemoveAt(uiIndex, nRemove); }                             \
+		void Remove(T lItem)                                                \
+		{ int iIndex = Index(lItem);                                      \
+			wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
+			              _WX_ERROR_REMOVE);                                           \
+			RemoveAt((size_t)iIndex); }                                     \
+		\
+		void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
+	}
 
 #define  _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)         \
-         _WX_DEFINE_TYPEARRAY(T, name, base, classexp)
+	_WX_DEFINE_TYPEARRAY(T, name, base, classexp)
 
 #else // if !wxUSE_STL
 
 // common declaration used by both _WX_DEFINE_TYPEARRAY and
 // _WX_DEFINE_TYPEARRAY_PTR
 #define  _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, ptrop)  \
-wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
-                       TypeTooBigToBeStoredIn##base,                  \
-                       name);                                         \
-typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
-classexp name : public base                                           \
-{                                                                     \
-public:                                                               \
-  name() { }                                                          \
-  ~name() { }                                                         \
-                                                                      \
-  name& operator=(const name& src)                                    \
-    { base* temp = (base*) this;                                      \
-      (*temp) = ((const base&)src);                                   \
-      return *this; }                                                 \
-                                                                      \
-  T& operator[](size_t uiIndex) const                                 \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Item(size_t uiIndex) const                                       \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Last() const                                                     \
-    { return (T&)(base::operator[](Count() - 1)); }                   \
-                                                                      \
-  int Index(T lItem, bool bFromEnd = false) const                     \
-    { return base::Index((base_type)lItem, bFromEnd); }               \
-                                                                      \
-  void Add(T lItem, size_t nInsert = 1)                               \
-    { base::Add((base_type)lItem, nInsert); }                         \
-  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)            \
-    { base::Insert((base_type)lItem, uiIndex, nInsert) ; }            \
-                                                                      \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
-    { base::RemoveAt(uiIndex, nRemove); }                             \
-  void Remove(T lItem)                                                \
-    { int iIndex = Index(lItem);                                      \
-      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
-         _WX_ERROR_REMOVE);                                           \
-      base::RemoveAt((size_t)iIndex); }                               \
-                                                                      \
-  void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
-                                                                      \
-  /* STL-like interface */                                            \
-private:                                                              \
-  typedef base::iterator biterator;                                   \
-  typedef base::const_iterator bconst_iterator;                       \
-  typedef base::value_type bvalue_type;                               \
-  typedef base::const_reference bconst_reference;                     \
-public:                                                               \
-  typedef T value_type;                                               \
-  typedef value_type* pointer;                                        \
-  typedef const value_type* const_pointer;                            \
-  typedef value_type* iterator;                                       \
-  typedef const value_type* const_iterator;                           \
-  typedef value_type& reference;                                      \
-  typedef const value_type& const_reference;                          \
-  typedef base::difference_type difference_type;                      \
-  typedef base::size_type size_type;                                  \
-                                                                      \
-  class reverse_iterator                                              \
-  {                                                                   \
-    typedef T value_type;                                             \
-    typedef value_type& reference;                                    \
-    typedef value_type* pointer;                                      \
-    typedef reverse_iterator itor;                                    \
-    friend inline itor operator+(int o, const itor& it)               \
-        { return it.m_ptr - o; }                                      \
-    friend inline itor operator+(const itor& it, int o)               \
-        { return it.m_ptr - o; }                                      \
-    friend inline itor operator-(const itor& it, int o)               \
-        { return it.m_ptr + o; }                                      \
-    friend inline difference_type operator-(const itor& i1,           \
-                                            const itor& i2)           \
-        { return i1.m_ptr - i2.m_ptr; }                               \
-                                                                      \
-  public:                                                             \
-    pointer m_ptr;                                                    \
-    reverse_iterator() : m_ptr(NULL) { }                              \
-    reverse_iterator(pointer ptr) : m_ptr(ptr) { }                    \
-    reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }            \
-    reference operator*() const { return *m_ptr; }                    \
-    ptrop                                                             \
-    itor& operator++() { --m_ptr; return *this; }                     \
-    const itor operator++(int)                                        \
-      { reverse_iterator tmp = *this; --m_ptr; return tmp; }          \
-    itor& operator--() { ++m_ptr; return *this; }                     \
-    const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }\
-    bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }\
-    bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
-  };                                                                  \
-                                                                      \
-  class const_reverse_iterator                                        \
-  {                                                                   \
-    typedef T value_type;                                             \
-    typedef const value_type& reference;                              \
-    typedef const value_type* pointer;                                \
-    typedef const_reverse_iterator itor;                              \
-    friend inline itor operator+(int o, const itor& it)               \
-        { return it.m_ptr - o; }                                      \
-    friend inline itor operator+(const itor& it, int o)               \
-        { return it.m_ptr - o; }                                      \
-    friend inline itor operator-(const itor& it, int o)               \
-        { return it.m_ptr + o; }                                      \
-    friend inline difference_type operator-(const itor& i1,           \
-                                            const itor& i2)           \
-        { return i1.m_ptr - i2.m_ptr; }                               \
-                                                                      \
-  public:                                                             \
-    pointer m_ptr;                                                    \
-    const_reverse_iterator() : m_ptr(NULL) { }                        \
-    const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }              \
-    const_reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }      \
-    const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }\
-    reference operator*() const { return *m_ptr; }                    \
-    ptrop                                                             \
-    itor& operator++() { --m_ptr; return *this; }                     \
-    const itor operator++(int)                                        \
-      { itor tmp = *this; --m_ptr; return tmp; }                      \
-    itor& operator--() { ++m_ptr; return *this; }                     \
-    const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }\
-    bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }\
-    bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
-  };                                                                  \
-                                                                      \
-  name(size_type n, const_reference v) { assign(n, v); }              \
-  name(const_iterator first, const_iterator last)                     \
-    { assign(first, last); }                                          \
-  void assign(const_iterator first, const_iterator last)              \
-    { base::assign((bconst_iterator)first, (bconst_iterator)last); }  \
-  void assign(size_type n, const_reference v)                         \
-    { base::assign(n, (bconst_reference)v); }                         \
-  reference back() { return *(end() - 1); }                           \
-  const_reference back() const { return *(end() - 1); }               \
-  iterator begin() { return (iterator)base::begin(); }                \
-  const_iterator begin() const { return (const_iterator)base::begin(); }\
-  size_type capacity() const { return base::capacity(); }             \
-  iterator end() { return (iterator)base::end(); }                    \
-  const_iterator end() const { return (const_iterator)base::end(); }  \
-  iterator erase(iterator first, iterator last)                       \
-    { return (iterator)base::erase((biterator)first, (biterator)last); }\
-  iterator erase(iterator it)                                         \
-    { return (iterator)base::erase((biterator)it); }                  \
-  reference front() { return *begin(); }                              \
-  const_reference front() const { return *begin(); }                  \
-  void insert(iterator it, size_type n, const_reference v)            \
-    { base::insert((biterator)it, n, (bconst_reference)v); }          \
-  iterator insert(iterator it, const_reference v = value_type())      \
-    { return (iterator)base::insert((biterator)it, (bconst_reference)v); }\
-  void insert(iterator it, const_iterator first, const_iterator last) \
-    { base::insert((biterator)it, (bconst_iterator)first,             \
-                   (bconst_iterator)last); }                          \
-  void pop_back() { base::pop_back(); }                               \
-  void push_back(const_reference v)                                   \
-    { base::push_back((bconst_reference)v); }                         \
-  reverse_iterator rbegin() { return reverse_iterator(end() - 1); }   \
-  const_reverse_iterator rbegin() const;                              \
-  reverse_iterator rend() { return reverse_iterator(begin() - 1); }   \
-  const_reverse_iterator rend() const;                                \
-  void reserve(size_type n) { base::reserve(n); }                     \
-  void resize(size_type n, value_type v = value_type())               \
-    { base::resize(n, v); }                                           \
-}
+	wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
+	                       TypeTooBigToBeStoredIn##base,                  \
+	                       name);                                         \
+	typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
+	classexp name : public base                                           \
+	{                                                                     \
+	public:                                                               \
+		name() { }                                                          \
+		~name() { }                                                         \
+		\
+		name& operator=(const name& src)                                    \
+		{ base* temp = (base*) this;                                      \
+			(*temp) = ((const base&)src);                                   \
+			return *this; }                                                 \
+		\
+		T& operator[](size_t uiIndex) const                                 \
+		{ return (T&)(base::operator[](uiIndex)); }                       \
+		T& Item(size_t uiIndex) const                                       \
+		{ return (T&)(base::operator[](uiIndex)); }                       \
+		T& Last() const                                                     \
+		{ return (T&)(base::operator[](Count() - 1)); }                   \
+		\
+		int Index(T lItem, bool bFromEnd = false) const                     \
+		{ return base::Index((base_type)lItem, bFromEnd); }               \
+		\
+		void Add(T lItem, size_t nInsert = 1)                               \
+		{ base::Add((base_type)lItem, nInsert); }                         \
+		void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)            \
+		{ base::Insert((base_type)lItem, uiIndex, nInsert) ; }            \
+		\
+		void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
+		{ base::RemoveAt(uiIndex, nRemove); }                             \
+		void Remove(T lItem)                                                \
+		{ int iIndex = Index(lItem);                                      \
+			wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
+			              _WX_ERROR_REMOVE);                                           \
+			base::RemoveAt((size_t)iIndex); }                               \
+		\
+		void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
+		\
+		/* STL-like interface */                                            \
+	private:                                                              \
+		typedef base::iterator biterator;                                   \
+		typedef base::const_iterator bconst_iterator;                       \
+		typedef base::value_type bvalue_type;                               \
+		typedef base::const_reference bconst_reference;                     \
+	public:                                                               \
+		typedef T value_type;                                               \
+		typedef value_type* pointer;                                        \
+		typedef const value_type* const_pointer;                            \
+		typedef value_type* iterator;                                       \
+		typedef const value_type* const_iterator;                           \
+		typedef value_type& reference;                                      \
+		typedef const value_type& const_reference;                          \
+		typedef base::difference_type difference_type;                      \
+		typedef base::size_type size_type;                                  \
+		\
+		class reverse_iterator                                              \
+		{                                                                   \
+			typedef T value_type;                                             \
+			typedef value_type& reference;                                    \
+			typedef value_type* pointer;                                      \
+			typedef reverse_iterator itor;                                    \
+			friend inline itor operator+(int o, const itor& it)               \
+			{ return it.m_ptr - o; }                                      \
+			friend inline itor operator+(const itor& it, int o)               \
+			{ return it.m_ptr - o; }                                      \
+			friend inline itor operator-(const itor& it, int o)               \
+			{ return it.m_ptr + o; }                                      \
+			friend inline difference_type operator-(const itor& i1,           \
+			                                        const itor& i2)           \
+			{ return i1.m_ptr - i2.m_ptr; }                               \
+			\
+		public:                                                             \
+			pointer m_ptr;                                                    \
+			reverse_iterator() : m_ptr(NULL) { }                              \
+			reverse_iterator(pointer ptr) : m_ptr(ptr) { }                    \
+			reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }            \
+			reference operator*() const { return *m_ptr; }                    \
+			ptrop                                                             \
+			itor& operator++() { --m_ptr; return *this; }                     \
+			const itor operator++(int)                                        \
+			{ reverse_iterator tmp = *this; --m_ptr; return tmp; }          \
+			itor& operator--() { ++m_ptr; return *this; }                     \
+			const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }\
+			bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }\
+			bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
+		};                                                                  \
+		\
+		class const_reverse_iterator                                        \
+		{                                                                   \
+			typedef T value_type;                                             \
+			typedef const value_type& reference;                              \
+			typedef const value_type* pointer;                                \
+			typedef const_reverse_iterator itor;                              \
+			friend inline itor operator+(int o, const itor& it)               \
+			{ return it.m_ptr - o; }                                      \
+			friend inline itor operator+(const itor& it, int o)               \
+			{ return it.m_ptr - o; }                                      \
+			friend inline itor operator-(const itor& it, int o)               \
+			{ return it.m_ptr + o; }                                      \
+			friend inline difference_type operator-(const itor& i1,           \
+			                                        const itor& i2)           \
+			{ return i1.m_ptr - i2.m_ptr; }                               \
+			\
+		public:                                                             \
+			pointer m_ptr;                                                    \
+			const_reverse_iterator() : m_ptr(NULL) { }                        \
+			const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }              \
+			const_reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }      \
+			const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }\
+			reference operator*() const { return *m_ptr; }                    \
+			ptrop                                                             \
+			itor& operator++() { --m_ptr; return *this; }                     \
+			const itor operator++(int)                                        \
+			{ itor tmp = *this; --m_ptr; return tmp; }                      \
+			itor& operator--() { ++m_ptr; return *this; }                     \
+			const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }\
+			bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }\
+			bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
+		};                                                                  \
+		\
+		name(size_type n, const_reference v) { assign(n, v); }              \
+		name(const_iterator first, const_iterator last)                     \
+		{ assign(first, last); }                                          \
+		void assign(const_iterator first, const_iterator last)              \
+		{ base::assign((bconst_iterator)first, (bconst_iterator)last); }  \
+		void assign(size_type n, const_reference v)                         \
+		{ base::assign(n, (bconst_reference)v); }                         \
+		reference back() { return *(end() - 1); }                           \
+		const_reference back() const { return *(end() - 1); }               \
+		iterator begin() { return (iterator)base::begin(); }                \
+		const_iterator begin() const { return (const_iterator)base::begin(); }\
+		size_type capacity() const { return base::capacity(); }             \
+		iterator end() { return (iterator)base::end(); }                    \
+		const_iterator end() const { return (const_iterator)base::end(); }  \
+		iterator erase(iterator first, iterator last)                       \
+		{ return (iterator)base::erase((biterator)first, (biterator)last); }\
+		iterator erase(iterator it)                                         \
+		{ return (iterator)base::erase((biterator)it); }                  \
+		reference front() { return *begin(); }                              \
+		const_reference front() const { return *begin(); }                  \
+		void insert(iterator it, size_type n, const_reference v)            \
+		{ base::insert((biterator)it, n, (bconst_reference)v); }          \
+		iterator insert(iterator it, const_reference v = value_type())      \
+		{ return (iterator)base::insert((biterator)it, (bconst_reference)v); }\
+		void insert(iterator it, const_iterator first, const_iterator last) \
+		{ base::insert((biterator)it, (bconst_iterator)first,             \
+			       (bconst_iterator)last); }                          \
+		void pop_back() { base::pop_back(); }                               \
+		void push_back(const_reference v)                                   \
+		{ base::push_back((bconst_reference)v); }                         \
+		reverse_iterator rbegin() { return reverse_iterator(end() - 1); }   \
+		const_reverse_iterator rbegin() const;                              \
+		reverse_iterator rend() { return reverse_iterator(begin() - 1); }   \
+		const_reverse_iterator rend() const;                                \
+		void reserve(size_type n) { base::reserve(n); }                     \
+		void resize(size_type n, value_type v = value_type())               \
+		{ base::resize(n, v); }                                           \
+	}
 
 #define _WX_PTROP pointer operator->() const { return m_ptr; }
 #define _WX_PTROP_NONE
 
 #define _WX_DEFINE_TYPEARRAY(T, name, base, classexp)                 \
-    _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP)
+	_WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP)
 #define _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)          \
-    _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP_NONE)
+	_WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP_NONE)
 
 #endif // !wxUSE_STL
 
@@ -493,51 +497,51 @@ public:                                                               \
 // ----------------------------------------------------------------------------
 
 #define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, comptype)\
-wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
-                       TypeTooBigToBeStoredInSorted##base,            \
-                       name);                                         \
-classexp name : public base                                           \
-{                                                                     \
-  typedef comptype SCMPFUNC;                                          \
-public:                                                               \
-  name(comptype fn defcomp) { m_fnCompare = fn; }                     \
-                                                                      \
-  name& operator=(const name& src)                                    \
-    { base* temp = (base*) this;                                      \
-      (*temp) = ((const base&)src);                                   \
-      m_fnCompare = src.m_fnCompare;                                  \
-      return *this; }                                                 \
-                                                                      \
-  T& operator[](size_t uiIndex) const                                 \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Item(size_t uiIndex) const                                       \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Last() const                                                     \
-    { return (T&)(base::operator[](size() - 1)); }                    \
-                                                                      \
-  int Index(T lItem) const                                            \
-    { return base::Index(lItem, (CMPFUNC)m_fnCompare); }              \
-                                                                      \
-  size_t IndexForInsert(T lItem) const                                \
-    { return base::IndexForInsert(lItem, (CMPFUNC)m_fnCompare); }     \
-                                                                      \
-  void AddAt(T item, size_t index)                                    \
-    { base::insert(begin() + index, item); }                          \
-                                                                      \
-  size_t Add(T lItem)                                                 \
-    { return base::Add(lItem, (CMPFUNC)m_fnCompare); }                \
-                                                                      \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
-    { base::erase(begin() + uiIndex, begin() + uiIndex + nRemove); }  \
-  void Remove(T lItem)                                                \
-    { int iIndex = Index(lItem);                                      \
-      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
-        _WX_ERROR_REMOVE );                                           \
-      base::erase(begin() + iIndex); }                                \
-                                                                      \
-private:                                                              \
-  comptype m_fnCompare;                                               \
-}
+	wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
+	                       TypeTooBigToBeStoredInSorted##base,            \
+	                       name);                                         \
+	classexp name : public base                                           \
+	{                                                                     \
+		typedef comptype SCMPFUNC;                                          \
+	public:                                                               \
+		name(comptype fn defcomp) { m_fnCompare = fn; }                     \
+		\
+		name& operator=(const name& src)                                    \
+		{ base* temp = (base*) this;                                      \
+			(*temp) = ((const base&)src);                                   \
+			m_fnCompare = src.m_fnCompare;                                  \
+			return *this; }                                                 \
+		\
+		T& operator[](size_t uiIndex) const                                 \
+		{ return (T&)(base::operator[](uiIndex)); }                       \
+		T& Item(size_t uiIndex) const                                       \
+		{ return (T&)(base::operator[](uiIndex)); }                       \
+		T& Last() const                                                     \
+		{ return (T&)(base::operator[](size() - 1)); }                    \
+		\
+		int Index(T lItem) const                                            \
+		{ return base::Index(lItem, (CMPFUNC)m_fnCompare); }              \
+		\
+		size_t IndexForInsert(T lItem) const                                \
+		{ return base::IndexForInsert(lItem, (CMPFUNC)m_fnCompare); }     \
+		\
+		void AddAt(T item, size_t index)                                    \
+		{ base::insert(begin() + index, item); }                          \
+		\
+		size_t Add(T lItem)                                                 \
+		{ return base::Add(lItem, (CMPFUNC)m_fnCompare); }                \
+		\
+		void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
+		{ base::erase(begin() + uiIndex, begin() + uiIndex + nRemove); }  \
+		void Remove(T lItem)                                                \
+		{ int iIndex = Index(lItem);                                      \
+			wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
+			              _WX_ERROR_REMOVE );                                           \
+			base::erase(begin() + iIndex); }                                \
+		\
+	private:                                                              \
+		comptype m_fnCompare;                                               \
+	}
 
 
 // ----------------------------------------------------------------------------
@@ -545,61 +549,61 @@ private:                                                              \
 // ----------------------------------------------------------------------------
 
 #define _WX_DECLARE_OBJARRAY(T, name, base, classexp)                    \
-typedef int (CMPFUNC_CONV *CMPFUNC##T)(T **pItem1, T **pItem2);          \
-classexp name : protected base                                           \
-{                                                                        \
-typedef int (CMPFUNC_CONV *CMPFUNC##base)(void **pItem1, void **pItem2); \
-typedef base base_array;                                                 \
-public:                                                                  \
-  name() { }                                                             \
-  name(const name& src);                                                 \
-  name& operator=(const name& src);                                      \
-                                                                         \
-  ~name();                                                               \
-                                                                         \
-  void Alloc(size_t count) { reserve(count); }                           \
-  size_t GetCount() const { return base_array::size(); }                 \
-  size_t size() const { return base_array::size(); }                     \
-  bool IsEmpty() const { return base_array::empty(); }                   \
-  bool empty() const { return base_array::empty(); }                     \
-  size_t Count() const { return base_array::size(); }                    \
-  void Shrink() { base::Shrink(); }                                      \
-                                                                         \
-  T& operator[](size_t uiIndex) const                                    \
-    { return *(T*)base::operator[](uiIndex); }                           \
-  T& Item(size_t uiIndex) const                                          \
-    { return *(T*)base::operator[](uiIndex); }                           \
-  T& Last() const                                                        \
-    { return *(T*)(base::operator[](size() - 1)); }                      \
-                                                                         \
-  int Index(const T& lItem, bool bFromEnd = false) const;                \
-                                                                         \
-  void Add(const T& lItem, size_t nInsert = 1);                          \
-  void Add(const T* pItem)                                               \
-    { base::push_back((T*)pItem); }                                      \
-  void push_back(const T* pItem)                                         \
-    { base::push_back((T*)pItem); }                                      \
-  void push_back(const T& lItem)                                         \
-    { Add(lItem); }                                                      \
-                                                                         \
-  void Insert(const T& lItem,  size_t uiIndex, size_t nInsert = 1);      \
-  void Insert(const T* pItem, size_t uiIndex)                            \
-    { base::insert(begin() + uiIndex, (T*)pItem); }                      \
-                                                                         \
-  void Empty() { DoEmpty(); base::clear(); }                             \
-  void Clear() { DoEmpty(); base::clear(); }                             \
-                                                                         \
-  T* Detach(size_t uiIndex)                                              \
-    { T* p = (T*)base::operator[](uiIndex);                              \
-      base::erase(begin() + uiIndex); return p; }                        \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1);                     \
-                                                                         \
-  void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC##base)fCmp); }        \
-                                                                         \
-private:                                                                 \
-  void DoEmpty();                                                        \
-  void DoCopy(const name& src);                                          \
-}
+	typedef int (CMPFUNC_CONV *CMPFUNC##T)(T **pItem1, T **pItem2);          \
+	classexp name : protected base                                           \
+	{                                                                        \
+		typedef int (CMPFUNC_CONV *CMPFUNC##base)(void **pItem1, void **pItem2); \
+		typedef base base_array;                                                 \
+	public:                                                                  \
+		name() { }                                                             \
+		name(const name& src);                                                 \
+		name& operator=(const name& src);                                      \
+		\
+		~name();                                                               \
+		\
+		void Alloc(size_t count) { reserve(count); }                           \
+		size_t GetCount() const { return base_array::size(); }                 \
+		size_t size() const { return base_array::size(); }                     \
+		bool IsEmpty() const { return base_array::empty(); }                   \
+		bool empty() const { return base_array::empty(); }                     \
+		size_t Count() const { return base_array::size(); }                    \
+		void Shrink() { base::Shrink(); }                                      \
+		\
+		T& operator[](size_t uiIndex) const                                    \
+		{ return *(T*)base::operator[](uiIndex); }                           \
+		T& Item(size_t uiIndex) const                                          \
+		{ return *(T*)base::operator[](uiIndex); }                           \
+		T& Last() const                                                        \
+		{ return *(T*)(base::operator[](size() - 1)); }                      \
+		\
+		int Index(const T& lItem, bool bFromEnd = false) const;                \
+		\
+		void Add(const T& lItem, size_t nInsert = 1);                          \
+		void Add(const T* pItem)                                               \
+		{ base::push_back((T*)pItem); }                                      \
+		void push_back(const T* pItem)                                         \
+		{ base::push_back((T*)pItem); }                                      \
+		void push_back(const T& lItem)                                         \
+		{ Add(lItem); }                                                      \
+		\
+		void Insert(const T& lItem,  size_t uiIndex, size_t nInsert = 1);      \
+		void Insert(const T* pItem, size_t uiIndex)                            \
+		{ base::insert(begin() + uiIndex, (T*)pItem); }                      \
+		\
+		void Empty() { DoEmpty(); base::clear(); }                             \
+		void Clear() { DoEmpty(); base::clear(); }                             \
+		\
+		T* Detach(size_t uiIndex)                                              \
+		{ T* p = (T*)base::operator[](uiIndex);                              \
+			base::erase(begin() + uiIndex); return p; }                        \
+		void RemoveAt(size_t uiIndex, size_t nRemove = 1);                     \
+		\
+		void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC##base)fCmp); }        \
+		\
+	private:                                                                 \
+		void DoEmpty();                                                        \
+		void DoCopy(const name& src);                                          \
+	}
 
 // ============================================================================
 // The public macros for declaration and definition of the dynamic arrays
@@ -625,14 +629,14 @@ private:                                                                 \
 // ----------------------------------------------------------------------------
 
 #define WX_DECLARE_BASEARRAY(T, name)                             \
-    WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, wxARRAY_DEFAULT_EXPORT)
+	WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DECLARE_EXPORTED_BASEARRAY(T, name)                    \
-    WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, WXDLLEXPORT)
+	WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, WXDLLEXPORT)
 
 #define WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, expmode)      \
-    typedef T _wxArray##name;                                     \
-    _WX_DECLARE_BASEARRAY(_wxArray##name, name, class expmode)
+	typedef T _wxArray##name;                                     \
+	_WX_DECLARE_BASEARRAY(_wxArray##name, name, class expmode)
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_TYPEARRAY(T, name, base) define an array class named "name" deriving
@@ -643,30 +647,30 @@ private:                                                                 \
 // ----------------------------------------------------------------------------
 
 #define WX_DEFINE_TYPEARRAY(T, name, base)                        \
-    WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class wxARRAY_DEFAULT_EXPORT)
+	WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DEFINE_TYPEARRAY_PTR(T, name, base)                        \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class wxARRAY_DEFAULT_EXPORT)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DEFINE_EXPORTED_TYPEARRAY(T, name, base)               \
-    WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class WXDLLEXPORT)
+	WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class WXDLLEXPORT)
 
 #define WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, base)               \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class WXDLLEXPORT)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class WXDLLEXPORT)
 
 #define WX_DEFINE_USER_EXPORTED_TYPEARRAY(T, name, base, expdecl) \
-    WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class expdecl)
+	WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class expdecl)
 
 #define WX_DEFINE_USER_EXPORTED_TYPEARRAY_PTR(T, name, base, expdecl) \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class expdecl)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class expdecl)
 
 #define WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, classdecl) \
-    typedef T _wxArray##name;                                   \
-    _WX_DEFINE_TYPEARRAY(_wxArray##name, name, base, classdecl)
+	typedef T _wxArray##name;                                   \
+	_WX_DEFINE_TYPEARRAY(_wxArray##name, name, base, classdecl)
 
 #define WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, classdecl) \
-    typedef T _wxArray##name;                                          \
-    _WX_DEFINE_TYPEARRAY_PTR(_wxArray##name, name, base, classdecl)
+	typedef T _wxArray##name;                                          \
+	_WX_DEFINE_TYPEARRAY_PTR(_wxArray##name, name, base, classdecl)
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_SORTED_TYPEARRAY: this is the same as the previous macro, but it
@@ -701,17 +705,17 @@ private:                                                                 \
 #define wxARRAY_EMPTY
 
 #define WX_DEFINE_SORTED_TYPEARRAY(T, name, base)                         \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base,               \
-                                             wxARRAY_DEFAULT_EXPORT)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base,               \
+	                wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, base)                \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base, WXDLLEXPORT)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base, WXDLLEXPORT)
 
 #define WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base, expmode)  \
-    typedef T _wxArray##name;                                             \
-    typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);       \
-    _WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base,             \
-                                wxARRAY_EMPTY, class expmode, SCMPFUNC##name)
+	typedef T _wxArray##name;                                             \
+	typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);       \
+	_WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base,             \
+	                              wxARRAY_EMPTY, class expmode, SCMPFUNC##name)
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_SORTED_TYPEARRAY_CMP: exactly the same as above but the comparison
@@ -726,19 +730,19 @@ private:                                                                 \
 // ----------------------------------------------------------------------------
 
 #define WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, base)               \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base,     \
-                                                 wxARRAY_DEFAULT_EXPORT)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base,     \
+	                wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base)      \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base,     \
-                                                 WXDLLEXPORT)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base,     \
+	                WXDLLEXPORT)
 
 #define WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base, \
-                                                     expmode)                \
-    typedef T _wxArray##name;                                                \
-    typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);          \
-    _WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base, = cmpfunc,     \
-                                class expmode, SCMPFUNC##name)
+                expmode)                \
+typedef T _wxArray##name;                                                \
+typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);          \
+_WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base, = cmpfunc,     \
+                              class expmode, SCMPFUNC##name)
 
 // ----------------------------------------------------------------------------
 // WX_DECLARE_OBJARRAY(T, name): this macro generates a new array class
@@ -781,17 +785,17 @@ private:                                                                 \
 // ----------------------------------------------------------------------------
 
 #define WX_DECLARE_OBJARRAY(T, name)                        \
-    WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, wxARRAY_DEFAULT_EXPORT)
+	WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)               \
-    WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, WXDLLEXPORT)
+	WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, WXDLLEXPORT)
 
 #define WX_DECLARE_OBJARRAY_WITH_DECL(T, name, decl) \
-    typedef T _wxObjArray##name;                            \
-    _WX_DECLARE_OBJARRAY(_wxObjArray##name, name, wxArrayPtrVoid, decl)
+	typedef T _wxObjArray##name;                            \
+	_WX_DECLARE_OBJARRAY(_wxObjArray##name, name, wxArrayPtrVoid, decl)
 
 #define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode) \
-    WX_DECLARE_OBJARRAY_WITH_DECL(T, name, class expmode)
+	WX_DECLARE_OBJARRAY_WITH_DECL(T, name, class expmode)
 
 // WX_DEFINE_OBJARRAY is going to be redefined when arrimpl.cpp is included,
 // try to provoke a human-understandable error if it used incorrectly.
@@ -820,171 +824,171 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 // ----------------------------------------------------------------------------
 
 #define WX_DEFINE_ARRAY(T, name)                                       \
-    WX_DEFINE_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
+	WX_DEFINE_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_ARRAY_PTR(T, name)                                \
-    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayPtrVoid)
+	WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_EXPORTED_ARRAY(T, name)                              \
-    WX_DEFINE_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
+	WX_DEFINE_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_EXPORTED_ARRAY_PTR(T, name)                       \
-    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayPtrVoid)
+	WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_ARRAY_WITH_DECL_PTR(T, name, decl)                \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, decl)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, decl)
 #define WX_DEFINE_USER_EXPORTED_ARRAY(T, name, expmode)                \
-    WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
+	WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_PTR(T, name, expmode)         \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_CHAR(T, name)                                 \
-    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayChar)
+	WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayChar)
 #define WX_DEFINE_EXPORTED_ARRAY_CHAR(T, name)                        \
-    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayChar)
+	WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayChar)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_CHAR(T, name, expmode)          \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayChar, wxARRAY_EMPTY expmode)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayChar, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_SHORT(T, name)                                 \
-    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayShort)
+	WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayShort)
 #define WX_DEFINE_EXPORTED_ARRAY_SHORT(T, name)                        \
-    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayShort)
+	WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayShort)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_SHORT(T, name, expmode)          \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayShort, wxARRAY_EMPTY expmode)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayShort, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_INT(T, name)                                   \
-    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayInt)
+	WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayInt)
 #define WX_DEFINE_EXPORTED_ARRAY_INT(T, name)                          \
-    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayInt)
+	WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayInt)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_INT(T, name, expmode)            \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayInt, wxARRAY_EMPTY expmode)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayInt, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_LONG(T, name)                                  \
-    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayLong)
+	WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayLong)
 #define WX_DEFINE_EXPORTED_ARRAY_LONG(T, name)                         \
-    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayLong)
+	WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayLong)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_LONG(T, name, expmode)           \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayLong, wxARRAY_EMPTY expmode)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayLong, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_SIZE_T(T, name)                                  \
-    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArraySizeT)
+	WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArraySizeT)
 #define WX_DEFINE_EXPORTED_ARRAY_SIZE_T(T, name)                         \
-    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArraySizeT)
+	WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArraySizeT)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_SIZE_T(T, name, expmode)           \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArraySizeT, wxARRAY_EMPTY expmode)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArraySizeT, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_DOUBLE(T, name)                                \
-    WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayDouble)
+	WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayDouble)
 #define WX_DEFINE_EXPORTED_ARRAY_DOUBLE(T, name)                       \
-    WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayDouble)
+	WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayDouble)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_DOUBLE(T, name, expmode)         \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayDouble, wxARRAY_EMPTY expmode)
+	WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayDouble, wxARRAY_EMPTY expmode)
 
 // ----------------------------------------------------------------------------
 // Convenience macros to define sorted arrays from base arrays
 // ----------------------------------------------------------------------------
 
 #define WX_DEFINE_SORTED_ARRAY(T, name)                                \
-    WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
+	WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name)                       \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name, expmode)         \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CHAR(T, name)                          \
-    WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayChar)
+	WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayChar)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CHAR(T, name)                 \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayChar)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayChar)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CHAR(T, name, expmode)   \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayChar, wxARRAY_EMPTY expmode)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayChar, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_SHORT(T, name)                          \
-    WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayShort)
+	WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayShort)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_SHORT(T, name)                 \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayShort)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayShort)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SHORT(T, name, expmode)   \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayShort, wxARRAY_EMPTY expmode)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayShort, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_INT(T, name)                            \
-    WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayInt)
+	WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayInt)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_INT(T, name)                   \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayInt)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayInt)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_INT(T, name, expmode)     \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayInt, expmode)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayInt, expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_LONG(T, name)                           \
-    WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayLong)
+	WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayLong)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_LONG(T, name)                  \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayLong)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayLong)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_LONG(T, name, expmode)    \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayLong, expmode)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayLong, expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_SIZE_T(T, name)                           \
-    WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArraySizeT)
+	WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArraySizeT)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_SIZE_T(T, name)                  \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArraySizeT)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArraySizeT)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(T, name, expmode)    \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArraySizeT, wxARRAY_EMPTY expmode)
+	WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArraySizeT, wxARRAY_EMPTY expmode)
 
 // ----------------------------------------------------------------------------
 // Convenience macros to define sorted arrays from base arrays
 // ----------------------------------------------------------------------------
 
 #define WX_DEFINE_SORTED_ARRAY_CMP(T, cmpfunc, name)                   \
-    WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayPtrVoid)
+	WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP(T, cmpfunc, name)          \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayPtrVoid)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP(T, cmpfunc,           \
-                                                     name, expmode)    \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayPtrVoid,   \
-                                                 wxARRAY_EMPTY expmode)
+                name, expmode)    \
+WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
+                wxBaseArrayPtrVoid,   \
+                wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_CHAR(T, cmpfunc, name)             \
-    WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayChar)
+	WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayChar)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_CHAR(T, cmpfunc, name)    \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayChar)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayChar)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_CHAR(T, cmpfunc,      \
-                                                       name, expmode)  \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayChar,      \
-                                                 wxARRAY_EMPTY expmode)
+                name, expmode)  \
+WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
+                wxBaseArrayChar,      \
+                wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_SHORT(T, cmpfunc, name)             \
-    WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayShort)
+	WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayShort)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_SHORT(T, cmpfunc, name)    \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayShort)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayShort)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_SHORT(T, cmpfunc,     \
-                                                       name, expmode)  \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayShort,     \
-                                                 wxARRAY_EMPTY expmode)
+                name, expmode)  \
+WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
+                wxBaseArrayShort,     \
+                wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_INT(T, cmpfunc, name)               \
-    WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayInt)
+	WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayInt)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_INT(T, cmpfunc, name)      \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayInt)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayInt)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_INT(T, cmpfunc,       \
-                                                     name, expmode)    \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayInt,       \
-                                                 wxARRAY_EMPTY expmode)
+                name, expmode)    \
+WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
+                wxBaseArrayInt,       \
+                wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_LONG(T, cmpfunc, name)              \
-    WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayLong)
+	WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayLong)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_LONG(T, cmpfunc, name)     \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayLong)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayLong)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_LONG(T, cmpfunc,      \
-                                                      name, expmode)   \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayLong,      \
-                                                 wxARRAY_EMPTY expmode)
+                name, expmode)   \
+WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
+                wxBaseArrayLong,      \
+                wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_SIZE_T(T, cmpfunc, name)              \
-    WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArraySizeT)
+	WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArraySizeT)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_SIZE_T(T, cmpfunc, name)     \
-    WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArraySizeT)
+	WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArraySizeT)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_SIZE_T(T, cmpfunc,      \
-                                                      name, expmode)   \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArraySizeT,     \
-                                                 wxARRAY_EMPTY expmode)
+                name, expmode)   \
+WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
+                wxBaseArraySizeT,     \
+                wxARRAY_EMPTY expmode)
 
 // ----------------------------------------------------------------------------
 // Some commonly used predefined arrays
@@ -1004,25 +1008,25 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
 // elements X,Y,Z and the second contains A,B,C (in those orders), then the
 // first array will be result as A,B,C,X,Y,Z
 #define WX_PREPEND_ARRAY(array, other)                                        \
-    {                                                                         \
-        size_t wxAAcnt = (other).size();                                      \
-        (array).Alloc(wxAAcnt);                                               \
-        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
-        {                                                                     \
-            (array).Insert((other)[wxAAn], wxAAn);                            \
-        }                                                                     \
-    }
+	{                                                                         \
+		size_t wxAAcnt = (other).size();                                      \
+		(array).Alloc(wxAAcnt);                                               \
+		for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
+		{                                                                     \
+			(array).Insert((other)[wxAAn], wxAAn);                            \
+		}                                                                     \
+	}
 
 // append all element of one array to another one
 #define WX_APPEND_ARRAY(array, other)                                         \
-    {                                                                         \
-        size_t wxAAcnt = (other).size();                                      \
-        (array).Alloc(wxAAcnt);                                               \
-        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
-        {                                                                     \
-            (array).push_back((other)[wxAAn]);                                \
-        }                                                                     \
-    }
+	{                                                                         \
+		size_t wxAAcnt = (other).size();                                      \
+		(array).Alloc(wxAAcnt);                                               \
+		for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
+		{                                                                     \
+			(array).push_back((other)[wxAAn]);                                \
+		}                                                                     \
+	}
 
 // delete all array elements
 //
@@ -1031,14 +1035,14 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
 //     be called (a decent compiler should give a warning about it, but don't
 //     count on it)!
 #define WX_CLEAR_ARRAY(array)                                                 \
-    {                                                                         \
-        size_t wxAAcnt = (array).size();                                      \
-        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
-        {                                                                     \
-            delete (array)[wxAAn];                                            \
-        }                                                                     \
-                                                                              \
-        (array).clear();                                                      \
-    }
+	{                                                                         \
+		size_t wxAAcnt = (array).size();                                      \
+		for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
+		{                                                                     \
+			delete (array)[wxAAn];                                            \
+		}                                                                     \
+		\
+		(array).clear();                                                      \
+	}
 
 #endif // _DYNARRAY_H

@@ -28,13 +28,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -58,15 +58,15 @@ extern "C"
  */
 
 /** @brief State needed to generate a dither signal */
-typedef struct PaUtilTriangularDitherGenerator{
-    PaUint32 previous;
-    PaUint32 randSeed1;
-    PaUint32 randSeed2;
+typedef struct PaUtilTriangularDitherGenerator {
+	PaUint32 previous;
+	PaUint32 randSeed1;
+	PaUint32 randSeed2;
 } PaUtilTriangularDitherGenerator;
 
 
 /** @brief Initialize dither state */
-void PaUtil_InitializeTriangularDitherState( PaUtilTriangularDitherGenerator *ditherState );
+void PaUtil_InitializeTriangularDitherState(PaUtilTriangularDitherGenerator *ditherState);
 
 
 /**
@@ -81,7 +81,7 @@ void PaUtil_InitializeTriangularDitherState( PaUtilTriangularDitherGenerator *di
  @return
  A signed 32-bit integer with a range of +32767 to -32768
 */
-PaInt32 PaUtil_Generate16BitTriangularDither( PaUtilTriangularDitherGenerator *ditherState );
+PaInt32 PaUtil_Generate16BitTriangularDither(PaUtilTriangularDitherGenerator *ditherState);
 
 
 /**
@@ -96,7 +96,7 @@ PaInt32 PaUtil_Generate16BitTriangularDither( PaUtilTriangularDitherGenerator *d
  @return
  A float with a range of -2.0 to +1.99999.
 */
-float PaUtil_GenerateFloatTriangularDither( PaUtilTriangularDitherGenerator *ditherState );
+float PaUtil_GenerateFloatTriangularDither(PaUtilTriangularDitherGenerator *ditherState);
 
 
 

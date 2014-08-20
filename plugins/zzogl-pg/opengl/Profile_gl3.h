@@ -24,7 +24,8 @@
 
 #define ENABLE_MARKER // Fire some marker for opengl Debugger (apitrace, gdebugger)
 
-class GPU_Profile {
+class GPU_Profile
+{
 	struct ProfileInfo {
 		u32 timer;
 		u32 frame;
@@ -39,13 +40,20 @@ class GPU_Profile {
 	u32 draw;
 
 
-	public:
-	GPU_Profile() : frame(0), draw(0) {
+public:
+	GPU_Profile() : frame(0), draw(0)
+	{
 		datas.clear();
 	}
 
-	void inc_draw() { draw++;}
-	void inc_frame() { frame++;}
+	void inc_draw()
+	{
+		draw++;
+	}
+	void inc_frame()
+	{
+		frame++;
+	}
 
 	void create_timer();
 	u32 read_diff_timers(u32 start_timer, u32 stop_timer);

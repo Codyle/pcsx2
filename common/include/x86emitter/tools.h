@@ -17,9 +17,8 @@
 
 #include "x86emitter.h"
 
-enum x86VendorType
-{
-	x86Vendor_Intel=0,
+enum x86VendorType {
+	x86Vendor_Intel = 0,
 	x86Vendor_AMD,
 	x86Vendor_Unknown,
 };
@@ -52,50 +51,50 @@ public:
 	//   x86 CPU Capabilities Section (all boolean flags!)
 	// ----------------------------------------------------------------------------
 
-	u32 hasFloatingPointUnit						:1;
-	u32 hasVirtual8086ModeEnhancements				:1;
-	u32 hasDebuggingExtensions						:1;
-	u32 hasPageSizeExtensions						:1;
-	u32 hasTimeStampCounter							:1;
-	u32 hasModelSpecificRegisters					:1;
-	u32 hasPhysicalAddressExtension					:1;
-	u32 hasCOMPXCHG8BInstruction					:1;
-	u32 hasAdvancedProgrammableInterruptController	:1;
-	u32 hasSEPFastSystemCall						:1;
-	u32 hasMemoryTypeRangeRegisters					:1;
-	u32 hasPTEGlobalFlag							:1;
-	u32 hasMachineCheckArchitecture					:1;
-	u32 hasConditionalMoveAndCompareInstructions	:1;
-	u32 hasFGPageAttributeTable						:1;
-	u32 has36bitPageSizeExtension					:1;
-	u32 hasProcessorSerialNumber					:1;
-	u32 hasCFLUSHInstruction						:1;
-	u32 hasDebugStore								:1;
-	u32 hasACPIThermalMonitorAndClockControl		:1;
-	u32 hasMultimediaExtensions						:1;
-	u32 hasFastStreamingSIMDExtensionsSaveRestore	:1;
-	u32 hasStreamingSIMDExtensions					:1;
-	u32 hasStreamingSIMD2Extensions					:1;
-	u32 hasSelfSnoop								:1;
+	u32 hasFloatingPointUnit						: 1;
+	u32 hasVirtual8086ModeEnhancements				: 1;
+	u32 hasDebuggingExtensions						: 1;
+	u32 hasPageSizeExtensions						: 1;
+	u32 hasTimeStampCounter							: 1;
+	u32 hasModelSpecificRegisters					: 1;
+	u32 hasPhysicalAddressExtension					: 1;
+	u32 hasCOMPXCHG8BInstruction					: 1;
+	u32 hasAdvancedProgrammableInterruptController	: 1;
+	u32 hasSEPFastSystemCall						: 1;
+	u32 hasMemoryTypeRangeRegisters					: 1;
+	u32 hasPTEGlobalFlag							: 1;
+	u32 hasMachineCheckArchitecture					: 1;
+	u32 hasConditionalMoveAndCompareInstructions	: 1;
+	u32 hasFGPageAttributeTable						: 1;
+	u32 has36bitPageSizeExtension					: 1;
+	u32 hasProcessorSerialNumber					: 1;
+	u32 hasCFLUSHInstruction						: 1;
+	u32 hasDebugStore								: 1;
+	u32 hasACPIThermalMonitorAndClockControl		: 1;
+	u32 hasMultimediaExtensions						: 1;
+	u32 hasFastStreamingSIMDExtensionsSaveRestore	: 1;
+	u32 hasStreamingSIMDExtensions					: 1;
+	u32 hasStreamingSIMD2Extensions					: 1;
+	u32 hasSelfSnoop								: 1;
 
 	// is TRUE for both multi-core and Hyperthreaded CPUs.
-	u32 hasMultiThreading							:1;
+	u32 hasMultiThreading							: 1;
 
-	u32 hasThermalMonitor							:1;
-	u32 hasIntel64BitArchitecture					:1;
-	u32 hasStreamingSIMD3Extensions					:1;
-	u32 hasSupplementalStreamingSIMD3Extensions		:1;
-	u32 hasStreamingSIMD4Extensions					:1;
-	u32 hasStreamingSIMD4Extensions2				:1;
-	u32 hasAVX										:1;
-	u32 hasFMA										:1;
+	u32 hasThermalMonitor							: 1;
+	u32 hasIntel64BitArchitecture					: 1;
+	u32 hasStreamingSIMD3Extensions					: 1;
+	u32 hasSupplementalStreamingSIMD3Extensions		: 1;
+	u32 hasStreamingSIMD4Extensions					: 1;
+	u32 hasStreamingSIMD4Extensions2				: 1;
+	u32 hasAVX										: 1;
+	u32 hasFMA										: 1;
 
 	// AMD-specific CPU Features
-	u32 hasMultimediaExtensionsExt					:1;
-	u32 hasAMD64BitArchitecture						:1;
-	u32 has3DNOWInstructionExtensionsExt			:1;
-	u32 has3DNOWInstructionExtensions				:1;
-	u32 hasStreamingSIMD4ExtensionsA				:1;
+	u32 hasMultimediaExtensionsExt					: 1;
+	u32 hasAMD64BitArchitecture						: 1;
+	u32 has3DNOWInstructionExtensionsExt			: 1;
+	u32 has3DNOWInstructionExtensions				: 1;
+	u32 hasStreamingSIMD4ExtensionsA				: 1;
 
 	// Core Counts!
 	u32 PhysicalCores;
@@ -118,12 +117,11 @@ public:
 	void SIMD_EstablishMXCSRmask();
 
 protected:
-	s64 _CPUSpeedHz( u64 time ) const;
+	s64 _CPUSpeedHz(u64 time) const;
 	void CountLogicalCores();
 };
 
-enum SSE_RoundMode
-{
+enum SSE_RoundMode {
 	SSE_RoundMode_FIRST = 0,
 	SSEround_Nearest = 0,
 	SSEround_NegInf,
@@ -132,7 +130,7 @@ enum SSE_RoundMode
 	SSE_RoundMode_COUNT
 };
 
-ImplementEnumOperators( SSE_RoundMode );
+ImplementEnumOperators(SSE_RoundMode);
 
 // --------------------------------------------------------------------------------------
 //  SSE_MXCSR  -  Control/Status Register (bitfield)
@@ -144,50 +142,46 @@ ImplementEnumOperators( SSE_RoundMode );
 // Bits 7-12 are the masks for disabling the exceptions in bits 0-5.  Cleared bits allow
 //   exceptions, set bits mask exceptions from being raised.
 //
-union SSE_MXCSR
-{
+union SSE_MXCSR {
 	u32		bitmask;
-	struct
-	{
+	struct {
 		u32
-			InvalidOpFlag		:1,
-			DenormalFlag		:1,
-			DivideByZeroFlag	:1,
-			OverflowFlag		:1,
-			UnderflowFlag		:1,
-			PrecisionFlag		:1,
+		InvalidOpFlag		: 1,
+		                        DenormalFlag		: 1,
+		                        DivideByZeroFlag	: 1,
+		                        OverflowFlag		: 1,
+		                        UnderflowFlag		: 1,
+		                        PrecisionFlag		: 1,
 
-			// This bit is supported only on SSE2 or better CPUs.  Setting it to 1 on
-			// SSE1 cpus will result in an invalid instruction exception when executing
-			// LDMXSCR.
-			DenormalsAreZero	:1,
+		                        // This bit is supported only on SSE2 or better CPUs.  Setting it to 1 on
+		                        // SSE1 cpus will result in an invalid instruction exception when executing
+		                        // LDMXSCR.
+		                        DenormalsAreZero	: 1,
 
-			InvalidOpMask		:1,
-			DenormalMask		:1,
-			DivideByZeroMask	:1,
-			OverflowMask		:1,
-			UnderflowMask		:1,
-			PrecisionMask		:1,
+		                        InvalidOpMask		: 1,
+		                        DenormalMask		: 1,
+		                        DivideByZeroMask	: 1,
+		                        OverflowMask		: 1,
+		                        UnderflowMask		: 1,
+		                        PrecisionMask		: 1,
 
-			RoundingControl		:2,
-			FlushToZero			:1;
+		                        RoundingControl		: 2,
+		                        FlushToZero			: 1;
 	};
 
 	SSE_RoundMode GetRoundMode() const;
-	SSE_MXCSR& SetRoundMode( SSE_RoundMode mode );
-	SSE_MXCSR& ClearExceptionFlags();
-	SSE_MXCSR& EnableExceptions();
-	SSE_MXCSR& DisableExceptions();
+	SSE_MXCSR &SetRoundMode(SSE_RoundMode mode);
+	SSE_MXCSR &ClearExceptionFlags();
+	SSE_MXCSR &EnableExceptions();
+	SSE_MXCSR &DisableExceptions();
 
-	SSE_MXCSR& ApplyReserveMask();
+	SSE_MXCSR &ApplyReserveMask();
 
-	bool operator ==( const SSE_MXCSR& right ) const
-	{
+	bool operator ==(const SSE_MXCSR &right) const {
 		return bitmask == right.bitmask;
 	}
 
-	bool operator !=( const SSE_MXCSR& right ) const
-	{
+	bool operator !=(const SSE_MXCSR &right) const {
 		return bitmask != right.bitmask;
 	}
 

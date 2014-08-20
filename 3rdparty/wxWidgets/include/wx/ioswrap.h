@@ -22,5 +22,5 @@
 #endif
 
 #endif
-  // wxUSE_STD_IOSTREAM
+// wxUSE_STD_IOSTREAM
 

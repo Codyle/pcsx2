@@ -15,21 +15,21 @@
 class WXDLLEXPORT wxDirDialog : public wxDirDialogBase
 {
 public:
-    wxDirDialog(wxWindow *parent,
-                const wxString& message = wxDirSelectorPromptStr,
-                const wxString& defaultPath = wxEmptyString,
-                long style = wxDD_DEFAULT_STYLE,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr);
+	wxDirDialog(wxWindow *parent,
+	            const wxString &message = wxDirSelectorPromptStr,
+	            const wxString &defaultPath = wxEmptyString,
+	            long style = wxDD_DEFAULT_STYLE,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            const wxString &name = wxDirDialogNameStr);
 
-    void SetPath(const wxString& path);
+	void SetPath(const wxString &path);
 
-    virtual int ShowModal();
+	virtual int ShowModal();
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDirDialog)
+	DECLARE_DYNAMIC_CLASS_NO_COPY(wxDirDialog)
 };
 
 #endif
-    // _WX_DIRDLG_H_
+// _WX_DIRDLG_H_

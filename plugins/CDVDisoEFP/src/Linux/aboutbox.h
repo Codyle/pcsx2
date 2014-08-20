@@ -23,8 +23,7 @@
 
 #include <gtk/gtkwidget.h>
 
-struct AboutBoxData
-{
+struct AboutBoxData {
 	GtkWidget *window; // GtkWindow - About Box
 };
 extern struct AboutBoxData aboutbox;

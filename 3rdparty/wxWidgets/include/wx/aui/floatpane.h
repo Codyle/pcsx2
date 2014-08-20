@@ -32,47 +32,47 @@
 class WXDLLIMPEXP_AUI wxAuiFloatingFrame : public wxAuiFloatingFrameBaseClass
 {
 public:
-    wxAuiFloatingFrame(wxWindow* parent,
-                   wxAuiManager* owner_mgr,
-                   const wxAuiPaneInfo& pane,
-                   wxWindowID id = wxID_ANY,
-                   long style = wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
-                                wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT |
-                                wxCLIP_CHILDREN
-                   );
-    virtual ~wxAuiFloatingFrame();
-    void SetPaneWindow(const wxAuiPaneInfo& pane);
-    wxAuiManager* GetOwnerManager() const;
+	wxAuiFloatingFrame(wxWindow* parent,
+	                   wxAuiManager* owner_mgr,
+	                   const wxAuiPaneInfo &pane,
+	                   wxWindowID id = wxID_ANY,
+	                   long style = wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
+	                                wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT |
+	                                wxCLIP_CHILDREN
+	                  );
+	virtual ~wxAuiFloatingFrame();
+	void SetPaneWindow(const wxAuiPaneInfo &pane);
+	wxAuiManager* GetOwnerManager() const;
 
 protected:
-    virtual void OnMoveStart();
-    virtual void OnMoving(const wxRect& window_rect, wxDirection dir);
-    virtual void OnMoveFinished();
+	virtual void OnMoveStart();
+	virtual void OnMoving(const wxRect &window_rect, wxDirection dir);
+	virtual void OnMoveFinished();
 
 private:
-    void OnSize(wxSizeEvent& event);
-    void OnClose(wxCloseEvent& event);
-    void OnMoveEvent(wxMoveEvent& event);
-    void OnIdle(wxIdleEvent& event);
-    void OnActivate(wxActivateEvent& event);
-    static bool isMouseDown();
+	void OnSize(wxSizeEvent &event);
+	void OnClose(wxCloseEvent &event);
+	void OnMoveEvent(wxMoveEvent &event);
+	void OnIdle(wxIdleEvent &event);
+	void OnActivate(wxActivateEvent &event);
+	static bool isMouseDown();
 
 private:
-    wxWindow* m_pane_window;    // pane window being managed
-    bool m_solid_drag;          // true if system uses solid window drag
-    bool m_moving;
-    wxRect m_last_rect;
-    wxRect m_last2_rect;
-    wxRect m_last3_rect;
-    wxSize m_last_size;
-    wxDirection m_lastDirection;
+	wxWindow* m_pane_window;    // pane window being managed
+	bool m_solid_drag;          // true if system uses solid window drag
+	bool m_moving;
+	wxRect m_last_rect;
+	wxRect m_last2_rect;
+	wxRect m_last3_rect;
+	wxSize m_last_size;
+	wxDirection m_lastDirection;
 
-    wxAuiManager* m_owner_mgr;
-    wxAuiManager m_mgr;
+	wxAuiManager* m_owner_mgr;
+	wxAuiManager m_mgr;
 
 #ifndef SWIG
-    DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxAuiFloatingFrame)
+	DECLARE_EVENT_TABLE()
+	DECLARE_CLASS(wxAuiFloatingFrame)
 #endif // SWIG
 };
 

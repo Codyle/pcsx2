@@ -41,9 +41,9 @@ using x86Emitter::xWrite64;
 
 #define _MM_MK_INSERTPS_NDX(srcField, dstField, zeroMask) (((srcField)<<6) | ((dstField)<<4) | (zeroMask))
 
-extern void ModRM( uint mod, uint reg, uint rm );
-extern void SibSB( uint ss, uint index, uint base );
-extern void SET8R( int cc, int to );
-extern u8*  J8Rel( int cc, int to );
-extern u32* J32Rel( int cc, u32 to );
+extern void ModRM(uint mod, uint reg, uint rm);
+extern void SibSB(uint ss, uint index, uint base);
+extern void SET8R(int cc, int to);
+extern u8*  J8Rel(int cc, int to);
+extern u32* J32Rel(int cc, u32 to);
 

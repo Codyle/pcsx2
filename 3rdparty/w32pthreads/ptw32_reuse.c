@@ -72,34 +72,21 @@
  * Pop a clean pthread_t struct off the reuse stack.
  */
 pthread_t
-ptw32_threadReusePop (void)
+ptw32_threadReusePop(void)
 {
-  pthread_t t = {NULL, 0};
-
-  EnterCriticalSection (&ptw32_thread_reuse_lock);
-
-  if (PTW32_THREAD_REUSE_EMPTY != ptw32_threadReuseTop)
-    {
-      ptw32_thread_t * tp;
-
-      tp = ptw32_threadReuseTop;
-
-      ptw32_threadReuseTop = tp->prevReuse;
-
-      if (PTW32_THREAD_REUSE_EMPTY == ptw32_threadReuseTop)
-        {
-          ptw32_threadReuseBottom = PTW32_THREAD_REUSE_EMPTY;
-        }
-
-      tp->prevReuse = NULL;
-
-      t = tp->ptHandle;
-    }
-
-  LeaveCriticalSection (&ptw32_thread_reuse_lock);
-
-  return t;
-
+	pthread_t t = {NULL, 0};
+	EnterCriticalSection(&ptw32_thread_reuse_lock);
+	if (PTW32_THREAD_REUSE_EMPTY != ptw32_threadReuseTop) {
+		ptw32_thread_t * tp;
+		tp = ptw32_threadReuseTop;
+		ptw32_threadReuseTop = tp->prevReuse;
+		if (PTW32_THREAD_REUSE_EMPTY == ptw32_threadReuseTop)
+			ptw32_threadReuseBottom = PTW32_THREAD_REUSE_EMPTY;
+		tp->prevReuse = NULL;
+		t = tp->ptHandle;
+	}
+	LeaveCriticalSection(&ptw32_thread_reuse_lock);
+	return t;
 }
 
 /*
@@ -109,38 +96,26 @@ ptw32_threadReusePop (void)
  * detroyed before this, or never initialised.
  */
 void
-ptw32_threadReusePush (pthread_t thread)
+ptw32_threadReusePush(pthread_t thread)
 {
-  ptw32_thread_t * tp = (ptw32_thread_t *) thread.p;
-  pthread_t t;
-
-  EnterCriticalSection (&ptw32_thread_reuse_lock);
-
-  t = tp->ptHandle;
-  memset(tp, 0, sizeof(ptw32_thread_t));
-
-  /* Must restore the original POSIX handle that we just wiped. */
-  tp->ptHandle = t;
-
-  /* Bump the reuse counter now */
+	ptw32_thread_t * tp = (ptw32_thread_t *) thread.p;
+	pthread_t t;
+	EnterCriticalSection(&ptw32_thread_reuse_lock);
+	t = tp->ptHandle;
+	memset(tp, 0, sizeof(ptw32_thread_t));
+	/* Must restore the original POSIX handle that we just wiped. */
+	tp->ptHandle = t;
+	/* Bump the reuse counter now */
 #ifdef PTW32_THREAD_ID_REUSE_INCREMENT
-  tp->ptHandle.x += PTW32_THREAD_ID_REUSE_INCREMENT;
+	tp->ptHandle.x += PTW32_THREAD_ID_REUSE_INCREMENT;
 #else
-  tp->ptHandle.x++;
+	tp->ptHandle.x++;
 #endif
-
-  tp->prevReuse = PTW32_THREAD_REUSE_EMPTY;
-
-  if (PTW32_THREAD_REUSE_EMPTY != ptw32_threadReuseBottom)
-    {
-      ptw32_threadReuseBottom->prevReuse = tp;
-    }
-  else
-    {
-      ptw32_threadReuseTop = tp;
-    }
-
-  ptw32_threadReuseBottom = tp;
-
-  LeaveCriticalSection (&ptw32_thread_reuse_lock);
+	tp->prevReuse = PTW32_THREAD_REUSE_EMPTY;
+	if (PTW32_THREAD_REUSE_EMPTY != ptw32_threadReuseBottom)
+		ptw32_threadReuseBottom->prevReuse = tp;
+	else
+		ptw32_threadReuseTop = tp;
+	ptw32_threadReuseBottom = tp;
+	LeaveCriticalSection(&ptw32_thread_reuse_lock);
 }

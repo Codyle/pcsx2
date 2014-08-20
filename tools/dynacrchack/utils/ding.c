@@ -17,48 +17,44 @@
  *  along with GNU Make; see the file COPYING.  If not, write to
  *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
  *  http://www.gnu.org/copyleft/gpl.html
- 
+
  ding - Play a windows notification sound
- 
-\*----------------------------------------------------------*/	
+
+\*----------------------------------------------------------*/
 
 #include <windows.h>
 #include <stdio.h>
 
-LONG sounds[]={
+LONG sounds[] = {
 	MB_OK,
 	MB_ICONINFORMATION,
 	MB_ICONWARNING,
 	MB_ICONERROR,
 	MB_ICONQUESTION,
 	0xFFFFFFFF //"Simple" (with fallback to PC speaker beep)
-	};
+};
 
-int usage( int res )
+int usage(int res)
 {
-	printf(	"Usage: ding [-h] [<n>=1]\n"
-			"Where <n> is a number as follows:\n"
-			"1-Default, 2-Information, 3-Warning, 4-Error, 5-Question, 6-Simple\n");
+	printf("Usage: ding [-h] [<n>=1]\n"
+	       "Where <n> is a number as follows:\n"
+	       "1-Default, 2-Information, 3-Warning, 4-Error, 5-Question, 6-Simple\n");
 	return res;
 }
 
-int main( int argc, char* argv[] ){
+int main(int argc, char* argv[])
+{
 	LONG s = sounds[0];
-	
-	if( argc > 2 )
-		return usage( 1 );
-	
-	if( argc == 2 ){
-		if( !strcmp( argv[1], "-h" ) )
-			return usage( 0 );
-		
-		if( atoi( argv[1] ) < 1 || atoi( argv[1] ) > sizeof(sounds)/sizeof(LONG) )
-			return usage( 1 );
-		
-		s=sounds[atoi( argv[1] ) - 1];
+	if (argc > 2)
+		return usage(1);
+	if (argc == 2) {
+		if (!strcmp(argv[1], "-h"))
+			return usage(0);
+		if (atoi(argv[1]) < 1 || atoi(argv[1]) > sizeof(sounds) / sizeof(LONG))
+			return usage(1);
+		s = sounds[atoi(argv[1]) - 1];
 	}
-	
-	MessageBeep( s );
-	Sleep( 250 );
+	MessageBeep(s);
+	Sleep(250);
 	return 0;
 }

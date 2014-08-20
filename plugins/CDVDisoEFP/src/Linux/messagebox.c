@@ -35,8 +35,7 @@ struct MessageBoxData messagebox;
 
 void MessageBoxDestroy()
 {
-	if (messagebox.window != NULL)
-	{
+	if (messagebox.window != NULL) {
 		gtk_widget_destroy(messagebox.window);
 		messagebox.window = NULL;
 		messagebox.desc = NULL;
@@ -54,8 +53,7 @@ void MessageBoxShow(char *message, int wherefrom)
 gint MessageBoxCancelEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 {
 	gtk_widget_hide(messagebox.window);
-	switch (messagebox.wherefrom)
-	{
+	switch (messagebox.wherefrom) {
 		case 1:
 			MainBoxRefocus();
 			break;
@@ -66,7 +64,7 @@ gint MessageBoxCancelEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 			ConversionBoxRefocus();
 			break;
 	} // ENDSWITCH- Whose window do I get to re-focus when this is done?
-	return(TRUE);
+	return (TRUE);
 } // END MessageBoxCancelEvent()
 
 void MessageBoxDisplay()
@@ -74,28 +72,23 @@ void MessageBoxDisplay()
 	GtkWidget *item;
 	GtkWidget *hbox1;
 	GtkWidget *vbox1;
-
 	messagebox.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_container_set_border_width(GTK_CONTAINER(messagebox.window), 5);
 	gtk_window_set_title(GTK_WINDOW(messagebox.window), "CDVDisoEFP");
 	gtk_window_set_position(GTK_WINDOW(messagebox.window), GTK_WIN_POS_CENTER);
 	gtk_window_set_resizable(GTK_WINDOW(messagebox.window), FALSE);
-
 	g_signal_connect(G_OBJECT(messagebox.window), "delete_event",
 	                 G_CALLBACK(MessageBoxCancelEvent), NULL);
 	vbox1 = gtk_vbox_new(FALSE, 5);
 	gtk_container_add(GTK_CONTAINER(messagebox.window), vbox1);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox1), 5);
 	gtk_widget_show(vbox1);
-
 	messagebox.desc = gtk_label_new("Hi There!\r\nHow are you doing?");
 	gtk_box_pack_start(GTK_BOX(vbox1), messagebox.desc, FALSE, FALSE, 0);
 	gtk_widget_show(messagebox.desc);
-
 	hbox1 = gtk_hbutton_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, TRUE, 0);
 	gtk_widget_show(hbox1);
-
 	item = gtk_button_new_with_label("Cancel");
 	gtk_box_pack_start(GTK_BOX(hbox1), item, TRUE, TRUE, 0);
 	GTK_WIDGET_SET_FLAGS(item, GTK_CAN_DEFAULT);

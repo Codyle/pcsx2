@@ -15,14 +15,14 @@
 #include "wx/msw/private.h"
 #include "shellapi.h"
 
-inline BOOL IsIconic( HWND WXUNUSED(hWnd) )
+inline BOOL IsIconic(HWND WXUNUSED(hWnd))
 {
-    // Probably not right...
+	// Probably not right...
 #if 0
-    long style = GetWindowLong(hWnd, GWL_STYLE);
-    return ((style & WS_MINIMIZE) == 0);
+	long style = GetWindowLong(hWnd, GWL_STYLE);
+	return ((style & WS_MINIMIZE) == 0);
 #endif
-    return FALSE;
+	return FALSE;
 }
 
 #ifdef __POCKETPC__
@@ -52,16 +52,16 @@ inline BOOL IsIconic( HWND WXUNUSED(hWnd) )
 #endif
 
 #ifndef LVS_EX_FULLROWSELECT
-    #define LVS_EX_FULLROWSELECT 0x00000020
+#define LVS_EX_FULLROWSELECT 0x00000020
 #endif
 
 #ifndef TVS_FULLROWSELECT
-    #define TVS_FULLROWSELECT       0x1000
+#define TVS_FULLROWSELECT       0x1000
 #endif
 
 #ifndef TVM_SETBKCOLOR
-    #define TVM_SETBKCOLOR          (TV_FIRST + 29)
-    #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
+#define TVM_SETBKCOLOR          (TV_FIRST + 29)
+#define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
 #endif
 
 // Used in msgdlg.cpp, evtloop.cpp
@@ -76,15 +76,15 @@ inline BOOL IsIconic( HWND WXUNUSED(hWnd) )
 // some windows styles don't exist in CE SDK, replace them with closest
 // equivalents
 #ifndef WS_THICKFRAME
-    #define WS_THICKFRAME WS_BORDER
+#define WS_THICKFRAME WS_BORDER
 #endif
 
 #ifndef WS_MINIMIZE
-    #define WS_MINIMIZE 0
+#define WS_MINIMIZE 0
 #endif
 
 #ifndef WS_MAXIMIZE
-    #define WS_MAXIMIZE 0
+#define WS_MAXIMIZE 0
 #endif
 
 
@@ -93,13 +93,13 @@ inline BOOL IsIconic( HWND WXUNUSED(hWnd) )
 //
 // update: they're defined in eVC 4 inside "#ifdef UNDER_CE" block
 #ifndef UNDER_CE
-    #define GlobalAlloc LocalAlloc
-    #define GlobalFree LocalFree
-    #define GlobalSize LocalSize
-    #define GPTR LPTR
-    #define GHND LPTR
-    #define GMEM_MOVEABLE 0
-    #define GMEM_SHARE 0
+#define GlobalAlloc LocalAlloc
+#define GlobalFree LocalFree
+#define GlobalSize LocalSize
+#define GPTR LPTR
+#define GHND LPTR
+#define GMEM_MOVEABLE 0
+#define GMEM_SHARE 0
 #endif // !UNDER_CE
 
 // WinCE RTL doesn't implement bsearch() used in encconv.cpp
@@ -120,20 +120,20 @@ bsearch(const void *key, const void *base, size_t num, size_t size,
 #define O_BINARY       0x8000  /* file mode is binary (untranslated) */
 
 #ifndef SS_SUNKEN
-    #define SS_SUNKEN 0x00001000L
+#define SS_SUNKEN 0x00001000L
 #endif
 
 // unsupported flags for WINDOWPOS structure
 #ifndef SWP_NOCOPYBITS
-    #define SWP_NOCOPYBITS 0
+#define SWP_NOCOPYBITS 0
 #endif
 
 #ifndef SWP_NOOWNERZORDER
-    #define SWP_NOOWNERZORDER 0
+#define SWP_NOOWNERZORDER 0
 #endif
 
 #ifndef SWP_NOSENDCHANGING
-    #define SWP_NOSENDCHANGING 0
+#define SWP_NOSENDCHANGING 0
 #endif
 
 #endif // _WX_CE_MISSING_H_

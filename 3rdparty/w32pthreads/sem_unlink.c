@@ -50,8 +50,8 @@
 #endif
 
 int
-sem_unlink (const char *name)
+sem_unlink(const char *name)
 {
-  errno = ENOSYS;
-  return -1;
+	errno = ENOSYS;
+	return -1;
 }				/* sem_unlink */

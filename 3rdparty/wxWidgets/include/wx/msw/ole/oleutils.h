@@ -36,27 +36,25 @@
 // return true if ok, false otherwise
 inline bool wxOleInitialize()
 {
-    // we need to initialize OLE library
+	// we need to initialize OLE library
 #ifdef __WXWINCE__
-    if ( FAILED(::CoInitializeEx(NULL, COINIT_MULTITHREADED)) )
+	if (FAILED(::CoInitializeEx(NULL, COINIT_MULTITHREADED)))
 #else
-    if ( FAILED(::OleInitialize(NULL)) )
+	if (FAILED(::OleInitialize(NULL)))
 #endif
-    {
-        wxLogError(_("Cannot initialize OLE"));
-
-        return false;
-    }
-
-    return true;
+	{
+		wxLogError(_("Cannot initialize OLE"));
+		return false;
+	}
+	return true;
 }
 
 inline void wxOleUninitialize()
 {
 #ifdef __WXWINCE__
-    ::CoUninitialize();
+	::CoUninitialize();
 #else
-    ::OleUninitialize();
+	::OleUninitialize();
 #endif
 }
 
@@ -67,8 +65,8 @@ inline void wxOleUninitialize()
 // release the interface pointer (if !NULL)
 inline void ReleaseInterface(IUnknown *pIUnk)
 {
-  if ( pIUnk != NULL )
-    pIUnk->Release();
+	if (pIUnk != NULL)
+		pIUnk->Release();
 }
 
 // release the interface pointer (if !NULL) and make it NULL
@@ -104,19 +102,44 @@ extern bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 class wxAutoULong
 {
 public:
-    wxAutoULong(ULONG value = 0) : m_Value(value) { }
+	wxAutoULong(ULONG value = 0) : m_Value(value) { }
 
-    operator ULONG&() { return m_Value; }
-    ULONG& operator=(ULONG value) { m_Value = value; return m_Value;  }
+	operator ULONG &()
+	{
+		return m_Value;
+	}
+	ULONG &operator=(ULONG value)
+	{
+		m_Value = value;
+		return m_Value;
+	}
 
-    wxAutoULong& operator++() { ++m_Value; return *this; }
-    const wxAutoULong operator++( int ) { wxAutoULong temp = *this; ++m_Value; return temp; }
+	wxAutoULong &operator++()
+	{
+		++m_Value;
+		return *this;
+	}
+	const wxAutoULong operator++(int)
+	{
+		wxAutoULong temp = *this;
+		++m_Value;
+		return temp;
+	}
 
-    wxAutoULong& operator--() { --m_Value; return *this; }
-    const wxAutoULong operator--( int ) { wxAutoULong temp = *this; --m_Value; return temp; }
+	wxAutoULong &operator--()
+	{
+		--m_Value;
+		return *this;
+	}
+	const wxAutoULong operator--(int)
+	{
+		wxAutoULong temp = *this;
+		--m_Value;
+		return temp;
+	}
 
 private:
-    ULONG m_Value;
+	ULONG m_Value;
 };
 
 // declare the methods and the member variable containing reference count
@@ -124,13 +147,13 @@ private:
 // and friends (see below)
 
 #define   DECLARE_IUNKNOWN_METHODS                                            \
-  public:                                                                     \
-    STDMETHODIMP          QueryInterface(REFIID, void **);                    \
-    STDMETHODIMP_(ULONG)  AddRef();                                           \
-    STDMETHODIMP_(ULONG)  Release();                                          \
-  private:                                                                    \
-    static  const IID    *ms_aIids[];                                         \
-    wxAutoULong           m_cRef
+	public:                                                                     \
+	STDMETHODIMP          QueryInterface(REFIID, void **);                    \
+	STDMETHODIMP_(ULONG)  AddRef();                                           \
+	STDMETHODIMP_(ULONG)  Release();                                          \
+	private:                                                                    \
+	static  const IID    *ms_aIids[];                                         \
+	wxAutoULong           m_cRef
 
 // macros for declaring supported interfaces
 // NB: you should write ADD_INTERFACE(Foo) and not ADD_INTERFACE(IID_IFoo)!
@@ -141,41 +164,41 @@ private:
 // implementation is as straightforward as possible
 // Parameter:  classname - the name of the class
 #define   IMPLEMENT_IUNKNOWN_METHODS(classname)                               \
-  STDMETHODIMP classname::QueryInterface(REFIID riid, void **ppv)             \
-  {                                                                           \
-    wxLogQueryInterface(_T(#classname), riid);                                \
-                                                                              \
-    if ( IsIidFromList(riid, ms_aIids, WXSIZEOF(ms_aIids)) ) {                \
-      *ppv = this;                                                            \
-      AddRef();                                                               \
-                                                                              \
-      return S_OK;                                                            \
-    }                                                                         \
-    else {                                                                    \
-      *ppv = NULL;                                                            \
-                                                                              \
-      return (HRESULT) E_NOINTERFACE;                                         \
-    }                                                                         \
-  }                                                                           \
-                                                                              \
-  STDMETHODIMP_(ULONG) classname::AddRef()                                    \
-  {                                                                           \
-    wxLogAddRef(_T(#classname), m_cRef);                                      \
-                                                                              \
-    return ++m_cRef;                                                          \
-  }                                                                           \
-                                                                              \
-  STDMETHODIMP_(ULONG) classname::Release()                                   \
-  {                                                                           \
-    wxLogRelease(_T(#classname), m_cRef);                                     \
-                                                                              \
-    if ( --m_cRef == wxAutoULong(0) ) {                                                    \
-      delete this;                                                            \
-      return 0;                                                               \
-    }                                                                         \
-    else                                                                      \
-      return m_cRef;                                                          \
-  }
+	STDMETHODIMP classname::QueryInterface(REFIID riid, void **ppv)             \
+	{                                                                           \
+		wxLogQueryInterface(_T(#classname), riid);                                \
+		\
+		if ( IsIidFromList(riid, ms_aIids, WXSIZEOF(ms_aIids)) ) {                \
+			*ppv = this;                                                            \
+			AddRef();                                                               \
+			\
+			return S_OK;                                                            \
+		}                                                                         \
+		else {                                                                    \
+			*ppv = NULL;                                                            \
+			\
+			return (HRESULT) E_NOINTERFACE;                                         \
+		}                                                                         \
+	}                                                                           \
+	\
+	STDMETHODIMP_(ULONG) classname::AddRef()                                    \
+	{                                                                           \
+		wxLogAddRef(_T(#classname), m_cRef);                                      \
+		\
+		return ++m_cRef;                                                          \
+	}                                                                           \
+	\
+	STDMETHODIMP_(ULONG) classname::Release()                                   \
+	{                                                                           \
+		wxLogRelease(_T(#classname), m_cRef);                                     \
+		\
+		if ( --m_cRef == wxAutoULong(0) ) {                                                    \
+			delete this;                                                            \
+			return 0;                                                               \
+		}                                                                         \
+		else                                                                      \
+			return m_cRef;                                                          \
+	}
 
 // ============================================================================
 // Debugging support
@@ -193,13 +216,13 @@ private:
 void wxLogQueryInterface(const wxChar *szInterface, REFIID riid);
 
 // these functions print out the new value of reference counter
-void wxLogAddRef (const wxChar *szInterface, ULONG cRef);
+void wxLogAddRef(const wxChar *szInterface, ULONG cRef);
 void wxLogRelease(const wxChar *szInterface, ULONG cRef);
 
 #else   //!__WXDEBUG__
-  #define   wxLogQueryInterface(szInterface, riid)
-  #define   wxLogAddRef(szInterface, cRef)
-  #define   wxLogRelease(szInterface, cRef)
+#define   wxLogQueryInterface(szInterface, riid)
+#define   wxLogAddRef(szInterface, cRef)
+#define   wxLogRelease(szInterface, cRef)
 #endif  //__WXDEBUG__
 
 // wrapper around BSTR type (by Vadim Zeitlin)
@@ -207,37 +230,43 @@ void wxLogRelease(const wxChar *szInterface, ULONG cRef);
 class WXDLLEXPORT wxBasicString
 {
 public:
-    // ctors & dtor
-    wxBasicString(const char *sz);
-    wxBasicString(const wxString& str);
-    ~wxBasicString();
+	// ctors & dtor
+	wxBasicString(const char *sz);
+	wxBasicString(const wxString &str);
+	~wxBasicString();
 
-    void Init(const char* sz);
+	void Init(const char* sz);
 
-    // accessors
-    // just get the string
-    operator BSTR() const { return m_wzBuf; }
-    // retrieve a copy of our string - caller must SysFreeString() it later!
-    BSTR Get() const { return SysAllocString(m_wzBuf); }
+	// accessors
+	// just get the string
+	operator BSTR() const
+	{
+		return m_wzBuf;
+	}
+	// retrieve a copy of our string - caller must SysFreeString() it later!
+	BSTR Get() const
+	{
+		return SysAllocString(m_wzBuf);
+	}
 
 private:
-    // @@@ not implemented (but should be)
-    wxBasicString(const wxBasicString&);
-    wxBasicString& operator=(const wxBasicString&);
+	// @@@ not implemented (but should be)
+	wxBasicString(const wxBasicString &);
+	wxBasicString &operator=(const wxBasicString &);
 
-    OLECHAR *m_wzBuf;     // actual string
+	OLECHAR *m_wzBuf;     // actual string
 };
 
 #if wxUSE_VARIANT
 // Convert variants
 class WXDLLIMPEXP_FWD_BASE wxVariant;
 
-WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant);
-WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant);
+WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant &variant, VARIANTARG &oleVariant);
+WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG &oleVariant, wxVariant &variant);
 #endif // wxUSE_VARIANT
 
 // Convert string to Unicode
-WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str);
+WXDLLEXPORT BSTR wxConvertStringToOle(const wxString &str);
 
 // Convert string from BSTR to wxString
 WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr);
@@ -248,7 +277,10 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr);
 // stub functions to avoid #if wxUSE_OLE in the main code
 // ----------------------------------------------------------------------------
 
-inline bool wxOleInitialize() { return false; }
+inline bool wxOleInitialize()
+{
+	return false;
+}
 inline void wxOleUninitialize() { }
 
 #endif // wxUSE_OLE/!wxUSE_OLE

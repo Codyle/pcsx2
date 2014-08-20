@@ -20,17 +20,21 @@
 // Every potential jump point in the PS2's addressable memory has a BASEBLOCK
 // associated with it. So that means a BASEBLOCK for every 4 bytes of PS2
 // addressable memory.  Yay!
-struct BASEBLOCK
-{
+struct BASEBLOCK {
 	u32 m_pFnptr;
 
-	const __inline uptr GetFnptr() const { return m_pFnptr; }
-	void __inline SetFnptr( uptr ptr ) { m_pFnptr = ptr; }
+	const __inline uptr GetFnptr() const
+	{
+		return m_pFnptr;
+	}
+	void __inline SetFnptr(uptr ptr)
+	{
+		m_pFnptr = ptr;
+	}
 };
 
 // extra block info (only valid for start of fn)
-struct BASEBLOCKEX
-{
+struct BASEBLOCKEX {
 	u32 startpc;
 	uptr fnptr;
 	u16 size;	// size in dwords
@@ -43,7 +47,8 @@ struct BASEBLOCKEX
 
 };
 
-class BaseBlockArray {
+class BaseBlockArray
+{
 	s32 _Reserved;
 	s32 _Size;
 	BASEBLOCKEX *blocks;
@@ -52,7 +57,7 @@ class BaseBlockArray {
 	{
 		pxAssert(size > 0);
 		BASEBLOCKEX *newMem = new BASEBLOCKEX[size];
-		if(blocks) {
+		if (blocks) {
 			memmove(newMem, blocks, _Reserved * sizeof(BASEBLOCKEX));
 			delete[] blocks;
 		}
@@ -67,49 +72,40 @@ public:
 
 	~BaseBlockArray()
 	{
-		if(blocks) {
+		if (blocks)
 			delete[] blocks;
-		}
 	}
 
-	BaseBlockArray (s32 size) : _Reserved(0),
+	BaseBlockArray(s32 size) : _Reserved(0),
 		_Size(0)
 	{
-		if(size > 0) {
+		if (size > 0)
 			resize(size);
-		}
 		_Reserved = size;
 	}
 
 	BASEBLOCKEX *insert(u32 startpc, uptr fnptr)
 	{
-		if(_Size + 1 >= _Reserved) {
+		if (_Size + 1 >= _Reserved) {
 			resize(_Reserved + 0x2000);
 			_Reserved += 0x2000;		// some games requires even more!
 		}
-
 		int imin = 0, imax = _Size, imid;
-
 		while (imin < imax) {
-			imid = (imin+imax)>>1;
-
+			imid = (imin + imax) >> 1;
 			if (blocks[imid].startpc > startpc)
 				imax = imid;
 			else
 				imin = imid + 1;
 		}
-	
 		pxAssert(imin == _Size || blocks[imin].startpc > startpc);
-
-		if(imin < _Size) {
+		if (imin < _Size) {
 			// make a hole for a new block.
 			memmove(blocks + imin + 1, blocks + imin, (_Size - imin) * sizeof(BASEBLOCKEX));
 		}
-
 		memset((blocks + imin), 0, sizeof(BASEBLOCKEX));
 		blocks[imin].startpc = startpc;
 		blocks[imin].fnptr = fnptr;
-
 		_Size++;
 		return &blocks[imin];
 	}
@@ -143,11 +139,8 @@ public:
 	__fi void erase(s32 first, s32 last)
 	{
 		int range = last - first;
-
-		if(last < _Size) {
+		if (last < _Size)
 			memmove(blocks + first, blocks + last, (_Size - last) * sizeof(BASEBLOCKEX));
-		}
-
 		_Size -= range;
 	}
 };
@@ -165,7 +158,7 @@ protected:
 public:
 	BaseBlocks() :
 		recompiler(0)
-	,	blocks(0)
+		,	blocks(0)
 	{
 		blocks.reserve(0x4000);
 	}
@@ -177,21 +170,20 @@ public:
 		blocks.reserve(0x4000);
 	}
 
-	void SetJITCompile( void (*recompiler_)() )
+	void SetJITCompile(void (*recompiler_)())
 	{
 		recompiler = (uptr)recompiler_;
 	}
 
 	BASEBLOCKEX* New(u32 startpc, uptr fnptr);
-	int LastIndex (u32 startpc) const;
+	int LastIndex(u32 startpc) const;
 	BASEBLOCKEX* GetByX86(uptr ip);
 
-	__fi int Index (u32 startpc) const
+	__fi int Index(u32 startpc) const
 	{
 		int idx = LastIndex(startpc);
-
 		if ((idx == -1) || (startpc < blocks[idx].startpc) ||
-			((blocks[idx].size) && (startpc >= blocks[idx].startpc + blocks[idx].size * 4)))
+		    ((blocks[idx].size) && (startpc >= blocks[idx].startpc + blocks[idx].size * 4)))
 			return -1;
 		else
 			return idx;
@@ -201,7 +193,6 @@ public:
 	{
 		if (idx < 0 || idx >= (int)blocks.size())
 			return 0;
-
 		return &blocks[idx];
 	}
 
@@ -214,27 +205,21 @@ public:
 	{
 		pxAssert(first <= last);
 		int idx = first;
-		do{
+		do {
 			pxAssert(idx <= last);
-
 			//u32 startpc = blocks[idx].startpc;
 			std::pair<linkiter_t, linkiter_t> range = links.equal_range(blocks[idx].startpc);
 			for (linkiter_t i = range.first; i != range.second; ++i)
 				*(u32*)i->second = recompiler - (i->second + 4);
-
-			if( IsDevBuild )
-			{
+			if (IsDevBuild) {
 				// Clear the first instruction to 0xcc (breakpoint), as a way to assert if some
 				// static jumps get left behind to this block.  Note: Do not clear more than the
 				// first byte, since this code is called during exception handlers and event handlers
 				// both of which expect to be able to return to the recompiled code.
-
-				BASEBLOCKEX effu( blocks[idx] );
-				memset( (void*)effu.fnptr, 0xcc, 1 );
+				BASEBLOCKEX effu(blocks[idx]);
+				memset((void*)effu.fnptr, 0xcc, 1);
 			}
-		}
-		while(idx++ < last);
-
+		} while (idx++ < last);
 		// TODO: remove links from this block?
 		blocks.erase(first, last + 1);
 	}
@@ -251,15 +236,14 @@ public:
 #define PC_GETBLOCK_(x, reclut) ((BASEBLOCK*)(reclut[((u32)(x)) >> 16] + (x)*(sizeof(BASEBLOCK)/4)))
 
 static void recLUT_SetPage(uptr reclut[0x10000], uptr hwlut[0x10000],
-						   BASEBLOCK *mapbase, uint pagebase, uint pageidx, uint mappage)
+                           BASEBLOCK *mapbase, uint pagebase, uint pageidx, uint mappage)
 {
 	// this value is in 64k pages!
 	uint page = pagebase + pageidx;
-
-	pxAssert( page < 0x10000 );
+	pxAssert(page < 0x10000);
 	reclut[page] = (uptr)&mapbase[(mappage - page) << 14];
 	if (hwlut)
 		hwlut[page] = 0u - (pagebase << 16);
 }
 
-C_ASSERT( sizeof(BASEBLOCK) == 4 );
+C_ASSERT(sizeof(BASEBLOCK) == 4);

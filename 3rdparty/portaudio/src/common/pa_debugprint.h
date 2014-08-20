@@ -47,7 +47,7 @@ extern "C"
 
 
 
-void PaUtil_DebugPrint( const char *format, ... );
+void PaUtil_DebugPrint(const char *format, ...);
 
 
 /*
@@ -101,7 +101,7 @@ void PaUtil_DebugPrint( const char *format, ... );
 
 
 #ifdef PA_LOG_API_CALLS
-#define PA_LOGAPI(x) PaUtil_DebugPrint x 
+#define PA_LOGAPI(x) PaUtil_DebugPrint x
 
 #define PA_LOGAPI_ENTER(functionName) PaUtil_DebugPrint( functionName " called.\n" )
 
@@ -120,9 +120,9 @@ void PaUtil_DebugPrint( const char *format, ... );
 #define PA_LOGAPI_EXIT_PAERROR_OR_T_RESULT( functionName, positiveResultFormatString, result ) \
 	PaUtil_DebugPrint( functionName " returned:\n" ); \
 	if( result > 0 ) \
-        PaUtil_DebugPrint("\t" positiveResultFormatString "\n", result ); \
-    else \
-        PaUtil_DebugPrint("\tPaError: %d ( %s )\n", result, Pa_GetErrorText( result ) )
+		PaUtil_DebugPrint("\t" positiveResultFormatString "\n", result ); \
+	else \
+		PaUtil_DebugPrint("\tPaError: %d ( %s )\n", result, Pa_GetErrorText( result ) )
 #else
 #define PA_LOGAPI(x)
 #define PA_LOGAPI_ENTER(functionName)
@@ -133,8 +133,8 @@ void PaUtil_DebugPrint( const char *format, ... );
 #define PA_LOGAPI_EXIT_PAERROR_OR_T_RESULT( functionName, positiveResultFormatString, result )
 #endif
 
-    
-typedef void (*PaUtilLogCallback ) (const char *log);
+
+typedef void (*PaUtilLogCallback)(const char *log);
 
 /**
     Install user provided log function

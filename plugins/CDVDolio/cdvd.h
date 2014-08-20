@@ -21,10 +21,9 @@
 
 #pragma once
 
-struct cdvdSubQ
-{
-	uint8 ctrl:4;		// control and mode bits
-	uint8 mode:4;		// control and mode bits
+struct cdvdSubQ {
+	uint8 ctrl: 4;		// control and mode bits
+	uint8 mode: 4;		// control and mode bits
 	uint8 trackNum;		// current track number (1 to 99)
 	uint8 trackIndex;	// current index within track (0 to 99)
 	uint8 trackM;		// current minute location on the disc (BCD encoded)
@@ -36,14 +35,12 @@ struct cdvdSubQ
 	uint8 discF;			// current frame offset from first track (BCD encoded)
 };
 
-struct cdvdTD // NOT bcd coded
-{
+struct cdvdTD { // NOT bcd coded
 	uint32 lsn;
 	uint8 type;
 };
 
-struct cdvdTN
-{
+struct cdvdTN {
 	uint8 strack;	// number of the first track (usually 1)
 	uint8 etrack;	// number of the last track
 };
@@ -117,8 +114,14 @@ class CDVD
 	HANDLE m_hFile;
 	string m_label;
 	OVERLAPPED m_overlapped;
-	struct {int count, size, offset;} m_block;
-	struct {uint8 buff[2048 * CACHE_BLOCK_COUNT]; bool pending; int start, count;} m_cache;
+	struct {
+		int count, size, offset;
+	} m_block;
+	struct {
+		uint8 buff[2048 * CACHE_BLOCK_COUNT];
+		bool pending;
+		int start, count;
+	} m_cache;
 	uint8 m_buff[2352];
 
 	LARGE_INTEGER MakeOffset(int lsn);

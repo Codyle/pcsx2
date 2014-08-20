@@ -19,55 +19,55 @@
 class WXDLLEXPORT wxBitmapButton : public wxBitmapButtonBase
 {
 public:
-    wxBitmapButton() { }
+	wxBitmapButton() { }
 
-    wxBitmapButton(wxWindow *parent,
-                   wxWindowID id,
-                   const wxBitmap& bitmap,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxBU_AUTODRAW,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxButtonNameStr)
-    {
-        Create(parent, id, bitmap, pos, size, style, validator, name);
-    }
+	wxBitmapButton(wxWindow *parent,
+	               wxWindowID id,
+	               const wxBitmap &bitmap,
+	               const wxPoint &pos = wxDefaultPosition,
+	               const wxSize &size = wxDefaultSize,
+	               long style = wxBU_AUTODRAW,
+	               const wxValidator &validator = wxDefaultValidator,
+	               const wxString &name = wxButtonNameStr)
+	{
+		Create(parent, id, bitmap, pos, size, style, validator, name);
+	}
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxBitmap& bitmap,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxBU_AUTODRAW,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            const wxBitmap &bitmap,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxBU_AUTODRAW,
+	            const wxValidator &validator = wxDefaultValidator,
+	            const wxString &name = wxButtonNameStr);
 
-    // Implementation
-    virtual bool SetBackgroundColour(const wxColour& colour);
-    virtual void SetDefault();
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-    virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-    virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-    virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
+	// Implementation
+	virtual bool SetBackgroundColour(const wxColour &colour);
+	virtual void SetDefault();
+	virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
+	virtual void DrawFace(WXHDC dc, int left, int top, int right, int bottom, bool sel);
+	virtual void DrawButtonFocus(WXHDC dc, int left, int top, int right, int bottom, bool sel);
+	virtual void DrawButtonDisable(WXHDC dc, int left, int top, int right, int bottom, bool with_marg);
 
 protected:
-    // reimplement some base class virtuals
-    virtual wxSize DoGetBestSize() const;
-    virtual void OnSetBitmap();
+	// reimplement some base class virtuals
+	virtual wxSize DoGetBestSize() const;
+	virtual void OnSetBitmap();
 
-    // invalidate m_brushDisabled when system colours change
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
+	// invalidate m_brushDisabled when system colours change
+	void OnSysColourChanged(wxSysColourChangedEvent &event);
 
-    // change the currently bitmap if we have a hover one
-    void OnMouseEnterOrLeave(wxMouseEvent& event);
-
-
-    // the brush we use to draw disabled buttons
-    wxBrush m_brushDisabled;
+	// change the currently bitmap if we have a hover one
+	void OnMouseEnterOrLeave(wxMouseEvent &event);
 
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton)
+	// the brush we use to draw disabled buttons
+	wxBrush m_brushDisabled;
+
+
+	DECLARE_EVENT_TABLE()
+	DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton)
 };
 
 #endif // _WX_BMPBUTTN_H_

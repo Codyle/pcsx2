@@ -19,10 +19,10 @@
 class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
-    virtual bool CreateEndProcessPipe(wxExecuteData& execData);
-    virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
-    virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
-    virtual int WaitForChild(wxExecuteData& execData);
+	virtual bool CreateEndProcessPipe(wxExecuteData &execData);
+	virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData &execData, int fd);
+	virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData &execData);
+	virtual int WaitForChild(wxExecuteData &execData);
 };
 
 #if wxUSE_GUI
@@ -30,22 +30,22 @@ public:
 class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual bool CreateEndProcessPipe(wxExecuteData& execData);
-    virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
-    virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
-    virtual int WaitForChild(wxExecuteData& execData);
+	virtual bool CreateEndProcessPipe(wxExecuteData &execData);
+	virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData &execData, int fd);
+	virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData &execData);
+	virtual int WaitForChild(wxExecuteData &execData);
 
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
-    virtual wxStandardPathsBase& GetStandardPaths();
+	virtual wxStandardPathsBase &GetStandardPaths();
 #endif
-    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
+	virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 
 #ifdef __WXGTK__
-    virtual wxString GetDesktopEnvironment() const;
+	virtual wxString GetDesktopEnvironment() const;
 #endif
 
 #if defined(__WXDEBUG__) && defined(__WXGTK20__)
-    virtual bool ShowAssertDialog(const wxString& msg);
+	virtual bool ShowAssertDialog(const wxString &msg);
 #endif
 };
 

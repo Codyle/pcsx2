@@ -15,10 +15,10 @@
 
 #pragma once
 
-namespace x86Emitter {
-
-struct xImplSimd_MinMax
+namespace x86Emitter
 {
+
+struct xImplSimd_MinMax {
 	const xImplSimd_DestRegSSE PS;		// packed single precision
 	const xImplSimd_DestRegSSE PD;		// packed double precision
 	const xImplSimd_DestRegSSE SS;		// scalar single precision
@@ -27,28 +27,26 @@ struct xImplSimd_MinMax
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-struct xImplSimd_Compare
-{
+struct xImplSimd_Compare {
 	SSE2_ComparisonType		CType;
 
-	void PS( const xRegisterSSE& to, const xRegisterSSE& from ) const;
-	void PS( const xRegisterSSE& to, const xIndirectVoid& from ) const;
+	void PS(const xRegisterSSE &to, const xRegisterSSE &from) const;
+	void PS(const xRegisterSSE &to, const xIndirectVoid &from) const;
 
-	void PD( const xRegisterSSE& to, const xRegisterSSE& from ) const;
-	void PD( const xRegisterSSE& to, const xIndirectVoid& from ) const;
+	void PD(const xRegisterSSE &to, const xRegisterSSE &from) const;
+	void PD(const xRegisterSSE &to, const xIndirectVoid &from) const;
 
-	void SS( const xRegisterSSE& to, const xRegisterSSE& from ) const;
-	void SS( const xRegisterSSE& to, const xIndirectVoid& from ) const;
+	void SS(const xRegisterSSE &to, const xRegisterSSE &from) const;
+	void SS(const xRegisterSSE &to, const xIndirectVoid &from) const;
 
-	void SD( const xRegisterSSE& to, const xRegisterSSE& from ) const;
-	void SD( const xRegisterSSE& to, const xIndirectVoid& from ) const;
+	void SD(const xRegisterSSE &to, const xRegisterSSE &from) const;
+	void SD(const xRegisterSSE &to, const xIndirectVoid &from) const;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Compare scalar floating point values and set EFLAGS (Ordered or Unordered)
 //
-struct xImplSimd_COMI
-{
+struct xImplSimd_COMI {
 	const xImplSimd_DestRegSSE SS;
 	const xImplSimd_DestRegSSE SD;
 };
@@ -56,8 +54,7 @@ struct xImplSimd_COMI
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-struct xImplSimd_PCompare
-{
+struct xImplSimd_PCompare {
 public:
 	// Compare packed bytes for equality.
 	// If a data element in dest is equal to the corresponding date element src, the
@@ -92,8 +89,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-struct xImplSimd_PMinMax
-{
+struct xImplSimd_PMinMax {
 	// Compare packed unsigned byte integers in dest to src and store packed min/max
 	// values in dest.
 	// Operation can be performed on either MMX or SSE operands.

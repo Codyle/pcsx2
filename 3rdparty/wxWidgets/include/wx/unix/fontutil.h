@@ -13,11 +13,11 @@
 #define _WX_UNIX_FONTUTIL_H_
 
 #ifdef __X__
-    typedef WXFontStructPtr wxNativeFont;
+typedef WXFontStructPtr wxNativeFont;
 #elif defined(__WXGTK__)
-    typedef GdkFont *wxNativeFont;
+typedef GdkFont *wxNativeFont;
 #else
-    #error "Unsupported toolkit"
+#error "Unsupported toolkit"
 #endif
 
 // returns the handle of the nearest available font or 0
@@ -32,6 +32,6 @@ wxLoadQueryNearestFont(int pointSize,
                        wxString* xFontName = (wxString *)NULL);
 
 // returns the font specified by the given XLFD
-extern wxNativeFont wxLoadFont(const wxString& fontSpec);
+extern wxNativeFont wxLoadFont(const wxString &fontSpec);
 
 #endif // _WX_UNIX_FONTUTIL_H_

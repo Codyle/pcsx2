@@ -28,11 +28,11 @@ void ProfilerTerm();
 void ProfilerSetEnabled(bool Enabled);
 void ProfilerRegisterSource(const char* Name, const void* buff, u32 sz);
 void ProfilerRegisterSource(const char* Name, const void* function);
-void ProfilerTerminateSource( const char* Name );
+void ProfilerTerminateSource(const char* Name);
 
-void ProfilerRegisterSource(const wxString& Name, const void* buff, u32 sz);
-void ProfilerRegisterSource(const wxString& Name, const void* function);
-void ProfilerTerminateSource( const wxString& Name );
+void ProfilerRegisterSource(const wxString &Name, const void* buff, u32 sz);
+void ProfilerRegisterSource(const wxString &Name, const void* function);
+void ProfilerTerminateSource(const wxString &Name);
 
 #else
 

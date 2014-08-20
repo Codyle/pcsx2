@@ -23,7 +23,7 @@ extern u32 dwNewChannel2[2]; // keeps track of what channels that have been turn
 extern u32 dwEndChannel2[2]; // keeps track of what channels have ended
 extern AUDIOBUFFER s_pAudioBuffers[NSPACKETS];
 extern s32 s_nCurBuffer, s_nQueuedBuffers;
-extern VOICE_PROCESSED voices[SPU_NUMBER_VOICES+1]; // +1 for modulation
+extern VOICE_PROCESSED voices[SPU_NUMBER_VOICES + 1]; // +1 for modulation
 extern u16* pSpuIrq[2];
 extern s32 s_buffers[NSSIZE][2]; // left and right buffers
 extern bool g_bPlaySound; // if true, will output sound, otherwise no

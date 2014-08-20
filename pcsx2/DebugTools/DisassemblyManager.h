@@ -23,8 +23,7 @@
 
 enum DisassemblyLineType { DISTYPE_OPCODE, DISTYPE_MACRO, DISTYPE_DATA, DISTYPE_OTHER };
 
-struct DisassemblyLineInfo
-{
+struct DisassemblyLineInfo {
 	DisassemblyLineType type;
 	MIPSAnalyst::MipsOpcodeInfo info;
 	std::string name;
@@ -34,14 +33,13 @@ struct DisassemblyLineInfo
 
 enum LineType { LINE_UP, LINE_DOWN };
 
-struct BranchLine
-{
+struct BranchLine {
 	u32 first;
 	u32 second;
 	LineType type;
 	int laneIndex;
 
-	bool operator<(const BranchLine& other) const
+	bool operator<(const BranchLine &other) const
 	{
 		return first < other.first;
 	}
@@ -56,8 +54,8 @@ public:
 	virtual int getLineNum(u32 address, bool findStart) = 0;
 	virtual u32 getLineAddress(int line) = 0;
 	virtual u32 getTotalSize() = 0;
-	virtual bool disassemble(u32 address, DisassemblyLineInfo& dest, bool insertSymbols) = 0;
-	virtual void getBranchLines(u32 start, u32 size, std::vector<BranchLine>& dest) { };
+	virtual bool disassemble(u32 address, DisassemblyLineInfo &dest, bool insertSymbols) = 0;
+	virtual void getBranchLines(u32 start, u32 size, std::vector<BranchLine> &dest) { };
 };
 
 class DisassemblyFunction: public DisassemblyEntry
@@ -68,9 +66,12 @@ public:
 	virtual int getNumLines();
 	virtual int getLineNum(u32 address, bool findStart);
 	virtual u32 getLineAddress(int line);
-	virtual u32 getTotalSize() { return size; };
-	virtual bool disassemble(u32 address, DisassemblyLineInfo& dest, bool insertSymbols);
-	virtual void getBranchLines(u32 start, u32 size, std::vector<BranchLine>& dest);
+	virtual u32 getTotalSize()
+	{
+		return size;
+	};
+	virtual bool disassemble(u32 address, DisassemblyLineInfo &dest, bool insertSymbols);
+	virtual void getBranchLines(u32 start, u32 size, std::vector<BranchLine> &dest);
 private:
 	void generateBranchLines();
 	void load();
@@ -82,7 +83,7 @@ private:
 	u32 size;
 	u32 hash;
 	std::vector<BranchLine> lines;
-	std::map<u32,DisassemblyEntry*> entries;
+	std::map<u32, DisassemblyEntry*> entries;
 	std::vector<u32> lineAddresses;
 };
 
@@ -92,12 +93,24 @@ public:
 	DisassemblyOpcode(DebugInterface* _cpu, u32 _address, int _num): cpu(_cpu), address(_address), num(_num) { };
 	virtual ~DisassemblyOpcode() { };
 	virtual void recheck() { };
-	virtual int getNumLines() { return num; };
-	virtual int getLineNum(u32 address, bool findStart) { return (address-this->address)/4; };
-	virtual u32 getLineAddress(int line) { return address+line*4; };
-	virtual u32 getTotalSize() { return num*4; };
-	virtual bool disassemble(u32 address, DisassemblyLineInfo& dest, bool insertSymbols);
-	virtual void getBranchLines(u32 start, u32 size, std::vector<BranchLine>& dest);
+	virtual int getNumLines()
+	{
+		return num;
+	};
+	virtual int getLineNum(u32 address, bool findStart)
+	{
+		return (address - this->address) / 4;
+	};
+	virtual u32 getLineAddress(int line)
+	{
+		return address + line * 4;
+	};
+	virtual u32 getTotalSize()
+	{
+		return num * 4;
+	};
+	virtual bool disassemble(u32 address, DisassemblyLineInfo &dest, bool insertSymbols);
+	virtual void getBranchLines(u32 start, u32 size, std::vector<BranchLine> &dest);
 private:
 	DebugInterface* cpu;
 	u32 address;
@@ -110,19 +123,31 @@ class DisassemblyMacro: public DisassemblyEntry
 public:
 	DisassemblyMacro(DebugInterface* _cpu, u32 _address): cpu(_cpu), address(_address) { };
 	virtual ~DisassemblyMacro() { };
-	
+
 	void setMacroLi(u32 _immediate, u8 _rt);
 	void setMacroMemory(std::string _name, u32 _immediate, u8 _rt, int _dataSize);
-	
+
 	virtual void recheck() { };
-	virtual int getNumLines() { return 1; };
-	virtual int getLineNum(u32 address, bool findStart) { return 0; };
-	virtual u32 getLineAddress(int line) { return address; };
-	virtual u32 getTotalSize() { return numOpcodes*4; };
-	virtual bool disassemble(u32 address, DisassemblyLineInfo& dest, bool insertSymbols) ;
+	virtual int getNumLines()
+	{
+		return 1;
+	};
+	virtual int getLineNum(u32 address, bool findStart)
+	{
+		return 0;
+	};
+	virtual u32 getLineAddress(int line)
+	{
+		return address;
+	};
+	virtual u32 getTotalSize()
+	{
+		return numOpcodes * 4;
+	};
+	virtual bool disassemble(u32 address, DisassemblyLineInfo &dest, bool insertSymbols) ;
 private:
 	enum MacroType { MACRO_LI, MACRO_MEMORYIMM };
-	
+
 	DebugInterface* cpu;
 	MacroType type;
 	std::string name;
@@ -139,29 +164,37 @@ class DisassemblyData: public DisassemblyEntry
 public:
 	DisassemblyData(DebugInterface* _cpu, u32 _address, u32 _size, DataType _type);
 	virtual ~DisassemblyData() { };
-	
+
 	virtual void recheck();
-	virtual int getNumLines() { return (int)lines.size(); };
+	virtual int getNumLines()
+	{
+		return (int)lines.size();
+	};
 	virtual int getLineNum(u32 address, bool findStart);
-	virtual u32 getLineAddress(int line) { return lineAddresses[line]; };
-	virtual u32 getTotalSize() { return size; };
-	virtual bool disassemble(u32 address, DisassemblyLineInfo& dest, bool insertSymbols);
+	virtual u32 getLineAddress(int line)
+	{
+		return lineAddresses[line];
+	};
+	virtual u32 getTotalSize()
+	{
+		return size;
+	};
+	virtual bool disassemble(u32 address, DisassemblyLineInfo &dest, bool insertSymbols);
 private:
 	void createLines();
 
-	struct DataEntry
-	{
+	struct DataEntry {
 		std::string text;
 		u32 size;
 		int lineNum;
 	};
-	
+
 	DebugInterface* cpu;
 	u32 address;
 	u32 size;
 	u32 hash;
 	DataType type;
-	std::map<u32,DataEntry> lines;
+	std::map<u32, DataEntry> lines;
 	std::vector<u32> lineAddresses;
 };
 
@@ -170,13 +203,25 @@ class DisassemblyComment: public DisassemblyEntry
 public:
 	DisassemblyComment(DebugInterface* _cpu, u32 _address, u32 _size, std::string name, std::string param);
 	virtual ~DisassemblyComment() { };
-	
+
 	virtual void recheck() { };
-	virtual int getNumLines() { return 1; };
-	virtual int getLineNum(u32 address, bool findStart) { return 0; };
-	virtual u32 getLineAddress(int line) { return address; };
-	virtual u32 getTotalSize() { return size; };
-	virtual bool disassemble(u32 address, DisassemblyLineInfo& dest, bool insertSymbols);
+	virtual int getNumLines()
+	{
+		return 1;
+	};
+	virtual int getLineNum(u32 address, bool findStart)
+	{
+		return 0;
+	};
+	virtual u32 getLineAddress(int line)
+	{
+		return address;
+	};
+	virtual u32 getTotalSize()
+	{
+		return size;
+	};
+	virtual bool disassemble(u32 address, DisassemblyLineInfo &dest, bool insertSymbols);
 private:
 	DebugInterface* cpu;
 	u32 address;
@@ -192,9 +237,16 @@ class DisassemblyManager
 public:
 	void clear();
 
-	void setCpu(DebugInterface* _cpu) { cpu = _cpu; };
-	void setMaxParamChars(int num) { maxParamChars = num; clear(); };
-	void getLine(u32 address, bool insertSymbols, DisassemblyLineInfo& dest);
+	void setCpu(DebugInterface* _cpu)
+	{
+		cpu = _cpu;
+	};
+	void setMaxParamChars(int num)
+	{
+		maxParamChars = num;
+		clear();
+	};
+	void getLine(u32 address, bool insertSymbols, DisassemblyLineInfo &dest);
 	void analyze(u32 address, u32 size);
 	std::vector<BranchLine> getBranchLines(u32 start, u32 size);
 
@@ -202,10 +254,13 @@ public:
 	u32 getNthPreviousAddress(u32 address, int n = 1);
 	u32 getNthNextAddress(u32 address, int n = 1);
 
-	static int getMaxParamChars() { return maxParamChars; };
+	static int getMaxParamChars()
+	{
+		return maxParamChars;
+	};
 private:
 	DisassemblyEntry* getEntry(u32 address);
-	std::map<u32,DisassemblyEntry*> entries;
+	std::map<u32, DisassemblyEntry*> entries;
 	DebugInterface* cpu;
 	static int maxParamChars;
 };

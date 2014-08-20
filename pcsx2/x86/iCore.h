@@ -102,7 +102,7 @@
 //#define X86_ISVI(type) ((type&~X86TYPE_VU1) == X86TYPE_VI)
 static __fi int X86_ISVI(int type)
 {
-	return ((type&~X86TYPE_VU1) == X86TYPE_VI);
+	return ((type & ~X86TYPE_VU1) == X86TYPE_VI);
 }
 
 struct _x86regs {
@@ -207,8 +207,7 @@ static const int MEM_XMMTAG = 0x8000;	// mmreg is xmmreg
 #define EEINSTINFO_COP1		1
 #define EEINSTINFO_COP2		2
 
-struct EEINST
-{
+struct EEINST {
 	u8 regs[34]; // includes HI/LO (HI=32, LO=33)
 	u8 fpuregs[33]; // ACC=32
 	u8 info; // extra info, if 1 inst is COP1, 2 inst is COP2. Also uses EEINST_XMM
@@ -231,14 +230,29 @@ extern void _recClearInst(EEINST* pinst);
 extern u32 _recIsRegWritten(EEINST* pinst, int size, u8 xmmtype, u8 reg);
 // returns the number of insts + 1 until used (0 if not used)
 extern u32 _recIsRegUsed(EEINST* pinst, int size, u8 xmmtype, u8 reg);
-extern void _recFillRegister(EEINST& pinst, int type, int reg, int write);
+extern void _recFillRegister(EEINST &pinst, int type, int reg, int write);
 
-static __fi bool EEINST_ISLIVE64(u32 reg)	{ return !!(g_pCurInstInfo->regs[reg] & (EEINST_LIVE0)); }
-static __fi bool EEINST_ISLIVEXMM(u32 reg)	{ return !!(g_pCurInstInfo->regs[reg] & (EEINST_LIVE0|EEINST_LIVE2)); }
-static __fi bool EEINST_ISLIVE2(u32 reg)	{ return !!(g_pCurInstInfo->regs[reg] & EEINST_LIVE2); }
+static __fi bool EEINST_ISLIVE64(u32 reg)
+{
+	return !!(g_pCurInstInfo->regs[reg] & (EEINST_LIVE0));
+}
+static __fi bool EEINST_ISLIVEXMM(u32 reg)
+{
+	return !!(g_pCurInstInfo->regs[reg] & (EEINST_LIVE0 | EEINST_LIVE2));
+}
+static __fi bool EEINST_ISLIVE2(u32 reg)
+{
+	return !!(g_pCurInstInfo->regs[reg] & EEINST_LIVE2);
+}
 
-static __fi bool FPUINST_ISLIVE(u32 reg)	{ return !!(g_pCurInstInfo->fpuregs[reg] & EEINST_LIVE0); }
-static __fi bool FPUINST_LASTUSE(u32 reg)	{ return !!(g_pCurInstInfo->fpuregs[reg] & EEINST_LASTUSE); }
+static __fi bool FPUINST_ISLIVE(u32 reg)
+{
+	return !!(g_pCurInstInfo->fpuregs[reg] & EEINST_LIVE0);
+}
+static __fi bool FPUINST_LASTUSE(u32 reg)
+{
+	return !!(g_pCurInstInfo->fpuregs[reg] & EEINST_LASTUSE);
+}
 
 extern u32 g_recWriteback; // used for jumps (VUrec mess!)
 

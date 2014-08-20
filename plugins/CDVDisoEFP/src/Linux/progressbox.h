@@ -30,8 +30,7 @@
 
 extern const char *compressnames[];
 
-struct ProgressBoxData
-{
+struct ProgressBoxData {
 	GtkWidget *window; // GtkWindow
 	GtkWidget *desc; // GtkLabel - What are we showing progress on?
 	GtkWidget *bar; // GtkProgressBar

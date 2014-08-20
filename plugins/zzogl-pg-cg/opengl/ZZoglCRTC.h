@@ -59,7 +59,7 @@ extern int s_nNewWidth, s_nNewHeight;
 extern CRangeManager s_RangeMngr; // manages overwritten memory
 extern void FlushTransferRanges(const tex0Info* ptex);
 extern void ProcessMessages();
-void AdjustTransToAspect(float4& v);
+void AdjustTransToAspect(float4 &v);
 
 void ZZGSStateReset();
 
@@ -73,24 +73,16 @@ static int s_nInterlaceTexWidth = 0;				// width of texture
 inline u32 CreateInterlaceTex(int width)
 {
 	if (width == s_nInterlaceTexWidth && s_ptexInterlace != 0) return s_ptexInterlace;
-
 	SAFE_RELEASE_TEX(s_ptexInterlace);
-
 	s_nInterlaceTexWidth = width;
-
 	vector<u32> data(width);
-
 	for (int i = 0; i < width; ++i)
-	{
 		data[i] = (i & 1) ? 0xffffffff : 0;
-	}
-
 	glGenTextures(1, &s_ptexInterlace);
 	glBindTexture(GL_TEXTURE_RECTANGLE_NV, s_ptexInterlace);
 	TextureRect(GL_RGBA, width, 1, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
 	setRectFilters(GL_NEAREST);
 	GL_REPORT_ERRORD();
-
 	return s_ptexInterlace;
 }
 

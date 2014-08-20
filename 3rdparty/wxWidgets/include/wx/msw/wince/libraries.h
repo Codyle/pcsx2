@@ -24,34 +24,34 @@
 #if defined(__VISUALC__) && defined(__WXWINCE__)
 
 #if (_WIN32_WCE >= 400) || defined(__POCKETPC__)
-    // No commdlg.lib in Mobile 5.0 Smartphone
+// No commdlg.lib in Mobile 5.0 Smartphone
 #if !(defined(__SMARTPHONE__) && _WIN32_WCE >= 1200)
-    #pragma comment(lib,"commdlg.lib")
+#pragma comment(lib,"commdlg.lib")
 #endif
 #endif
 
 #if (_WIN32_WCE >= 400) && !defined(wxNO_RTTI)
-    #pragma comment(lib,"ccrtrtti.lib")
+#pragma comment(lib,"ccrtrtti.lib")
 #endif
 
 #if defined(__WINCE_STANDARDSDK__)
-    // DoDragDrop:
-    #pragma comment(lib,"olece400.lib")
+// DoDragDrop:
+#pragma comment(lib,"olece400.lib")
 #elif defined(__POCKETPC__)
-    // PocketPC build:
-    // DoDragDrop:
-    #pragma comment(lib,"ceshell.lib")
+// PocketPC build:
+// DoDragDrop:
+#pragma comment(lib,"ceshell.lib")
 
-    #pragma comment(lib,"aygshell.lib")
+#pragma comment(lib,"aygshell.lib")
 #elif defined(__HANDHELDPC__)
-    // Handheld PC builds. Maybe WindowsCE.NET 4.X needs another symbol.
-    #pragma comment(lib,"ceshell.lib")
+// Handheld PC builds. Maybe WindowsCE.NET 4.X needs another symbol.
+#pragma comment(lib,"ceshell.lib")
 #elif defined(__SMARTPHONE__)
-    // Smartphone build:
-    #pragma comment(lib,"ceshell.lib")
-    #pragma comment(lib,"aygshell.lib")
+// Smartphone build:
+#pragma comment(lib,"ceshell.lib")
+#pragma comment(lib,"aygshell.lib")
 #else
-    #error "Unknown SDK, please fill-in missing pieces"
+#error "Unknown SDK, please fill-in missing pieces"
 #endif
 
 #endif // __VISUALC__ && __WXWINCE__

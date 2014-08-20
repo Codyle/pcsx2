@@ -28,8 +28,7 @@
 
 #pragma pack(push, 1)
 
-__aligned(struct, 32) GSVertex
-{
+__aligned(struct, 32) GSVertex {
 	union
 	{
 		struct
@@ -44,31 +43,31 @@ __aligned(struct, 32) GSVertex
 		__m128i m[2];
 	};
 
-	void operator = (const GSVertex& v) {m[0] = v.m[0]; m[1] = v.m[1];}
+	void operator = (const GSVertex & v)
+	{
+		m[0] = v.m[0];
+		m[1] = v.m[1];
+	}
 };
 
-struct GSVertexP
-{
+struct GSVertexP {
 	GSVector4 p;
 };
 
 // Align 16 because the structure only contains 16B. Otherwise
 // sizeof(GSVertexPxyT1) == 32 which defeat the purpose to save bandwidth vs
 // GSVertexPT1
-__aligned(struct, 16) GSVertexPxyT1
-{
+__aligned(struct, 16) GSVertexPxyT1 {
 	GSVector2 p;
 	GSVector2 t;
 };
 
-__aligned(struct, 32) GSVertexPT1
-{
+__aligned(struct, 32) GSVertexPT1 {
 	GSVector4 p;
 	GSVector2 t;
 };
 
-struct GSVertexPT2
-{
+struct GSVertexPT2 {
 	GSVector4 p;
 	GSVector2 t[2];
 };

@@ -37,4 +37,4 @@
 #endif
 
 #endif
-    // _WX_PEN_H_BASE_
+// _WX_PEN_H_BASE_

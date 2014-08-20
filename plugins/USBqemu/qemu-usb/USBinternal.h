@@ -19,75 +19,75 @@ extern int64_t usb_frame_time;
 extern int64_t usb_bit_time;
 
 typedef struct OHCIPort {
-    USBPort port;
-    uint32_t ctrl;
+	USBPort port;
+	uint32_t ctrl;
 } OHCIPort;
 
 typedef uint32_t target_phys_addr_t;
 
 typedef struct {
-    //USBBus bus;
-    //qemu_irq irq;
-    int mem;
-    int num_ports;
-    const char *name;
+	//USBBus bus;
+	//qemu_irq irq;
+	int mem;
+	int num_ports;
+	const char *name;
 
-    //QEMUTimer *eof_timer;
+	//QEMUTimer *eof_timer;
 	int64_t eof_timer;
-    int64_t sof_time;
+	int64_t sof_time;
 
-    /* OHCI state */
-    /* Control partition */
-    uint32_t ctl, status;
-    uint32_t intr_status;
-    uint32_t intr;
+	/* OHCI state */
+	/* Control partition */
+	uint32_t ctl, status;
+	uint32_t intr_status;
+	uint32_t intr;
 
-    /* memory pointer partition */
-    uint32_t hcca;
-    uint32_t ctrl_head, ctrl_cur;
-    uint32_t bulk_head, bulk_cur;
-    uint32_t per_cur;
-    uint32_t done;
-    int done_count;
+	/* memory pointer partition */
+	uint32_t hcca;
+	uint32_t ctrl_head, ctrl_cur;
+	uint32_t bulk_head, bulk_cur;
+	uint32_t per_cur;
+	uint32_t done;
+	int done_count;
 
-    /* Frame counter partition */
-    uint32_t fsmps:15;
-    uint32_t fit:1;
-    uint32_t fi:14;
-    uint32_t frt:1;
-    uint16_t frame_number;
-    uint16_t padding;
-    uint32_t pstart;
-    uint32_t lst;
+	/* Frame counter partition */
+	uint32_t fsmps: 15;
+	uint32_t fit: 1;
+	uint32_t fi: 14;
+	uint32_t frt: 1;
+	uint16_t frame_number;
+	uint16_t padding;
+	uint32_t pstart;
+	uint32_t lst;
 
-    /* Root Hub partition */
-    uint32_t rhdesc_a, rhdesc_b;
-    uint32_t rhstatus;
-    OHCIPort rhport[OHCI_MAX_PORTS];
+	/* Root Hub partition */
+	uint32_t rhdesc_a, rhdesc_b;
+	uint32_t rhstatus;
+	OHCIPort rhport[OHCI_MAX_PORTS];
 
-    /* PXA27x Non-OHCI events */
-    uint32_t hstatus;
-    uint32_t hmask;
-    uint32_t hreset;
-    uint32_t htest;
+	/* PXA27x Non-OHCI events */
+	uint32_t hstatus;
+	uint32_t hmask;
+	uint32_t hreset;
+	uint32_t htest;
 
-    /* SM501 local memory offset */
-    target_phys_addr_t localmem_base;
+	/* SM501 local memory offset */
+	target_phys_addr_t localmem_base;
 
-    /* Active packets.  */
-    uint32_t old_ctl;
-    USBPacket usb_packet;
-    uint8_t usb_buf[8192];
-    uint32_t async_td;
-    int async_complete;
+	/* Active packets.  */
+	uint32_t old_ctl;
+	USBPacket usb_packet;
+	uint8_t usb_buf[8192];
+	uint32_t async_td;
+	int async_complete;
 
 } OHCIState;
 
 /* Host Controller Communications Area */
 struct ohci_hcca {
-    uint32_t intr[32];
-    uint16_t frame, pad;
-    uint32_t done;
+	uint32_t intr[32];
+	uint16_t frame, pad;
+	uint32_t done;
 };
 
 static void ohci_bus_stop(OHCIState *ohci);
@@ -142,36 +142,36 @@ static void ohci_async_cancel_device(OHCIState *ohci, USBDevice *dev);
 #define OHCI_DPTR_MASK    0xfffffff0
 
 #define OHCI_BM(val, field) \
-  (((val) & OHCI_##field##_MASK) >> OHCI_##field##_SHIFT)
+	(((val) & OHCI_##field##_MASK) >> OHCI_##field##_SHIFT)
 
 #define OHCI_SET_BM(val, field, newval) do { \
-    val &= ~OHCI_##field##_MASK; \
-    val |= ((newval) << OHCI_##field##_SHIFT) & OHCI_##field##_MASK; \
-    } while(0)
+		val &= ~OHCI_##field##_MASK; \
+		val |= ((newval) << OHCI_##field##_SHIFT) & OHCI_##field##_MASK; \
+	} while(0)
 
 /* endpoint descriptor */
 struct ohci_ed {
-    uint32_t flags;
-    uint32_t tail;
-    uint32_t head;
-    uint32_t next;
+	uint32_t flags;
+	uint32_t tail;
+	uint32_t head;
+	uint32_t next;
 };
 
 /* General transfer descriptor */
 struct ohci_td {
-    uint32_t flags;
-    uint32_t cbp;
-    uint32_t next;
-    uint32_t be;
+	uint32_t flags;
+	uint32_t cbp;
+	uint32_t next;
+	uint32_t be;
 };
 
 /* Isochronous transfer descriptor */
 struct ohci_iso_td {
-    uint32_t flags;
-    uint32_t bp;
-    uint32_t next;
-    uint32_t be;
-    uint16_t offset[8];
+	uint32_t flags;
+	uint32_t bp;
+	uint32_t next;
+	uint32_t be;
+	uint16_t offset[8];
 };
 
 #define USB_HZ                      12000000

@@ -21,8 +21,7 @@
 
 #pragma once
 
-struct CDVDSetting
-{
+struct CDVDSetting {
 	uint32 id;
 	string name;
 	string note;
@@ -42,8 +41,8 @@ protected:
 	virtual bool OnCommand(HWND hWnd, UINT id, UINT code);
 
 public:
-	CDVDDialog (UINT id);
-	virtual ~CDVDDialog () {}
+	CDVDDialog(UINT id);
+	virtual ~CDVDDialog() {}
 
 	INT_PTR DoModal();
 
@@ -55,5 +54,5 @@ public:
 
 	void ComboBoxInit(UINT id, const CDVDSetting* settings, int count, uint32 selid, uint32 maxid = ~0);
 	int ComboBoxAppend(UINT id, const char* str, LPARAM data = 0, bool select = false);
-	bool ComboBoxGetSelData(UINT id, INT_PTR& data);
+	bool ComboBoxGetSelData(UINT id, INT_PTR &data);
 };

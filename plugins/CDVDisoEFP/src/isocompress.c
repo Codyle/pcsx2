@@ -38,16 +38,14 @@
 #include "bzip2v3.h"
 #include "isocompress.h"
 
-const char *compressnames[] =
-{
+const char *compressnames[] = {
 	"No Compression",
 	".Z (zlib) for speed",
 	".BZ2 (bzip2) for speed",
 	".bz2 (bzip2) for size",
 	NULL
 }; // Compress types 0, 3, 4, and 5
-const char *compressdesc[] =
-{
+const char *compressdesc[] = {
 	"",
 	" zlib orig",
 	" block.dump",
@@ -57,16 +55,14 @@ const char *compressdesc[] =
 	NULL
 };
 
-const char *compressid[] =
-{
+const char *compressid[] = {
 	"BVD2",
 	"Z V2",
 	"BZV2",
 	"BZV3",
 	NULL
 }; // Starts at compress type 2
-struct CompressExt compressext[] =
-{
+struct CompressExt compressext[] = {
 	{ ".z", 1 },
 	{ ".Z", 1 },
 	{ ".bz2", 5 },
@@ -89,40 +85,32 @@ int IsoNameStripCompress(struct IsoFile *isofile)
 	int retmethod;
 	retmethod = 0;
 	tempext = 0;
-	while (compressext[tempext].name != NULL)
-	{
+	while (compressext[tempext].name != NULL) {
 		tempextpos = 0;
 		while (*(compressext[tempext].name + tempextpos) != 0)  tempextpos++;
 		tempnamepos = isofile->namepos;
 		while ((tempnamepos > 0) && (tempextpos > 0) &&
-		        (isofile->name[tempnamepos - 1] == *(compressext[tempext].name + tempextpos - 1)))
-		{
+		       (isofile->name[tempnamepos - 1] == *(compressext[tempext].name + tempextpos - 1))) {
 			tempnamepos--;
 			tempextpos--;
 		} // ENDWHILE- Comparing one extension to the end of the file name
-		if (tempextpos == 0)
-		{
+		if (tempextpos == 0) {
 			isofile->namepos = tempnamepos; // Move name pointer in front of ext.
-			return(compressext[tempext].method); // Found a match... say which one.
-		}
-		else
-		{
+			return (compressext[tempext].method); // Found a match... say which one.
+		} else {
 			tempext++; // Next ext in the list to test...
 		} // ENDIF- Did we find a match?
 	} // ENDWHILE- looking through extension list
-	return(0); // No compress extension found.
+	return (0); // No compress extension found.
 } // END IsoNameStripCompress()
 
 int CompressOpenForRead(struct IsoFile *isofile)
 {
 	int retval;
-
 #ifdef VERBOSE_FUNCTION_ISOCOMPRESS
 	PrintLog("CDVDiso compress: OpenForRead()");
 #endif /* VERBOSE_FUNCTION_ISOCOMPRESS */
-
-	switch (isofile->compress)
-	{
+	switch (isofile->compress) {
 		case 1:
 			retval = GZipV1OpenForRead(isofile);
 			if (retval >= 0)  retval = GZipV1OpenTableForRead(isofile);
@@ -147,8 +135,7 @@ int CompressOpenForRead(struct IsoFile *isofile)
 			retval = -1;
 			break;
 	} // ENDSWITCH compress- which method do we try to get header info from?
-
-	return(retval);
+	return (retval);
 } // END CompressOpenForRead()
 
 int CompressSeek(struct IsoFile *isofile, off64_t sector)
@@ -157,8 +144,7 @@ int CompressSeek(struct IsoFile *isofile, off64_t sector)
 #ifdef VERBOSE_FUNCTION_ISOCOMPRESS
 	PrintLog("CDVDiso compress: Seek(%lli)", sector);
 #endif /* VERBOSE_FUNCTION_ISOCOMPRESS */
-	switch (isofile->compress)
-	{
+	switch (isofile->compress) {
 		case 1:
 			retval = GZipV1SeekTable(isofile, sector);
 			break;
@@ -178,8 +164,7 @@ int CompressSeek(struct IsoFile *isofile, off64_t sector)
 			retval = -1;
 			break;
 	} // ENDSWITCH compress- which method do we try to get header info from?
-
-	return(retval);
+	return (retval);
 } // END CompressSeek()
 
 int CompressRead(struct IsoFile *isofile, char *buffer)
@@ -188,88 +173,58 @@ int CompressRead(struct IsoFile *isofile, char *buffer)
 	int retval;
 	int compptr;
 	int i;
-
 #ifdef VERBOSE_FUNCTION_ISOCOMPRESS
 	PrintLog("CDVDiso compress: Read()");
 #endif /* VERBOSE_FUNCTION_ISOCOMPRESS */
-
-	switch (isofile->compress)
-	{
+	switch (isofile->compress) {
 		case 1:
 			retval = GZipV1ReadTable(isofile, &table);
-			if (retval >= 0)
-			{
+			if (retval >= 0) {
 				if (table.offset != isofile->filebytepos)
-				{
-					retval = GZipV1Seek(isofile, table.offset);
-				} // ENDIF- The data file not in position?
+					retval = GZipV1Seek(isofile, table.offset); // ENDIF- The data file not in position?
 			} // ENDIF- Did we get a table entry?
 			if (retval >= 0)
-			{
-				retval = GZipV1Read(isofile, table.size, buffer);
-			} // ENDIF- Are we still on track?
+				retval = GZipV1Read(isofile, table.size, buffer); // ENDIF- Are we still on track?
 			break;
 		case 2:
 			retval = BlockV2ReadTable(isofile, &table);
-			if (retval >= 0)
-			{
+			if (retval >= 0) {
 				if (table.offset != isofile->filebytepos)
-				{
-					retval = BlockV2Seek(isofile, table.offset);
-				} // ENDIF- The data file not in position?
+					retval = BlockV2Seek(isofile, table.offset); // ENDIF- The data file not in position?
 			} // ENDIF- Did we get a table entry?
 			if (retval >= 0)
-			{
-				retval = BlockV2Read(isofile, table.size, buffer);
-			} // ENDIF- Are we still on track?
+				retval = BlockV2Read(isofile, table.size, buffer); // ENDIF- Are we still on track?
 			break;
-
 		case 3:
 			retval = GZipV2ReadTable(isofile, &table);
-			if (retval >= 0)
-			{
+			if (retval >= 0) {
 				if (table.offset != isofile->filebytepos)
-				{
-					retval = GZipV2Seek(isofile, table.offset);
-				} // ENDIF- The data file not in position?
+					retval = GZipV2Seek(isofile, table.offset); // ENDIF- The data file not in position?
 			} // ENDIF- Did we get a table entry?
 			if (retval >= 0)
-			{
-				retval = GZipV2Read(isofile, table.size, buffer);
-			} // ENDIF- Are we still on track?
+				retval = GZipV2Read(isofile, table.size, buffer); // ENDIF- Are we still on track?
 			break;
-
 		case 4:
 			retval = 0;
 			if ((isofile->filesectorpos < isofile->compsector) ||
-			        (isofile->filesectorpos > isofile->compsector + isofile->numsectors - 1))
-			{
+			    (isofile->filesectorpos > isofile->compsector + isofile->numsectors - 1)) {
 				retval = BZip2V2ReadTable(isofile, &table);
-				if (retval >= 0)
-				{
+				if (retval >= 0) {
 					if (table.offset != isofile->filebytepos)
-					{
-						retval = BZip2V2Seek(isofile, table.offset);
-					} // ENDIF- The data file not in position?
+						retval = BZip2V2Seek(isofile, table.offset); // ENDIF- The data file not in position?
 				} // ENDIF- Did we get a table entry?
-				if (retval >= 0)
-				{
+				if (retval >= 0) {
 					retval = BZip2V2Read(isofile, table.size, isofile->compblock);
 					isofile->compsector = isofile->filesectorpos / isofile->numsectors;
 					isofile->compsector *= isofile->numsectors;
 				} // ENDIF- Are we still on track?
 			} // ENDIF- Did we have to read in another block?
-
-			if (retval >= 0)
-			{
+			if (retval >= 0) {
 				compptr = isofile->filesectorpos - isofile->compsector;
 				compptr *= isofile->blocksize;
 				if ((compptr < 0) || (compptr > (65535 - isofile->blocksize)))
-				{
 					retval = -1;
-				}
-				else
-				{
+				else {
 					for (i = 0; i < isofile->blocksize; i++)
 						*(buffer + i) = isofile->compblock[compptr + i];
 					isofile->filesectorpos++;
@@ -279,38 +234,26 @@ int CompressRead(struct IsoFile *isofile, char *buffer)
 		case 5:
 			retval = 0;
 			if ((isofile->filesectorpos < isofile->compsector) ||
-			        (isofile->filesectorpos > isofile->compsector + isofile->numsectors - 1))
-			{
-
-				if (isofile->filesectorpos != isofile->compsector + isofile->numsectors)
-				{
+			    (isofile->filesectorpos > isofile->compsector + isofile->numsectors - 1)) {
+				if (isofile->filesectorpos != isofile->compsector + isofile->numsectors) {
 					retval = BZip2V3ReadTable(isofile, &table);
-					if (retval >= 0)
-					{
+					if (retval >= 0) {
 						if (table.offset != isofile->filebytepos)
-						{
-							retval = BZip2V3Seek(isofile, table.offset);
-						} // ENDIF- The data file not in position?
+							retval = BZip2V3Seek(isofile, table.offset); // ENDIF- The data file not in position?
 					} // ENDIF- Did we get a table entry?
 				} // ENDIF- Not the next block in the batch? Seek then.
-				if (retval >= 0)
-				{
+				if (retval >= 0) {
 					retval = BZip2V3Read(isofile, 0, isofile->compblock);
 					isofile->compsector = isofile->filesectorpos / isofile->numsectors;
 					isofile->compsector *= isofile->numsectors;
 				} // ENDIF- Are we still on track?
 			} // ENDIF- Did we have to read in another block?
-
-			if (retval >= 0)
-			{
+			if (retval >= 0) {
 				compptr = isofile->filesectorpos - isofile->compsector;
 				compptr *= isofile->blocksize;
 				if ((compptr < 0) || (compptr > (65535 - isofile->blocksize)))
-				{
 					retval = -1;
-				}
-				else
-				{
+				else {
 					for (i = 0; i < isofile->blocksize; i++)
 						*(buffer + i) = isofile->compblock[compptr + i];
 					isofile->filesectorpos++;
@@ -321,21 +264,17 @@ int CompressRead(struct IsoFile *isofile, char *buffer)
 			retval = -1;
 			break;
 	} // ENDSWITCH compress- which method do we try to get header info from?
-
 	if (retval >= 0)  retval = isofile->blocksize;
-	return(retval);
+	return (retval);
 } // END CompressRead()
 
 void CompressClose(struct IsoFile *isofile)
 {
 	int retval;
-
 #ifdef VERBOSE_FUNCTION_ISOCOMPRESS
 	PrintLog("CDVDiso compress: Close()");
 #endif /* VERBOSE_FUNCTION_ISOCOMPRESS */
-
-	switch (isofile->compress)
-	{
+	switch (isofile->compress) {
 		case 1:
 			GZipV1Close(isofile);
 			break;
@@ -361,13 +300,10 @@ void CompressClose(struct IsoFile *isofile)
 int CompressOpenForWrite(struct IsoFile *isofile)
 {
 	int retval;
-
 #ifdef VERBOSE_FUNCTION_ISOCOMPRESS
 	PrintLog("CDVDiso compress: OpenForWrite()");
 #endif /* VERBOSE_FUNCTION_ISOCOMPRESS */
-
-	switch (isofile->compress)
-	{
+	switch (isofile->compress) {
 		case 1:
 			retval = GZipV1OpenForWrite(isofile);
 			if (retval >= 0)  retval = GZipV1OpenTableForWrite(isofile);
@@ -391,7 +327,7 @@ int CompressOpenForWrite(struct IsoFile *isofile)
 			retval = -1;
 			break;
 	} // ENDSWITCH compress- which method do we try to get header info from?
-	return(retval);
+	return (retval);
 } // END CompressOpenForWrite()
 
 int CompressWrite(struct IsoFile *isofile, char *buffer)
@@ -403,12 +339,10 @@ int CompressWrite(struct IsoFile *isofile, char *buffer)
 #ifdef VERBOSE_FUNCTION_ISOCOMPRESS
 	PrintLog("CDVDiso compress: Write()");
 #endif /* VERBOSE_FUNCTION_ISOCOMPRESS */
-	switch (isofile->compress)
-	{
+	switch (isofile->compress) {
 		case 1:
 			retval = GZipV1Write(isofile, buffer);
-			if (retval > 0)
-			{
+			if (retval > 0) {
 				table.offset = isofile->filebytepos - retval;
 				table.size = retval;
 				retval = GZipV1WriteTable(isofile, table);
@@ -419,30 +353,25 @@ int CompressWrite(struct IsoFile *isofile, char *buffer)
 			break;
 		case 3:
 			retval = GZipV2Write(isofile, buffer);
-			if (retval > 0)
-			{
+			if (retval > 0) {
 				table.offset = isofile->filebytepos - retval;
 				table.size = retval;
 				retval = GZipV2WriteTable(isofile, table);
 			} // ENDIF- Wrote the data out? Update the table as well.
 			break;
-
 		case 4:
 			retval = 0;
 			if ((isofile->filesectorpos < isofile->compsector) ||
-			        (isofile->filesectorpos > isofile->compsector + isofile->numsectors - 1))
-			{
+			    (isofile->filesectorpos > isofile->compsector + isofile->numsectors - 1)) {
 				retval = BZip2V2Write(isofile, isofile->compblock);
 				isofile->compsector += isofile->numsectors;
-				if (retval > 0)
-				{
+				if (retval > 0) {
 					table.offset = isofile->filebytepos - retval;
 					table.size = retval;
 					retval = BZip2V2WriteTable(isofile, table);
 				} // ENDIF- Wrote the data out? Update the table as well.
 			} // ENDIF- Do we have a full buffer to write out?
-			if (retval >= 0)
-			{
+			if (retval >= 0) {
 				compptr = isofile->filesectorpos - isofile->compsector;
 				compptr *= isofile->blocksize;
 				for (i = 0; i < isofile->blocksize; i++)
@@ -450,23 +379,19 @@ int CompressWrite(struct IsoFile *isofile, char *buffer)
 			} // ENDIF- Do we have a valid buffer to draw from?
 			isofile->filesectorpos++;
 			break;
-
 		case 5:
 			retval = 0;
 			if ((isofile->filesectorpos < isofile->compsector) ||
-			        (isofile->filesectorpos > isofile->compsector + isofile->numsectors - 1))
-			{
+			    (isofile->filesectorpos > isofile->compsector + isofile->numsectors - 1)) {
 				retval = BZip2V3Write(isofile, isofile->compblock);
 				isofile->compsector += isofile->numsectors;
-				if (retval > 0)
-				{
+				if (retval > 0) {
 					table.offset = isofile->filebytepos - retval;
 					table.size = retval;
 					retval = BZip2V3WriteTable(isofile, table);
 				} // ENDIF- Wrote the data out? Update the table as well.
 			} // ENDIF- Do we have a full buffer to write out?
-			if (retval >= 0)
-			{
+			if (retval >= 0) {
 				compptr = isofile->filesectorpos - isofile->compsector;
 				compptr *= isofile->blocksize;
 				for (i = 0; i < isofile->blocksize; i++)
@@ -474,11 +399,10 @@ int CompressWrite(struct IsoFile *isofile, char *buffer)
 			} // ENDIF- Do we have a valid buffer to draw from?
 			isofile->filesectorpos++;
 			break;
-
 		default:
 			retval = -1;
 			break;
 	} // ENDSWITCH compress- which method do we try to get header info from?
 	if (retval >= 0)  retval = isofile->blocksize;
-	return(retval);
+	return (retval);
 } // END CompressWrite()

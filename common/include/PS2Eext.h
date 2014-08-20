@@ -39,149 +39,124 @@ static void SysMessage(const char *fmt, ...);
 static void __forceinline PluginNullConfigure(std::string desc, s32 &log);
 static void __forceinline PluginNullAbout(const char *aboutText);
 
-enum FileMode
-{
-    READ_FILE = 0,
-    WRITE_FILE
+enum FileMode {
+	READ_FILE = 0,
+	WRITE_FILE
 };
 
-struct PluginLog
-{
-    bool WriteToFile, WriteToConsole;
-    FILE *LogFile;
+struct PluginLog {
+	bool WriteToFile, WriteToConsole;
+	FILE *LogFile;
 
-    bool Open(std::string logname)
-    {
-        LogFile = fopen(logname.c_str(), "w");
+	bool Open(std::string logname)
+	{
+		LogFile = fopen(logname.c_str(), "w");
+		if (LogFile) {
+			setvbuf(LogFile, NULL,  _IONBF, 0);
+			return true;
+		}
+		return false;
+	}
 
-        if (LogFile)
-        {
-            setvbuf(LogFile, NULL,  _IONBF, 0);
-            return true;
-        }
-        return false;
-    }
+	void Close()
+	{
+		if (LogFile) {
+			fclose(LogFile);
+			LogFile = NULL;
+		}
+	}
 
-    void Close()
-    {
-        if (LogFile) {
-            fclose(LogFile);
-            LogFile = NULL;
-        }
-    }
+	void Write(const char *fmt, ...)
+	{
+		va_list list;
+		if (LogFile == NULL) return;
+		va_start(list, fmt);
+		if (WriteToFile) vfprintf(LogFile, fmt, list);
+		if (WriteToConsole) vfprintf(stdout, fmt, list);
+		va_end(list);
+	}
 
-    void Write(const char *fmt, ...)
-    {
-        va_list list;
+	void WriteLn(const char *fmt, ...)
+	{
+		va_list list;
+		if (LogFile == NULL) return;
+		va_start(list, fmt);
+		if (WriteToFile) vfprintf(LogFile, fmt, list);
+		if (WriteToConsole) vfprintf(stdout, fmt, list);
+		va_end(list);
+		if (WriteToFile) fprintf(LogFile, "\n");
+		if (WriteToConsole) fprintf(stdout, "\n");
+	}
 
-        if (LogFile == NULL) return;
-
-        va_start(list, fmt);
-        if (WriteToFile) vfprintf(LogFile, fmt, list);
-        if (WriteToConsole) vfprintf(stdout, fmt, list);
-        va_end(list);
-    }
-
-    void WriteLn(const char *fmt, ...)
-    {
-        va_list list;
-
-        if (LogFile == NULL) return;
-
-        va_start(list, fmt);
-        if (WriteToFile) vfprintf(LogFile, fmt, list);
-        if (WriteToConsole) vfprintf(stdout, fmt, list);
-        va_end(list);
-
-        if (WriteToFile) fprintf(LogFile, "\n");
-        if (WriteToConsole) fprintf(stdout, "\n");
-    }
-
-    void Message(const char *fmt, ...)
-    {
-        va_list list;
-        char buf[256];
-
-        if (LogFile == NULL) return;
-
-        va_start(list, fmt);
-        vsprintf(buf, fmt, list);
-        va_end(list);
-
-        SysMessage(buf);
-    }
+	void Message(const char *fmt, ...)
+	{
+		va_list list;
+		char buf[256];
+		if (LogFile == NULL) return;
+		va_start(list, fmt);
+		vsprintf(buf, fmt, list);
+		va_end(list);
+		SysMessage(buf);
+	}
 };
 
-struct PluginConf
-{
-    FILE *ConfFile;
-    char *PluginName;
+struct PluginConf {
+	FILE *ConfFile;
+	char *PluginName;
 
-    bool Open(std::string name, FileMode mode = READ_FILE)
-    {
-        if (mode == READ_FILE)
-        {
-            ConfFile = fopen(name.c_str(), "r");
-        }
-        else
-        {
-            ConfFile = fopen(name.c_str(), "w");
-        }
+	bool Open(std::string name, FileMode mode = READ_FILE)
+	{
+		if (mode == READ_FILE)
+			ConfFile = fopen(name.c_str(), "r");
+		else
+			ConfFile = fopen(name.c_str(), "w");
+		if (ConfFile == NULL) return false;
+		return true;
+	}
 
-        if (ConfFile == NULL) return false;
+	void Close()
+	{
+		if (ConfFile) {
+			fclose(ConfFile);
+			ConfFile = NULL;
+		}
+	}
 
-        return true;
-    }
-
-    void Close()
-    {
-        if (ConfFile) {
-            fclose(ConfFile);
-            ConfFile = NULL;
-        }
-    }
-
-    int ReadInt(const std::string& item, int defval)
-    {
-        int value = defval;
-        std::string buf = item + " = %d\n";
-
-        if (ConfFile)
+	int ReadInt(const std::string &item, int defval)
+	{
+		int value = defval;
+		std::string buf = item + " = %d\n";
+		if (ConfFile)
 			if (fscanf(ConfFile, buf.c_str(), &value) < 0)
 				SysMessage("Somethings got wrong when option was read\n");
+		return value;
+	}
 
-        return value;
-    }
-
-    void WriteInt(std::string item, int value)
-    {
-        std::string buf = item + " = %d\n";
-
-        if (ConfFile) fprintf(ConfFile, buf.c_str(), value);
-    }
+	void WriteInt(std::string item, int value)
+	{
+		std::string buf = item + " = %d\n";
+		if (ConfFile) fprintf(ConfFile, buf.c_str(), value);
+	}
 };
 
 #ifdef __LINUX__
 
 static void SysMessage(const char *fmt, ...)
 {
-    va_list list;
-    char msg[512];
-
-    va_start(list, fmt);
-    vsprintf(msg, fmt, list);
-    va_end(list);
-
-    if (msg[strlen(msg)-1] == '\n') msg[strlen(msg)-1] = 0;
-
-    GtkWidget *dialog;
-    dialog = gtk_message_dialog_new (NULL,
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_INFO,
-                                     GTK_BUTTONS_OK,
-                                     "%s", msg);
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+	va_list list;
+	char msg[512];
+	va_start(list, fmt);
+	vsprintf(msg, fmt, list);
+	va_end(list);
+	if (msg[strlen(msg) - 1] == '\n') msg[strlen(msg) - 1] = 0;
+	GtkWidget *dialog;
+	dialog = gtk_message_dialog_new(NULL,
+	                                GTK_DIALOG_DESTROY_WITH_PARENT,
+	                                GTK_MESSAGE_INFO,
+	                                GTK_BUTTONS_OK,
+	                                "%s", msg);
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
 }
 
 static bool loggingValue = false;
@@ -194,38 +169,33 @@ static void __forceinline set_logging(GtkToggleButton *check)
 static void __forceinline send_ok(GtkDialog *dialog)
 {
 	int ret = (loggingValue) ? 1 : 0;
-	gtk_dialog_response (dialog, ret);
+	gtk_dialog_response(dialog, ret);
 }
 
 static void __forceinline PluginNullConfigure(std::string desc, int &log)
 {
-    GtkWidget *dialog, *label, *okay_button, *check_box;
-
-    /* Create the widgets */
-    dialog = gtk_dialog_new();
-    label = gtk_label_new (desc.c_str());
-    okay_button = gtk_button_new_with_label("Ok");
-    check_box = gtk_check_button_new_with_label("Logging");
-
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_box), (log != 0));
-
-    /* Ensure that the dialog box is destroyed when the user clicks ok, and that we get the check box value. */
-    g_signal_connect_swapped(GTK_OBJECT (okay_button), "clicked", G_CALLBACK(send_ok), dialog);
-    g_signal_connect_swapped(GTK_OBJECT (check_box), "toggled", G_CALLBACK(set_logging), check_box);
-
-    /* Add all our widgets, and show everything we've added to the dialog. */
-    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_action_area(GTK_DIALOG(dialog))), okay_button);
-    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), label);
-    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), check_box);
-    gtk_widget_show_all (dialog);
-
-    log = gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+	GtkWidget *dialog, *label, *okay_button, *check_box;
+	/* Create the widgets */
+	dialog = gtk_dialog_new();
+	label = gtk_label_new(desc.c_str());
+	okay_button = gtk_button_new_with_label("Ok");
+	check_box = gtk_check_button_new_with_label("Logging");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_box), (log != 0));
+	/* Ensure that the dialog box is destroyed when the user clicks ok, and that we get the check box value. */
+	g_signal_connect_swapped(GTK_OBJECT(okay_button), "clicked", G_CALLBACK(send_ok), dialog);
+	g_signal_connect_swapped(GTK_OBJECT(check_box), "toggled", G_CALLBACK(set_logging), check_box);
+	/* Add all our widgets, and show everything we've added to the dialog. */
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_action_area(GTK_DIALOG(dialog))), okay_button);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), label);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), check_box);
+	gtk_widget_show_all(dialog);
+	log = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
 }
 
 static void __forceinline PluginNullAbout(const char *aboutText)
 {
-    SysMessage(aboutText);
+	SysMessage(aboutText);
 }
 
 #define ENTRY_POINT /* We don't need no stinkin' entry point! */
@@ -236,12 +206,12 @@ static void __forceinline PluginNullAbout(const char *aboutText)
 
 static void __forceinline SysMessage(const char *fmt, ...)
 {
-    va_list list;
-    char tmp[512];
-    va_start(list,fmt);
-    vsprintf(tmp,fmt,list);
-    va_end(list);
-    MessageBox( GetActiveWindow(), tmp, "Message", MB_SETFOREGROUND | MB_OK );
+	va_list list;
+	char tmp[512];
+	va_start(list, fmt);
+	vsprintf(tmp, fmt, list);
+	va_end(list);
+	MessageBox(GetActiveWindow(), tmp, "Message", MB_SETFOREGROUND | MB_OK);
 }
 
 static void __forceinline PluginNullConfigure(std::string desc, s32 &log)
@@ -249,24 +219,24 @@ static void __forceinline PluginNullConfigure(std::string desc, s32 &log)
 	/* To do: Write a dialog box that displays a dialog box with the text in desc,
 	   and a check box that says "Logging", checked if log !=0, and set log to
 	   1 if it is checked on return, and 0 if it isn't. */
-    SysMessage("This space intentionally left blank.");
+	SysMessage("This space intentionally left blank.");
 }
 
 static void __forceinline PluginNullAbout(const char *aboutText)
 {
-    SysMessage(aboutText);
+	SysMessage(aboutText);
 }
 
 #define ENTRY_POINT \
-HINSTANCE hInst; \
-\
-BOOL APIENTRY DllMain(HANDLE hModule,                  /* DLL INIT*/ \
-                      DWORD  dwReason, \
-                      LPVOID lpReserved) \
-{	\
-    hInst = (HINSTANCE)hModule; \
-    return TRUE;                                          /* very quick :)*/ \
-}
+	HINSTANCE hInst; \
+	\
+	BOOL APIENTRY DllMain(HANDLE hModule,                  /* DLL INIT*/ \
+	                      DWORD  dwReason, \
+	                      LPVOID lpReserved) \
+	{	\
+		hInst = (HINSTANCE)hModule; \
+		return TRUE;                                          /* very quick :)*/ \
+	}
 
 #endif
 #endif // PS2EEXT_H_INCLUDED

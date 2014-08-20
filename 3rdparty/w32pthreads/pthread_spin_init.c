@@ -38,93 +38,59 @@
 
 
 int
-pthread_spin_init (pthread_spinlock_t * lock, int pshared)
+pthread_spin_init(pthread_spinlock_t * lock, int pshared)
 {
-  pthread_spinlock_t s;
-  int cpus = 0;
-  int result = 0;
-
-  if (lock == NULL)
-    {
-      return EINVAL;
-    }
-
+	pthread_spinlock_t s;
+	int cpus = 0;
+	int result = 0;
+	if (lock == NULL)
+		return EINVAL;
 #ifdef PTW32_STATIC_LIB
-  // This allos for C++ static initializers to function without crashes. (air)
-  pthread_win32_process_attach_np();
+	// This allos for C++ static initializers to function without crashes. (air)
+	pthread_win32_process_attach_np();
 #endif
-
-// Optimized this so that it doesn't do cpu count checks needlessly. (air)
+	// Optimized this so that it doesn't do cpu count checks needlessly. (air)
 #if _POSIX_THREAD_PROCESS_SHARED >= 0
-  /*
-   * Not implemented yet.
-   */
-
-  if (0 != ptw32_getprocessors (&cpus))
-    {
-      cpus = 1;
-    }
-
-  if (cpus > 1)
-    {
-      if (pshared == PTHREAD_PROCESS_SHARED)
-	{
-	  /*
-	   * Creating spinlock that can be shared between
-	   * processes.
-	   */
-
+	/*
+	 * Not implemented yet.
+	 */
+	if (0 != ptw32_getprocessors(&cpus))
+		cpus = 1;
+	if (cpus > 1) {
+		if (pshared == PTHREAD_PROCESS_SHARED) {
+			/*
+			 * Creating spinlock that can be shared between
+			 * processes.
+			 */
 #error ERROR [__FILE__, line __LINE__]: Process shared spin locks are not supported yet.
-
-
+		}
 	}
-    }
-
 #else
-
-  if (pshared == PTHREAD_PROCESS_SHARED)
-    return ENOSYS;
-
+	if (pshared == PTHREAD_PROCESS_SHARED)
+		return ENOSYS;
 #endif /* _POSIX_THREAD_PROCESS_SHARED */
-
-  s = (pthread_spinlock_t) calloc (1, sizeof (*s));
-
-  if (s == NULL)
-    {
-      return ENOMEM;
-    }
-
-  if (cpus > 1)
-    {
-      s->u.cpus = cpus;
-      s->interlock = PTW32_SPIN_UNLOCKED;
-    }
-  else
-    {
-      pthread_mutexattr_t ma;
-      result = pthread_mutexattr_init (&ma);
-
-      if (0 == result)
-	{
-	  ma->pshared = pshared;
-	  result = pthread_mutex_init (&(s->u.mutex), &ma);
-	  if (0 == result)
-	    {
-	      s->interlock = PTW32_SPIN_USE_MUTEX;
-	    }
+	s = (pthread_spinlock_t) calloc(1, sizeof(*s));
+	if (s == NULL)
+		return ENOMEM;
+	if (cpus > 1) {
+		s->u.cpus = cpus;
+		s->interlock = PTW32_SPIN_UNLOCKED;
+	} else {
+		pthread_mutexattr_t ma;
+		result = pthread_mutexattr_init(&ma);
+		if (0 == result) {
+			ma->pshared = pshared;
+			result = pthread_mutex_init(&(s->u.mutex), &ma);
+			if (0 == result)
+				s->interlock = PTW32_SPIN_USE_MUTEX;
+		}
+		(void) pthread_mutexattr_destroy(&ma);
 	}
-      (void) pthread_mutexattr_destroy (&ma);
-    }
-
-  if (0 == result)
-    {
-      *lock = s;
-    }
-  else
-    {
-      (void) free (s);
-      *lock = NULL;
-    }
-
-  return (result);
+	if (0 == result)
+		*lock = s;
+	else {
+		(void) free(s);
+		*lock = NULL;
+	}
+	return (result);
 }

@@ -26,19 +26,19 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxBitmapComboBoxNameStr[];
 class WXDLLIMPEXP_ADV wxBitmapComboBoxBase
 {
 public:
-    // ctors and such
-    wxBitmapComboBoxBase() { }
+	// ctors and such
+	wxBitmapComboBoxBase() { }
 
-    virtual ~wxBitmapComboBoxBase() { }
+	virtual ~wxBitmapComboBoxBase() { }
 
-    // Returns the image of the item with the given index.
-    virtual wxBitmap GetItemBitmap(unsigned int n) const = 0;
+	// Returns the image of the item with the given index.
+	virtual wxBitmap GetItemBitmap(unsigned int n) const = 0;
 
-    // Sets the image for the given item.
-    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap) = 0;
+	// Sets the image for the given item.
+	virtual void SetItemBitmap(unsigned int n, const wxBitmap &bitmap) = 0;
 
-    // Returns size of the image used in list
-    virtual wxSize GetBitmapSize() const = 0;
+	// Returns size of the image used in list
+	virtual wxSize GetBitmapSize() const = 0;
 };
 
 

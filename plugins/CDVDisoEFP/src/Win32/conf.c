@@ -55,112 +55,82 @@ void InitConf()
 	int i;
 	int pos;
 	char *envptr;
-
 #ifdef VERBOSE_FUNCTION_CONF
 	PrintLog("CDVD config: InitConf()");
 #endif /* VERBOSE_FUNCTION_CONF */
-
 	conf.isoname[0] = 0; // Empty the iso name
-
 	i = 0;
-	while ((i < 255) && defaultdevice[i] != 0)
-	{
+	while ((i < 255) && defaultdevice[i] != 0) {
 		conf.devicename[i] = defaultdevice[i];
 		i++;
 	} // ENDWHILE- copying the default CD/DVD name in
 	conf.devicename[i] = 0; // 0-terminate the device name
-
 	// Locating directory and file positions
 	pos = 0;
 	envptr = NULL;
 	// envptr = getenv("HOME");
-	if (envptr == NULL)
-	{
+	if (envptr == NULL) {
 		// = <Default Home>
 		retval = GetCurrentDirectory(253, confdirname);
 		if (retval > 0)
-		{
 			pos = retval;
-		}
-		else
-		{
+		else {
 			pos = 2;
 			confdirname[0] = '.';
 			confdirname[1] = '\\';
 		} // ENDIF- Did we retrieve a directory reference?
-
 		i = 0;
-		while (i < pos)
-		{
+		while (i < pos) {
 			conffilename[i] = confdirname[i];
 			i++;
 		} // ENDWHILE- Copying dir info (so far) into file info
-
-		if (confdirname[pos-1] != '\\')
-		{
+		if (confdirname[pos - 1] != '\\') {
 			confdirname[pos] = '\\';
 			conffilename[pos] = '\\';
 			pos++;
 		} // ENDIF- No directory separator here? Add one.
-
 		i = 0;
-		while ((pos < 253) && (defaulthome[i] != 0))
-		{
+		while ((pos < 253) && (defaulthome[i] != 0)) {
 			confdirname[pos] = defaulthome[i];
 			conffilename[pos] = defaulthome[i];
 			pos++;
 			i++;
 		} // ENDWHILE- putting an offset where to store ini data
-
-	}
-	else
-	{
+	} else {
 		// = <Env Home>/<Default Directory>
 		i = 0;
-		while ((pos < 253) && (*(envptr + i) != 0))
-		{
+		while ((pos < 253) && (*(envptr + i) != 0)) {
 			confdirname[pos] = *(envptr + i);
 			conffilename[pos] = *(envptr + i);
 			pos++;
 			i++;
 		} // ENDWHILE- copying home directory info in
-
-		if (confdirname[pos-1] != '\\')
-		{
+		if (confdirname[pos - 1] != '\\') {
 			confdirname[pos] = '\\';
 			conffilename[pos] = '\\';
 			pos++;
 		} // ENDIF- No directory separator here? Add one.
-
 		i = 0;
-		while ((pos < 253) && (defaultdirectory[i] != 0))
-		{
+		while ((pos < 253) && (defaultdirectory[i] != 0)) {
 			confdirname[pos] = defaultdirectory[i];
 			conffilename[pos] = defaultdirectory[i];
 			pos++;
 			i++;
 		} // NEXT- putting a default place to store configuration data
 	} // ENDIF- No Home directory?
-
 	confdirname[pos] = 0; // Directory reference finished
-
 	// += /<Config File Name>
-	if (conffilename[pos-1] != '\\')
-	{
+	if (conffilename[pos - 1] != '\\') {
 		conffilename[pos] = '\\';
 		pos++;
 	} // ENDIF- No directory separator here? Add one.
-
 	i = 0;
-	while ((pos < 253) && (defaultfile[i] != 0))
-	{
+	while ((pos < 253) && (defaultfile[i] != 0)) {
 		conffilename[pos] = defaultfile[i];
 		pos++;
 		i++;
 	} // NEXT- putting a default place to store configuration data
-
 	conffilename[pos] = 0; // File reference finished
-
 #ifdef VERBOSE_FUNCTION_CONF
 	PrintLog("CDVD config:   Directory: %s", confdirname);
 	PrintLog("CDVD config:   File: %s", conffilename);
@@ -171,32 +141,21 @@ void InitConf()
 void LoadConf()
 {
 	int retval;
-
 #ifdef VERBOSE_FUNCTION_CONF
 	PrintLog("CDVD config: LoadConf()");
 #endif /* VERBOSE_FUNCTION_CONF */
-
 	retval = INILoadString(conffilename, "Settings", "IsoFile", conf.isoname);
 	if (retval < 0)
-	{
-		sprintf(conf.isoname, "[Put an Image File here]");
-	} // ENDIF- Couldn't find keyword? Fill in a default
-
+		sprintf(conf.isoname, "[Put an Image File here]"); // ENDIF- Couldn't find keyword? Fill in a default
 	retval = INILoadString(conffilename, "Settings", "Device", conf.devicename);
 	if (retval < 0)
-	{
-		sprintf(conf.devicename, "D:");
-	} // ENDIF- Couldn't find keyword? Fill in a default
-
+		sprintf(conf.devicename, "D:"); // ENDIF- Couldn't find keyword? Fill in a default
 	retval = INILoadUInt(conffilename, "Settings", "OpenOnStart", &conf.startconfigure);
-	if (retval < 0)
-	{
+	if (retval < 0) {
 		conf.startconfigure = 0; // FALSE
 	} // ENDIF- Couldn't find keyword? Fill in a default
-
 	retval = INILoadUInt(conffilename, "Settings", "OpenOnRestart", &conf.restartconfigure);
-	if (retval < 0)
-	{
+	if (retval < 0) {
 		conf.restartconfigure = 1; // TRUE
 	} // ENDIF- Couldn't find keyword? Fill in a default
 } // END LoadConf()
@@ -207,9 +166,7 @@ void SaveConf()
 #ifdef VERBOSE_FUNCTION_CONF
 	PrintLog("CDVD config: SaveConf()");
 #endif /* VERBOSE_FUNCTION_CONF */
-
 	mkdir(confdirname);
-
 	INISaveString(conffilename, "Settings", "IsoFile", conf.isoname);
 	INISaveString(conffilename, "Settings", "Device", conf.devicename);
 	INISaveUInt(conffilename, "Settings", "OpenOnStart", conf.startconfigure);

@@ -38,19 +38,13 @@
 #include "sched.h"
 
 int
-pthread_attr_setinheritsched (pthread_attr_t * attr, int inheritsched)
+pthread_attr_setinheritsched(pthread_attr_t * attr, int inheritsched)
 {
-  if (ptw32_is_attr (attr) != 0)
-    {
-      return EINVAL;
-    }
-
-  if (PTHREAD_INHERIT_SCHED != inheritsched
-      && PTHREAD_EXPLICIT_SCHED != inheritsched)
-    {
-      return EINVAL;
-    }
-
-  (*attr)->inheritsched = inheritsched;
-  return 0;
+	if (ptw32_is_attr(attr) != 0)
+		return EINVAL;
+	if (PTHREAD_INHERIT_SCHED != inheritsched
+	    && PTHREAD_EXPLICIT_SCHED != inheritsched)
+		return EINVAL;
+	(*attr)->inheritsched = inheritsched;
+	return 0;
 }

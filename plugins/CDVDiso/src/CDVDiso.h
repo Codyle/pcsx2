@@ -84,8 +84,7 @@ void __Log(char *fmt, ...);
 #define DEV_DEF		""
 #define CDDEV_DEF	"/dev/cdrom"
 
-typedef struct
-{
+typedef struct {
 	int slsn;
 	int elsn;
 #ifdef _WINDOWS_

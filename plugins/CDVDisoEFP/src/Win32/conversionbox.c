@@ -39,8 +39,7 @@ HWND conversionboxwindow;
 
 void ConversionBoxDestroy()
 {
-	if (conversionboxwindow != NULL)
-	{
+	if (conversionboxwindow != NULL) {
 		EndDialog(conversionboxwindow, FALSE);
 		conversionboxwindow = NULL;
 	} // ENDIF- Do we have a Main Window still?
@@ -64,25 +63,19 @@ void ConversionBoxFileEvent()
 	struct IsoFile *tempfile;
 	GetDlgItemText(conversionboxwindow, IDC_0402, templine, 256);
 	returnval = IsIsoFile(templine);
-	if (returnval == -1)
-	{
+	if (returnval == -1) {
 		SetDlgItemText(conversionboxwindow, IDC_0404, "File Type: ---");
 		return;
 	} // ENDIF- Not a name of any sort?
-
-	if (returnval == -2)
-	{
+	if (returnval == -2) {
 		SetDlgItemText(conversionboxwindow, IDC_0404, "File Type: Not a file");
 		return;
 	} // ENDIF- Not a regular file?
-	if (returnval == -3)
-	{
+	if (returnval == -3) {
 		SetDlgItemText(conversionboxwindow, IDC_0404, "File Type: Not a valid image file");
 		return;
 	} // ENDIF- Not a regular file?
-
-	if (returnval == -4)
-	{
+	if (returnval == -4) {
 		SetDlgItemText(conversionboxwindow, IDC_0404, "File Type: Missing Table File (will rebuild)");
 		return;
 	} // ENDIF- Not a regular file?
@@ -134,8 +127,7 @@ void ConversionBoxOKEvent()
 	int retval;
 	ConversionBoxUnfocus();
 	GetDlgItemText(conversionboxwindow, IDC_0402, filename, 256);
-	if (IsIsoFile(filename) < 0)
-	{
+	if (IsIsoFile(filename) < 0) {
 		ConversionBoxRefocus();
 		MessageBox(conversionboxwindow,
 		           "Not a Valid Image File.",
@@ -147,13 +139,11 @@ void ConversionBoxOKEvent()
 	compressmethod = ComboBox_GetCurSel(tempitem);
 	tempitem = NULL;
 	if (compressmethod > 0)  compressmethod += 2;
-
 	multi = 0;
 	if (IsDlgButtonChecked(conversionboxwindow, IDC_0408))  multi = 1;
 	fromfile = NULL;
 	fromfile = IsoFileOpenForRead(filename);
-	if (fromfile == NULL)
-	{
+	if (fromfile == NULL) {
 		ConversionBoxRefocus();
 		MessageBox(conversionboxwindow,
 		           "Cannot opening the source file",
@@ -161,10 +151,8 @@ void ConversionBoxOKEvent()
 		           MB_OK | MB_ICONWARNING | MB_SETFOREGROUND);
 		return;
 	} // ENDIF- Not an Iso File? Stop early.
-
 	if ((compressmethod == fromfile->compress) &&
-	        (multi == fromfile->multi))
-	{
+	    (multi == fromfile->multi)) {
 		fromfile = IsoFileClose(fromfile);
 		ConversionBoxRefocus();
 		MessageBox(conversionboxwindow,
@@ -177,8 +165,7 @@ void ConversionBoxOKEvent()
 	                             GetImageTypeConvertTo(fromfile->imagetype),
 	                             multi,
 	                             compressmethod);
-	if (tofile == NULL)
-	{
+	if (tofile == NULL) {
 		fromfile = IsoFileClose(fromfile);
 		ConversionBoxRefocus();
 		MessageBox(conversionboxwindow,
@@ -187,17 +174,13 @@ void ConversionBoxOKEvent()
 		           MB_OK | MB_ICONWARNING | MB_SETFOREGROUND);
 		return;
 	} // ENDIF- Not an Iso File? Stop early.
-	if (fromfile->multi == 1)
-	{
+	if (fromfile->multi == 1) {
 		i = 0;
 		while ((i < 10) &&
-		        (IsoFileSeek(fromfile, fromfile->multisectorend[i] + 1) == 0))  i++;
+		       (IsoFileSeek(fromfile, fromfile->multisectorend[i] + 1) == 0))  i++;
 		endsector = fromfile->multisectorend[fromfile->multiend];
-	}
-	else
-	{
-		endsector = fromfile->filesectorsize;
-	} // ENDIF- Get ending sector from multifile? (Or single file?)
+	} else
+		endsector = fromfile->filesectorsize; // ENDIF- Get ending sector from multifile? (Or single file?)
 	IsoFileSeek(fromfile, 0);
 	// Open Progress Bar
 	sprintf(templine, "%s: %s%s -> %s%s",
@@ -207,28 +190,22 @@ void ConversionBoxOKEvent()
 	        multinames[tofile->multi],
 	        compressdesc[tofile->compress]);
 	ProgressBoxStart(templine, endsector);
-
 	tofile->cdvdtype = fromfile->cdvdtype;
 	for (i = 0; i < 2048; i++)  tofile->toc[i] = fromfile->toc[i];
 	stop = 0;
 	mainboxstop = 0;
 	progressboxstop = 0;
-	while ((stop == 0) && (tofile->sectorpos < endsector))
-	{
+	while ((stop == 0) && (tofile->sectorpos < endsector)) {
 		retval = IsoFileRead(fromfile, tempblock);
-		if (retval < 0)
-		{
+		if (retval < 0) {
 			MessageBox(conversionboxwindow,
 			           "Trouble reading source file",
 			           "CDVDisoEFP Message",
 			           MB_OK | MB_ICONWARNING | MB_SETFOREGROUND);
 			stop = 1;
-		}
-		else
-		{
+		} else {
 			retval = IsoFileWrite(tofile, tempblock);
-			if (retval < 0)
-			{
+			if (retval < 0) {
 				MessageBox(conversionboxwindow,
 				           "Trouble writing new file",
 				           "CDVDisoEFP Message",
@@ -241,20 +218,15 @@ void ConversionBoxOKEvent()
 		if (progressboxstop != 0)  stop = 2;
 	} // ENDWHILE- Not stopped for some reason...
 	ProgressBoxStop();
-	if (stop == 0)
-	{
+	if (stop == 0) {
 		if (tofile->multi == 1)  tofile->name[tofile->multipos] = '0'; // First file
 		strcpy(templine, tofile->name);
 		// fromfile = IsoFileCloseAndDelete(fromfile);
 		fromfile = IsoFileClose(fromfile);
-
 		IsoSaveTOC(tofile);
 		tofile = IsoFileClose(tofile);
 		SetDlgItemText(mainboxwindow, IDC_0202, templine);
-
-	}
-	else
-	{
+	} else {
 		fromfile = IsoFileClose(fromfile);
 		tofile = IsoFileCloseAndDelete(tofile);
 	} // ENDIF- Did we succeed in the transfer?
@@ -268,7 +240,6 @@ void ConversionBoxBrowseEvent()
 	OPENFILENAME filebox;
 	char newfilename[256];
 	BOOL returnbool;
-
 	filebox.lStructSize = sizeof(filebox);
 	filebox.hwndOwner = conversionboxwindow;
 	filebox.hInstance = NULL;
@@ -290,14 +261,10 @@ void ConversionBoxBrowseEvent()
 	filebox.lCustData = 0;
 	filebox.lpfnHook = NULL;
 	filebox.lpTemplateName = NULL;
-
 	GetDlgItemText(conversionboxwindow, IDC_0402, newfilename, 256);
 	returnbool = GetOpenFileName(&filebox);
 	if (returnbool != FALSE)
-	{
-		SetDlgItemText(conversionboxwindow, IDC_0402, newfilename);
-	} // ENDIF- User actually selected a name? Save it.
-
+		SetDlgItemText(conversionboxwindow, IDC_0402, newfilename); // ENDIF- User actually selected a name? Save it.
 	return;
 } // END ConversionBoxBrowseEvent()
 
@@ -313,16 +280,13 @@ void ConversionBoxDisplay()
 	// ConversionBoxFileEvent(); // Needed?
 	itemptr = GetDlgItem(conversionboxwindow, IDC_0406); // Compression Combo
 	itemcount = 0;
-	while (compressnames[itemcount] != NULL)
-	{
+	while (compressnames[itemcount] != NULL) {
 		ComboBox_AddString(itemptr, compressnames[itemcount]);
 		itemcount++;
 	} // ENDWHILE- loading compression types into combo box
 	ComboBox_SetCurSel(itemptr, 0); // First Selection?
 	itemptr = NULL;
-
 	CheckDlgButton(conversionboxwindow, IDC_0408, FALSE); // Start unchecked
-
 	return;
 } // END ConversionBoxDisplay()
 
@@ -331,40 +295,35 @@ BOOL CALLBACK ConversionBoxCallback(HWND window,
                                     WPARAM param,
                                     LPARAM param2)
 {
-	switch (msg)
-	{
+	switch (msg) {
 		case WM_INITDIALOG:
 			conversionboxwindow = window;
 			ConversionBoxDisplay(); // Final touches to this window
-			return(FALSE); // Let Windows display this window
+			return (FALSE); // Let Windows display this window
 			break;
 		case WM_CLOSE: // The "X" in the upper right corner was hit.
 			ConversionBoxCancelEvent();
-			return(TRUE);
+			return (TRUE);
 			break;
-
 		case WM_COMMAND:
-			switch (LOWORD(param))
-			{
+			switch (LOWORD(param)) {
 				case IDC_0402: // Filename Edit Box
 					ConversionBoxFileEvent(); // Describe the File's current type...
-					return(FALSE); // Let Windows edit the text.
+					return (FALSE); // Let Windows edit the text.
 					break;
 				case IDC_0403: // "Browse" Button
 					ConversionBoxBrowseEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
-
 				case IDC_0409: // "Change File" Button
 					ConversionBoxOKEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 				case IDC_0410: // "Cancel" Button
 					ConversionBoxCancelEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 			} // ENDSWITCH param- Which object got the message?
 	} // ENDSWITCH msg- what message has been sent to this window?
-
-	return(FALSE);
+	return (FALSE);
 } // END ConversionBoxEventLoop()

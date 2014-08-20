@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxColourPickerCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxColourPickerCtrlXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxColourPickerCtrlXmlHandler)
 
 public:
-    wxColourPickerCtrlXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxColourPickerCtrlXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_COLOURPICKERCTRL

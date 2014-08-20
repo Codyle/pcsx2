@@ -48,7 +48,7 @@
 #include <mmsystem.h>
 
 #ifndef NUMELMS
-   #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
+#define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 
 ///////////////////////////////////////////////////////////////////////////
@@ -56,22 +56,22 @@
 // the applicaiton is being compiled with the headers from Visual C++ 6.0.
 ///////////////////////////////////////////////////////////////////////////
 #ifndef InterlockedExchangePointer
-	#define InterlockedExchangePointer(Target, Value) \
-   (PVOID)InterlockedExchange((PLONG)(Target), (LONG)(Value))
+#define InterlockedExchangePointer(Target, Value) \
+	(PVOID)InterlockedExchange((PLONG)(Target), (LONG)(Value))
 #endif
 
 #ifndef _WAVEFORMATEXTENSIBLE_
 #define _WAVEFORMATEXTENSIBLE_
 typedef struct {
-    WAVEFORMATEX    Format;
-    union {
-        WORD wValidBitsPerSample;       /* bits of precision  */
-        WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
-        WORD wReserved;                 /* If neither applies, set to zero. */
-    } Samples;
-    DWORD           dwChannelMask;      /* which channels are */
-                                        /* present in stream  */
-    GUID            SubFormat;
+	WAVEFORMATEX    Format;
+	union {
+		WORD wValidBitsPerSample;       /* bits of precision  */
+		WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
+		WORD wReserved;                 /* If neither applies, set to zero. */
+	} Samples;
+	DWORD           dwChannelMask;      /* which channels are */
+	/* present in stream  */
+	GUID            SubFormat;
 } WAVEFORMATEXTENSIBLE, *PWAVEFORMATEXTENSIBLE;
 #endif // !_WAVEFORMATEXTENSIBLE_
 
@@ -80,48 +80,48 @@ typedef struct {
 #endif // !defined(WAVE_FORMAT_EXTENSIBLE)
 
 #ifndef GetWindowLongPtr
-  #define GetWindowLongPtrA   GetWindowLongA
-  #define GetWindowLongPtrW   GetWindowLongW
-  #ifdef UNICODE
-    #define GetWindowLongPtr  GetWindowLongPtrW
-  #else
-    #define GetWindowLongPtr  GetWindowLongPtrA
-  #endif // !UNICODE
+#define GetWindowLongPtrA   GetWindowLongA
+#define GetWindowLongPtrW   GetWindowLongW
+#ifdef UNICODE
+#define GetWindowLongPtr  GetWindowLongPtrW
+#else
+#define GetWindowLongPtr  GetWindowLongPtrA
+#endif // !UNICODE
 #endif // !GetWindowLongPtr
 
 #ifndef SetWindowLongPtr
-  #define SetWindowLongPtrA   SetWindowLongA
-  #define SetWindowLongPtrW   SetWindowLongW
-  #ifdef UNICODE
-    #define SetWindowLongPtr  SetWindowLongPtrW
-  #else
-    #define SetWindowLongPtr  SetWindowLongPtrA
-  #endif // !UNICODE
+#define SetWindowLongPtrA   SetWindowLongA
+#define SetWindowLongPtrW   SetWindowLongW
+#ifdef UNICODE
+#define SetWindowLongPtr  SetWindowLongPtrW
+#else
+#define SetWindowLongPtr  SetWindowLongPtrA
+#endif // !UNICODE
 #endif // !SetWindowLongPtr
 
 #ifndef GWLP_WNDPROC
-  #define GWLP_WNDPROC        (-4)
+#define GWLP_WNDPROC        (-4)
 #endif
 #ifndef GWLP_HINSTANCE
-  #define GWLP_HINSTANCE      (-6)
+#define GWLP_HINSTANCE      (-6)
 #endif
 #ifndef GWLP_HWNDPARENT
-  #define GWLP_HWNDPARENT     (-8)
+#define GWLP_HWNDPARENT     (-8)
 #endif
 #ifndef GWLP_USERDATA
-  #define GWLP_USERDATA       (-21)
+#define GWLP_USERDATA       (-21)
 #endif
 #ifndef GWLP_ID
-  #define GWLP_ID             (-12)
+#define GWLP_ID             (-12)
 #endif
 #ifndef DWLP_MSGRESULT
-  #define DWLP_MSGRESULT  0
+#define DWLP_MSGRESULT  0
 #endif
 #ifndef DWLP_DLGPROC
-  #define DWLP_DLGPROC    DWLP_MSGRESULT + sizeof(LRESULT)
+#define DWLP_DLGPROC    DWLP_MSGRESULT + sizeof(LRESULT)
 #endif
 #ifndef DWLP_USER
-  #define DWLP_USER       DWLP_DLGPROC + sizeof(DLGPROC)
+#define DWLP_USER       DWLP_DLGPROC + sizeof(DLGPROC)
 #endif
 ///////////////////////////////////////////////////////////////////////////
 // End Platform SDK definitions
@@ -179,75 +179,87 @@ typedef struct {
 #include <strsafe.h>
 
 #ifndef NUMELMS
-   #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
+#define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 
 class CPinInfo : public PIN_INFO
 {
 public:
-	CPinInfo() {pFilter = NULL;}
-	~CPinInfo() {if(pFilter) pFilter->Release();}
+	CPinInfo()
+	{
+		pFilter = NULL;
+	}
+	~CPinInfo()
+	{
+		if (pFilter) pFilter->Release();
+	}
 };
 
 class CFilterInfo : public FILTER_INFO
 {
 public:
-	CFilterInfo() {pGraph = NULL;}
-	~CFilterInfo() {if(pGraph) pGraph->Release();}
+	CFilterInfo()
+	{
+		pGraph = NULL;
+	}
+	~CFilterInfo()
+	{
+		if (pGraph) pGraph->Release();
+	}
 };
 
 #define BeginEnumFilters(pFilterGraph, pEnumFilters, pBaseFilter) \
 	{CComPtr<IEnumFilters> pEnumFilters; \
-	if(pFilterGraph && SUCCEEDED(pFilterGraph->EnumFilters(&pEnumFilters))) \
-	{ \
-		for(CComPtr<IBaseFilter> pBaseFilter; S_OK == pEnumFilters->Next(1, &pBaseFilter, 0); pBaseFilter = NULL) \
+		if(pFilterGraph && SUCCEEDED(pFilterGraph->EnumFilters(&pEnumFilters))) \
 		{ \
-
+			for(CComPtr<IBaseFilter> pBaseFilter; S_OK == pEnumFilters->Next(1, &pBaseFilter, 0); pBaseFilter = NULL) \
+			{ \
+				 
 #define EndEnumFilters }}}
 
 #define BeginEnumCachedFilters(pGraphConfig, pEnumFilters, pBaseFilter) \
 	{CComPtr<IEnumFilters> pEnumFilters; \
-	if(pGraphConfig && SUCCEEDED(pGraphConfig->EnumCacheFilter(&pEnumFilters))) \
-	{ \
-		for(CComPtr<IBaseFilter> pBaseFilter; S_OK == pEnumFilters->Next(1, &pBaseFilter, 0); pBaseFilter = NULL) \
+		if(pGraphConfig && SUCCEEDED(pGraphConfig->EnumCacheFilter(&pEnumFilters))) \
 		{ \
-
+			for(CComPtr<IBaseFilter> pBaseFilter; S_OK == pEnumFilters->Next(1, &pBaseFilter, 0); pBaseFilter = NULL) \
+			{ \
+				 
 #define EndEnumCachedFilters }}}
 
 #define BeginEnumPins(pBaseFilter, pEnumPins, pPin) \
 	{CComPtr<IEnumPins> pEnumPins; \
-	if(pBaseFilter && SUCCEEDED(pBaseFilter->EnumPins(&pEnumPins))) \
-	{ \
-		for(CComPtr<IPin> pPin; S_OK == pEnumPins->Next(1, &pPin, 0); pPin = NULL) \
+		if(pBaseFilter && SUCCEEDED(pBaseFilter->EnumPins(&pEnumPins))) \
 		{ \
-
+			for(CComPtr<IPin> pPin; S_OK == pEnumPins->Next(1, &pPin, 0); pPin = NULL) \
+			{ \
+				 
 #define EndEnumPins }}}
 
 #define BeginEnumMediaTypes(pPin, pEnumMediaTypes, pMediaType) \
 	{CComPtr<IEnumMediaTypes> pEnumMediaTypes; \
-	if(pPin && SUCCEEDED(pPin->EnumMediaTypes(&pEnumMediaTypes))) \
-	{ \
-		AM_MEDIA_TYPE* pMediaType = NULL; \
-		for(; S_OK == pEnumMediaTypes->Next(1, &pMediaType, NULL); DeleteMediaType(pMediaType), pMediaType = NULL) \
+		if(pPin && SUCCEEDED(pPin->EnumMediaTypes(&pEnumMediaTypes))) \
 		{ \
-
+			AM_MEDIA_TYPE* pMediaType = NULL; \
+			for(; S_OK == pEnumMediaTypes->Next(1, &pMediaType, NULL); DeleteMediaType(pMediaType), pMediaType = NULL) \
+			{ \
+				 
 #define EndEnumMediaTypes(pMediaType) } if(pMediaType) DeleteMediaType(pMediaType); }}
 
 #define BeginEnumSysDev(clsid, pMoniker) \
 	{CComPtr<ICreateDevEnum> pDevEnum4$##clsid; \
-	pDevEnum4$##clsid.CoCreateInstance(CLSID_SystemDeviceEnum); \
-	CComPtr<IEnumMoniker> pClassEnum4$##clsid; \
-	if(SUCCEEDED(pDevEnum4$##clsid->CreateClassEnumerator(clsid, &pClassEnum4$##clsid, 0)) \
-	&& pClassEnum4$##clsid) \
-	{ \
-		for(CComPtr<IMoniker> pMoniker; pClassEnum4$##clsid->Next(1, &pMoniker, 0) == S_OK; pMoniker = NULL) \
+		pDevEnum4$##clsid.CoCreateInstance(CLSID_SystemDeviceEnum); \
+		CComPtr<IEnumMoniker> pClassEnum4$##clsid; \
+		if(SUCCEEDED(pDevEnum4$##clsid->CreateClassEnumerator(clsid, &pClassEnum4$##clsid, 0)) \
+		    && pClassEnum4$##clsid) \
 		{ \
-
+			for(CComPtr<IMoniker> pMoniker; pClassEnum4$##clsid->Next(1, &pMoniker, 0) == S_OK; pMoniker = NULL) \
+			{ \
+				 
 #define EndEnumSysDev }}}
 
 #else
-    #ifdef DEBUG
-    #pragma message("STREAMS.H included TWICE")
-    #endif
+#ifdef DEBUG
+#pragma message("STREAMS.H included TWICE")
+#endif
 #endif // __STREAMS__
 

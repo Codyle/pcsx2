@@ -127,15 +127,15 @@ typedef int pid_t;
 /* Thread scheduling policies */
 
 enum {
-  SCHED_OTHER = 0,
-  SCHED_FIFO,
-  SCHED_RR,
-  SCHED_MIN   = SCHED_OTHER,
-  SCHED_MAX   = SCHED_RR
+	SCHED_OTHER = 0,
+	SCHED_FIFO,
+	SCHED_RR,
+	SCHED_MIN   = SCHED_OTHER,
+	SCHED_MAX   = SCHED_RR
 };
 
 struct sched_param {
-  int sched_priority;
+	int sched_priority;
 };
 
 #ifdef __cplusplus
@@ -143,15 +143,15 @@ extern "C"
 {
 #endif                          /* __cplusplus */
 
-PTW32_DLLPORT int __cdecl sched_yield (void);
+PTW32_DLLPORT int __cdecl sched_yield(void);
 
-PTW32_DLLPORT int __cdecl sched_get_priority_min (int policy);
+PTW32_DLLPORT int __cdecl sched_get_priority_min(int policy);
 
-PTW32_DLLPORT int __cdecl sched_get_priority_max (int policy);
+PTW32_DLLPORT int __cdecl sched_get_priority_max(int policy);
 
-PTW32_DLLPORT int __cdecl sched_setscheduler (pid_t pid, int policy);
+PTW32_DLLPORT int __cdecl sched_setscheduler(pid_t pid, int policy);
 
-PTW32_DLLPORT int __cdecl sched_getscheduler (pid_t pid);
+PTW32_DLLPORT int __cdecl sched_getscheduler(pid_t pid);
 
 /*
  * Note that this macro returns ENOTSUP rather than
@@ -164,7 +164,7 @@ PTW32_DLLPORT int __cdecl sched_getscheduler (pid_t pid);
  * SCHED_RR is passed to it.
  */
 #define sched_rr_get_interval(_pid, _interval) \
-  ( errno = ENOTSUP, (int) -1 )
+	( errno = ENOTSUP, (int) -1 )
 
 
 #ifdef __cplusplus

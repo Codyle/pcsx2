@@ -32,6 +32,6 @@ OSS_MEM_EXTERN int sound_buffer_size;
 
 #define OSS_SPEED_44100	44100
 
-void SoundFeedVoiceData(unsigned char* pSound,long lBytes);
+void SoundFeedVoiceData(unsigned char* pSound, long lBytes);
 
 #endif // _OSS_SOUND_H

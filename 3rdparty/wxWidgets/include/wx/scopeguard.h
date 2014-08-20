@@ -36,16 +36,16 @@
 // doesn't care about OW compatibility) wxPrivate::OnScopeExit still works.
 
 #define wxPrivateOnScopeExit(guard)          \
-    {                                        \
-        if ( !(guard).WasDismissed() )       \
-        {                                    \
-            wxTRY                            \
-            {                                \
-                (guard).Execute();           \
-            }                                \
-            wxCATCH_ALL(;)                   \
-        }                                    \
-    }
+	{                                        \
+		if ( !(guard).WasDismissed() )       \
+		{                                    \
+			wxTRY                            \
+			{                                \
+				(guard).Execute();           \
+			}                                \
+			wxCATCH_ALL(;)                   \
+		}                                    \
+	}
 
 #define wxPrivateUse(n) wxUnusedVar(n)
 
@@ -59,28 +59,26 @@ namespace wxPrivate
 #else
 #define wxPrivate
 #endif
-    // in the original implementation this was a member template function of
-    // ScopeGuardImplBase but gcc 2.8 which is still used for OS/2 doesn't
-    // support member templates and so we must make it global
-    template <class ScopeGuardImpl>
-    void OnScopeExit(ScopeGuardImpl& guard)
-    {
-        if ( !guard.WasDismissed() )
-        {
-            // we're called from ScopeGuardImpl dtor and so we must not throw
-            wxTRY
-            {
-                guard.Execute();
-            }
-            wxCATCH_ALL(;) // do nothing, just eat the exception
-        }
-    }
+// in the original implementation this was a member template function of
+// ScopeGuardImplBase but gcc 2.8 which is still used for OS/2 doesn't
+// support member templates and so we must make it global
+template <class ScopeGuardImpl>
+void OnScopeExit(ScopeGuardImpl &guard)
+{
+	if (!guard.WasDismissed()) {
+		// we're called from ScopeGuardImpl dtor and so we must not throw
+		wxTRY {
+			guard.Execute();
+		}
+		wxCATCH_ALL(;) // do nothing, just eat the exception
+	}
+}
 
-    // just to avoid the warning about unused variables
-    template <class T>
-    void Use(const T& WXUNUSED(t))
-    {
-    }
+// just to avoid the warning about unused variables
+template <class T>
+void Use(const T &WXUNUSED(t))
+{
+}
 #if !defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 95)
 } // namespace wxPrivate
 #endif
@@ -101,27 +99,33 @@ namespace wxPrivate
 class wxScopeGuardImplBase
 {
 public:
-    wxScopeGuardImplBase() : m_wasDismissed(false) { }
+	wxScopeGuardImplBase() : m_wasDismissed(false) { }
 
-    void Dismiss() const { m_wasDismissed = true; }
+	void Dismiss() const
+	{
+		m_wasDismissed = true;
+	}
 
-    // for OnScopeExit() only (we can't make it friend, unfortunately)!
-    bool WasDismissed() const { return m_wasDismissed; }
+	// for OnScopeExit() only (we can't make it friend, unfortunately)!
+	bool WasDismissed() const
+	{
+		return m_wasDismissed;
+	}
 
 protected:
-    ~wxScopeGuardImplBase() { }
+	~wxScopeGuardImplBase() { }
 
-    wxScopeGuardImplBase(const wxScopeGuardImplBase& other)
-        : m_wasDismissed(other.m_wasDismissed)
-    {
-        other.Dismiss();
-    }
+	wxScopeGuardImplBase(const wxScopeGuardImplBase &other)
+		: m_wasDismissed(other.m_wasDismissed)
+	{
+		other.Dismiss();
+	}
 
-    // must be mutable for copy ctor to work
-    mutable bool m_wasDismissed;
+	// must be mutable for copy ctor to work
+	mutable bool m_wasDismissed;
 
 private:
-    wxScopeGuardImplBase& operator=(const wxScopeGuardImplBase&);
+	wxScopeGuardImplBase &operator=(const wxScopeGuardImplBase &);
 };
 
 // ----------------------------------------------------------------------------
@@ -132,27 +136,33 @@ template <class F>
 class wxScopeGuardImpl0 : public wxScopeGuardImplBase
 {
 public:
-    static wxScopeGuardImpl0<F> MakeGuard(F fun)
-    {
-        return wxScopeGuardImpl0<F>(fun);
-    }
+	static wxScopeGuardImpl0<F> MakeGuard(F fun)
+	{
+		return wxScopeGuardImpl0<F>(fun);
+	}
 
-    ~wxScopeGuardImpl0() { wxPrivateOnScopeExit(*this); }
+	~wxScopeGuardImpl0()
+	{
+		wxPrivateOnScopeExit(*this);
+	}
 
-    void Execute() { m_fun(); }
+	void Execute()
+	{
+		m_fun();
+	}
 
 protected:
-    wxScopeGuardImpl0(F fun) : m_fun(fun) { }
+	wxScopeGuardImpl0(F fun) : m_fun(fun) { }
 
-    F m_fun;
+	F m_fun;
 
-    wxScopeGuardImpl0& operator=(const wxScopeGuardImpl0&);
+	wxScopeGuardImpl0 &operator=(const wxScopeGuardImpl0 &);
 };
 
 template <class F>
 inline wxScopeGuardImpl0<F> wxMakeGuard(F fun)
 {
-    return wxScopeGuardImpl0<F>::MakeGuard(fun);
+	return wxScopeGuardImpl0<F>::MakeGuard(fun);
 }
 
 // ----------------------------------------------------------------------------
@@ -163,28 +173,34 @@ template <class F, class P1>
 class wxScopeGuardImpl1 : public wxScopeGuardImplBase
 {
 public:
-    static wxScopeGuardImpl1<F, P1> MakeGuard(F fun, P1 p1)
-    {
-        return wxScopeGuardImpl1<F, P1>(fun, p1);
-    }
+	static wxScopeGuardImpl1<F, P1> MakeGuard(F fun, P1 p1)
+	{
+		return wxScopeGuardImpl1<F, P1>(fun, p1);
+	}
 
-    ~wxScopeGuardImpl1() { wxPrivateOnScopeExit(* this); }
+	~wxScopeGuardImpl1()
+	{
+		wxPrivateOnScopeExit(* this);
+	}
 
-    void Execute() { m_fun(m_p1); }
+	void Execute()
+	{
+		m_fun(m_p1);
+	}
 
 protected:
-    wxScopeGuardImpl1(F fun, P1 p1) : m_fun(fun), m_p1(p1) { }
+	wxScopeGuardImpl1(F fun, P1 p1) : m_fun(fun), m_p1(p1) { }
 
-    F m_fun;
-    const P1 m_p1;
+	F m_fun;
+	const P1 m_p1;
 
-    wxScopeGuardImpl1& operator=(const wxScopeGuardImpl1&);
+	wxScopeGuardImpl1 &operator=(const wxScopeGuardImpl1 &);
 };
 
 template <class F, class P1>
 inline wxScopeGuardImpl1<F, P1> wxMakeGuard(F fun, P1 p1)
 {
-    return wxScopeGuardImpl1<F, P1>::MakeGuard(fun, p1);
+	return wxScopeGuardImpl1<F, P1>::MakeGuard(fun, p1);
 }
 
 // ----------------------------------------------------------------------------
@@ -195,29 +211,35 @@ template <class F, class P1, class P2>
 class wxScopeGuardImpl2 : public wxScopeGuardImplBase
 {
 public:
-    static wxScopeGuardImpl2<F, P1, P2> MakeGuard(F fun, P1 p1, P2 p2)
-    {
-        return wxScopeGuardImpl2<F, P1, P2>(fun, p1, p2);
-    }
+	static wxScopeGuardImpl2<F, P1, P2> MakeGuard(F fun, P1 p1, P2 p2)
+	{
+		return wxScopeGuardImpl2<F, P1, P2>(fun, p1, p2);
+	}
 
-    ~wxScopeGuardImpl2() { wxPrivateOnScopeExit(*this); }
+	~wxScopeGuardImpl2()
+	{
+		wxPrivateOnScopeExit(*this);
+	}
 
-    void Execute() { m_fun(m_p1, m_p2); }
+	void Execute()
+	{
+		m_fun(m_p1, m_p2);
+	}
 
 protected:
-    wxScopeGuardImpl2(F fun, P1 p1, P2 p2) : m_fun(fun), m_p1(p1), m_p2(p2) { }
+	wxScopeGuardImpl2(F fun, P1 p1, P2 p2) : m_fun(fun), m_p1(p1), m_p2(p2) { }
 
-    F m_fun;
-    const P1 m_p1;
-    const P2 m_p2;
+	F m_fun;
+	const P1 m_p1;
+	const P2 m_p2;
 
-    wxScopeGuardImpl2& operator=(const wxScopeGuardImpl2&);
+	wxScopeGuardImpl2 &operator=(const wxScopeGuardImpl2 &);
 };
 
 template <class F, class P1, class P2>
 inline wxScopeGuardImpl2<F, P1, P2> wxMakeGuard(F fun, P1 p1, P2 p2)
 {
-    return wxScopeGuardImpl2<F, P1, P2>::MakeGuard(fun, p1, p2);
+	return wxScopeGuardImpl2<F, P1, P2>::MakeGuard(fun, p1, p2);
 }
 
 // ============================================================================
@@ -232,90 +254,108 @@ template <class Obj, class MemFun>
 class wxObjScopeGuardImpl0 : public wxScopeGuardImplBase
 {
 public:
-    static wxObjScopeGuardImpl0<Obj, MemFun>
-        MakeObjGuard(Obj& obj, MemFun memFun)
-    {
-        return wxObjScopeGuardImpl0<Obj, MemFun>(obj, memFun);
-    }
+	static wxObjScopeGuardImpl0<Obj, MemFun>
+	MakeObjGuard(Obj &obj, MemFun memFun)
+	{
+		return wxObjScopeGuardImpl0<Obj, MemFun>(obj, memFun);
+	}
 
-    ~wxObjScopeGuardImpl0() { wxPrivateOnScopeExit(*this); }
+	~wxObjScopeGuardImpl0()
+	{
+		wxPrivateOnScopeExit(*this);
+	}
 
-    void Execute() { (m_obj.*m_memfun)(); }
+	void Execute()
+	{
+		(m_obj.*m_memfun)();
+	}
 
 protected:
-    wxObjScopeGuardImpl0(Obj& obj, MemFun memFun)
-        : m_obj(obj), m_memfun(memFun) { }
+	wxObjScopeGuardImpl0(Obj &obj, MemFun memFun)
+		: m_obj(obj), m_memfun(memFun) { }
 
-    Obj& m_obj;
-    MemFun m_memfun;
+	Obj &m_obj;
+	MemFun m_memfun;
 };
 
 template <class Obj, class MemFun>
-inline wxObjScopeGuardImpl0<Obj, MemFun> wxMakeObjGuard(Obj& obj, MemFun memFun)
+inline wxObjScopeGuardImpl0<Obj, MemFun> wxMakeObjGuard(Obj &obj, MemFun memFun)
 {
-    return wxObjScopeGuardImpl0<Obj, MemFun>::MakeObjGuard(obj, memFun);
+	return wxObjScopeGuardImpl0<Obj, MemFun>::MakeObjGuard(obj, memFun);
 }
 
 template <class Obj, class MemFun, class P1>
 class wxObjScopeGuardImpl1 : public wxScopeGuardImplBase
 {
 public:
-    static wxObjScopeGuardImpl1<Obj, MemFun, P1>
-        MakeObjGuard(Obj& obj, MemFun memFun, P1 p1)
-    {
-        return wxObjScopeGuardImpl1<Obj, MemFun, P1>(obj, memFun, p1);
-    }
+	static wxObjScopeGuardImpl1<Obj, MemFun, P1>
+	MakeObjGuard(Obj &obj, MemFun memFun, P1 p1)
+	{
+		return wxObjScopeGuardImpl1<Obj, MemFun, P1>(obj, memFun, p1);
+	}
 
-    ~wxObjScopeGuardImpl1() { wxPrivateOnScopeExit(*this); }
+	~wxObjScopeGuardImpl1()
+	{
+		wxPrivateOnScopeExit(*this);
+	}
 
-    void Execute() { (m_obj.*m_memfun)(m_p1); }
+	void Execute()
+	{
+		(m_obj.*m_memfun)(m_p1);
+	}
 
 protected:
-    wxObjScopeGuardImpl1(Obj& obj, MemFun memFun, P1 p1)
-        : m_obj(obj), m_memfun(memFun), m_p1(p1) { }
+	wxObjScopeGuardImpl1(Obj &obj, MemFun memFun, P1 p1)
+		: m_obj(obj), m_memfun(memFun), m_p1(p1) { }
 
-    Obj& m_obj;
-    MemFun m_memfun;
-    const P1 m_p1;
+	Obj &m_obj;
+	MemFun m_memfun;
+	const P1 m_p1;
 };
 
 template <class Obj, class MemFun, class P1>
 inline wxObjScopeGuardImpl1<Obj, MemFun, P1>
-wxMakeObjGuard(Obj& obj, MemFun memFun, P1 p1)
+wxMakeObjGuard(Obj &obj, MemFun memFun, P1 p1)
 {
-    return wxObjScopeGuardImpl1<Obj, MemFun, P1>::MakeObjGuard(obj, memFun, p1);
+	return wxObjScopeGuardImpl1<Obj, MemFun, P1>::MakeObjGuard(obj, memFun, p1);
 }
 
 template <class Obj, class MemFun, class P1, class P2>
 class wxObjScopeGuardImpl2 : public wxScopeGuardImplBase
 {
 public:
-    static wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>
-        MakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2)
-    {
-        return wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>(obj, memFun, p1, p2);
-    }
+	static wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>
+	MakeObjGuard(Obj &obj, MemFun memFun, P1 p1, P2 p2)
+	{
+		return wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>(obj, memFun, p1, p2);
+	}
 
-    ~wxObjScopeGuardImpl2() { wxPrivateOnScopeExit(*this); }
+	~wxObjScopeGuardImpl2()
+	{
+		wxPrivateOnScopeExit(*this);
+	}
 
-    void Execute() { (m_obj.*m_memfun)(m_p1, m_p2); }
+	void Execute()
+	{
+		(m_obj.*m_memfun)(m_p1, m_p2);
+	}
 
 protected:
-    wxObjScopeGuardImpl2(Obj& obj, MemFun memFun, P1 p1, P2 p2)
-        : m_obj(obj), m_memfun(memFun), m_p1(p1), m_p2(p2) { }
+	wxObjScopeGuardImpl2(Obj &obj, MemFun memFun, P1 p1, P2 p2)
+		: m_obj(obj), m_memfun(memFun), m_p1(p1), m_p2(p2) { }
 
-    Obj& m_obj;
-    MemFun m_memfun;
-    const P1 m_p1;
-    const P2 m_p2;
+	Obj &m_obj;
+	MemFun m_memfun;
+	const P1 m_p1;
+	const P2 m_p2;
 };
 
 template <class Obj, class MemFun, class P1, class P2>
 inline wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>
-wxMakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2)
+wxMakeObjGuard(Obj &obj, MemFun memFun, P1 p1, P2 p2)
 {
-    return wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>::
-                                            MakeObjGuard(obj, memFun, p1, p2);
+	return wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>::
+	       MakeObjGuard(obj, memFun, p1, p2);
 }
 
 // ============================================================================
@@ -323,7 +363,7 @@ wxMakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2)
 // ============================================================================
 
 // wxScopeGuard is just a reference, see the explanation in CUJ article
-typedef const wxScopeGuardImplBase& wxScopeGuard;
+typedef const wxScopeGuardImplBase &wxScopeGuard;
 
 // when an unnamed scope guard is needed, the macros below may be used
 //
@@ -335,39 +375,39 @@ typedef const wxScopeGuardImplBase& wxScopeGuard;
 #define wxGuardName    wxMAKE_UNIQUE_NAME(scopeGuard)
 
 #define wxON_BLOCK_EXIT0_IMPL(n, f) \
-    wxScopeGuard n = wxMakeGuard(f); \
-    wxPrivateUse(n)
+	wxScopeGuard n = wxMakeGuard(f); \
+	wxPrivateUse(n)
 #define wxON_BLOCK_EXIT0(f) \
-    wxON_BLOCK_EXIT0_IMPL(wxGuardName, f)
+	wxON_BLOCK_EXIT0_IMPL(wxGuardName, f)
 
 #define wxON_BLOCK_EXIT_OBJ0_IMPL(n, o, m) \
-    wxScopeGuard n = wxMakeObjGuard(o, m); \
-    wxPrivateUse(n)
+	wxScopeGuard n = wxMakeObjGuard(o, m); \
+	wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ0(o, m) \
-    wxON_BLOCK_EXIT_OBJ0_IMPL(wxGuardName, o, &m)
+	wxON_BLOCK_EXIT_OBJ0_IMPL(wxGuardName, o, &m)
 
 #define wxON_BLOCK_EXIT1_IMPL(n, f, p1) \
-    wxScopeGuard n = wxMakeGuard(f, p1); \
-    wxPrivateUse(n)
+	wxScopeGuard n = wxMakeGuard(f, p1); \
+	wxPrivateUse(n)
 #define wxON_BLOCK_EXIT1(f, p1) \
-    wxON_BLOCK_EXIT1_IMPL(wxGuardName, f, p1)
+	wxON_BLOCK_EXIT1_IMPL(wxGuardName, f, p1)
 
 #define wxON_BLOCK_EXIT_OBJ1_IMPL(n, o, m, p1) \
-    wxScopeGuard n = wxMakeObjGuard(o, m, p1); \
-    wxPrivateUse(n)
+	wxScopeGuard n = wxMakeObjGuard(o, m, p1); \
+	wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ1(o, m, p1) \
-    wxON_BLOCK_EXIT_OBJ1_IMPL(wxGuardName, o, &m, p1)
+	wxON_BLOCK_EXIT_OBJ1_IMPL(wxGuardName, o, &m, p1)
 
 #define wxON_BLOCK_EXIT2_IMPL(n, f, p1, p2) \
-    wxScopeGuard n = wxMakeGuard(f, p1, p2); \
-    wxPrivateUse(n)
+	wxScopeGuard n = wxMakeGuard(f, p1, p2); \
+	wxPrivateUse(n)
 #define wxON_BLOCK_EXIT2(f, p1, p2) \
-    wxON_BLOCK_EXIT2_IMPL(wxGuardName, f, p1, p2)
+	wxON_BLOCK_EXIT2_IMPL(wxGuardName, f, p1, p2)
 
 #define wxON_BLOCK_EXIT_OBJ2_IMPL(n, o, m, p1, p2) \
-    wxScopeGuard n = wxMakeObjGuard(o, m, p1, p2); \
-    wxPrivateUse(n)
+	wxScopeGuard n = wxMakeObjGuard(o, m, p1, p2); \
+	wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ2(o, m, p1, p2) \
-    wxON_BLOCK_EXIT_OBJ2_IMPL(wxGuardName, o, &m, p1, p2)
+	wxON_BLOCK_EXIT_OBJ2_IMPL(wxGuardName, o, &m, p1, p2)
 
 #endif // _WX_SCOPEGUARD_H_

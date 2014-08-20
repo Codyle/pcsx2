@@ -65,19 +65,17 @@
 #endif
 
 static void
-ptw32_cancel_self (void)
+ptw32_cancel_self(void)
 {
-  ptw32_throw (PTW32_EPS_CANCEL);
-
-  /* Never reached */
+	ptw32_throw(PTW32_EPS_CANCEL);
+	/* Never reached */
 }
 
 static void CALLBACK
-ptw32_cancel_callback (DWORD_PTR unused)
+ptw32_cancel_callback(DWORD_PTR unused)
 {
-  ptw32_throw (PTW32_EPS_CANCEL);
-
-  /* Never reached */
+	ptw32_throw(PTW32_EPS_CANCEL);
+	/* Never reached */
 }
 
 /*
@@ -86,25 +84,21 @@ ptw32_cancel_callback (DWORD_PTR unused)
  * is a substitute for QueueUserAPCEx if it's not available.
  */
 DWORD
-ptw32_RegisterCancelation (PAPCFUNC unused1, HANDLE threadH, DWORD unused2)
+ptw32_RegisterCancelation(PAPCFUNC unused1, HANDLE threadH, DWORD unused2)
 {
-  CONTEXT context;
-
-  context.ContextFlags = CONTEXT_CONTROL;
-  GetThreadContext (threadH, &context);
-  PTW32_PROGCTR (context) = (DWORD_PTR) ptw32_cancel_self;
-  SetThreadContext (threadH, &context);
-  return 0;
+	CONTEXT context;
+	context.ContextFlags = CONTEXT_CONTROL;
+	GetThreadContext(threadH, &context);
+	PTW32_PROGCTR(context) = (DWORD_PTR) ptw32_cancel_self;
+	SetThreadContext(threadH, &context);
+	return 0;
 }
 
-void ptw32_PrepCancel( ptw32_thread_t* tp )
+void ptw32_PrepCancel(ptw32_thread_t* tp)
 {
 	HANDLE threadH = tp->threadH;
-
-	SuspendThread (threadH);
-
-	if (WaitForSingleObject (threadH, 0) == WAIT_TIMEOUT)
-	{
+	SuspendThread(threadH);
+	if (WaitForSingleObject(threadH, 0) == WAIT_TIMEOUT) {
 		tp->state = PThreadStateCanceling;
 		tp->cancelState = PTHREAD_CANCEL_DISABLE;
 		/*
@@ -113,8 +107,8 @@ void ptw32_PrepCancel( ptw32_thread_t* tp )
 		* this will result in a call to ptw32_RegisterCancelation and only
 		* the threadH arg will be used.
 		*/
-		ptw32_register_cancelation (ptw32_cancel_callback, threadH, 0);
-		(void) pthread_mutex_unlock (&tp->cancelLock);
-		ResumeThread (threadH);
+		ptw32_register_cancelation(ptw32_cancel_callback, threadH, 0);
+		(void) pthread_mutex_unlock(&tp->cancelLock);
+		ResumeThread(threadH);
 	}
 }

@@ -28,16 +28,19 @@ class GSdxApp
 	std::string m_ini;
 	std::string m_section;
 #ifdef _LINUX
-	std::map< std::string, std::string > m_configuration_map;
+	std::map<std::string, std::string> m_configuration_map;
 #endif
 
 public:
 	GSdxApp();
 
-    void* GetModuleHandlePtr();
+	void* GetModuleHandlePtr();
 
 #ifdef _WINDOWS
- 	HMODULE GetModuleHandle() {return (HMODULE)GetModuleHandlePtr();}
+	HMODULE GetModuleHandle()
+	{
+		return (HMODULE)GetModuleHandlePtr();
+	}
 #endif
 #ifdef _LINUX
 	void BuildConfigurationMap(const char* lpFileName);

@@ -81,8 +81,8 @@ void _unpackVFSS_xyzw(int dstreg, int srcreg, int xyzw);
 void VU_MERGE_REGS_CUSTOM(int dest, int src, int xyzw);
 void VU_MERGE_REGS_SAFE(int dest, int src, int xyzw);
 #define VU_MERGE_REGS(dest, src) { \
-	VU_MERGE_REGS_CUSTOM(dest, src, _X_Y_Z_W); \
-}
+		VU_MERGE_REGS_CUSTOM(dest, src, _X_Y_Z_W); \
+	}
 
 // use for allocating vi regs
 #define ALLOCTEMPX86(mode) _allocX86reg(-1, X86TYPE_TEMP, 0, ((info&PROCESS_VU_SUPER)?0:MODE_NOFRAME)|mode)
@@ -265,5 +265,5 @@ void recVUMI_EEXP(VURegs *vuRegs, int info);
 void recVUMI_XGKICK(VURegs *vuRegs, int info);
 void recVUMI_XTOP(VURegs *vuRegs, int info);
 void recVUMI_XITOP(VURegs *vuRegs, int info);
-void recVUMI_XTOP( VURegs *VU , int info);
+void recVUMI_XTOP(VURegs *VU , int info);
 

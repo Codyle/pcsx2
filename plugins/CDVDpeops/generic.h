@@ -33,7 +33,7 @@ void  WaitUntilDriveIsReady(void);
 void  SetGenCDSpeed(int iReset);
 void  GetBESubReadFunc(void);
 int   GetGenReadFunc(int iRM);
-int   OpenGenCD(int iA,int iT,int iL);
+int   OpenGenCD(int iA, int iT, int iL);
 void  CloseGenCD(void);
 void  OpenGenInterface(void);
 void  CloseGenInterface(void);

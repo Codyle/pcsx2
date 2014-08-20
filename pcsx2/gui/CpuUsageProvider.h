@@ -23,12 +23,12 @@ public:
 	BaseCpuUsageProvider() {}
 	virtual ~BaseCpuUsageProvider() throw() {}
 
-	virtual bool IsImplemented() const=0;
-	virtual void UpdateStats()=0;
-	virtual int GetEEcorePct() const=0;
-	virtual int GetGsPct() const=0;
-	virtual int GetVUPct() const=0;
-	virtual int GetGuiPct() const=0;
+	virtual bool IsImplemented() const = 0;
+	virtual void UpdateStats() = 0;
+	virtual int GetEEcorePct() const = 0;
+	virtual int GetGsPct() const = 0;
+	virtual int GetVUPct() const = 0;
+	virtual int GetGuiPct() const = 0;
 };
 
 
@@ -41,21 +41,38 @@ public:
 	CpuUsageProvider();
 	virtual ~CpuUsageProvider() throw();
 
-	virtual bool IsImplemented() const	{ return m_Implementation->IsImplemented(); }
-	virtual void UpdateStats()			{ m_Implementation->UpdateStats(); }
-	virtual int GetEEcorePct() const	{ return m_Implementation->GetEEcorePct(); }
-	virtual int GetGsPct() const		{ return m_Implementation->GetGsPct(); }
-	virtual int GetVUPct() const		{ return m_Implementation->GetVUPct(); }
-	virtual int GetGuiPct() const		{ return m_Implementation->GetGuiPct(); }
+	virtual bool IsImplemented() const
+	{
+		return m_Implementation->IsImplemented();
+	}
+	virtual void UpdateStats()
+	{
+		m_Implementation->UpdateStats();
+	}
+	virtual int GetEEcorePct() const
+	{
+		return m_Implementation->GetEEcorePct();
+	}
+	virtual int GetGsPct() const
+	{
+		return m_Implementation->GetGsPct();
+	}
+	virtual int GetVUPct() const
+	{
+		return m_Implementation->GetVUPct();
+	}
+	virtual int GetGuiPct() const
+	{
+		return m_Implementation->GetGuiPct();
+	}
 };
 
-struct AllPCSX2Threads
-{
+struct AllPCSX2Threads {
 	u64		ee, gs, vu, ui;
 	u64		update;
 
 	void LoadWithCurrentTimes();
-	AllPCSX2Threads operator-( const AllPCSX2Threads& right ) const;
+	AllPCSX2Threads operator-(const AllPCSX2Threads &right) const;
 };
 
 class DefaultCpuUsageProvider :
@@ -87,5 +104,8 @@ public:
 	int GetGuiPct() const;
 
 protected:
-	void CoreThread_OnResumed() { Reset(); }
+	void CoreThread_OnResumed()
+	{
+		Reset();
+	}
 };

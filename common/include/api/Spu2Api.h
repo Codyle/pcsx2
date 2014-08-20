@@ -57,8 +57,8 @@ EXPORT_C_(void) SPU2interruptDMA(u8 core);
 EXPORT_C_(void) SPU2setDMABaseAddr(uptr baseaddr);
 
 EXPORT_C_(u32) SPU2ReadMemAddr(u8 core);
-EXPORT_C_(void) SPU2WriteMemAddr(u8 core,u32 value);
-EXPORT_C_(void) SPU2irqCallback(void (*SPU2callback)(),void (*DMA4callback)(),void (*DMA7callback)());
+EXPORT_C_(void) SPU2WriteMemAddr(u8 core, u32 value);
+EXPORT_C_(void) SPU2irqCallback(void (*SPU2callback)(), void (*DMA4callback)(), void (*DMA7callback)());
 
 // extended funcs
 

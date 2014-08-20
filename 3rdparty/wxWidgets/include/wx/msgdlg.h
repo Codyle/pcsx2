@@ -19,24 +19,22 @@
 class WXDLLEXPORT wxMessageDialogBase
 {
 protected:
-    // common validation of wxMessageDialog style
-    void SetMessageDialogStyle(long style)
-    {
-        wxASSERT_MSG( ((style & wxYES_NO) == wxYES_NO) || ((style & wxYES_NO) == 0),
-                      _T("wxYES and wxNO may only be used together in wxMessageDialog") );
-
-        wxASSERT_MSG( (style & wxID_OK) != wxID_OK,
-                      _T("wxMessageBox: Did you mean wxOK (and not wxID_OK)?") );
-
-        m_dialogStyle = style;
-    }
-    inline long GetMessageDialogStyle() const
-    {
-        return m_dialogStyle;
-    }
+	// common validation of wxMessageDialog style
+	void SetMessageDialogStyle(long style)
+	{
+		wxASSERT_MSG(((style & wxYES_NO) == wxYES_NO) || ((style & wxYES_NO) == 0),
+		             _T("wxYES and wxNO may only be used together in wxMessageDialog"));
+		wxASSERT_MSG((style & wxID_OK) != wxID_OK,
+		             _T("wxMessageBox: Did you mean wxOK (and not wxID_OK)?"));
+		m_dialogStyle = style;
+	}
+	inline long GetMessageDialogStyle() const
+	{
+		return m_dialogStyle;
+	}
 
 private:
-    long m_dialogStyle;
+	long m_dialogStyle;
 };
 
 #if defined(__WX_COMPILING_MSGDLGG_CPP__)
@@ -67,8 +65,8 @@ private:
 // wxMessageBox: the simplest way to use wxMessageDialog
 // ----------------------------------------------------------------------------
 
-int WXDLLEXPORT wxMessageBox(const wxString& message,
-                             const wxString& caption = wxMessageBoxCaptionStr,
+int WXDLLEXPORT wxMessageBox(const wxString &message,
+                             const wxString &caption = wxMessageBoxCaptionStr,
                              long style = wxOK | wxCENTRE,
                              wxWindow *parent = NULL,
                              int x = wxDefaultCoord, int y = wxDefaultCoord);
@@ -76,4 +74,4 @@ int WXDLLEXPORT wxMessageBox(const wxString& message,
 #endif // wxUSE_MSGDLG
 
 #endif
-    // _WX_MSGDLG_H_BASE_
+// _WX_MSGDLG_H_BASE_

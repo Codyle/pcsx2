@@ -20,26 +20,26 @@
 
 // Status Flags
 static const int
-	TX_RDY =		0x0001,
-	RX_RDY =		0x0002,
-	TX_EMPTY =		0x0004,
-	PARITY_ERR =	0x0008,
-	RX_OVERRUN =	0x0010,
-	FRAMING_ERR =	0x0020,
-	SYNC_DETECT =	0x0040,
-	DSR =			0x0080,
-	CTS =			0x0100,
-	IRQ =			0x0200;
+TX_RDY =		0x0001,
+RX_RDY =		0x0002,
+TX_EMPTY =		0x0004,
+PARITY_ERR =	0x0008,
+RX_OVERRUN =	0x0010,
+FRAMING_ERR =	0x0020,
+SYNC_DETECT =	0x0040,
+DSR =			0x0080,
+CTS =			0x0100,
+IRQ =			0x0200;
 
 // Control Flags
 static const int
-	TX_PERM =		0x0001,
-	DTR =			0x0002,
-	RX_PERM =		0x0004,
-	BREAK =			0x0008,
-	RESET_ERR =		0x0010,
-	RTS =			0x0020,
-	SIO_RESET =		0x0040;
+TX_PERM =		0x0001,
+DTR =			0x0002,
+RX_PERM =		0x0004,
+BREAK =			0x0008,
+RESET_ERR =		0x0010,
+RTS =			0x0020,
+SIO_RESET =		0x0040;
 
 void inline SIO_STAT_READY()
 {
@@ -67,8 +67,7 @@ void inline DEVICE_UNPLUGGED()
 	memset8<0x00>(sio.buf);
 }
 
-enum SIO_MODE
-{
+enum SIO_MODE {
 	SIO_START = 0,
 	SIO_CONTROLLER,
 	SIO_MULTITAP,
@@ -87,7 +86,7 @@ enum SIO_MODE
 #ifdef _MSC_VER
 #pragma pack(1)
 #endif
-struct mc_command_0x26_tag{
+struct mc_command_0x26_tag {
 	u8	field_151;			//+02 flags
 	u16	sectorSize;			//+03 Size of each sector(page), in bytes.
 	u16 eraseBlocks;		//+05 Number of sectors in the erase block

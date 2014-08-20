@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxRichTextCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextCtrlXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxRichTextCtrlXmlHandler)
 
 public:
-    wxRichTextCtrlXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxRichTextCtrlXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_RICHTEXT

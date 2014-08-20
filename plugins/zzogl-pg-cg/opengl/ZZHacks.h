@@ -22,10 +22,9 @@
 
 #include "PS2Edefs.h"
 
-// This is a list of the various hacks, and what bit controls them. 
+// This is a list of the various hacks, and what bit controls them.
 // Changing these is not advised unless you know what you are doing.
-enum GAME_HACK_OPTIONS
-{
+enum GAME_HACK_OPTIONS {
 	GAME_TEXTURETARGS		=	0x00000001,
 	GAME_AUTORESET			=	0x00000002,
 	GAME_INTERLACE2X		=	0x00000004,
@@ -60,13 +59,11 @@ enum GAME_HACK_OPTIONS
 	GAME_AUTOSKIPDRAW		=	0x40000000, // Remove blur effect on some games
 	GAME_RESERVED_HACK		=	0x80000000
 };
-	
+
 #define USEALPHATESTING (!(conf.settings().no_alpha_test))
 
-typedef union 
-{
-	struct
-	{
+typedef union {
+	struct {
 		u32 texture_targs : 1;
 		u32 auto_reset : 1;
 		u32 interlace_2x : 1;
@@ -91,15 +88,15 @@ typedef union
 		u32 args_32_bit : 1;
 		u32 path3 : 1;
 		u32 parallel_context : 1; // tries to parallelize both contexts so that render calls are reduced (xenosaga)
-									// makes the game faster, but can be buggy
+		// makes the game faster, but can be buggy
 		u32 xenosaga_spec : 1; // xenosaga specularity hack (ignore any zmask=1 draws)
 		u32 partial_pointers : 1; // whenver the texture or render target are small, tries to look for bigger ones to read from
 		u32 partial_depth : 1; // tries to save depth targets as much as possible across height changes
 		u32 reget : 1; // some sort of weirdness in ReGet() code
 		u32 gust : 1; // Needed for Gustgames fast update.
 		u32 no_logz : 1; // Intended for linux -- not logarithmic Z.
-		u32 automatic_skip_draw :1; // allow debug of the automatic skip draw option
-		u32 reserved2 :1;
+		u32 automatic_skip_draw : 1; // allow debug of the automatic skip draw option
+		u32 reserved2 : 1;
 	};
 	u32 _u32;
 } gameHacks;

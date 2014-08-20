@@ -25,10 +25,10 @@ HCURSOR SetCursor(HCURSOR hCursor);
 
 /* Implemented with wrong number of args by MicroWindows */
 /* so we need to use a different name */
-int GetScrollPosWX (HWND hWnd, int iSBar);
+int GetScrollPosWX(HWND hWnd, int iSBar);
 
 BOOL ScrollWindow(HWND, int xAmount, int yAmount,
-                 CONST RECT* lpRect, CONST RECT* lpClipRect);
+                  CONST RECT* lpRect, CONST RECT* lpClipRect);
 
 HWND WindowFromPoint(POINT pt);
 SHORT GetKeyState(int nVirtKey);
@@ -46,7 +46,7 @@ COLORREF GetTextColor(HDC hdc);
 COLORREF GetBkColor(HDC hdc);
 HPALETTE SelectPalette(HDC hdc, HPALETTE hPalette, BOOL b);
 BOOL IntersectClipRect(HDC hdc, int x, int y,
-               int w, int h);
+                       int w, int h);
 BOOL GetClipBox(HDC hdc, RECT* rect);
 BOOL DrawIconEx(HDC hdc, int x, int y, HICON hIcon, int w, int h, UINT istepIfAniCur, HBRUSH hbrFlickerFreeDraw, UINT diFlags);
 BOOL SetViewportExtEx(HDC hdc, int x, int y, LPSIZE lpSize);
@@ -57,23 +57,23 @@ BOOL ExtFloodFill(HDC hdc, int x, int y, COLORREF col, UINT flags);
 int SetPolyFillMode(HDC hdc, int mode);
 BOOL RoundRect(HDC hdc, int left, int top, int right, int bottom, int r1, int r2);
 BOOL MaskBlt(HDC hdc, int x, int y, int w, int h,
-              HDC hDCSource, int xSrc, int ySrc, HBITMAP hBitmapMask, int xMask, int yMask, DWORD rop);
+             HDC hDCSource, int xSrc, int ySrc, HBITMAP hBitmapMask, int xMask, int yMask, DWORD rop);
 UINT RealizePalette(HDC hDC);
 BOOL SetBrushOrgEx(HDC hdc, int xOrigin, int yOrigin, LPPOINT lpPoint);
 int GetObject(HGDIOBJ hObj, int sz, LPVOID logObj);
 
 /* For some reason these aren't defined in the headers */
-BOOL  EnableScrollBar (HWND hWnd, int iSBar, BOOL bEnable) ;
-BOOL  GetScrollPos (HWND hWnd, int iSBar, int* pPos);
-BOOL  GetScrollRange (HWND hWnd, int iSBar, int* pMinPos, int* pMaxPos);
-BOOL  SetScrollPos (HWND hWnd, int iSBar, int iNewPos);
-BOOL  SetScrollRange (HWND hWnd, int iSBar, int iMinPos, int iMaxPos);
-BOOL  SetScrollInfo (HWND hWnd, int iSBar,
-             LPCSCROLLINFO lpsi, BOOL fRedraw);
+BOOL  EnableScrollBar(HWND hWnd, int iSBar, BOOL bEnable) ;
+BOOL  GetScrollPos(HWND hWnd, int iSBar, int* pPos);
+BOOL  GetScrollRange(HWND hWnd, int iSBar, int* pMinPos, int* pMaxPos);
+BOOL  SetScrollPos(HWND hWnd, int iSBar, int iNewPos);
+BOOL  SetScrollRange(HWND hWnd, int iSBar, int iMinPos, int iMaxPos);
+BOOL  SetScrollInfo(HWND hWnd, int iSBar,
+                    LPCSCROLLINFO lpsi, BOOL fRedraw);
 BOOL  GetScrollInfo(HWND hWnd, int iSBar, LPSCROLLINFO lpsi);
-BOOL  ShowScrollBar (HWND hWnd, int iSBar, BOOL bShow);
+BOOL  ShowScrollBar(HWND hWnd, int iSBar, BOOL bShow);
 HBITMAP WINAPI
-CreateBitmap( int width, int height, int nPlanes, int bPP, LPCVOID lpData);
+CreateBitmap(int width, int height, int nPlanes, int bPP, LPCVOID lpData);
 
 #ifdef __cplusplus
 }
@@ -118,11 +118,11 @@ CreateBitmap( int width, int height, int nPlanes, int bPP, LPCVOID lpData);
 #ifndef WM_GETMINMAXINFO
 #define WM_GETMINMAXINFO                0x0024
 typedef struct tagMINMAXINFO {
-    POINT ptReserved;
-    POINT ptMaxSize;
-    POINT ptMaxPosition;
-    POINT ptMinTrackSize;
-    POINT ptMaxTrackSize;
+	POINT ptReserved;
+	POINT ptMaxSize;
+	POINT ptMaxPosition;
+	POINT ptMinTrackSize;
+	POINT ptMaxTrackSize;
 } MINMAXINFO, *PMINMAXINFO, *LPMINMAXINFO;
 
 #endif

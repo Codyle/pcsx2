@@ -61,8 +61,7 @@ extern string s_strIniPath;
 #define  SPU2_BUILD	4	// increase that with each version
 #define SPU2_MINOR 6
 
-enum zerospu2_options
-{
+enum zerospu2_options {
 	OPTION_TIMESTRETCH = 1, // stretches samples without changing pitch to reduce cracking
 	OPTION_REALTIME = 2, // sync to real time instead of ps2 time
 	OPTION_MUTE = 4,   // don't output anything
@@ -70,8 +69,7 @@ enum zerospu2_options
 };
 
 // ADSR constants
-enum adsr_ms
-{
+enum adsr_ms {
 	ATTACK_MS 		= 494L,
 	DECAYHALF_MS 	= 286L,
 	DECAY_MS 		= 572L,
@@ -134,7 +132,7 @@ int SetupSound(); // if successful, returns 0
 void RemoveSound();
 int SoundGetBytesBuffered();
 // returns 0 is successful, else nonzero
-void SoundFeedVoiceData(unsigned char* pSound,long lBytes);
+void SoundFeedVoiceData(unsigned char* pSound, long lBytes);
 
 static __forceinline void clamp16(s32 &dest)
 {
@@ -154,8 +152,7 @@ static __forceinline void clampandwrite16(s16 &dest, s32 &value)
 		dest = (s16)value;
 }
 
-struct tSPU_ATTR
-{
+struct tSPU_ATTR {
 	u16 extCd : 1;
 	u16 extAudio : 1;
 	u16 cdreverb : 1;
@@ -265,10 +262,8 @@ static __forceinline void C_SPUADDR_SET(u32 value, s32 c)
 #pragma pack(1)
 #endif
 // the layout of each voice in wSpuRegs
-struct _SPU_VOICE
-{
-	union
-	{
+struct _SPU_VOICE {
+	union {
 		struct {
 			u16 Vol : 14;
 			u16 Inverted : 1;
@@ -310,8 +305,7 @@ struct _SPU_VOICE
 #endif
 
 // ADSR INFOS PER   CHANNEL
-struct ADSRInfoEx
-{
+struct ADSRInfoEx {
 	s32			State;
 	s32			AttackModeExp;
 	s32			AttackRate;
@@ -328,8 +322,7 @@ struct ADSRInfoEx
 
 #define SPU_VOICE_STATE_SIZE (sizeof(VOICE_PROCESSED)-4*sizeof(void*))
 
-struct VOICE_PROCESSED
-{
+struct VOICE_PROCESSED {
 	VOICE_PROCESSED()
 	{
 		memset(this, 0, sizeof(VOICE_PROCESSED));
@@ -353,7 +346,7 @@ struct VOICE_PROCESSED
 	s32 leftvol, rightvol;	 // left right volumes
 
 	s32 iSBPos;							 // mixing stuff
-	s32 SB[32+32];
+	s32 SB[32 + 32];
 	s32 spos;
 	s32 sinc;
 
@@ -385,27 +378,20 @@ struct VOICE_PROCESSED
 	void init(s32 i)
 	{
 		chanid = i;
-
-		if (chanid > 23)
-		{
+		if (chanid > 23) {
 			memoffset = 0x400;
 			memchannel = 1;
-		}
-		else
-		{
+		} else {
 			memoffset = 0x0;
 			memchannel = 0;
 		}
-
 		pLoop = pStart = pCurr = (u8*)spu2mem;
-
 		pvoice = (_SPU_VOICE*)((u8*)spu2regs + memoffset) + (i % 24);
 		ADSRX.SustainLevel = 1024;				// -> init sustain
 	}
 };
 
-struct AUDIOBUFFER
-{
+struct AUDIOBUFFER {
 	u8* pbuf;
 	u32 len;
 
@@ -416,8 +402,7 @@ struct AUDIOBUFFER
 	s32 newchannels;
 };
 
-struct ADMA
-{
+struct ADMA {
 	u16*			  MemAddr;
 	s32			  Index;
 	s32			  AmountLeft;
@@ -427,8 +412,7 @@ struct ADMA
 
 extern ADMA adma[2];
 
-struct SPU2freezeData
-{
+struct SPU2freezeData {
 	u32 version;
 	u8 spu2regs[0x10000];
 	u8 spu2mem[0x200000];
@@ -446,7 +430,7 @@ struct SPU2freezeData
 	s32 SPUTargetCycle[2];
 
 	s32 voicesize;
-	VOICE_PROCESSED voices[SPU_NUMBER_VOICES+1];
+	VOICE_PROCESSED voices[SPU_NUMBER_VOICES + 1];
 };
 
 #endif /* __SPU2_H__ */

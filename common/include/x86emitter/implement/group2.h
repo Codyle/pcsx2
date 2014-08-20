@@ -15,11 +15,11 @@
 
 #pragma once
 
-namespace x86Emitter {
-
-enum G2Type
+namespace x86Emitter
 {
-	G2Type_ROL=0,
+
+enum G2Type {
+	G2Type_ROL = 0,
 	G2Type_ROR,
 	G2Type_RCL,
 	G2Type_RCR,
@@ -36,25 +36,24 @@ enum G2Type
 // Optimization Note: For Imm forms, we ignore the instruction if the shift count is zero.
 // This is a safe optimization since any zero-value shift does not affect any flags.
 //
-struct xImpl_Group2
-{
+struct xImpl_Group2 {
 	G2Type InstType;
 
-	void operator()( const xRegisterInt& to, const xRegisterCL& from ) const;
-	void operator()( const xIndirect32orLess& to, const xRegisterCL& from ) const;
-	void operator()( const xRegisterInt& to, u8 imm ) const;
-	void operator()( const xIndirect32orLess& to, u8 imm ) const;
+	void operator()(const xRegisterInt &to, const xRegisterCL &from) const;
+	void operator()(const xIndirect32orLess &to, const xRegisterCL &from) const;
+	void operator()(const xRegisterInt &to, u8 imm) const;
+	void operator()(const xIndirect32orLess &to, u8 imm) const;
 
 #if 0
 	// ------------------------------------------------------------------------
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, u8 imm ) const
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, u8 imm) const
 	{
-		_DoI_helpermess( *this, to, imm );
+		_DoI_helpermess(*this, to, imm);
 	}
 
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, const xRegisterCL& from ) const
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, const xRegisterCL &from) const
 	{
-		_DoI_helpermess( *this, to, from );
+		_DoI_helpermess(*this, to, from);
 	}
 #endif
 };

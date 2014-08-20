@@ -19,8 +19,7 @@
 #include "DebugTools/Breakpoints.h"
 #include "CtrlDisassemblyView.h"
 
-struct GenericListViewColumn
-{
+struct GenericListViewColumn {
 	const wchar_t *name;
 	float size;
 	int flags;
@@ -36,10 +35,10 @@ public:
 protected:
 	wxString OnGetItemText(long item, long col) const;
 
-	void sizeEvent(wxSizeEvent& evt);
-	void keydownEvent(wxKeyEvent& evt);
+	void sizeEvent(wxSizeEvent &evt);
+	void keydownEvent(wxKeyEvent &evt);
 private:
-	int getBreakpointIndex(int itemIndex, bool& isMemory) const;
+	int getBreakpointIndex(int itemIndex, bool &isMemory) const;
 	int getTotalBreakpointCount();
 	void editBreakpoint(int itemIndex);
 	void toggleEnabled(int itemIndex);

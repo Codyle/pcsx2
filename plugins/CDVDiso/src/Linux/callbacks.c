@@ -10,65 +10,57 @@
 
 
 void
-OnFileSel                              (GtkButton       *button,
-                                        gpointer         user_data)
+OnFileSel(GtkButton       *button,
+          gpointer         user_data)
 {
-
 }
 
 
 void
-OnStop                                 (GtkButton       *button,
-                                        gpointer         user_data)
+OnStop(GtkButton       *button,
+       gpointer         user_data)
 {
-
 }
 
 
 void
-OnCompress                             (GtkButton       *button,
-                                        gpointer         user_data)
+OnCompress(GtkButton       *button,
+           gpointer         user_data)
 {
-
 }
 
 
 void
-OnDecompress                           (GtkButton       *button,
-                                        gpointer         user_data)
+OnDecompress(GtkButton       *button,
+             gpointer         user_data)
 {
-
 }
 
 
 void
-OnCreate                               (GtkButton       *button,
-                                        gpointer         user_data)
+OnCreate(GtkButton       *button,
+         gpointer         user_data)
 {
-
 }
 
 
 void
-OnCreateZ                              (GtkButton       *button,
-                                        gpointer         user_data)
+OnCreateZ(GtkButton       *button,
+          gpointer         user_data)
 {
-
 }
 
 
 void
-OnOk                                   (GtkButton       *button,
-                                        gpointer         user_data)
+OnOk(GtkButton       *button,
+     gpointer         user_data)
 {
-
 }
 
 
 void
-OnCancel                               (GtkButton       *button,
-                                        gpointer         user_data)
+OnCancel(GtkButton       *button,
+         gpointer         user_data)
 {
-
 }
 

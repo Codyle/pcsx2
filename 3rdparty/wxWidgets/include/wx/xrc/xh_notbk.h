@@ -18,16 +18,16 @@ class WXDLLIMPEXP_FWD_CORE wxNotebook;
 
 class WXDLLIMPEXP_XRC wxNotebookXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler)
 
 public:
-    wxNotebookXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxNotebookXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_isInside;
-    wxNotebook *m_notebook;
+	bool m_isInside;
+	wxNotebook *m_notebook;
 };
 
 #endif // wxUSE_XRC && wxUSE_NOTEBOOK

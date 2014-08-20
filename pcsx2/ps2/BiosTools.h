@@ -17,15 +17,15 @@
 
 namespace Exception
 {
-	class BiosLoadFailed : public BadStream
-	{
-		DEFINE_EXCEPTION_COPYTORS( BiosLoadFailed, FileNotFound )
-		DEFINE_EXCEPTION_MESSAGES( BiosLoadFailed )
-		DEFINE_STREAM_EXCEPTION_ACCESSORS( BiosLoadFailed )
+class BiosLoadFailed : public BadStream
+{
+	DEFINE_EXCEPTION_COPYTORS(BiosLoadFailed, FileNotFound)
+	DEFINE_EXCEPTION_MESSAGES(BiosLoadFailed)
+	DEFINE_STREAM_EXCEPTION_ACCESSORS(BiosLoadFailed)
 
-	public:
-		BiosLoadFailed( const wxString& streamName );
-	};
+public:
+	BiosLoadFailed(const wxString &streamName);
+};
 }
 
 extern u32 BiosVersion;		//  Used by CDVD
@@ -33,4 +33,4 @@ extern u32 BiosChecksum;
 extern wxString BiosDescription;
 
 extern void LoadBIOS();
-extern bool IsBIOS(const wxString& filename, wxString& description);
+extern bool IsBIOS(const wxString &filename, wxString &description);

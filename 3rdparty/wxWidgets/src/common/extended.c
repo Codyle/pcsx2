@@ -9,9 +9,9 @@
 
 
 #if defined(_WIN32_WCE)
-    /* eVC cause warnings in its own headers: stdlib.h and winnt.h */
-    #pragma warning (disable:4115)
-    #pragma warning (disable:4214)
+/* eVC cause warnings in its own headers: stdlib.h and winnt.h */
+#pragma warning (disable:4115)
+#pragma warning (disable:4214)
 #endif
 
 #include <stdio.h>
@@ -22,8 +22,8 @@
 #include "wx/defs.h"
 
 #if defined(_WIN32_WCE)
-    #pragma warning (default:4115)
-    #pragma warning (default:4214)
+#pragma warning (default:4115)
+#pragma warning (default:4214)
 #endif
 
 #if wxUSE_APPLE_IEEE
@@ -107,38 +107,33 @@
 
 wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes)
 {
-    wxFloat64 f;
-    wxInt32 expon;
-    wxUint32 hiMant, loMant;
-
-    expon = ((bytes[0] & 0x7F) << 8) | (bytes[1] & 0xFF);
-    hiMant = ((wxUint32)(bytes[2] & 0xFF) << 24)
-            | ((wxUint32)(bytes[3] & 0xFF) << 16)
-            | ((wxUint32)(bytes[4] & 0xFF) << 8)
-            | ((wxUint32)(bytes[5] & 0xFF));
-    loMant = ((wxUint32)(bytes[6] & 0xFF) << 24)
-            | ((wxUint32)(bytes[7] & 0xFF) << 16)
-            | ((wxUint32)(bytes[8] & 0xFF) << 8)
-            | ((wxUint32)(bytes[9] & 0xFF));
-
-    if (expon == 0 && hiMant == 0 && loMant == 0) {
-        f = 0;
-    }
-    else {
-        if (expon == 0x7FFF) { /* Infinity or NaN */
-            f = HUGE_VAL;
-        }
-        else {
-            expon -= 16383;
-            f  = ldexp(UnsignedToFloat(hiMant), expon-=31);
-            f += ldexp(UnsignedToFloat(loMant), expon-=32);
-        }
-    }
-
-    if (bytes[0] & 0x80)
-        return -f;
-    else
-        return f;
+	wxFloat64 f;
+	wxInt32 expon;
+	wxUint32 hiMant, loMant;
+	expon = ((bytes[0] & 0x7F) << 8) | (bytes[1] & 0xFF);
+	hiMant = ((wxUint32)(bytes[2] & 0xFF) << 24)
+	         | ((wxUint32)(bytes[3] & 0xFF) << 16)
+	         | ((wxUint32)(bytes[4] & 0xFF) << 8)
+	         | ((wxUint32)(bytes[5] & 0xFF));
+	loMant = ((wxUint32)(bytes[6] & 0xFF) << 24)
+	         | ((wxUint32)(bytes[7] & 0xFF) << 16)
+	         | ((wxUint32)(bytes[8] & 0xFF) << 8)
+	         | ((wxUint32)(bytes[9] & 0xFF));
+	if (expon == 0 && hiMant == 0 && loMant == 0)
+		f = 0;
+	else {
+		if (expon == 0x7FFF)   /* Infinity or NaN */
+			f = HUGE_VAL;
+		else {
+			expon -= 16383;
+			f  = ldexp(UnsignedToFloat(hiMant), expon -= 31);
+			f += ldexp(UnsignedToFloat(loMant), expon -= 32);
+		}
+	}
+	if (bytes[0] & 0x80)
+		return -f;
+	else
+		return f;
 }
 
 
@@ -147,48 +142,50 @@ wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes)
 
 void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes)
 {
-    wxInt32 sign;
-    wxInt32 expon;
-    wxFloat64 fMant, fsMant;
-    wxUint32 hiMant, loMant;
-
-    if (num < 0) {
-        sign = 0x8000;
-        num *= -1;
-    } else {
-        sign = 0;
-    }
-
-    if (num == 0) {
-        expon = 0; hiMant = 0; loMant = 0;
-    }
-    else {
-        fMant = frexp(num, &expon);
-        if ((expon > 16384) || !(fMant < 1)) { /* Infinity or NaN */
-            expon = sign|0x7FFF; hiMant = 0; loMant = 0; /* infinity */
-        }
-        else { /* Finite */
-            expon += 16382;
-            if (expon < 0) { /* denormalized */
-                fMant = ldexp(fMant, expon);
-                expon = 0;
-            }
-            expon |= sign;
-            fMant = ldexp(fMant, 32);          fsMant = floor(fMant); hiMant = FloatToUnsigned(fsMant);
-            fMant = ldexp(fMant - fsMant, 32); fsMant = floor(fMant); loMant = FloatToUnsigned(fsMant);
-        }
-    }
-
-    bytes[0] = expon >> 8;
-    bytes[1] = expon;
-    bytes[2] = hiMant >> 24;
-    bytes[3] = hiMant >> 16;
-    bytes[4] = hiMant >> 8;
-    bytes[5] = hiMant;
-    bytes[6] = loMant >> 24;
-    bytes[7] = loMant >> 16;
-    bytes[8] = loMant >> 8;
-    bytes[9] = loMant;
+	wxInt32 sign;
+	wxInt32 expon;
+	wxFloat64 fMant, fsMant;
+	wxUint32 hiMant, loMant;
+	if (num < 0) {
+		sign = 0x8000;
+		num *= -1;
+	} else
+		sign = 0;
+	if (num == 0) {
+		expon = 0;
+		hiMant = 0;
+		loMant = 0;
+	} else {
+		fMant = frexp(num, &expon);
+		if ((expon > 16384) || !(fMant < 1)) { /* Infinity or NaN */
+			expon = sign | 0x7FFF;
+			hiMant = 0;
+			loMant = 0; /* infinity */
+		} else { /* Finite */
+			expon += 16382;
+			if (expon < 0) { /* denormalized */
+				fMant = ldexp(fMant, expon);
+				expon = 0;
+			}
+			expon |= sign;
+			fMant = ldexp(fMant, 32);
+			fsMant = floor(fMant);
+			hiMant = FloatToUnsigned(fsMant);
+			fMant = ldexp(fMant - fsMant, 32);
+			fsMant = floor(fMant);
+			loMant = FloatToUnsigned(fsMant);
+		}
+	}
+	bytes[0] = expon >> 8;
+	bytes[1] = expon;
+	bytes[2] = hiMant >> 24;
+	bytes[3] = hiMant >> 16;
+	bytes[4] = hiMant >> 8;
+	bytes[5] = hiMant;
+	bytes[6] = loMant >> 24;
+	bytes[7] = loMant >> 16;
+	bytes[8] = loMant >> 8;
+	bytes[9] = loMant;
 }
 
 

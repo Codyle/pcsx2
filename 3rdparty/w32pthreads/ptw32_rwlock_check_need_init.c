@@ -37,56 +37,49 @@
 #include "ptw32pch.h"
 
 INLINE int
-ptw32_rwlock_check_need_init (pthread_rwlock_t * rwlock)
+ptw32_rwlock_check_need_init(pthread_rwlock_t * rwlock)
 {
-  int result = 0;
-
-  /*
-   * The following guarded test is specifically for statically
-   * initialised rwlocks (via PTHREAD_RWLOCK_INITIALIZER).
-   *
-   * Note that by not providing this synchronisation we risk
-   * introducing race conditions into applications which are
-   * correctly written.
-   *
-   * Approach
-   * --------
-   * We know that static rwlocks will not be PROCESS_SHARED
-   * so we can serialise access to internal state using
-   * Win32 Critical Sections rather than Win32 Mutexes.
-   *
-   * If using a single global lock slows applications down too much,
-   * multiple global locks could be created and hashed on some random
-   * value associated with each mutex, the pointer perhaps. At a guess,
-   * a good value for the optimal number of global locks might be
-   * the number of processors + 1.
-   *
-   */
-  EnterCriticalSection (&ptw32_rwlock_test_init_lock);
-
-  /*
-   * We got here possibly under race
-   * conditions. Check again inside the critical section
-   * and only initialise if the rwlock is valid (not been destroyed).
-   * If a static rwlock has been destroyed, the application can
-   * re-initialise it only by calling pthread_rwlock_init()
-   * explicitly.
-   */
-  if (*rwlock == PTHREAD_RWLOCK_INITIALIZER)
-    {
-      result = pthread_rwlock_init (rwlock, NULL);
-    }
-  else if (*rwlock == NULL)
-    {
-      /*
-       * The rwlock has been destroyed while we were waiting to
-       * initialise it, so the operation that caused the
-       * auto-initialisation should fail.
-       */
-      result = EINVAL;
-    }
-
-  LeaveCriticalSection (&ptw32_rwlock_test_init_lock);
-
-  return result;
+	int result = 0;
+	/*
+	 * The following guarded test is specifically for statically
+	 * initialised rwlocks (via PTHREAD_RWLOCK_INITIALIZER).
+	 *
+	 * Note that by not providing this synchronisation we risk
+	 * introducing race conditions into applications which are
+	 * correctly written.
+	 *
+	 * Approach
+	 * --------
+	 * We know that static rwlocks will not be PROCESS_SHARED
+	 * so we can serialise access to internal state using
+	 * Win32 Critical Sections rather than Win32 Mutexes.
+	 *
+	 * If using a single global lock slows applications down too much,
+	 * multiple global locks could be created and hashed on some random
+	 * value associated with each mutex, the pointer perhaps. At a guess,
+	 * a good value for the optimal number of global locks might be
+	 * the number of processors + 1.
+	 *
+	 */
+	EnterCriticalSection(&ptw32_rwlock_test_init_lock);
+	/*
+	 * We got here possibly under race
+	 * conditions. Check again inside the critical section
+	 * and only initialise if the rwlock is valid (not been destroyed).
+	 * If a static rwlock has been destroyed, the application can
+	 * re-initialise it only by calling pthread_rwlock_init()
+	 * explicitly.
+	 */
+	if (*rwlock == PTHREAD_RWLOCK_INITIALIZER)
+		result = pthread_rwlock_init(rwlock, NULL);
+	else if (*rwlock == NULL) {
+		/*
+		 * The rwlock has been destroyed while we were waiting to
+		 * initialise it, so the operation that caused the
+		 * auto-initialisation should fail.
+		 */
+		result = EINVAL;
+	}
+	LeaveCriticalSection(&ptw32_rwlock_test_init_lock);
+	return result;
 }

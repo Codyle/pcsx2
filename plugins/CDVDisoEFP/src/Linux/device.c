@@ -56,83 +56,69 @@ void InitDisc()
 	PrintLog("CDVD device: InitDisc()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
 	if ((disctype == CDVD_TYPE_PS2DVD) ||
-	        (disctype == CDVD_TYPE_DVDV))
-	{
-		InitDVDInfo();
-	} // ENDIF- Clean out DVD Disc Info?
-
+	    (disctype == CDVD_TYPE_DVDV))
+		InitDVDInfo(); // ENDIF- Clean out DVD Disc Info?
 	if ((disctype == CDVD_TYPE_PS2CD) ||
-	        (disctype == CDVD_TYPE_PS2CDDA) ||
-	        (disctype == CDVD_TYPE_PSCD) ||
-	        (disctype == CDVD_TYPE_PSCDDA) ||
-	        (disctype == CDVD_TYPE_CDDA))
-	{
-		InitCDInfo();
-	} // ENDIF- Clean out DVD Disc Info?
-
+	    (disctype == CDVD_TYPE_PS2CDDA) ||
+	    (disctype == CDVD_TYPE_PSCD) ||
+	    (disctype == CDVD_TYPE_PSCDDA) ||
+	    (disctype == CDVD_TYPE_CDDA))
+		InitCDInfo(); // ENDIF- Clean out DVD Disc Info?
 	disctype = CDVD_TYPE_NODISC;
 	for (i = 0; i > sizeof(tocbuffer); i++)  tocbuffer[i] = 0x00;
 } // END InitDisc()
 
 s32 DiscInserted()
 {
-	if (devicehandle == -1)  return(-1);
-	if (traystatus == CDVD_TRAY_OPEN)  return(-1);
-	if (disctype == CDVD_TYPE_ILLEGAL)  return(-1);
+	if (devicehandle == -1)  return (-1);
+	if (traystatus == CDVD_TRAY_OPEN)  return (-1);
+	if (disctype == CDVD_TYPE_ILLEGAL)  return (-1);
 	// if(disctype == CDVD_TYPE_UNKNOWN)  return(-1); // Hmm. Let this one through?
-	if (disctype == CDVD_TYPE_DETCTDVDD)  return(-1);
-	if (disctype == CDVD_TYPE_DETCTDVDS)  return(-1);
-	if (disctype == CDVD_TYPE_DETCTCD)  return(-1);
-	if (disctype == CDVD_TYPE_DETCT)  return(-1);
-	if (disctype == CDVD_TYPE_NODISC)  return(-1);
+	if (disctype == CDVD_TYPE_DETCTDVDD)  return (-1);
+	if (disctype == CDVD_TYPE_DETCTDVDS)  return (-1);
+	if (disctype == CDVD_TYPE_DETCTCD)  return (-1);
+	if (disctype == CDVD_TYPE_DETCT)  return (-1);
+	if (disctype == CDVD_TYPE_NODISC)  return (-1);
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD device: DiscInserted()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-	return(0);
+	return (0);
 } // END DiscInserted()
 
 // Called by DeviceTrayStatus() and CDVDopen()
 s32 DeviceOpen()
 {
 	// s32 s32result;
-
 	errno = 0;
-
-	if (devicehandle != -1)
-	{
+	if (devicehandle != -1) {
 #ifdef VERBOSE_WARNING_DEVICE
 		PrintLog("CDVD device:   Device already open!");
 #endif /* VERBOSE_WARNING_DEVICE */
-		return(0);
+		return (0);
 	} // ENDIF- Is the CD/DVD already in use? That's fine.
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD device: DeviceOpen()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
 	// InitConf();
 	// LoadConf(); // Should be done once before making this call
-
 	devicehandle = open(conf.devicename, O_RDONLY | O_NONBLOCK);
-	if (devicehandle == -1)
-	{
+	if (devicehandle == -1) {
 #ifdef VERBOSE_WARNINGS
 		PrintLog("CDVD device:   Error opening device: %i:%s", errno, strerror(errno));
 #endif /* VERBOSE_WARNINGS */
-		return(-1);
+		return (-1);
 	} // ENDIF- Failed to open device? Abort
-
 	// Note: Hmm. Need a minimum capability in case this fails?
 	devicecapability = ioctl(devicehandle, CDROM_GET_CAPABILITY);
-	if (errno != 0)
-	{
+	if (errno != 0) {
 #ifdef VERBOSE_WARNINGS
 		PrintLog("CDVD device:   Error getting device capabilities: %i:%s", errno, strerror(errno));
 #endif /* VERBOSE_WARNINGS */
 		close(devicehandle);
 		devicehandle = -1;
 		devicecapability = 0;
-		return(-1);
+		return (-1);
 	} // ENDIF- Can't read drive capabilities? Close and Abort.
-
 #ifdef VERBOSE_DISC_TYPE
 	PrintLog("CDVD device: Device Type(s)");
 	if (devicecapability < CDC_CD_R)  PrintLog("CDVD device:   CD");
@@ -156,25 +142,20 @@ s32 DeviceOpen()
 	// if(devicecapability & CDC_RESET)  PrintLog("CDVD device:   Can reset the device");
 	//if(devicecapability & CDC_IOCTLS)  PrintLog("CDVD device:   Odd IOCTLs. Not sure of compatability");
 	if (devicecapability & CDC_DRIVE_STATUS)  PrintLog("CDVD device:   Can monitor the drive tray");
-
 #endif /* VERBOSE_DISC_INFO */
-
 	////// Should be called after an open (instead of inside of one)
 	// InitDisc();
 	// traystatus = CDVD_TRAY_OPEN; // Start with Tray Open
 	// DeviceTrayStatus(); // Now find out for sure.
-	return(0); // Device opened and ready for use.
+	return (0); // Device opened and ready for use.
 } // END DeviceOpen()
 // Called by DeviceTrayStatus(), CDVDclose(), and CDVDshutdown()
 void DeviceClose()
 {
 	// s32 s32result;
 	int zerospeed;
-
 	zerospeed = 0;
-
-	if (devicehandle == -1)
-	{
+	if (devicehandle == -1) {
 #ifdef VERBOSE_FUNCTION_DEVICE
 		PrintLog("CDVD device:   Device already closed");
 #endif /* VERBOSE_FUNCTION_DEVICE */
@@ -196,17 +177,13 @@ s32 DeviceReadTrack(u32 lsn, int mode, u8 *buffer)
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD device: DeviceReadTrack(%i)", lsn);
 #endif /* VERBOSE_FUNCTION_DEVICE */
-	if (DiscInserted() == -1)  return(-1);
+	if (DiscInserted() == -1)  return (-1);
 	// Get that data
 	if ((disctype == CDVD_TYPE_PS2DVD) || (disctype == CDVD_TYPE_DVDV))
-	{
 		s32result = DVDreadTrack(lsn, mode, buffer);
-	}
 	else
-	{
-		s32result = CDreadTrack(lsn, mode, buffer);
-	} //ENDIF- Read a DVD sector or a CD sector?
-	return(s32result);
+		s32result = CDreadTrack(lsn, mode, buffer); //ENDIF- Read a DVD sector or a CD sector?
+	return (s32result);
 } // END DeviceReadTrack()
 
 s32 DeviceBufferOffset()
@@ -214,102 +191,69 @@ s32 DeviceBufferOffset()
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD device: DeviceBufferOffset()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-	if (DiscInserted() == -1)  return(-1);
+	if (DiscInserted() == -1)  return (-1);
 	if ((disctype == CDVD_TYPE_PS2DVD) || (disctype == CDVD_TYPE_DVDV))
-	{
-		return(0);
-	}
+		return (0);
 	else
-	{
-		return(CDgetBufferOffset());
-	} // ENDIF- Is this a DVD?
+		return (CDgetBufferOffset()); // ENDIF- Is this a DVD?
 } // END DeviceBufferOffset()
 
 s32 DeviceGetTD(u8 track, cdvdTD *cdvdtd)
 {
-	if (DiscInserted() == -1)  return(-1);
+	if (DiscInserted() == -1)  return (-1);
 	if ((disctype == CDVD_TYPE_PS2DVD) || (disctype == CDVD_TYPE_DVDV))
-	{
-		return(DVDgetTD(track, cdvdtd));
-	}
+		return (DVDgetTD(track, cdvdtd));
 	else
-	{
-		return(CDgetTD(track, cdvdtd));
-	} // ENDIF- Is this a DVD?
+		return (CDgetTD(track, cdvdtd)); // ENDIF- Is this a DVD?
 } // END DeviceGetTD()
 // Called by DeviceTrayStatus()
 s32 DeviceGetDiskType()
 {
 	s32 s32result;
 	s32 ioctldisktype;
-
 	errno = 0;
-
 	if (devicehandle == -1)
-	{
-		return(-1);
-	} // ENDIF- Someone forget to open the device?
-
+		return (-1); // ENDIF- Someone forget to open the device?
 	if (traystatus == CDVD_TRAY_OPEN)
-	{
-		return(disctype);
-	} // ENDIF- Is the device tray open? No disc to check yet.
-
+		return (disctype); // ENDIF- Is the device tray open? No disc to check yet.
 	if (disctype != CDVD_TYPE_NODISC)
-	{
-		return(disctype);
-	} // ENDIF- Already checked? Drive still closed? Disc hasn't changed.
-
+		return (disctype); // ENDIF- Already checked? Drive still closed? Disc hasn't changed.
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD device: DeviceGetDiskType()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
 	disctype = CDVD_TYPE_DETCT;
 	ioctldisktype = ioctl(devicehandle, CDROM_DISC_STATUS);
-	if (errno != 0)
-	{
+	if (errno != 0) {
 #ifdef VERBOSE_WARNINGS
 		PrintLog("CDVD device:   Trouble reading Disc Type!");
 		PrintLog("CDVD device:     Error: %i:%s", errno, strerror(errno));
 #endif /* VERBOSE_WARNINGS */
 		disctype = CDVD_TYPE_UNKNOWN;
-		return(disctype);
+		return (disctype);
 	} // ENDIF- Trouble probing for a disc?
 	s32result = DVDgetDiskType(ioctldisktype);
 	if (s32result != -1)
-	{
-		return(disctype);
-	} // ENDIF- Did we find a disc type?
-
+		return (disctype); // ENDIF- Did we find a disc type?
 	s32result = CDgetDiskType(ioctldisktype);
 	if (s32result != -1)
-	{
-		return(disctype);
-	} // ENDIF- Did we find a disc type?
+		return (disctype); // ENDIF- Did we find a disc type?
 	disctype = CDVD_TYPE_UNKNOWN; // Not a CD? Not a DVD? Is is peanut butter?
-	return(disctype);
+	return (disctype);
 } // END CDVDgetDiskType()
 
 // Called by PollLoop() and CDVDgetTrayStatus()
 s32 DeviceTrayStatus()
 {
 	s32 s32result;
-
 	errno = 0;
-
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD device: DeviceTrayStatus()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-
 	if (devicehandle == -1)
-	{
-		return(-1);
-	} // ENDIF- Someone forget to open the device?
-
-	if ((devicecapability & CDC_DRIVE_STATUS) != 0)
-	{
+		return (-1); // ENDIF- Someone forget to open the device?
+	if ((devicecapability & CDC_DRIVE_STATUS) != 0) {
 		s32result = ioctl(devicehandle, CDROM_DRIVE_STATUS);
-		if (s32result < 0)
-		{
+		if (s32result < 0) {
 #ifdef VERBOSE_WARNINGS
 			PrintLog("CDVD device:   Trouble reading Drive Status!");
 			PrintLog("CDVD device:     Error: (%i) %i:%s", s32result, errno, strerror(errno));
@@ -317,12 +261,9 @@ s32 DeviceTrayStatus()
 			s32result = CDS_TRAY_OPEN;
 		} // ENDIF- Failure to get status? Assume it's open.
 		errno = 0;
-	}
-	else
-	{
+	} else {
 		s32result = ioctl(devicehandle, CDROM_DISC_STATUS);
-		if (errno != 0)
-		{
+		if (errno != 0) {
 #ifdef VERBOSE_WARNINGS
 			PrintLog("CDVD device:   Trouble detecting Disc Status presense!");
 			PrintLog("CDVD device:     Error: (%i) %i:%s", s32result, errno, strerror(errno));
@@ -331,85 +272,63 @@ s32 DeviceTrayStatus()
 			errno = 0;
 		} // ENDIF- Trouble?
 		if (s32result == CDS_NO_DISC)
-		{
-			s32result = CDS_TRAY_OPEN;
-		} // ENDIF- Is there no disc in the device? Guess the tray is open
+			s32result = CDS_TRAY_OPEN; // ENDIF- Is there no disc in the device? Guess the tray is open
 	} // ENDIF- Can we poll the tray directly? (Or look at disc status instead?)
-	if (s32result == CDS_TRAY_OPEN)
-	{
+	if (s32result == CDS_TRAY_OPEN) {
 		traystatus = CDVD_TRAY_OPEN;
-		if (disctype != CDVD_TYPE_NODISC)
-		{
+		if (disctype != CDVD_TYPE_NODISC) {
 			DeviceClose(); // Kind of severe way of flushing all buffers.
 			DeviceOpen();
 			InitDisc();
 		} // ENDIF- Tray just opened... clear disc info
-	}
-	else
-	{
+	} else {
 		traystatus = CDVD_TRAY_CLOSE;
 		if (disctype == CDVD_TYPE_NODISC)
-		{
-			DeviceGetDiskType();
-		} // ENDIF- Tray just closed? Get disc information
+			DeviceGetDiskType(); // ENDIF- Tray just closed? Get disc information
 	} // ENDIF- Do we detect an open tray?
-	return(traystatus);
+	return (traystatus);
 } // END CDVD_getTrayStatus()
 s32 DeviceTrayOpen()
 {
 	s32 s32result;
-
 	errno = 0;
-
 	if (devicehandle == -1)
-	{
-		return(-1);
-	} // ENDIF- Someone forget to open the device?
-
+		return (-1); // ENDIF- Someone forget to open the device?
 	if ((devicecapability & CDC_OPEN_TRAY) == 0)
-	{
-		return(-1);
-	} // ENDIF- Don't have open capability? Error out.
-
+		return (-1); // ENDIF- Don't have open capability? Error out.
 	// Tray already open? Exit.
-	if (traystatus == CDVD_TRAY_OPEN)  return(0);
+	if (traystatus == CDVD_TRAY_OPEN)  return (0);
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD device: DeviceTrayOpen()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
 	s32result = ioctl(devicehandle, CDROMEJECT);
 #ifdef VERBOSE_WARNINGS
-	if ((s32result != 0) || (errno != 0))
-	{
+	if ((s32result != 0) || (errno != 0)) {
 		PrintLog("CDVD device:   Could not open the tray!");
 		PrintLog("CDVD device:     Error: (%i) %i:%s", s32result, errno, strerror(errno));
 	} // ENDIF- Trouble?
 #endif /* VERBOSE_WARNINGS */
-	return(s32result);
+	return (s32result);
 } // END DeviceTrayOpen()
 s32 DeviceTrayClose()
 {
 	s32 s32result;
 	errno = 0;
 	if (devicehandle == -1)
-	{
-		return(-1);
-	} // ENDIF- Someone forget to open the device?
+		return (-1); // ENDIF- Someone forget to open the device?
 	if ((devicecapability & CDC_CLOSE_TRAY) == 0)
-	{
-		return(-1);
-	} // ENDIF- Don't have close capability? Error out.
+		return (-1); // ENDIF- Don't have close capability? Error out.
 	// Tray already closed? Exit.
-	if (traystatus == CDVD_TRAY_CLOSE)  return(0);
+	if (traystatus == CDVD_TRAY_CLOSE)  return (0);
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD device: DeviceTrayClose()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
 	s32result = ioctl(devicehandle, CDROMCLOSETRAY);
 #ifdef VERBOSE_WARNINGS
-	if ((s32result != 0) || (errno != 0))
-	{
+	if ((s32result != 0) || (errno != 0)) {
 		PrintLog("CDVD device:   Could not close the tray!");
 		PrintLog("CDVD device:     Error: (%i) %i:%s", s32result, errno, strerror(errno));
 	} // ENDIF- Trouble?
 #endif /* VERBOSE_WARNINGS */
-	return(s32result);
+	return (s32result);
 } // END DeviceTrayClose()

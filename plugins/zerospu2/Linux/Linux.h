@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- // Modified by arcum42@gmail.com
+// Modified by arcum42@gmail.com
 
- #ifndef __LINUX_H__
- #define __LINUX_H__
+#ifndef __LINUX_H__
+#define __LINUX_H__
 
 #include <assert.h>
 #include <stdlib.h>

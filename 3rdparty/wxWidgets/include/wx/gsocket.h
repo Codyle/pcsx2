@@ -46,46 +46,46 @@ extern "C" {
 typedef struct _GAddress GAddress;
 
 typedef enum {
-  GSOCK_NOFAMILY = 0,
-  GSOCK_INET,
-  GSOCK_INET6,
-  GSOCK_UNIX
+	GSOCK_NOFAMILY = 0,
+	GSOCK_INET,
+	GSOCK_INET6,
+	GSOCK_UNIX
 } GAddressType;
 
 typedef enum {
-  GSOCK_STREAMED,
-  GSOCK_UNSTREAMED
+	GSOCK_STREAMED,
+	GSOCK_UNSTREAMED
 } GSocketStream;
 
 typedef enum {
-  GSOCK_NOERROR = 0,
-  GSOCK_INVOP,
-  GSOCK_IOERR,
-  GSOCK_INVADDR,
-  GSOCK_INVSOCK,
-  GSOCK_NOHOST,
-  GSOCK_INVPORT,
-  GSOCK_WOULDBLOCK,
-  GSOCK_TIMEDOUT,
-  GSOCK_MEMERR,
-  GSOCK_OPTERR
+	GSOCK_NOERROR = 0,
+	GSOCK_INVOP,
+	GSOCK_IOERR,
+	GSOCK_INVADDR,
+	GSOCK_INVSOCK,
+	GSOCK_NOHOST,
+	GSOCK_INVPORT,
+	GSOCK_WOULDBLOCK,
+	GSOCK_TIMEDOUT,
+	GSOCK_MEMERR,
+	GSOCK_OPTERR
 } GSocketError;
 
 /* See below for an explanation on how events work.
  */
 typedef enum {
-  GSOCK_INPUT  = 0,
-  GSOCK_OUTPUT = 1,
-  GSOCK_CONNECTION = 2,
-  GSOCK_LOST = 3,
-  GSOCK_MAX_EVENT = 4
+	GSOCK_INPUT  = 0,
+	GSOCK_OUTPUT = 1,
+	GSOCK_CONNECTION = 2,
+	GSOCK_LOST = 3,
+	GSOCK_MAX_EVENT = 4
 } GSocketEvent;
 
 enum {
-  GSOCK_INPUT_FLAG = 1 << GSOCK_INPUT,
-  GSOCK_OUTPUT_FLAG = 1 << GSOCK_OUTPUT,
-  GSOCK_CONNECTION_FLAG = 1 << GSOCK_CONNECTION,
-  GSOCK_LOST_FLAG = 1 << GSOCK_LOST
+	GSOCK_INPUT_FLAG = 1 << GSOCK_INPUT,
+	GSOCK_OUTPUT_FLAG = 1 << GSOCK_OUTPUT,
+	GSOCK_CONNECTION_FLAG = 1 << GSOCK_CONNECTION,
+	GSOCK_LOST_FLAG = 1 << GSOCK_LOST
 };
 
 typedef int GSocketEventFlags;
@@ -101,19 +101,19 @@ typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
 class GSocketGUIFunctionsTable
 {
 public:
-    // needed since this class declares virtual members
-    virtual ~GSocketGUIFunctionsTable() { }
-    virtual bool OnInit() = 0;
-    virtual void OnExit() = 0;
-    virtual bool CanUseEventLoop() = 0;
-    virtual bool Init_Socket(GSocket *socket) = 0;
-    virtual void Destroy_Socket(GSocket *socket) = 0;
+	// needed since this class declares virtual members
+	virtual ~GSocketGUIFunctionsTable() { }
+	virtual bool OnInit() = 0;
+	virtual void OnExit() = 0;
+	virtual bool CanUseEventLoop() = 0;
+	virtual bool Init_Socket(GSocket *socket) = 0;
+	virtual void Destroy_Socket(GSocket *socket) = 0;
 #ifndef __WINDOWS__
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event) = 0;
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event) = 0;
+	virtual void Install_Callback(GSocket *socket, GSocketEvent event) = 0;
+	virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event) = 0;
 #endif
-    virtual void Enable_Events(GSocket *socket) = 0;
-    virtual void Disable_Events(GSocket *socket) = 0;
+	virtual void Enable_Events(GSocket *socket) = 0;
+	virtual void Disable_Events(GSocket *socket) = 0;
 };
 
 
@@ -152,7 +152,7 @@ GAddressType GAddress_GetFamily(GAddress *address);
 GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname);
 GSocketError GAddress_INET_SetAnyAddress(GAddress *address);
 GSocketError GAddress_INET_SetHostAddress(GAddress *address,
-                                          unsigned long hostaddr);
+                unsigned long hostaddr);
 GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
                                        const char *protocol);
 GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port);

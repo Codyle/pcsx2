@@ -21,23 +21,27 @@
 * Format:  OP rd, rs, rt                                 *
 *********************************************************/
 
-namespace R5900 {
-namespace Dynarec {
+namespace R5900
+{
+namespace Dynarec
+{
 namespace OpcodeImpl
 {
-	void recADD( void );
-	void recADDU( void );
-	void recDADD( void );
-	void recDADDU( void );
-	void recSUB( void );
-	void recSUBU( void );
-	void recDSUB( void );
-	void recDSUBU( void );
-	void recAND( void );
-	void recOR( void );
-	void recXOR( void );
-	void recNOR( void );
-	void recSLT( void );
-	void recSLTU( void );
-} } }
+void recADD(void);
+void recADDU(void);
+void recDADD(void);
+void recDADDU(void);
+void recSUB(void);
+void recSUBU(void);
+void recDSUB(void);
+void recDSUBU(void);
+void recAND(void);
+void recOR(void);
+void recXOR(void);
+void recNOR(void);
+void recSLT(void);
+void recSLTU(void);
+}
+}
+}
 #endif

@@ -27,8 +27,7 @@
 // the IPU is fixed to 16 byte strides (128-bit / QWC resolution):
 static const uint decoder_stride = 16;
 
-enum macroblock_modes
-{
+enum macroblock_modes {
 	MACROBLOCK_INTRA = 1,
 	MACROBLOCK_PATTERN = 2,
 	MACROBLOCK_MOTION_BACKWARD = 4,
@@ -37,57 +36,54 @@ enum macroblock_modes
 	DCT_TYPE_INTERLACED = 32
 };
 
-enum motion_type
-{
+enum motion_type {
 	MOTION_TYPE_SHIFT = 6,
-	MOTION_TYPE_MASK = (3*64),
+	MOTION_TYPE_MASK = (3 * 64),
 	MOTION_TYPE_BASE = 64,
-	MC_FIELD = (1*64),
-	MC_FRAME = (2*64),
-	MC_16X8 = (2*64),
-	MC_DMV = (3*64)
+	MC_FIELD = (1 * 64),
+	MC_FRAME = (2 * 64),
+	MC_16X8 = (2 * 64),
+	MC_DMV = (3 * 64)
 };
 
 /* picture structure */
-enum picture_structure
-{
+enum picture_structure {
 	TOP_FIELD = 1,
 	BOTTOM_FIELD = 2,
 	FRAME_PICTURE = 3
 };
 
 /* picture coding type */
-enum picture_coding_type
-{
-	I_TYPE  =1,
+enum picture_coding_type {
+	I_TYPE  = 1,
 	P_TYPE = 2,
 	B_TYPE = 3,
 	D_TYPE = 4
 };
 
-struct macroblock_8{
+struct macroblock_8 {
 	u8 Y[16][16];		//0
 	u8 Cb[8][8];		//1
 	u8 Cr[8][8];		//2
 };
 
-struct macroblock_16{
+struct macroblock_16 {
 	s16 Y[16][16];			//0
 	s16 Cb[8][8];			//1
 	s16 Cr[8][8];			//2
 };
 
-struct macroblock_rgb32{
+struct macroblock_rgb32 {
 	struct {
 		u8 r, g, b, a;
 	} c[16][16];
 };
 
-struct rgb16_t{
-	u16 r:5, g:5, b:5, a:1;
+struct rgb16_t {
+	u16 r: 5, g: 5, b: 5, a: 1;
 };
 
-struct macroblock_rgb16{
+struct macroblock_rgb16 {
 	rgb16_t	c[16][16];
 };
 
@@ -158,37 +154,36 @@ struct decoder_t {
 
 	int mpeg1;
 
-	template< typename T >
-	void SetOutputTo( T& obj )
+	template<typename T>
+	void SetOutputTo(T &obj)
 	{
 		uint mb_offset = ((uptr)&obj - (uptr)&mb8);
-		pxAssume( (mb_offset & 15) == 0 );
+		pxAssume((mb_offset & 15) == 0);
 		ipu0_idx	= mb_offset / 16;
-		ipu0_data	= sizeof(obj)/16;
+		ipu0_data	= sizeof(obj) / 16;
 	}
 
 	u128* GetIpuDataPtr()
 	{
 		return ((u128*)&mb8) + ipu0_idx;
 	}
-	
+
 	void AdvanceIpuDataBy(uint amt)
 	{
-		pxAssertMsg(ipu0_data>=amt, "IPU FIFO Overflow on advance!" );
+		pxAssertMsg(ipu0_data >= amt, "IPU FIFO Overflow on advance!");
 		ipu0_idx  += amt;
 		ipu0_data -= amt;
 	}
 };
 
-struct mpeg2_scan_pack
-{
+struct mpeg2_scan_pack {
 	u8 norm[64];
 	u8 alt[64];
 
 	mpeg2_scan_pack();
 };
 
-extern int bitstream_init ();
+extern int bitstream_init();
 extern u32 UBITS(uint bits);
 extern s32 SBITS(uint bits);
 
@@ -203,11 +198,11 @@ extern int get_macroblock_modes();
 extern int get_motion_delta(const int f_code);
 extern int get_dmv();
 
-extern void ipu_csc(macroblock_8& mb8, macroblock_rgb32& rgb32, int sgn);
-extern void ipu_dither(const macroblock_rgb32& rgb32, macroblock_rgb16& rgb16, int dte);
-extern void ipu_vq(macroblock_rgb16& rgb16, u8* indx4);
+extern void ipu_csc(macroblock_8 &mb8, macroblock_rgb32 &rgb32, int sgn);
+extern void ipu_dither(const macroblock_rgb32 &rgb32, macroblock_rgb16 &rgb16, int dte);
+extern void ipu_vq(macroblock_rgb16 &rgb16, u8* indx4);
 
-extern int slice (u8 * buffer);
+extern int slice(u8 * buffer);
 
 #ifdef _MSC_VER
 #define BigEndian(in) _byteswap_ulong(in)

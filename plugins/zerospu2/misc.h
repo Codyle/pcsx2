@@ -34,8 +34,7 @@ inline u32 timeGetTime()
 	timeb t;
 	ftime(&t);
 #endif
-
-	return (u32)(t.time*1000+t.millitm);
+	return (u32)(t.time * 1000 + t.millitm);
 }
 
 #include <sys/time.h>
@@ -59,7 +58,7 @@ inline u64 GetMicroTime()
 #else
 	timeval t;
 	gettimeofday(&t, NULL);
-	return t.tv_sec*1000000+t.tv_usec;
+	return t.tv_sec * 1000000 + t.tv_usec;
 #endif
 }
 
@@ -68,18 +67,20 @@ inline u64 GetMicroTime()
 #include <assert.h>
 
 // declare linux equivalents (alignment must be power of 2 (1,2,4...2^15)
-static __forceinline void* pcsx2_aligned_malloc(size_t size, size_t alignment) {
+static __forceinline void* pcsx2_aligned_malloc(size_t size, size_t alignment)
+{
 	assert(alignment <= 0x8000);
 	uptr r = (uptr)malloc(size + --alignment + 2);
 	uptr o = (r + 2 + alignment) & ~(uptr)alignment;
 	if (!r) return NULL;
-	((u16*)o)[-1] = (u16)(o-r);
+	((u16*)o)[-1] = (u16)(o - r);
 	return (void*)o;
 }
 
-static __forceinline void pcsx2_aligned_free(void* p) {
+static __forceinline void pcsx2_aligned_free(void* p)
+{
 	if (!p) return;
-	free((void*)((uptr)p-((u16*)p)[-1]));
+	free((void*)((uptr)p - ((u16*)p)[-1]));
 }
 
 

@@ -26,19 +26,19 @@
 
 void ReadConfig(void);
 void WriteConfig(void);
-void OnChooseFile(HWND hW,int iFType);
+void OnChooseFile(HWND hW, int iFType);
 void EnumDrives(HWND hW);
-void GetCDRInfos(HWND hW,int * iA, int * iT,int * iL);
+void GetCDRInfos(HWND hW, int * iA, int * iT, int * iL);
 void OnIMode(HWND hW);
 void OnCache(HWND hW);
 void ShowSubFileStuff(HWND hW);
 BOOL OnInitCDRDialog(HWND hW);
 void OnCDRAuto(HWND hW);
-void ShowProgress(HWND hW,long lact,long lmin,long lmax);
-void WriteDiffSub(FILE * xfile,int i,unsigned char * lpX,int iM,BOOL b3Min);
-BOOL OnCreateSubFileEx(HWND hW,HWND hWX,BOOL b3Min);
-BOOL OnCreateSubEx(HWND hW,HWND hWX,int iM,BOOL b3Min);
-void StartSubReading(HWND hW,HWND hWX);
+void ShowProgress(HWND hW, long lact, long lmin, long lmax);
+void WriteDiffSub(FILE * xfile, int i, unsigned char * lpX, int iM, BOOL b3Min);
+BOOL OnCreateSubFileEx(HWND hW, HWND hWX, BOOL b3Min);
+BOOL OnCreateSubEx(HWND hW, HWND hWX, int iM, BOOL b3Min);
+void StartSubReading(HWND hW, HWND hWX);
 BOOL CALLBACK SubDlgProc(HWND hW, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void OnCreateSub(HWND hW);
 void OnCDROK(HWND hW);

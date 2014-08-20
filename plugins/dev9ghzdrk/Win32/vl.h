@@ -1,8 +1,8 @@
 /*
  * QEMU System Emulator header
- * 
+ *
  * Copyright (c) 2003 Fabrice Bellard
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -77,8 +77,8 @@ extern int qemu_ftruncate64(int, int64_t);
 
 static inline char *realpath(const char *path, char *resolved_path)
 {
-    _fullpath(resolved_path, path, _MAX_PATH);
-    return resolved_path;
+	_fullpath(resolved_path, path, _MAX_PATH);
+	return resolved_path;
 }
 
 #define PRId64 "I64d"
@@ -137,7 +137,7 @@ typedef void VMChangeStateHandler(void *opaque, int running);
 typedef void VMStopHandler(void *opaque, int reason);
 
 VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
-                                                     void *opaque);
+                void *opaque);
 void qemu_del_vm_change_state_handler(VMChangeStateEntry *e);
 
 int qemu_add_vm_stop_handler(VMStopHandler *cb, void *opaque);
@@ -200,19 +200,19 @@ typedef void QEMUPutKBDEvent(void *opaque, int keycode);
 typedef void QEMUPutMouseEvent(void *opaque, int dx, int dy, int dz, int buttons_state);
 
 typedef struct QEMUPutMouseEntry {
-    QEMUPutMouseEvent *qemu_put_mouse_event;
-    void *qemu_put_mouse_event_opaque;
-    int qemu_put_mouse_event_absolute;
-    char *qemu_put_mouse_event_name;
+	QEMUPutMouseEvent *qemu_put_mouse_event;
+	void *qemu_put_mouse_event_opaque;
+	int qemu_put_mouse_event_absolute;
+	char *qemu_put_mouse_event_name;
 
-    /* used internally by qemu for handling mice */
-    struct QEMUPutMouseEntry *next;
+	/* used internally by qemu for handling mice */
+	struct QEMUPutMouseEntry *next;
 } QEMUPutMouseEntry;
 
 void qemu_add_kbd_event_handler(QEMUPutKBDEvent *func, void *opaque);
 QEMUPutMouseEntry *qemu_add_mouse_event_handler(QEMUPutMouseEvent *func,
-                                                void *opaque, int absolute,
-                                                const char *name);
+                void *opaque, int absolute,
+                const char *name);
 void qemu_remove_mouse_event_handler(QEMUPutMouseEntry *entry);
 
 void kbd_put_keycode(int keycode);
@@ -253,13 +253,13 @@ typedef void IOReadHandler(void *opaque, const uint8_t *buf, int size);
 typedef int IOCanRWHandler(void *opaque);
 typedef void IOHandler(void *opaque);
 
-int qemu_set_fd_handler2(int fd, 
-                         IOCanRWHandler *fd_read_poll, 
-                         IOHandler *fd_read, 
-                         IOHandler *fd_write, 
+int qemu_set_fd_handler2(int fd,
+                         IOCanRWHandler *fd_read_poll,
+                         IOHandler *fd_read,
+                         IOHandler *fd_write,
                          void *opaque);
 int qemu_set_fd_handler(int fd,
-                        IOHandler *fd_read, 
+                        IOHandler *fd_read,
                         IOHandler *fd_write,
                         void *opaque);
 
@@ -290,10 +290,10 @@ typedef struct QEMUBH QEMUBH;
 
 #define CHR_IOCTL_SERIAL_SET_PARAMS   1
 typedef struct {
-    int speed;
-    int parity;
-    int data_bits;
-    int stop_bits;
+	int speed;
+	int parity;
+	int data_bits;
+	int stop_bits;
 } QEMUSerialSetParams;
 
 #define CHR_IOCTL_SERIAL_SET_BREAK    2
@@ -307,25 +307,25 @@ typedef struct {
 typedef void IOEventHandler(void *opaque, int event);
 
 typedef struct CharDriverState {
-    int (*chr_write)(struct CharDriverState *s, const uint8_t *buf, int len);
-    void (*chr_update_read_handler)(struct CharDriverState *s);
-    int (*chr_ioctl)(struct CharDriverState *s, int cmd, void *arg);
-    IOEventHandler *chr_event;
-    IOCanRWHandler *chr_can_read;
-    IOReadHandler *chr_read;
-    void *handler_opaque;
-    void (*chr_send_event)(struct CharDriverState *chr, int event);
-    void (*chr_close)(struct CharDriverState *chr);
-    void *opaque;
-    QEMUBH *bh;
+	int (*chr_write)(struct CharDriverState *s, const uint8_t *buf, int len);
+	void (*chr_update_read_handler)(struct CharDriverState *s);
+	int (*chr_ioctl)(struct CharDriverState *s, int cmd, void *arg);
+	IOEventHandler *chr_event;
+	IOCanRWHandler *chr_can_read;
+	IOReadHandler *chr_read;
+	void *handler_opaque;
+	void (*chr_send_event)(struct CharDriverState *chr, int event);
+	void (*chr_close)(struct CharDriverState *chr);
+	void *opaque;
+	QEMUBH *bh;
 } CharDriverState;
 
 CharDriverState *qemu_chr_open(const char *filename);
 void qemu_chr_printf(CharDriverState *s, const char *fmt, ...);
 int qemu_chr_write(CharDriverState *s, const uint8_t *buf, int len);
 void qemu_chr_send_event(CharDriverState *s, int event);
-void qemu_chr_add_handlers(CharDriverState *s, 
-                           IOCanRWHandler *fd_can_read, 
+void qemu_chr_add_handlers(CharDriverState *s,
+                           IOCanRWHandler *fd_can_read,
                            IOReadHandler *fd_read,
                            IOEventHandler *fd_event,
                            void *opaque);
@@ -372,20 +372,20 @@ extern CharDriverState *parallel_hds[MAX_PARALLEL_PORTS];
 typedef struct VLANClientState VLANClientState;
 
 struct VLANClientState {
-    IOReadHandler *fd_read;
-    /* Packets may still be sent if this returns zero.  It's used to
-       rate-limit the slirp code.  */
-    IOCanRWHandler *fd_can_read;
-    void *opaque;
-    struct VLANClientState *next;
-    struct VLANState *vlan;
-    char info_str[256];
+	IOReadHandler *fd_read;
+	/* Packets may still be sent if this returns zero.  It's used to
+	   rate-limit the slirp code.  */
+	IOCanRWHandler *fd_can_read;
+	void *opaque;
+	struct VLANClientState *next;
+	struct VLANState *vlan;
+	char info_str[256];
 };
 
 typedef struct VLANState {
-    int id;
-    VLANClientState *first_client;
-    struct VLANState *next;
+	int id;
+	VLANClientState *first_client;
+	struct VLANState *next;
 } VLANState;
 
 VLANState *qemu_find_vlan(int id);
@@ -407,9 +407,9 @@ int tap_win32_init(VLANState *vlan, const char *ifname);
 #define MAX_NICS 8
 
 typedef struct NICInfo {
-    uint8_t macaddr[6];
-    const char *model;
-    VLANState *vlan;
+	uint8_t macaddr[6];
+	const char *model;
+	VLANState *vlan;
 } NICInfo;
 
 extern int nb_nics;
@@ -467,42 +467,42 @@ uint64_t qemu_get_be64(QEMUFile *f);
 
 static inline void qemu_put_be64s(QEMUFile *f, const uint64_t *pv)
 {
-    qemu_put_be64(f, *pv);
+	qemu_put_be64(f, *pv);
 }
 
 static inline void qemu_put_be32s(QEMUFile *f, const uint32_t *pv)
 {
-    qemu_put_be32(f, *pv);
+	qemu_put_be32(f, *pv);
 }
 
 static inline void qemu_put_be16s(QEMUFile *f, const uint16_t *pv)
 {
-    qemu_put_be16(f, *pv);
+	qemu_put_be16(f, *pv);
 }
 
 static inline void qemu_put_8s(QEMUFile *f, const uint8_t *pv)
 {
-    qemu_put_byte(f, *pv);
+	qemu_put_byte(f, *pv);
 }
 
 static inline void qemu_get_be64s(QEMUFile *f, uint64_t *pv)
 {
-    *pv = qemu_get_be64(f);
+	*pv = qemu_get_be64(f);
 }
 
 static inline void qemu_get_be32s(QEMUFile *f, uint32_t *pv)
 {
-    *pv = qemu_get_be32(f);
+	*pv = qemu_get_be32(f);
 }
 
 static inline void qemu_get_be16s(QEMUFile *f, uint16_t *pv)
 {
-    *pv = qemu_get_be16(f);
+	*pv = qemu_get_be16(f);
 }
 
 static inline void qemu_get_8s(QEMUFile *f, uint8_t *pv)
 {
-    *pv = qemu_get_byte(f);
+	*pv = qemu_get_byte(f);
 }
 
 #if TARGET_LONG_BITS == 64
@@ -523,8 +523,8 @@ int64_t qemu_fseek(QEMUFile *f, int64_t pos, int whence);
 typedef void SaveStateHandler(QEMUFile *f, void *opaque);
 typedef int LoadStateHandler(QEMUFile *f, void *opaque, int version_id);
 
-int register_savevm(const char *idstr, 
-                    int instance_id, 
+int register_savevm(const char *idstr,
+                    int instance_id,
                     int version_id,
                     SaveStateHandler *save_state,
                     LoadStateHandler *load_state,
@@ -566,21 +566,21 @@ extern BlockDriver bdrv_vvfat;
 extern BlockDriver bdrv_qcow2;
 
 typedef struct BlockDriverInfo {
-    /* in bytes, 0 if irrelevant */
-    int cluster_size; 
-    /* offset at which the VM state can be saved (0 if not possible) */
-    int64_t vm_state_offset; 
+	/* in bytes, 0 if irrelevant */
+	int cluster_size;
+	/* offset at which the VM state can be saved (0 if not possible) */
+	int64_t vm_state_offset;
 } BlockDriverInfo;
 
 typedef struct QEMUSnapshotInfo {
-    char id_str[128]; /* unique snapshot id */
-    /* the following fields are informative. They are not needed for
-       the consistency of the snapshot */
-    char name[256]; /* user choosen name */
-    uint32_t vm_state_size; /* VM state info size */
-    uint32_t date_sec; /* UTC date of the snapshot */
-    uint32_t date_nsec;
-    uint64_t vm_clock_nsec; /* VM clock relative to boot */
+	char id_str[128]; /* unique snapshot id */
+	/* the following fields are informative. They are not needed for
+	   the consistency of the snapshot */
+	char name[256]; /* user choosen name */
+	uint32_t vm_state_size; /* VM state info size */
+	uint32_t date_sec; /* UTC date of the snapshot */
+	uint32_t date_nsec;
+	uint64_t vm_clock_nsec; /* VM clock relative to boot */
 } QEMUSnapshotInfo;
 
 #define BDRV_O_RDONLY      0x0000
@@ -595,7 +595,7 @@ typedef struct QEMUSnapshotInfo {
 
 void bdrv_init(void);
 BlockDriver *bdrv_find_format(const char *format_name);
-int bdrv_create(BlockDriver *drv, 
+int bdrv_create(BlockDriver *drv,
                 const char *filename, int64_t size_in_sectors,
                 const char *backing_file, int flags);
 BlockDriverState *bdrv_new(const char *device_name);
@@ -605,13 +605,13 @@ int bdrv_open(BlockDriverState *bs, const char *filename, int flags);
 int bdrv_open2(BlockDriverState *bs, const char *filename, int flags,
                BlockDriver *drv);
 void bdrv_close(BlockDriverState *bs);
-int bdrv_read(BlockDriverState *bs, int64_t sector_num, 
+int bdrv_read(BlockDriverState *bs, int64_t sector_num,
               uint8_t *buf, int nb_sectors);
-int bdrv_write(BlockDriverState *bs, int64_t sector_num, 
+int bdrv_write(BlockDriverState *bs, int64_t sector_num,
                const uint8_t *buf, int nb_sectors);
-int bdrv_pread(BlockDriverState *bs, int64_t offset, 
+int bdrv_pread(BlockDriverState *bs, int64_t offset,
                void *buf, int count);
-int bdrv_pwrite(BlockDriverState *bs, int64_t offset, 
+int bdrv_pwrite(BlockDriverState *bs, int64_t offset,
                 const void *buf, int count);
 int bdrv_truncate(BlockDriverState *bs, int64_t offset);
 int64_t bdrv_getlength(BlockDriverState *bs);
@@ -649,11 +649,11 @@ void bdrv_flush(BlockDriverState *bs);
 #define BIOS_ATA_TRANSLATION_LARGE  3
 #define BIOS_ATA_TRANSLATION_RECHS  4
 
-void bdrv_set_geometry_hint(BlockDriverState *bs, 
+void bdrv_set_geometry_hint(BlockDriverState *bs,
                             int cyls, int heads, int secs);
 void bdrv_set_type_hint(BlockDriverState *bs, int type);
 void bdrv_set_translation_hint(BlockDriverState *bs, int translation);
-void bdrv_get_geometry_hint(BlockDriverState *bs, 
+void bdrv_get_geometry_hint(BlockDriverState *bs,
                             int *pcyls, int *pheads, int *psecs);
 int bdrv_get_type_hint(BlockDriverState *bs);
 int bdrv_get_translation_hint(BlockDriverState *bs);
@@ -664,7 +664,7 @@ int bdrv_media_changed(BlockDriverState *bs);
 int bdrv_is_locked(BlockDriverState *bs);
 void bdrv_set_locked(BlockDriverState *bs, int locked);
 void bdrv_eject(BlockDriverState *bs, int eject_flag);
-void bdrv_set_change_cb(BlockDriverState *bs, 
+void bdrv_set_change_cb(BlockDriverState *bs,
                         void (*change_cb)(void *opaque), void *opaque);
 void bdrv_get_format(BlockDriverState *bs, char *buf, int buf_size);
 void bdrv_info(void);
@@ -672,21 +672,21 @@ BlockDriverState *bdrv_find(const char *name);
 void bdrv_iterate(void (*it)(void *opaque, const char *name), void *opaque);
 int bdrv_is_encrypted(BlockDriverState *bs);
 int bdrv_set_key(BlockDriverState *bs, const char *key);
-void bdrv_iterate_format(void (*it)(void *opaque, const char *name), 
+void bdrv_iterate_format(void (*it)(void *opaque, const char *name),
                          void *opaque);
 const char *bdrv_get_device_name(BlockDriverState *bs);
-int bdrv_write_compressed(BlockDriverState *bs, int64_t sector_num, 
+int bdrv_write_compressed(BlockDriverState *bs, int64_t sector_num,
                           const uint8_t *buf, int nb_sectors);
 int bdrv_get_info(BlockDriverState *bs, BlockDriverInfo *bdi);
 
-void bdrv_get_backing_filename(BlockDriverState *bs, 
+void bdrv_get_backing_filename(BlockDriverState *bs,
                                char *filename, int filename_size);
-int bdrv_snapshot_create(BlockDriverState *bs, 
+int bdrv_snapshot_create(BlockDriverState *bs,
                          QEMUSnapshotInfo *sn_info);
-int bdrv_snapshot_goto(BlockDriverState *bs, 
+int bdrv_snapshot_goto(BlockDriverState *bs,
                        const char *snapshot_id);
 int bdrv_snapshot_delete(BlockDriverState *bs, const char *snapshot_id);
-int bdrv_snapshot_list(BlockDriverState *bs, 
+int bdrv_snapshot_list(BlockDriverState *bs,
                        QEMUSnapshotInfo **psn_info);
 char *bdrv_snapshot_dump(char *buf, int buf_size, QEMUSnapshotInfo *sn);
 
@@ -698,17 +698,17 @@ void path_combine(char *dest, int dest_size,
 
 #ifndef QEMU_TOOL
 
-typedef void QEMUMachineInitFunc(int ram_size, int vga_ram_size, 
+typedef void QEMUMachineInitFunc(int ram_size, int vga_ram_size,
                                  int boot_device,
-             DisplayState *ds, const char **fd_filename, int snapshot,
-             const char *kernel_filename, const char *kernel_cmdline,
-             const char *initrd_filename);
+                                 DisplayState *ds, const char **fd_filename, int snapshot,
+                                 const char *kernel_filename, const char *kernel_cmdline,
+                                 const char *initrd_filename);
 
 typedef struct QEMUMachine {
-    const char *name;
-    const char *desc;
-    QEMUMachineInitFunc *init;
-    struct QEMUMachine *next;
+	const char *name;
+	const char *desc;
+	QEMUMachineInitFunc *init;
+	struct QEMUMachine *next;
 } QEMUMachine;
 
 int qemu_register_machine(QEMUMachine *m);
@@ -724,9 +724,9 @@ extern target_phys_addr_t isa_mem_base;
 typedef void (IOPortWriteFunc)(void *opaque, uint32_t address, uint32_t data);
 typedef uint32_t (IOPortReadFunc)(void *opaque, uint32_t address);
 
-int register_ioport_read(int start, int length, int size, 
+int register_ioport_read(int start, int length, int size,
                          IOPortReadFunc *func, void *opaque);
-int register_ioport_write(int start, int length, int size, 
+int register_ioport_write(int start, int length, int size,
                           IOPortWriteFunc *func, void *opaque);
 void isa_unassign_ioport(int start, int length);
 
@@ -739,11 +739,11 @@ extern target_phys_addr_t pci_mem_base;
 typedef struct PCIBus PCIBus;
 typedef struct PCIDevice PCIDevice;
 
-typedef void PCIConfigWriteFunc(PCIDevice *pci_dev, 
+typedef void PCIConfigWriteFunc(PCIDevice *pci_dev,
                                 uint32_t address, uint32_t data, int len);
-typedef uint32_t PCIConfigReadFunc(PCIDevice *pci_dev, 
+typedef uint32_t PCIConfigReadFunc(PCIDevice *pci_dev,
                                    uint32_t address, int len);
-typedef void PCIMapIORegionFunc(PCIDevice *pci_dev, int region_num, 
+typedef void PCIMapIORegionFunc(PCIDevice *pci_dev, int region_num,
                                 uint32_t addr, uint32_t size, int type);
 
 #define PCI_ADDRESS_SPACE_MEM		0x00
@@ -751,10 +751,10 @@ typedef void PCIMapIORegionFunc(PCIDevice *pci_dev, int region_num,
 #define PCI_ADDRESS_SPACE_MEM_PREFETCH	0x08
 
 typedef struct PCIIORegion {
-    uint32_t addr; /* current PCI mapping address. -1 means not mapped */
-    uint32_t size;
-    uint8_t type;
-    PCIMapIORegionFunc *map_func;
+	uint32_t addr; /* current PCI mapping address. -1 means not mapped */
+	uint32_t size;
+	uint8_t type;
+	PCIMapIORegionFunc *map_func;
 } PCIIORegion;
 
 #define PCI_ROM_SLOT 6
@@ -774,39 +774,39 @@ typedef struct PCIIORegion {
 #define PCI_MAX_LAT		0x3f	/* 8 bits */
 
 struct PCIDevice {
-    /* PCI config space */
-    uint8_t config[256];
+	/* PCI config space */
+	uint8_t config[256];
 
-    /* the following fields are read only */
-    PCIBus *bus;
-    int devfn;
-    char name[64];
-    PCIIORegion io_regions[PCI_NUM_REGIONS];
-    
-    /* do not access the following fields */
-    PCIConfigReadFunc *config_read;
-    PCIConfigWriteFunc *config_write;
-    /* ??? This is a PC-specific hack, and should be removed.  */
-    int irq_index;
+	/* the following fields are read only */
+	PCIBus *bus;
+	int devfn;
+	char name[64];
+	PCIIORegion io_regions[PCI_NUM_REGIONS];
 
-    /* Current IRQ levels.  Used internally by the generic PCI code.  */
-    int irq_state[4];
+	/* do not access the following fields */
+	PCIConfigReadFunc *config_read;
+	PCIConfigWriteFunc *config_write;
+	/* ??? This is a PC-specific hack, and should be removed.  */
+	int irq_index;
+
+	/* Current IRQ levels.  Used internally by the generic PCI code.  */
+	int irq_state[4];
 };
 
 PCIDevice *pci_register_device(PCIBus *bus, const char *name,
                                int instance_size, int devfn,
-                               PCIConfigReadFunc *config_read, 
+                               PCIConfigReadFunc *config_read,
                                PCIConfigWriteFunc *config_write);
 
-void pci_register_io_region(PCIDevice *pci_dev, int region_num, 
-                            uint32_t size, int type, 
+void pci_register_io_region(PCIDevice *pci_dev, int region_num,
+                            uint32_t size, int type,
                             PCIMapIORegionFunc *map_func);
 
 void pci_set_irq(PCIDevice *pci_dev, int irq_num, int level);
 
-uint32_t pci_default_read_config(PCIDevice *d, 
+uint32_t pci_default_read_config(PCIDevice *d,
                                  uint32_t address, int len);
-void pci_default_write_config(PCIDevice *d, 
+void pci_default_write_config(PCIDevice *d,
                               uint32_t address, uint32_t val, int len);
 void pci_device_save(PCIDevice *s, QEMUFile *f);
 int pci_device_load(PCIDevice *s, QEMUFile *f);
@@ -852,8 +852,8 @@ int piix4_init(PCIBus *bus, int devfn);
 /* openpic.c */
 typedef struct openpic_t openpic_t;
 void openpic_set_irq(void *opaque, int n_IRQ, int level);
-openpic_t *openpic_init (PCIBus *bus, int *pmem_index, int nb_cpus,
-                         CPUState **envp);
+openpic_t *openpic_init(PCIBus *bus, int *pmem_index, int nb_cpus,
+                        CPUState **envp);
 
 /* heathrow_pic.c */
 typedef struct HeathrowPICS HeathrowPICS;
@@ -865,14 +865,14 @@ PCIBus *pci_gt64120_init(void *pic);
 
 #ifdef HAS_AUDIO
 struct soundhw {
-    const char *name;
-    const char *descr;
-    int enabled;
-    int isa;
-    union {
-        int (*init_isa) (AudioState *s);
-        int (*init_pci) (PCIBus *bus, AudioState *s);
-    } init;
+	const char *name;
+	const char *descr;
+	int enabled;
+	int isa;
+	union {
+		int (*init_isa)(AudioState *s);
+		int (*init_pci)(PCIBus *bus, AudioState *s);
+	} init;
 };
 
 extern struct soundhw soundhw[];
@@ -883,40 +883,40 @@ extern struct soundhw soundhw[];
 #define VGA_RAM_SIZE (8192 * 1024)
 
 struct DisplayState {
-    uint8_t *data;
-    int linesize;
-    int depth;
-    int bgr; /* BGR color order instead of RGB. Only valid for depth == 32 */
-    int width;
-    int height;
-    void *opaque;
+	uint8_t *data;
+	int linesize;
+	int depth;
+	int bgr; /* BGR color order instead of RGB. Only valid for depth == 32 */
+	int width;
+	int height;
+	void *opaque;
 
-    void (*dpy_update)(struct DisplayState *s, int x, int y, int w, int h);
-    void (*dpy_resize)(struct DisplayState *s, int w, int h);
-    void (*dpy_refresh)(struct DisplayState *s);
-    void (*dpy_copy)(struct DisplayState *s, int src_x, int src_y, int dst_x, int dst_y, int w, int h);
+	void (*dpy_update)(struct DisplayState *s, int x, int y, int w, int h);
+	void (*dpy_resize)(struct DisplayState *s, int w, int h);
+	void (*dpy_refresh)(struct DisplayState *s);
+	void (*dpy_copy)(struct DisplayState *s, int src_x, int src_y, int dst_x, int dst_y, int w, int h);
 };
 
 static inline void dpy_update(DisplayState *s, int x, int y, int w, int h)
 {
-    s->dpy_update(s, x, y, w, h);
+	s->dpy_update(s, x, y, w, h);
 }
 
 static inline void dpy_resize(DisplayState *s, int w, int h)
 {
-    s->dpy_resize(s, w, h);
+	s->dpy_resize(s, w, h);
 }
 
-int isa_vga_init(DisplayState *ds, uint8_t *vga_ram_base, 
+int isa_vga_init(DisplayState *ds, uint8_t *vga_ram_base,
                  unsigned long vga_ram_offset, int vga_ram_size);
-int pci_vga_init(PCIBus *bus, DisplayState *ds, uint8_t *vga_ram_base, 
+int pci_vga_init(PCIBus *bus, DisplayState *ds, uint8_t *vga_ram_base,
                  unsigned long vga_ram_offset, int vga_ram_size,
                  unsigned long vga_bios_offset, int vga_bios_size);
 
 /* cirrus_vga.c */
-void pci_cirrus_vga_init(PCIBus *bus, DisplayState *ds, uint8_t *vga_ram_base, 
+void pci_cirrus_vga_init(PCIBus *bus, DisplayState *ds, uint8_t *vga_ram_base,
                          unsigned long vga_ram_offset, int vga_ram_size);
-void isa_cirrus_vga_init(DisplayState *ds, uint8_t *vga_ram_base, 
+void isa_cirrus_vga_init(DisplayState *ds, uint8_t *vga_ram_base,
                          unsigned long vga_ram_offset, int vga_ram_size);
 
 /* sdl.c */
@@ -942,47 +942,47 @@ void isa_ide_init(int iobase, int iobase2, int irq,
 void pci_cmd646_ide_init(PCIBus *bus, BlockDriverState **hd_table,
                          int secondary_ide_enabled);
 void pci_piix3_ide_init(PCIBus *bus, BlockDriverState **hd_table, int devfn);
-int pmac_ide_init (BlockDriverState **hd_table,
-                   SetIRQFunc *set_irq, void *irq_opaque, int irq);
+int pmac_ide_init(BlockDriverState **hd_table,
+                  SetIRQFunc *set_irq, void *irq_opaque, int irq);
 
 /* cdrom.c */
 int cdrom_read_toc(int nb_sectors, uint8_t *buf, int msf, int start_track);
 int cdrom_read_toc_raw(int nb_sectors, uint8_t *buf, int msf, int session_num);
 
 /* es1370.c */
-int es1370_init (PCIBus *bus, AudioState *s);
+int es1370_init(PCIBus *bus, AudioState *s);
 
 /* sb16.c */
-int SB16_init (AudioState *s);
+int SB16_init(AudioState *s);
 
 /* adlib.c */
-int Adlib_init (AudioState *s);
+int Adlib_init(AudioState *s);
 
 /* gus.c */
-int GUS_init (AudioState *s);
+int GUS_init(AudioState *s);
 
 /* dma.c */
-typedef int (*DMA_transfer_handler) (void *opaque, int nchan, int pos, int size);
-int DMA_get_channel_mode (int nchan);
-int DMA_read_memory (int nchan, void *buf, int pos, int size);
-int DMA_write_memory (int nchan, void *buf, int pos, int size);
-void DMA_hold_DREQ (int nchan);
-void DMA_release_DREQ (int nchan);
+typedef int (*DMA_transfer_handler)(void *opaque, int nchan, int pos, int size);
+int DMA_get_channel_mode(int nchan);
+int DMA_read_memory(int nchan, void *buf, int pos, int size);
+int DMA_write_memory(int nchan, void *buf, int pos, int size);
+void DMA_hold_DREQ(int nchan);
+void DMA_release_DREQ(int nchan);
 void DMA_schedule(int nchan);
-void DMA_run (void);
-void DMA_init (int high_page_enable);
-void DMA_register_channel (int nchan,
-                           DMA_transfer_handler transfer_handler,
-                           void *opaque);
+void DMA_run(void);
+void DMA_init(int high_page_enable);
+void DMA_register_channel(int nchan,
+                          DMA_transfer_handler transfer_handler,
+                          void *opaque);
 /* fdc.c */
 #define MAX_FD 2
 extern BlockDriverState *fd_table[MAX_FD];
 
 typedef struct fdctrl_t fdctrl_t;
 
-fdctrl_t *fdctrl_init (int irq_lvl, int dma_chann, int mem_mapped, 
-                       uint32_t io_base,
-                       BlockDriverState **fds);
+fdctrl_t *fdctrl_init(int irq_lvl, int dma_chann, int mem_mapped,
+                      uint32_t io_base,
+                      BlockDriverState **fds);
 int fdctrl_get_drive_type(fdctrl_t *fdctrl, int drive_num);
 
 /* ne2000.c */
@@ -1018,9 +1018,9 @@ void rtc_set_date(RTCState *s, const struct tm *tm);
 typedef struct SerialState SerialState;
 SerialState *serial_init(SetIRQFunc *set_irq, void *opaque,
                          int base, int irq, CharDriverState *chr);
-SerialState *serial_mm_init (SetIRQFunc *set_irq, void *opaque,
-                             target_ulong base, int it_shift,
-                             int irq, CharDriverState *chr);
+SerialState *serial_mm_init(SetIRQFunc *set_irq, void *opaque,
+                            target_ulong base, int it_shift,
+                            int irq, CharDriverState *chr);
 
 /* parallel.c */
 
@@ -1102,19 +1102,19 @@ extern void cpu_mips_irq_request(void *opaque, int irq, int level);
 
 /* mips_timer.c */
 extern void cpu_mips_clock_init(CPUState *);
-extern void cpu_mips_irqctrl_init (void);
+extern void cpu_mips_irqctrl_init(void);
 
 /* shix.c */
 extern QEMUMachine shix_machine;
 
 #ifdef TARGET_PPC
-ppc_tb_t *cpu_ppc_tb_init (CPUState *env, uint32_t freq);
+ppc_tb_t *cpu_ppc_tb_init(CPUState *env, uint32_t freq);
 #endif
-void PREP_debug_write (void *opaque, uint32_t addr, uint32_t val);
+void PREP_debug_write(void *opaque, uint32_t addr, uint32_t val);
 
 extern CPUWriteMemoryFunc *PPC_io_write[];
 extern CPUReadMemoryFunc *PPC_io_read[];
-void PPC_debug_write (void *opaque, uint32_t addr, uint32_t val);
+void PPC_debug_write(void *opaque, uint32_t addr, uint32_t val);
 
 /* sun4m.c */
 extern QEMUMachine sun4m_machine;
@@ -1123,24 +1123,24 @@ void pic_set_irq_cpu(int irq, int level, unsigned int cpu);
 /* iommu.c */
 void *iommu_init(uint32_t addr);
 void sparc_iommu_memory_rw(void *opaque, target_phys_addr_t addr,
-                                 uint8_t *buf, int len, int is_write);
+                           uint8_t *buf, int len, int is_write);
 static inline void sparc_iommu_memory_read(void *opaque,
-                                           target_phys_addr_t addr,
-                                           uint8_t *buf, int len)
+                target_phys_addr_t addr,
+                uint8_t *buf, int len)
 {
-    sparc_iommu_memory_rw(opaque, addr, buf, len, 0);
+	sparc_iommu_memory_rw(opaque, addr, buf, len, 0);
 }
 
 static inline void sparc_iommu_memory_write(void *opaque,
-                                            target_phys_addr_t addr,
-                                            uint8_t *buf, int len)
+                target_phys_addr_t addr,
+                uint8_t *buf, int len)
 {
-    sparc_iommu_memory_rw(opaque, addr, buf, len, 1);
+	sparc_iommu_memory_rw(opaque, addr, buf, len, 1);
 }
 
 /* tcx.c */
 void tcx_init(DisplayState *ds, uint32_t addr, uint8_t *vram_base,
-	       unsigned long vram_offset, int vram_size, int width, int height);
+              unsigned long vram_offset, int vram_size, int width, int height);
 
 /* slavio_intctl.c */
 void *slavio_intctl_init();
@@ -1176,9 +1176,9 @@ void esp_reset(void *opaque);
 void *sparc32_dma_init(uint32_t daddr, int espirq, int leirq, void *iommu,
                        void *intctl);
 void ledma_set_irq(void *opaque, int isr);
-void ledma_memory_read(void *opaque, target_phys_addr_t addr, 
+void ledma_memory_read(void *opaque, target_phys_addr_t addr,
                        uint8_t *buf, int len, int do_bswap);
-void ledma_memory_write(void *opaque, target_phys_addr_t addr, 
+void ledma_memory_write(void *opaque, target_phys_addr_t addr,
                         uint8_t *buf, int len, int do_bswap);
 void espdma_raise_irq(void *opaque);
 void espdma_clear_irq(void *opaque);
@@ -1196,25 +1196,25 @@ extern QEMUMachine sun4u_machine;
 /* NVRAM helpers */
 #include "hw/m48t59.h"
 
-void NVRAM_set_byte (m48t59_t *nvram, uint32_t addr, uint8_t value);
-uint8_t NVRAM_get_byte (m48t59_t *nvram, uint32_t addr);
-void NVRAM_set_word (m48t59_t *nvram, uint32_t addr, uint16_t value);
-uint16_t NVRAM_get_word (m48t59_t *nvram, uint32_t addr);
-void NVRAM_set_lword (m48t59_t *nvram, uint32_t addr, uint32_t value);
-uint32_t NVRAM_get_lword (m48t59_t *nvram, uint32_t addr);
-void NVRAM_set_string (m48t59_t *nvram, uint32_t addr,
-                       const unsigned char *str, uint32_t max);
-int NVRAM_get_string (m48t59_t *nvram, uint8_t *dst, uint16_t addr, int max);
-void NVRAM_set_crc (m48t59_t *nvram, uint32_t addr,
-                    uint32_t start, uint32_t count);
-int PPC_NVRAM_set_params (m48t59_t *nvram, uint16_t NVRAM_size,
-                          const unsigned char *arch,
-                          uint32_t RAM_size, int boot_device,
-                          uint32_t kernel_image, uint32_t kernel_size,
-                          const char *cmdline,
-                          uint32_t initrd_image, uint32_t initrd_size,
-                          uint32_t NVRAM_image,
-                          int width, int height, int depth);
+void NVRAM_set_byte(m48t59_t *nvram, uint32_t addr, uint8_t value);
+uint8_t NVRAM_get_byte(m48t59_t *nvram, uint32_t addr);
+void NVRAM_set_word(m48t59_t *nvram, uint32_t addr, uint16_t value);
+uint16_t NVRAM_get_word(m48t59_t *nvram, uint32_t addr);
+void NVRAM_set_lword(m48t59_t *nvram, uint32_t addr, uint32_t value);
+uint32_t NVRAM_get_lword(m48t59_t *nvram, uint32_t addr);
+void NVRAM_set_string(m48t59_t *nvram, uint32_t addr,
+                      const unsigned char *str, uint32_t max);
+int NVRAM_get_string(m48t59_t *nvram, uint8_t *dst, uint16_t addr, int max);
+void NVRAM_set_crc(m48t59_t *nvram, uint32_t addr,
+                   uint32_t start, uint32_t count);
+int PPC_NVRAM_set_params(m48t59_t *nvram, uint16_t NVRAM_size,
+                         const unsigned char *arch,
+                         uint32_t RAM_size, int boot_device,
+                         uint32_t kernel_image, uint32_t kernel_size,
+                         const char *cmdline,
+                         uint32_t initrd_image, uint32_t initrd_size,
+                         uint32_t NVRAM_image,
+                         int width, int height, int depth);
 
 /* adb.c */
 
@@ -1226,31 +1226,31 @@ typedef struct ADBDevice ADBDevice;
 
 /* buf = NULL means polling */
 typedef int ADBDeviceRequest(ADBDevice *d, uint8_t *buf_out,
-                              const uint8_t *buf, int len);
+                             const uint8_t *buf, int len);
 typedef int ADBDeviceReset(ADBDevice *d);
 
 struct ADBDevice {
-    struct ADBBusState *bus;
-    int devaddr;
-    int handler;
-    ADBDeviceRequest *devreq;
-    ADBDeviceReset *devreset;
-    void *opaque;
+	struct ADBBusState *bus;
+	int devaddr;
+	int handler;
+	ADBDeviceRequest *devreq;
+	ADBDeviceReset *devreset;
+	void *opaque;
 };
 
 typedef struct ADBBusState {
-    ADBDevice devices[MAX_ADB_DEVICES];
-    int nb_devices;
-    int poll_index;
+	ADBDevice devices[MAX_ADB_DEVICES];
+	int nb_devices;
+	int poll_index;
 } ADBBusState;
 
 int adb_request(ADBBusState *s, uint8_t *buf_out,
                 const uint8_t *buf, int len);
 int adb_poll(ADBBusState *s, uint8_t *buf_out);
 
-ADBDevice *adb_register_device(ADBBusState *s, int devaddr, 
-                               ADBDeviceRequest *devreq, 
-                               ADBDeviceReset *devreset, 
+ADBDevice *adb_register_device(ADBBusState *s, int devaddr,
+                               ADBDeviceRequest *devreq,
+                               ADBDeviceReset *devreset,
                                void *opaque);
 void adb_kbd_init(ADBBusState *bus);
 void adb_mouse_init(ADBBusState *bus);
@@ -1275,8 +1275,8 @@ void usb_info(void);
 
 /* scsi-disk.c */
 enum scsi_reason {
-    SCSI_REASON_DONE, /* Command complete.  */
-    SCSI_REASON_DATA  /* Transfer complete, more data required.  */
+	SCSI_REASON_DONE, /* Command complete.  */
+	SCSI_REASON_DATA  /* Transfer complete, more data required.  */
 };
 
 typedef struct SCSIDevice SCSIDevice;
@@ -1362,30 +1362,30 @@ struct SH7750State;
 struct SH7750State *sh7750_init(CPUState * cpu);
 
 typedef struct {
-    /* The callback will be triggered if any of the designated lines change */
-    uint16_t portamask_trigger;
-    uint16_t portbmask_trigger;
-    /* Return 0 if no action was taken */
-    int (*port_change_cb) (uint16_t porta, uint16_t portb,
-			   uint16_t * periph_pdtra,
-			   uint16_t * periph_portdira,
-			   uint16_t * periph_pdtrb,
-			   uint16_t * periph_portdirb);
+	/* The callback will be triggered if any of the designated lines change */
+	uint16_t portamask_trigger;
+	uint16_t portbmask_trigger;
+	/* Return 0 if no action was taken */
+	int (*port_change_cb)(uint16_t porta, uint16_t portb,
+	                      uint16_t * periph_pdtra,
+	                      uint16_t * periph_portdira,
+	                      uint16_t * periph_pdtrb,
+	                      uint16_t * periph_portdirb);
 } sh7750_io_device;
 
 int sh7750_register_io_device(struct SH7750State *s,
-			      sh7750_io_device * device);
+                              sh7750_io_device * device);
 /* tc58128.c */
 int tc58128_init(struct SH7750State *s, char *zone1, char *zone2);
 
 /* NOR flash devices */
 typedef struct pflash_t pflash_t;
 
-pflash_t *pflash_register (target_ulong base, ram_addr_t off,
-                           BlockDriverState *bs,
-                           target_ulong sector_len, int nb_blocs, int width,
-                           uint16_t id0, uint16_t id1, 
-                           uint16_t id2, uint16_t id3);
+pflash_t *pflash_register(target_ulong base, ram_addr_t off,
+                          BlockDriverState *bs,
+                          target_ulong sector_len, int nb_blocs, int width,
+                          uint16_t id0, uint16_t id1,
+                          uint16_t id2, uint16_t id3);
 
 #include "gdbstub.h"
 

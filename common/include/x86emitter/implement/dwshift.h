@@ -15,7 +15,8 @@
 
 #pragma once
 
-namespace x86Emitter {
+namespace x86Emitter
+{
 
 // Implementations here cover SHLD and SHRD.
 
@@ -28,17 +29,16 @@ namespace x86Emitter {
 // Optimization Note: Imm shifts by 0 are ignore (no code generated).  This is a safe optimization
 // because shifts by 0 do *not* affect flags status (intel docs cited).
 //
-struct xImpl_DwordShift
-{
+struct xImpl_DwordShift {
 	u16		OpcodeBase;
 
-	void operator()( const xRegister32& to,	const xRegister32& from, const xRegisterCL& clreg ) const;
-	void operator()( const xRegister16& to,	const xRegister16& from, const xRegisterCL& clreg ) const;
-	void operator()( const xRegister32& to,	const xRegister32& from, u8 shiftcnt ) const;
-	void operator()( const xRegister16& to,	const xRegister16& from, u8 shiftcnt ) const;
+	void operator()(const xRegister32 &to,	const xRegister32 &from, const xRegisterCL &clreg) const;
+	void operator()(const xRegister16 &to,	const xRegister16 &from, const xRegisterCL &clreg) const;
+	void operator()(const xRegister32 &to,	const xRegister32 &from, u8 shiftcnt) const;
+	void operator()(const xRegister16 &to,	const xRegister16 &from, u8 shiftcnt) const;
 
-	void operator()( const xIndirectVoid& dest,const xRegister16or32& from, const xRegisterCL& clreg ) const;
-	void operator()( const xIndirectVoid& dest,const xRegister16or32& from, u8 shiftcnt ) const;
+	void operator()(const xIndirectVoid &dest, const xRegister16or32 &from, const xRegisterCL &clreg) const;
+	void operator()(const xIndirectVoid &dest, const xRegister16or32 &from, u8 shiftcnt) const;
 };
 
 }	// End namespace x86Emitter

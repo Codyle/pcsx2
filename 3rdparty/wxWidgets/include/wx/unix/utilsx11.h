@@ -27,27 +27,26 @@ typedef void* WXWindow;
 
 class wxIconBundle;
 
-void wxSetIconsX11( WXDisplay* display, WXWindow window,
-                    const wxIconBundle& ib );
+void wxSetIconsX11(WXDisplay* display, WXWindow window,
+                   const wxIconBundle &ib);
 
 
-enum wxX11FullScreenMethod
-{
-    wxX11_FS_AUTODETECT = 0,
-    wxX11_FS_WMSPEC,
-    wxX11_FS_KDE,
-    wxX11_FS_GENERIC
+enum wxX11FullScreenMethod {
+	wxX11_FS_AUTODETECT = 0,
+	wxX11_FS_WMSPEC,
+	wxX11_FS_KDE,
+	wxX11_FS_GENERIC
 };
 
 wxX11FullScreenMethod wxGetFullScreenMethodX11(WXDisplay* display,
-                                               WXWindow rootWindow);
+                WXWindow rootWindow);
 
 void wxSetFullScreenStateX11(WXDisplay* display, WXWindow rootWindow,
                              WXWindow window, bool show, wxRect *origSize,
                              wxX11FullScreenMethod method);
 
 #endif
-    // __WXMOTIF__, __WXGTK__, __WXX11__
+// __WXMOTIF__, __WXGTK__, __WXX11__
 
 #endif
-    // _WX_UNIX_UTILSX11_H_
+// _WX_UNIX_UTILSX11_H_

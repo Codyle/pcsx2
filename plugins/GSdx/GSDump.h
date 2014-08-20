@@ -52,10 +52,13 @@ public:
 	GSDump();
 	virtual ~GSDump();
 
-	void Open(const string& fn, uint32 crc, const GSFreezeData& fd, const GSPrivRegSet* regs);
+	void Open(const string &fn, uint32 crc, const GSFreezeData &fd, const GSPrivRegSet* regs);
 	void Close();
 	void ReadFIFO(uint32 size);
 	void Transfer(int index, const uint8* mem, size_t size);
 	void VSync(int field, bool last, const GSPrivRegSet* regs);
-	operator bool() {return m_gs != NULL;}
+	operator bool()
+	{
+		return m_gs != NULL;
+	}
 };

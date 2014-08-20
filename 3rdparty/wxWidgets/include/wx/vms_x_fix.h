@@ -1195,11 +1195,11 @@
 
 #if (__VMS_VER < 80200000)
 # define SetReqLen(req,n,badlen) \
-    if ((req->length + n) > (unsigned)65535) { \
-	    n = badlen; \
-	    req->length += n; \
-    } else \
-	req->length += n
+	if ((req->length + n) > (unsigned)65535) { \
+		n = badlen; \
+		req->length += n; \
+	} else \
+		req->length += n
 #endif
 
 #ifdef __cplusplus

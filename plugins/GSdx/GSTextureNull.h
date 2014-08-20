@@ -25,17 +25,34 @@
 
 class GSTextureNull : public GSTexture
 {
-	struct {int type, w, h, format;} m_desc;
+	struct {
+		int type, w, h, format;
+	} m_desc;
 
 public:
 	GSTextureNull();
 	GSTextureNull(int type, int w, int h, int format);
 
-	int GetType() const {return m_desc.type;}
-	int GetFormat() const {return m_desc.format;}
+	int GetType() const
+	{
+		return m_desc.type;
+	}
+	int GetFormat() const
+	{
+		return m_desc.format;
+	}
 
-	bool Update(const GSVector4i& r, const void* data, int pitch) {return true;}
-	bool Map(GSMap& m, const GSVector4i* r) {return false;}
+	bool Update(const GSVector4i &r, const void* data, int pitch)
+	{
+		return true;
+	}
+	bool Map(GSMap &m, const GSVector4i* r)
+	{
+		return false;
+	}
 	void Unmap() {}
-	bool Save(const string& fn, bool dds = false) {return false;}
+	bool Save(const string &fn, bool dds = false)
+	{
+		return false;
+	}
 };

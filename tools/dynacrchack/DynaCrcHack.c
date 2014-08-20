@@ -45,17 +45,30 @@ typedef int bool;
 #define false	(0)
 
 //GSdx values available to CRC hacks
-typedef struct{	uint32 FBP;	uint32 FPSM; uint32 FBMSK; uint32 TBP0; uint32 TPSM; uint32 TZTST; bool TME;} GSFrameInfo;
-enum Region{CRC_NoRegion,CRC_US,CRC_EU,CRC_JP,CRC_JPUNDUB,CRC_RU,CRC_FR,CRC_DE,CRC_IT,CRC_ES,CRC_ASIA,CRC_KO,CRC_RegionCount};
-enum GS_PSM{PSM_PSMCT32=0,PSM_PSMCT24=1,PSM_PSMCT16=2,PSM_PSMCT16S=10,PSM_PSMT8=19,PSM_PSMT4=20,PSM_PSMT8H=27,
-            PSM_PSMT4HL=36,PSM_PSMT4HH=44,PSM_PSMZ32=48,PSM_PSMZ24=49,PSM_PSMZ16=50,PSM_PSMZ16S=58};
+typedef struct {
+	uint32 FBP;
+	uint32 FPSM;
+	uint32 FBMSK;
+	uint32 TBP0;
+	uint32 TPSM;
+	uint32 TZTST;
+	bool TME;
+} GSFrameInfo;
+enum Region {CRC_NoRegion, CRC_US, CRC_EU, CRC_JP, CRC_JPUNDUB, CRC_RU, CRC_FR, CRC_DE, CRC_IT, CRC_ES, CRC_ASIA, CRC_KO, CRC_RegionCount};
+enum GS_PSM {PSM_PSMCT32 = 0, PSM_PSMCT24 = 1, PSM_PSMCT16 = 2, PSM_PSMCT16S = 10, PSM_PSMT8 = 19, PSM_PSMT4 = 20, PSM_PSMT8H = 27,
+             PSM_PSMT4HL = 36, PSM_PSMT4HH = 44, PSM_PSMZ32 = 48, PSM_PSMZ24 = 49, PSM_PSMZ16 = 50, PSM_PSMZ16S = 58
+            };
 
 //trickery to make the hack function appear and behave (almost) identical to the CRC hack functions at GSState.cpp
 // - see the Notes section for exceptions
 #define skip (*pSkip)
 #define GSUtil_HasSharedBits(a,b,c,d) sharedBits
 #define GSC_AnyGame(a,b) _GSC_AnyGame()
-GSFrameInfo fi; int* pSkip; uint32 g_crc_region; uint32 sharedBits; uint32 g_crc;
+GSFrameInfo fi;
+int* pSkip;
+uint32 g_crc_region;
+uint32 sharedBits;
+uint32 g_crc;
 
 //utils
 const int MODE_3_DELAY = 750;	// ms
@@ -87,64 +100,46 @@ bool IsIn(const DWORD val, ...);
 
 /************ Dynamic CRC hack code starts here *****************/
 
-bool GSC_AnyGame( const GSFrameInfo& fi, int& skip )
+bool GSC_AnyGame(const GSFrameInfo &fi, int &skip)
 {
-
-//Example: MGS3 CRC hack copied directly from GSState.cpp (see the Notes section exceptions):
-if( IsCRC(0x086273D2, 0x26A6E286, 0x9F185CE1) ){ // 3 first MGS3 CRCs from GSCrc.c
-	if(skip == 0)
-	{
-		if(fi.TME && fi.FBP == 0x02000 && fi.FPSM == PSM_PSMCT32 && (fi.TBP0 == 0x00000 || fi.TBP0 == 0x01000) && fi.TPSM == PSM_PSMCT24)
-		{
-			skip = 1000; // 76, 79
-		}
-		else if(fi.TME && fi.FBP == 0x02800 && fi.FPSM == PSM_PSMCT24 && (fi.TBP0 == 0x00000 || fi.TBP0 == 0x01000) && fi.TPSM == PSM_PSMCT32)
-		{
-			skip = 1000; // 69
-		}
-	}
-	else
-	{
-		if(!fi.TME && (fi.FBP == 0x00000 || fi.FBP == 0x01000) && fi.FPSM == PSM_PSMCT32)
-		{
-			skip = 0;
-		}
-		else if(!fi.TME && fi.FBP == fi.TBP0 && fi.TBP0 == 0x2000 && fi.FPSM == PSM_PSMCT32 && fi.TPSM == PSM_PSMCT24)
-		{
-
-			if(g_crc_region == CRC_US || g_crc_region == CRC_JP || g_crc_region == CRC_KO)
-			{
-				skip = 119;	//ntsc
+	//Example: MGS3 CRC hack copied directly from GSState.cpp (see the Notes section exceptions):
+	if (IsCRC(0x086273D2, 0x26A6E286, 0x9F185CE1)) { // 3 first MGS3 CRCs from GSCrc.c
+		if (skip == 0) {
+			if (fi.TME && fi.FBP == 0x02000 && fi.FPSM == PSM_PSMCT32 && (fi.TBP0 == 0x00000 || fi.TBP0 == 0x01000) && fi.TPSM == PSM_PSMCT24) {
+				skip = 1000; // 76, 79
+			} else if (fi.TME && fi.FBP == 0x02800 && fi.FPSM == PSM_PSMCT24 && (fi.TBP0 == 0x00000 || fi.TBP0 == 0x01000) && fi.TPSM == PSM_PSMCT32) {
+				skip = 1000; // 69
 			}
-			else
-			{
-				skip = 136;	//pal
+		} else {
+			if (!fi.TME && (fi.FBP == 0x00000 || fi.FBP == 0x01000) && fi.FPSM == PSM_PSMCT32)
+				skip = 0;
+			else if (!fi.TME && fi.FBP == fi.TBP0 && fi.TBP0 == 0x2000 && fi.FPSM == PSM_PSMCT32 && fi.TPSM == PSM_PSMCT24) {
+				if (g_crc_region == CRC_US || g_crc_region == CRC_JP || g_crc_region == CRC_KO) {
+					skip = 119;	//ntsc
+				} else {
+					skip = 136;	//pal
+				}
 			}
 		}
+		return true;
 	}
-
 	return true;
-}
-
-
-
-return true;
 }
 
 /*********** Dynamic CRC hack code ends here *****************/
 
 
 // Prints to the Debugger's output window or to DebugView ( http://technet.microsoft.com/en-us/sysinternals/bb896647 )
-void dprintf( const char* format, ...)
+void dprintf(const char* format, ...)
 {
-	#define _BUFSIZ 2048
+#define _BUFSIZ 2048
 	char buffer[_BUFSIZ];
 	va_list args;
-	va_start( args, format );
-	if( 0 > vsnprintf( buffer, _BUFSIZ, format, args ) )
-		sprintf( buffer, "%s","<too-long-to-print>\n" );
-	OutputDebugString( buffer );
-	va_end( args );
+	va_start(args, format);
+	if (0 > vsnprintf(buffer, _BUFSIZ, format, args))
+		sprintf(buffer, "%s", "<too-long-to-print>\n");
+	OutputDebugString(buffer);
+	va_end(args);
 };
 
 // Tests if the first argument is equal to any of the other arguments.
@@ -152,15 +147,17 @@ void dprintf( const char* format, ...)
 // - All values MUST be 32 bits (int/uint32/DWORD etc) or else it may crash.
 // E.g. IsIn( 6,   2,4,6,8,     END) is true
 // E.g. IsIn( 7,   2,4,6,8,10,  END) is false
-bool IsIn( const DWORD val, ... )
+bool IsIn(const DWORD val, ...)
 {
 	va_list args;
-	va_start( args, val );
+	va_start(args, val);
 	DWORD test, res = 0;
-	for ( ; ( test = va_arg( args, DWORD ) ) != END ; )
-		if( test == val)
-			{res=1; break;}
-	va_end( args );
+	for (; (test = va_arg(args, DWORD)) != END ;)
+		if (test == val) {
+			res = 1;
+			break;
+		}
+	va_end(args);
 	return res;
 }
 
@@ -170,106 +167,109 @@ bool isCornerTriggered()
 {
 	static POINT last;
 	POINT coord;
-	GetCursorPos( &coord );
-	bool triggered = ( !coord.x && !coord.y && ( last.x || last.y ) );
+	GetCursorPos(&coord);
+	bool triggered = (!coord.x && !coord.y && (last.x || last.y));
 	last = coord;
 	return triggered;
 }
 
-DWORD _dingsLeft=0, _nextDing=0;
+DWORD _dingsLeft = 0, _nextDing = 0;
 // Initiate n ding sounds (at 250ms intervals) while aborting any previous sequence.
 // Use n=0 to stop an already playing sequence.
-void dings(const int n){_dingsLeft=n; _nextDing=0;}
+void dings(const int n)
+{
+	_dingsLeft = n;
+	_nextDing = 0;
+}
 void processDings()
 {
-	if( _dingsLeft <= 0 )
+	if (_dingsLeft <= 0)
 		return;
 	DWORD now = GetTickCount();
-	if( now < _nextDing )
+	if (now < _nextDing)
 		return;
 	_nextDing = now + 250;
 	_dingsLeft--;
-	MessageBeep( 0 );	// Asynchronous
+	MessageBeep(0);	// Asynchronous
 }
 
 // Executed every iteration of the DLL hack invocation, takes care of mode and sounds
 bool preProcess_isAbort()
 {
 	static int mode = INITIAL_MODE;
-
-	if( MOUSE_TOGGLE && isCornerTriggered() ){
-		mode = 1 + mode%3;
-		if( MOUSE_TOGGLE == 2 )
-			dings( mode );
-		dprintf( "Hack Mode: %s\n", mode==1?"Off":(mode==2?"On":"Toggle") );
+	if (MOUSE_TOGGLE && isCornerTriggered()) {
+		mode = 1 + mode % 3;
+		if (MOUSE_TOGGLE == 2)
+			dings(mode);
+		dprintf("Hack Mode: %s\n", mode == 1 ? "Off" : (mode == 2 ? "On" : "Toggle"));
 	}
 	processDings();
-
-	if( mode == 1 ) return true;
-	if( mode == 2 ) return false;
-	return ( GetTickCount() / MODE_3_DELAY) %2;
+	if (mode == 1) return true;
+	if (mode == 2) return false;
+	return (GetTickCount() / MODE_3_DELAY) % 2;
 }
 
 
-DWORD WINAPI thread_PrintStats( LPVOID lpParam );
-typedef struct _stats {	uint32 overall, changed, skipped, nextPrint;} Stats;
+DWORD WINAPI thread_PrintStats(LPVOID lpParam);
+typedef struct _stats {
+	uint32 overall, changed, skipped, nextPrint;
+} Stats;
 
 #define DLL_EXPORT __declspec(dllexport)
 
 #define CRC_HACK     DynamicCrcHack2
 #define CRC_HACK_OLD DynamicCrcHack
 #if INITIAL_MODE == 0
-	#define CRC_HACK Voldemort2
-	#define CRC_HACK_OLD Voldemort
+#define CRC_HACK Voldemort2
+#define CRC_HACK_OLD Voldemort
 #endif
-DLL_EXPORT bool CRC_HACK (uint32 FBP, uint32 FPSM, uint32 FBMSK, uint32 TBP0, uint32 TPSM, uint32 TZTST,
-                          uint32 TME, int* _pSkip, uint32 _g_crc_region, uint32 _sharedBits, uint32 _crc)
+DLL_EXPORT bool CRC_HACK(uint32 FBP, uint32 FPSM, uint32 FBMSK, uint32 TBP0, uint32 TPSM, uint32 TZTST,
+                         uint32 TME, int* _pSkip, uint32 _g_crc_region, uint32 _sharedBits, uint32 _crc)
 {
-
-	static Stats stat={overall:0, changed:0, skipped:0, nextPrint:0};
-
-	DWORD now=GetTickCount();
-	if(stat.nextPrint <= now){
+	static Stats stat = {overall: 0, changed: 0, skipped: 0, nextPrint: 0};
+	DWORD now = GetTickCount();
+	if (stat.nextPrint <= now) {
 		dprintf("DH: Overall: %5d, skipped: %5d, actions:%5d\n", stat.overall, stat.skipped, stat.changed);
-		stat.overall=stat.changed=stat.skipped=0;
-		stat.nextPrint=now+1000;
+		stat.overall = stat.changed = stat.skipped = 0;
+		stat.nextPrint = now + 1000;
 	}
-	
 	stat.overall++;
-	
-	if(preProcess_isAbort())	// Process dings if required
+	if (preProcess_isAbort())	// Process dings if required
 		return true;			// Abort hack depending on mode
-
-	fi.FBP=FBP; fi.FPSM=FPSM; fi.FBMSK=FBMSK; fi.TBP0=TBP0; fi.TPSM=TPSM; fi.TZTST=TZTST; fi.TME=TME;
-	pSkip=_pSkip; g_crc_region=_g_crc_region; sharedBits=_sharedBits; g_crc = _crc;
-
-	int pre=skip;
-	bool res=_GSC_AnyGame();
-	int post=skip;
-
-	if(skip) stat.skipped++;
-	
-	if(post!=pre) stat.changed++;
-	
+	fi.FBP = FBP;
+	fi.FPSM = FPSM;
+	fi.FBMSK = FBMSK;
+	fi.TBP0 = TBP0;
+	fi.TPSM = TPSM;
+	fi.TZTST = TZTST;
+	fi.TME = TME;
+	pSkip = _pSkip;
+	g_crc_region = _g_crc_region;
+	sharedBits = _sharedBits;
+	g_crc = _crc;
+	int pre = skip;
+	bool res = _GSC_AnyGame();
+	int post = skip;
+	if (skip) stat.skipped++;
+	if (post != pre) stat.changed++;
 	return res;
-		
 }
 
-DLL_EXPORT bool CRC_HACK_OLD (uint32 FBP, uint32 FPSM, uint32 FBMSK, uint32 TBP0, uint32 TPSM, uint32 TZTST,
-                          uint32 TME, int* _pSkip, uint32 _g_crc_region, uint32 _sharedBits)
+DLL_EXPORT bool CRC_HACK_OLD(uint32 FBP, uint32 FPSM, uint32 FBMSK, uint32 TBP0, uint32 TPSM, uint32 TZTST,
+                             uint32 TME, int* _pSkip, uint32 _g_crc_region, uint32 _sharedBits)
 {
-	return CRC_HACK(FBP, FPSM, FBMSK, TBP0, TPSM, TZTST, TME,_pSkip, _g_crc_region,_sharedBits, END);
+	return CRC_HACK(FBP, FPSM, FBMSK, TBP0, TPSM, TZTST, TME, _pSkip, _g_crc_region, _sharedBits, END);
 }
 
-char* v[]={
+char* v[] = {
 	"DLL_PROCESS_DETACH",
 	"DLL_PROCESS_ATTACH",
 	"DLL_THREAD_ATTACH",
 	"DLL_THREAD_DETACH"
 };
-BOOL WINAPI DllMain (HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
+BOOL WINAPI DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
 {
-	if (dwReason<4)
+	if (dwReason < 4)
 		dprintf("DllMain: %s\n", v[dwReason]);
 	else
 		dprintf("DllMain: %d\n", dwReason);

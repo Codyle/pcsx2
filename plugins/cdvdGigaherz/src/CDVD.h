@@ -22,8 +22,7 @@
 #define CDVDdefs
 #include <PS2Edefs.h>
 
-typedef struct _track
-{
+typedef struct _track {
 	u32 start_lba;
 	u32 length;
 	u32 type;
@@ -37,32 +36,31 @@ extern int curDiskType;
 extern int curTrayStatus;
 
 typedef struct _toc_entry {
-    UCHAR SessionNumber;
-    UCHAR Control      : 4;
-    UCHAR Adr          : 4;
-    UCHAR Reserved1;
-    UCHAR Point;
-    UCHAR MsfExtra[3];
-    UCHAR Zero;
-    UCHAR Msf[3];
+	UCHAR SessionNumber;
+	UCHAR Control      : 4;
+	UCHAR Adr          : 4;
+	UCHAR Reserved1;
+	UCHAR Point;
+	UCHAR MsfExtra[3];
+	UCHAR Zero;
+	UCHAR Msf[3];
 } toc_entry;
 
-typedef struct _toc_data
-{
-    UCHAR Length[2];
-    UCHAR FirstCompleteSession;
-    UCHAR LastCompleteSession;
+typedef struct _toc_data {
+	UCHAR Length[2];
+	UCHAR FirstCompleteSession;
+	UCHAR LastCompleteSession;
 
-    toc_entry Descriptors[255];
+	toc_entry Descriptors[255];
 } toc_data;
 
 extern toc_data cdtoc;
 
 class Source //abstract class as base for source modules
 {
-	Source(Source&);
+	Source(Source &);
 public:
-	Source(){};
+	Source() {};
 
 	//virtual destructor
 	virtual ~Source()
@@ -70,23 +68,23 @@ public:
 	}
 
 	//virtual members
-	virtual s32 GetSectorCount()=0;
-	virtual s32 ReadTOC(char *toc,int size)=0;
-	virtual s32 ReadSectors2048(u32 sector, u32 count, char *buffer)=0;
-	virtual s32 ReadSectors2352(u32 sector, u32 count, char *buffer)=0;
-	virtual s32 GetLayerBreakAddress()=0;
+	virtual s32 GetSectorCount() = 0;
+	virtual s32 ReadTOC(char *toc, int size) = 0;
+	virtual s32 ReadSectors2048(u32 sector, u32 count, char *buffer) = 0;
+	virtual s32 ReadSectors2352(u32 sector, u32 count, char *buffer) = 0;
+	virtual s32 GetLayerBreakAddress() = 0;
 
-	virtual s32 GetMediaType()=0;
+	virtual s32 GetMediaType() = 0;
 
-	virtual s32 IsOK()=0;
-	virtual s32 Reopen()=0;
+	virtual s32 IsOK() = 0;
+	virtual s32 Reopen() = 0;
 
-	virtual s32 DiscChanged()=0;
+	virtual s32 DiscChanged() = 0;
 };
 
 class IOCtlSrc: public Source
 {
-	IOCtlSrc(IOCtlSrc&);
+	IOCtlSrc(IOCtlSrc &);
 
 	HANDLE device;
 
@@ -96,7 +94,7 @@ class IOCtlSrc: public Source
 
 	s32 last_sector_count;
 
-	char sectorbuffer[32*2048];
+	char sectorbuffer[32 * 2048];
 
 	char fName[256];
 
@@ -122,7 +120,7 @@ public:
 
 	//virtual members
 	virtual s32 GetSectorCount();
-	virtual s32 ReadTOC(char *toc,int size);
+	virtual s32 ReadTOC(char *toc, int size);
 	virtual s32 ReadSectors2048(u32 sector, u32 count, char *buffer);
 	virtual s32 ReadSectors2352(u32 sector, u32 count, char *buffer);
 	virtual s32 GetLayerBreakAddress();
@@ -157,7 +155,7 @@ s32 cdvdGetMediaType();
 
 void ReadSettings();
 void WriteSettings();
-void CfgSetSettingsDir( const char* dir );
+void CfgSetSettingsDir(const char* dir);
 
 extern char csrc[];
 extern bool cdvd_is_open;

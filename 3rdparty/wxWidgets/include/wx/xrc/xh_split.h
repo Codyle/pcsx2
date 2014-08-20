@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxSplitterWindowXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxSplitterWindowXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxSplitterWindowXmlHandler)
 
 public:
-    wxSplitterWindowXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxSplitterWindowXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_SPLITTER

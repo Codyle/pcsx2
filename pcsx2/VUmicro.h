@@ -24,10 +24,10 @@ static const uint VU0_PROGSIZE	= 0x1000;		// 4kb
 static const uint VU1_MEMSIZE	= 0x4000;		// 16kb
 static const uint VU1_PROGSIZE	= 0x4000;		// 16kb
 
-static const uint VU0_MEMMASK	= VU0_MEMSIZE-1;
-static const uint VU0_PROGMASK	= VU0_PROGSIZE-1;
-static const uint VU1_MEMMASK	= VU1_MEMSIZE-1;
-static const uint VU1_PROGMASK	= VU1_PROGSIZE-1;
+static const uint VU0_MEMMASK	= VU0_MEMSIZE - 1;
+static const uint VU0_PROGMASK	= VU0_PROGSIZE - 1;
+static const uint VU1_MEMMASK	= VU1_MEMSIZE - 1;
+static const uint VU1_PROGMASK	= VU1_PROGSIZE - 1;
 
 #define vuRunCycles  (512*12)  // Cycles to run ExecuteBlockJIT() for (called from within recs)
 #define vu0RunCycles (512*12)  // Cycles to run vu0 for whenever ExecuteBlock() is called
@@ -65,12 +65,12 @@ public:
 
 	virtual ~BaseCpuProvider() throw()
 	{
-		if( m_Reserved != 0 )
-			Console.Warning( "Cleanup miscount detected on CPU provider.  Count=%d", m_Reserved );
+		if (m_Reserved != 0)
+			Console.Warning("Cleanup miscount detected on CPU provider.  Count=%d", m_Reserved);
 	}
 
-	virtual const char* GetShortName() const=0;
-	virtual wxString GetLongName() const=0;
+	virtual const char* GetShortName() const = 0;
+	virtual wxString GetLongName() const = 0;
 
 	// returns the number of bytes committed to the working caches for this CPU
 	// provider (typically this refers to recompiled code caches, but could also refer
@@ -80,30 +80,30 @@ public:
 		return 0;
 	}
 
-	virtual void Reserve()=0;
-	virtual void Shutdown()=0;
-	virtual void Reset()=0;
-	virtual void Execute(u32 cycles)=0;
-	virtual void ExecuteBlock(bool startUp)=0;
+	virtual void Reserve() = 0;
+	virtual void Shutdown() = 0;
+	virtual void Reset() = 0;
+	virtual void Execute(u32 cycles) = 0;
+	virtual void ExecuteBlock(bool startUp) = 0;
 
-	virtual void Step()=0;
-	virtual void Clear(u32 Addr, u32 Size)=0;
+	virtual void Step() = 0;
+	virtual void Clear(u32 Addr, u32 Size) = 0;
 
 	// C++ Calling Conventions are unstable, and some compilers don't even allow us to take the
 	// address of C++ methods.  We need to use a wrapper function to invoke the ExecuteBlock from
 	// recompiled code.
-	static void __fastcall ExecuteBlockJIT( BaseCpuProvider* cpu )
+	static void __fastcall ExecuteBlockJIT(BaseCpuProvider* cpu)
 	{
 		cpu->Execute(1024);
 	}
 
 	// Gets the current cache reserve allocated to this CPU (value returned in megabytes)
-	virtual uint GetCacheReserve() const=0;
-	
+	virtual uint GetCacheReserve() const = 0;
+
 	// Specifies the maximum cache reserve amount for this CPU (value in megabytes).
 	// CPU providers are allowed to reset their reserves (recompiler resets, etc) if such is
 	// needed to conform to the new amount requested.
-	virtual void SetCacheReserve( uint reserveInMegs ) const=0;
+	virtual void SetCacheReserve(uint reserveInMegs) const = 0;
 
 };
 
@@ -113,12 +113,14 @@ public:
 // Layer class for possible future implementation (currently is nothing more than a type-safe
 // type define).
 //
-class BaseVUmicroCPU : public BaseCpuProvider {
+class BaseVUmicroCPU : public BaseCpuProvider
+{
 public:
 	int m_Idx;
 	u32 m_lastEEcycles;
 
-	BaseVUmicroCPU() {
+	BaseVUmicroCPU()
+	{
 		m_Idx		   = 0;
 		m_lastEEcycles = 0;
 	}
@@ -137,7 +139,8 @@ public:
 	//
 	virtual void Vsync() throw() { }
 
-	virtual void Step() {
+	virtual void Step()
+	{
 		// Ideally this would fall back on interpretation for executing single instructions
 		// for all CPU types, but due to VU complexities and large discrepancies between
 		// clamping in recs and ints, it's not really worth bothering with yet.
@@ -148,7 +151,7 @@ public:
 
 	// Executes a Block based on static preset cycles OR
 	// Executes a Block based on EE delta time (see VUmicro.cpp)
-	virtual void ExecuteBlock(bool startUp=0);
+	virtual void ExecuteBlock(bool startUp = 0);
 
 	static void __fastcall ExecuteBlockJIT(BaseVUmicroCPU* cpu);
 
@@ -166,10 +169,19 @@ class InterpVU0 : public BaseVUmicroCPU
 {
 public:
 	InterpVU0();
-	virtual ~InterpVU0() throw() { Shutdown(); }
+	virtual ~InterpVU0() throw()
+	{
+		Shutdown();
+	}
 
-	const char* GetShortName() const	{ return "intVU0"; }
-	wxString GetLongName() const		{ return L"VU0 Interpreter"; }
+	const char* GetShortName() const
+	{
+		return "intVU0";
+	}
+	wxString GetLongName() const
+	{
+		return L"VU0 Interpreter";
+	}
 
 	void Reserve() { }
 	void Shutdown() throw() { }
@@ -179,18 +191,30 @@ public:
 	void Execute(u32 cycles);
 	void Clear(u32 addr, u32 size) {}
 
-	uint GetCacheReserve() const { return 0; }
-	void SetCacheReserve( uint reserveInMegs ) const {}
+	uint GetCacheReserve() const
+	{
+		return 0;
+	}
+	void SetCacheReserve(uint reserveInMegs) const {}
 };
 
 class InterpVU1 : public BaseVUmicroCPU
 {
 public:
 	InterpVU1();
-	virtual ~InterpVU1() throw() { Shutdown(); }
+	virtual ~InterpVU1() throw()
+	{
+		Shutdown();
+	}
 
-	const char* GetShortName() const	{ return "intVU1"; }
-	wxString GetLongName() const		{ return L"VU1 Interpreter"; }
+	const char* GetShortName() const
+	{
+		return "intVU1";
+	}
+	wxString GetLongName() const
+	{
+		return L"VU1 Interpreter";
+	}
 
 	void Reserve() { }
 	void Shutdown() throw();
@@ -201,8 +225,11 @@ public:
 	void Clear(u32 addr, u32 size) {}
 	void ResumeXGkick() {}
 
-	uint GetCacheReserve() const { return 0; }
-	void SetCacheReserve( uint reserveInMegs ) const {}
+	uint GetCacheReserve() const
+	{
+		return 0;
+	}
+	void SetCacheReserve(uint reserveInMegs) const {}
 };
 
 // --------------------------------------------------------------------------------------
@@ -212,10 +239,19 @@ class recMicroVU0 : public BaseVUmicroCPU
 {
 public:
 	recMicroVU0();
-	virtual ~recMicroVU0() throw()  { Shutdown(); }
+	virtual ~recMicroVU0() throw()
+	{
+		Shutdown();
+	}
 
-	const char* GetShortName() const	{ return "mVU0"; }
-	wxString GetLongName() const		{ return L"microVU0 Recompiler"; }
+	const char* GetShortName() const
+	{
+		return "mVU0";
+	}
+	wxString GetLongName() const
+	{
+		return L"microVU0 Recompiler";
+	}
 
 	void Reserve();
 	void Shutdown() throw();
@@ -226,17 +262,26 @@ public:
 	void Vsync() throw();
 
 	uint GetCacheReserve() const;
-	void SetCacheReserve( uint reserveInMegs ) const;
+	void SetCacheReserve(uint reserveInMegs) const;
 };
 
 class recMicroVU1 : public BaseVUmicroCPU
 {
 public:
 	recMicroVU1();
-	virtual ~recMicroVU1() throw() { Shutdown(); }
+	virtual ~recMicroVU1() throw()
+	{
+		Shutdown();
+	}
 
-	const char* GetShortName() const	{ return "mVU1"; }
-	wxString GetLongName() const		{ return L"microVU1 Recompiler"; }
+	const char* GetShortName() const
+	{
+		return "mVU1";
+	}
+	wxString GetLongName() const
+	{
+		return L"microVU1 Recompiler";
+	}
 
 	void Reserve();
 	void Shutdown() throw();
@@ -247,7 +292,7 @@ public:
 	void ResumeXGkick();
 
 	uint GetCacheReserve() const;
-	void SetCacheReserve( uint reserveInMegs ) const;
+	void SetCacheReserve(uint reserveInMegs) const;
 };
 
 // --------------------------------------------------------------------------------------
@@ -259,8 +304,14 @@ class recSuperVU0 : public BaseVUmicroCPU
 public:
 	recSuperVU0();
 
-	const char* GetShortName() const	{ return "sVU0"; }
-	wxString GetLongName() const		{ return L"SuperVU0 Recompiler"; }
+	const char* GetShortName() const
+	{
+		return "sVU0";
+	}
+	wxString GetLongName() const
+	{
+		return L"SuperVU0 Recompiler";
+	}
 
 	void Reserve();
 	void Shutdown() throw();
@@ -269,7 +320,7 @@ public:
 	void Clear(u32 Addr, u32 Size);
 
 	uint GetCacheReserve() const;
-	void SetCacheReserve( uint reserveInMegs ) const;
+	void SetCacheReserve(uint reserveInMegs) const;
 };
 
 class recSuperVU1 : public BaseVUmicroCPU
@@ -277,18 +328,27 @@ class recSuperVU1 : public BaseVUmicroCPU
 public:
 	recSuperVU1();
 
-	const char* GetShortName() const	{ return "sVU1"; }
-	wxString GetLongName() const		{ return L"SuperVU1 Recompiler"; }
+	const char* GetShortName() const
+	{
+		return "sVU1";
+	}
+	wxString GetLongName() const
+	{
+		return L"SuperVU1 Recompiler";
+	}
 
 	void Reserve();
 	void Shutdown() throw();
 	void Reset();
 	void Execute(u32 cycles);
 	void Clear(u32 Addr, u32 Size);
-	void ResumeXGkick() { Console.Warning("ResumeXGkick() Not implemented!"); }
+	void ResumeXGkick()
+	{
+		Console.Warning("ResumeXGkick() Not implemented!");
+	}
 
 	uint GetCacheReserve() const;
-	void SetCacheReserve( uint reserveInMegs ) const;
+	void SetCacheReserve(uint reserveInMegs) const;
 };
 
 extern BaseVUmicroCPU* CpuVU0;

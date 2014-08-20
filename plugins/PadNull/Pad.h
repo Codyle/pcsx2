@@ -42,8 +42,7 @@
 
 #define PAD_LOG __Log
 
-typedef struct
-{
+typedef struct {
 	s32 Log;
 } Config;
 

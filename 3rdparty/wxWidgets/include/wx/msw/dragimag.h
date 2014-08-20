@@ -103,172 +103,170 @@ class WXDLLEXPORT wxDragImage: public wxObject
 {
 public:
 
-    // Ctors & dtor
-    ////////////////////////////////////////////////////////////////////////////
+	// Ctors & dtor
+	////////////////////////////////////////////////////////////////////////////
 
-    wxDragImage();
-    wxDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor)
-    {
-        Init();
+	wxDragImage();
+	wxDragImage(const wxBitmap &image, const wxCursor &cursor = wxNullCursor)
+	{
+		Init();
+		Create(image, cursor);
+	}
 
-        Create(image, cursor);
-    }
+	// Deprecated form of the above
+	wxDragImage(const wxBitmap &image, const wxCursor &cursor, const wxPoint &cursorHotspot)
+	{
+		Init();
+		Create(image, cursor, cursorHotspot);
+	}
 
-    // Deprecated form of the above
-    wxDragImage(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
-    {
-        Init();
+	wxDragImage(const wxIcon &image, const wxCursor &cursor = wxNullCursor)
+	{
+		Init();
+		Create(image, cursor);
+	}
 
-        Create(image, cursor, cursorHotspot);
-    }
+	// Deprecated form of the above
+	wxDragImage(const wxIcon &image, const wxCursor &cursor, const wxPoint &cursorHotspot)
+	{
+		Init();
+		Create(image, cursor, cursorHotspot);
+	}
 
-    wxDragImage(const wxIcon& image, const wxCursor& cursor = wxNullCursor)
-    {
-        Init();
+	wxDragImage(const wxString &str, const wxCursor &cursor = wxNullCursor)
+	{
+		Init();
+		Create(str, cursor);
+	}
 
-        Create(image, cursor);
-    }
-
-    // Deprecated form of the above
-    wxDragImage(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot)
-    {
-        Init();
-
-        Create(image, cursor, cursorHotspot);
-    }
-
-    wxDragImage(const wxString& str, const wxCursor& cursor = wxNullCursor)
-    {
-        Init();
-
-        Create(str, cursor);
-    }
-
-    // Deprecated form of the above
-    wxDragImage(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot)
-    {
-        Init();
-
-        Create(str, cursor, cursorHotspot);
-    }
+	// Deprecated form of the above
+	wxDragImage(const wxString &str, const wxCursor &cursor, const wxPoint &cursorHotspot)
+	{
+		Init();
+		Create(str, cursor, cursorHotspot);
+	}
 
 #if wxUSE_TREECTRL
-    wxDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
-    {
-        Init();
-
-        Create(treeCtrl, id);
-    }
+	wxDragImage(const wxTreeCtrl &treeCtrl, wxTreeItemId &id)
+	{
+		Init();
+		Create(treeCtrl, id);
+	}
 #endif
 
 #if wxUSE_LISTCTRL
-    wxDragImage(const wxListCtrl& listCtrl, long id)
-    {
-        Init();
-
-        Create(listCtrl, id);
-    }
+	wxDragImage(const wxListCtrl &listCtrl, long id)
+	{
+		Init();
+		Create(listCtrl, id);
+	}
 #endif
 
-    virtual ~wxDragImage();
+	virtual ~wxDragImage();
 
-    // Attributes
-    ////////////////////////////////////////////////////////////////////////////
+	// Attributes
+	////////////////////////////////////////////////////////////////////////////
 
-    // Operations
-    ////////////////////////////////////////////////////////////////////////////
+	// Operations
+	////////////////////////////////////////////////////////////////////////////
 
-    // Create a drag image from a bitmap and optional cursor
-    bool Create(const wxBitmap& image, const wxCursor& cursor = wxNullCursor);
-    bool Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-    {
-        wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
-        return Create(image, cursor);
-    }
+	// Create a drag image from a bitmap and optional cursor
+	bool Create(const wxBitmap &image, const wxCursor &cursor = wxNullCursor);
+	bool Create(const wxBitmap &image, const wxCursor &cursor, const wxPoint &WXUNUSED(cursorHotspot))
+	{
+		wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
+		return Create(image, cursor);
+	}
 
-    // Create a drag image from an icon and optional cursor
-    bool Create(const wxIcon& image, const wxCursor& cursor = wxNullCursor);
-    bool Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-    {
-        wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
-        return Create(image, cursor);
-    }
+	// Create a drag image from an icon and optional cursor
+	bool Create(const wxIcon &image, const wxCursor &cursor = wxNullCursor);
+	bool Create(const wxIcon &image, const wxCursor &cursor, const wxPoint &WXUNUSED(cursorHotspot))
+	{
+		wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
+		return Create(image, cursor);
+	}
 
-    // Create a drag image from a string and optional cursor
-    bool Create(const wxString& str, const wxCursor& cursor = wxNullCursor);
-    bool Create(const wxString& str, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-    {
-        wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
-        return Create(str, cursor);
-    }
+	// Create a drag image from a string and optional cursor
+	bool Create(const wxString &str, const wxCursor &cursor = wxNullCursor);
+	bool Create(const wxString &str, const wxCursor &cursor, const wxPoint &WXUNUSED(cursorHotspot))
+	{
+		wxLogDebug(wxT("wxDragImage::Create: use of a cursor hotspot is now deprecated. Please omit this argument."));
+		return Create(str, cursor);
+	}
 
 #if wxUSE_TREECTRL
-    // Create a drag image for the given tree control item
-    bool Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
+	// Create a drag image for the given tree control item
+	bool Create(const wxTreeCtrl &treeCtrl, wxTreeItemId &id);
 #endif
 
 #if wxUSE_LISTCTRL
-    // Create a drag image for the given list control item
-    bool Create(const wxListCtrl& listCtrl, long id);
+	// Create a drag image for the given list control item
+	bool Create(const wxListCtrl &listCtrl, long id);
 #endif
 
-    // Begin drag. hotspot is the location of the drag position relative to the upper-left
-    // corner of the image.
-    bool BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen = false, wxRect* rect = (wxRect*) NULL);
+	// Begin drag. hotspot is the location of the drag position relative to the upper-left
+	// corner of the image.
+	bool BeginDrag(const wxPoint &hotspot, wxWindow* window, bool fullScreen = false, wxRect* rect = (wxRect*) NULL);
 
-    // Begin drag. hotspot is the location of the drag position relative to the upper-left
-    // corner of the image. This is full screen only. fullScreenRect gives the
-    // position of the window on the screen, to restrict the drag to.
-    bool BeginDrag(const wxPoint& hotspot, wxWindow* window, wxWindow* fullScreenRect);
+	// Begin drag. hotspot is the location of the drag position relative to the upper-left
+	// corner of the image. This is full screen only. fullScreenRect gives the
+	// position of the window on the screen, to restrict the drag to.
+	bool BeginDrag(const wxPoint &hotspot, wxWindow* window, wxWindow* fullScreenRect);
 
-    // End drag
-    bool EndDrag();
+	// End drag
+	bool EndDrag();
 
-    // Move the image: call from OnMouseMove. Pt is in window client coordinates if window
-    // is non-NULL, or in screen coordinates if NULL.
-    bool Move(const wxPoint& pt);
+	// Move the image: call from OnMouseMove. Pt is in window client coordinates if window
+	// is non-NULL, or in screen coordinates if NULL.
+	bool Move(const wxPoint &pt);
 
-    // Show the image
-    bool Show();
+	// Show the image
+	bool Show();
 
-    // Hide the image
-    bool Hide();
+	// Hide the image
+	bool Hide();
 
-    // Implementation
-    ////////////////////////////////////////////////////////////////////////////
+	// Implementation
+	////////////////////////////////////////////////////////////////////////////
 
-    // Initialize variables
-    void Init();
+	// Initialize variables
+	void Init();
 
-    // Returns the native image list handle
-    WXHIMAGELIST GetHIMAGELIST() const { return m_hImageList; }
+	// Returns the native image list handle
+	WXHIMAGELIST GetHIMAGELIST() const
+	{
+		return m_hImageList;
+	}
 
 #if !wxUSE_SIMPLER_DRAGIMAGE
-    // Returns the native image list handle for the cursor
-    WXHIMAGELIST GetCursorHIMAGELIST() const { return m_hCursorImageList; }
+	// Returns the native image list handle for the cursor
+	WXHIMAGELIST GetCursorHIMAGELIST() const
+	{
+		return m_hCursorImageList;
+	}
 #endif
 
 protected:
-    WXHIMAGELIST    m_hImageList;
+	WXHIMAGELIST    m_hImageList;
 
 #if wxUSE_SIMPLER_DRAGIMAGE
-    wxCursor        m_oldCursor;
+	wxCursor        m_oldCursor;
 #else
-    WXHIMAGELIST    m_hCursorImageList;
+	WXHIMAGELIST    m_hCursorImageList;
 #endif
 
-    wxCursor        m_cursor;
-//    wxPoint         m_cursorHotspot; // Obsolete
-    wxPoint         m_position;
-    wxWindow*       m_window;
-    wxRect          m_boundingRect;
-    bool            m_fullScreen;
+	wxCursor        m_cursor;
+	//    wxPoint         m_cursorHotspot; // Obsolete
+	wxPoint         m_position;
+	wxWindow*       m_window;
+	wxRect          m_boundingRect;
+	bool            m_fullScreen;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDragImage)
-    DECLARE_NO_COPY_CLASS(wxDragImage)
+	DECLARE_DYNAMIC_CLASS(wxDragImage)
+	DECLARE_NO_COPY_CLASS(wxDragImage)
 };
 
 #endif // wxUSE_DRAGIMAGE
 #endif
-    // _WX_DRAGIMAG_H_
+// _WX_DRAGIMAG_H_

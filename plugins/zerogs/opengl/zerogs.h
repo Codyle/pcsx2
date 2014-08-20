@@ -31,8 +31,9 @@
 
 #ifndef _WIN32
 #include <GL/glx.h>
-inline void* wglGetProcAddress(const char* x) {
-  return (void*)glXGetProcAddress((const GLubyte*)x);
+inline void* wglGetProcAddress(const char* x)
+{
+	return (void*)glXGetProcAddress((const GLubyte*)x);
 }
 #else
 #include "glprocs.h"
@@ -83,8 +84,7 @@ using namespace std;
 
 static __forceinline const char *error_name(int err)
 {
-	switch (err)
-	{
+	switch (err) {
 		case GL_NO_ERROR:
 			return "GL_NO_ERROR";
 		case GL_INVALID_ENUM:
@@ -101,71 +101,70 @@ static __forceinline const char *error_name(int err)
 			return "GL_OUT_OF_MEMORY";
 		case GL_TABLE_TOO_LARGE:
 			return "GL_TABLE_TOO_LARGE";
-		default:
-		{
-			char *str;
-			sprintf(str, "Unknown error(0x%x)", err);
-			return str;
-		}
+		default: {
+				char *str;
+				sprintf(str, "Unknown error(0x%x)", err);
+				return str;
+			}
 	}
 }
 
 #define GL_ERROR_LOG() \
-{ \
-	GLenum myGLerror = glGetError(); \
-	\
-	if( myGLerror != GL_NO_ERROR ) \
 	{ \
-		ERROR_LOG("%s:%d: gl error %s\n", __FILE__, (int)__LINE__, error_name(myGLerror)); \
-	} \
-}\
-
+		GLenum myGLerror = glGetError(); \
+		\
+		if( myGLerror != GL_NO_ERROR ) \
+		{ \
+			ERROR_LOG("%s:%d: gl error %s\n", __FILE__, (int)__LINE__, error_name(myGLerror)); \
+		} \
+	}\
+	 
 #define GL_REPORT_ERROR() \
-{ \
-	err = glGetError(); \
-	if( err != GL_NO_ERROR ) \
 	{ \
-		ERROR_LOG("%s:%d: gl error %s\n", __FILE__, (int)__LINE__, error_name(err)); \
-		ZeroGS::HandleGLError(); \
-	} \
-}
+		err = glGetError(); \
+		if( err != GL_NO_ERROR ) \
+		{ \
+			ERROR_LOG("%s:%d: gl error %s\n", __FILE__, (int)__LINE__, error_name(err)); \
+			ZeroGS::HandleGLError(); \
+		} \
+	}
 
- #ifdef _DEBUG
+#ifdef _DEBUG
 #define GL_REPORT_ERRORD() \
-{ \
-	GLenum err = glGetError(); \
-	if( err != GL_NO_ERROR ) \
 	{ \
-		ERROR_LOG("%s:%d: gl error %s\n", __FILE__, (int)__LINE__, error_name(err)); \
-		ZeroGS::HandleGLError(); \
-	} \
-}
+		GLenum err = glGetError(); \
+		if( err != GL_NO_ERROR ) \
+		{ \
+			ERROR_LOG("%s:%d: gl error %s\n", __FILE__, (int)__LINE__, error_name(err)); \
+			ZeroGS::HandleGLError(); \
+		} \
+	}
 #else
 #define GL_REPORT_ERRORD()
 #endif
 
 // sets the data stream
 #define SET_STREAM() { \
-	glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(VertexGPU), (void*)8); \
-	glSecondaryColorPointerEXT(4, GL_UNSIGNED_BYTE, sizeof(VertexGPU), (void*)12); \
-	glTexCoordPointer(3, GL_FLOAT, sizeof(VertexGPU), (void*)16); \
-	glVertexPointer(4, GL_SHORT, sizeof(VertexGPU), (void*)0); \
-}
+		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(VertexGPU), (void*)8); \
+		glSecondaryColorPointerEXT(4, GL_UNSIGNED_BYTE, sizeof(VertexGPU), (void*)12); \
+		glTexCoordPointer(3, GL_FLOAT, sizeof(VertexGPU), (void*)16); \
+		glVertexPointer(4, GL_SHORT, sizeof(VertexGPU), (void*)0); \
+	}
 
 #define SETVERTEXSHADER(prog) { \
-	if( (prog) != g_vsprog ) { \
-		cgGLBindProgram(prog); \
-		g_vsprog = prog; \
+		if( (prog) != g_vsprog ) { \
+			cgGLBindProgram(prog); \
+			g_vsprog = prog; \
+		} \
 	} \
-} \
-
+	 
 #define SETPIXELSHADER(prog) { \
-	if( (prog) != g_psprog ) { \
-		cgGLBindProgram(prog); \
-		g_psprog = prog; \
+		if( (prog) != g_psprog ) { \
+			cgGLBindProgram(prog); \
+			g_psprog = prog; \
+		} \
 	} \
-} \
-
+	 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #endif
@@ -178,8 +177,7 @@ extern float g_fiGPU_TEXWIDTH;
 
 extern CGprogram g_vsprog, g_psprog;
 
-struct FRAGMENTSHADER
-{
+struct FRAGMENTSHADER {
 	FRAGMENTSHADER() : prog(0), sMemory(0), sFinal(0), sBitwiseANDX(0), sBitwiseANDY(0), sInterlace(0), sCLUT(0), sOneColor(0), sBitBltZ(0),
 		fTexAlpha2(0), fTexOffset(0), fTexDims(0), fTexBlock(0), fClampExts(0), fTexWrapMode(0),
 		fRealTexDims(0), fTestBlack(0), fPageOffset(0), fTexAlpha(0) {}
@@ -194,8 +192,7 @@ struct FRAGMENTSHADER
 #endif
 };
 
-struct VERTEXSHADER
-{
+struct VERTEXSHADER {
 	VERTEXSHADER() : prog(0), sBitBltPos(0), sBitBltTex(0) {}
 	CGprogram prog;
 	CGparameter sBitBltPos, sBitBltTex, fBitBltTrans;		 // vertex shader constants
@@ -225,7 +222,7 @@ struct VERTEXSHADER
 #define GAME_32BITTARGS 0x00200000
 #define GAME_PATH3HACK 0x00400000
 #define GAME_DOPARALLELCTX 0x00800000 // tries to parallelize both contexts so that render calls are reduced (xenosaga)
-									  // makes the game faster, but can be buggy
+// makes the game faster, but can be buggy
 #define GAME_XENOSPECHACK 0x01000000 // xenosaga specularity hack (ignore any zmask=1 draws)
 //#define GAME_PARTIALPOINTERS 0x02000000 // whenver the texture or render target are small, tries to look for bigger ones to read from
 //#define GAME_PARTIALDEPTH 0x04000000 // tries to save depth targets as much as possible across height changes
@@ -236,355 +233,368 @@ extern u8* g_pbyGSMemory;
 extern u8* g_pbyGSClut; // the temporary clut buffer
 extern CGparameter g_vparamPosXY[2], g_fparamFogColor;
 
-namespace ZeroGS {
+namespace ZeroGS
+{
 
-	typedef void (*DrawFn)();
+typedef void (*DrawFn)();
 
-	enum RenderFormatType
+enum RenderFormatType {
+	RFT_byte8 = 0,	  // A8R8G8B8
+	RFT_float16 = 1,	// A32R32B32G32
+};
+
+// managers render-to-texture targets
+class CRenderTarget
+{
+public:
+	CRenderTarget();
+	virtual ~CRenderTarget();
+
+	virtual bool Create(const frameInfo &frame);
+	virtual void Destroy();
+
+	// set the GPU_POSXY variable, scissor rect, and current render target
+	void SetTarget(int fbplocal, const Rect2 &scissor, int context);
+	void SetViewport();
+
+	// copies/creates the feedback contents
+	inline void CreateFeedback()
 	{
-		RFT_byte8 = 0,	  // A8R8G8B8
-		RFT_float16 = 1,	// A32R32B32G32
+		if (ptexFeedback == 0 || !(status & TS_FeedbackReady))
+			_CreateFeedback();
+	}
+
+	virtual void Resolve();
+	virtual void Resolve(int startrange, int endrange); // resolves only in the allowed range
+	virtual void Update(int context, CRenderTarget* pdepth);
+	virtual void ConvertTo32(); // converts a psm==2 target, to a psm==0
+	virtual void ConvertTo16(); // converts a psm==0 target, to a psm==2
+
+	virtual bool IsDepth()
+	{
+		return false;
+	}
+	void SetRenderTarget(int targ);
+
+	void* psys;   // system data used for comparison
+	u32 ptex;
+
+	int fbp, fbw, fbh; // if fbp is negative, virtual target (not mapped to any real addr)
+	int start, end; // in bytes
+	u32 lastused;	// time stamp since last used
+	Vector vposxy;
+
+	u32 fbm;
+	u16 status;
+	u8 psm;
+	u8 resv0;
+	Rect scissorrect;
+
+	//int startresolve, endresolve;
+	u32 nUpdateTarg; // use this target to update the texture if non 0 (one time only)
+
+	// this is optionally used when feedback effects are used (render target is used as a texture when rendering to itself)
+	u32 ptexFeedback;
+
+	enum TargetStatus {
+		TS_Resolved = 1,
+		TS_NeedUpdate = 2,
+		TS_Virtual = 4, // currently not mapped to memory
+		TS_FeedbackReady = 8, // feedback effect is ready and doesn't need to be updated
+		TS_NeedConvert32 = 16,
+		TS_NeedConvert16 = 32,
 	};
 
-	// managers render-to-texture targets
-	class CRenderTarget
+private:
+	void _CreateFeedback();
+};
+
+// manages zbuffers
+class CDepthTarget : public CRenderTarget
+{
+public:
+	CDepthTarget();
+	virtual ~CDepthTarget();
+
+	virtual bool Create(const frameInfo &frame);
+	virtual void Destroy();
+
+	virtual void Resolve();
+	virtual void Resolve(int startrange, int endrange); // resolves only in the allowed range
+	virtual void Update(int context, CRenderTarget* prndr);
+
+	virtual bool IsDepth()
 	{
-	public:
-		CRenderTarget();
-		virtual ~CRenderTarget();
+		return true;
+	}
 
-		virtual bool Create(const frameInfo& frame);
-		virtual void Destroy();
+	void SetDepthStencilSurface();
 
-		// set the GPU_POSXY variable, scissor rect, and current render target
-		void SetTarget(int fbplocal, const Rect2& scissor, int context);
-		void SetViewport();
+	u32 pdepth;		 // 24 bit, will contain the stencil buffer if possible
+	u32 pstencil;	   // if not 0, contains the stencil buffer
+	int icount;		 // internal counter
+};
 
-		// copies/creates the feedback contents
-		inline void CreateFeedback() {
-			if( ptexFeedback == 0 || !(status&TS_FeedbackReady) )
-				_CreateFeedback();
-		}
-
-		virtual void Resolve();
-		virtual void Resolve(int startrange, int endrange); // resolves only in the allowed range
-		virtual void Update(int context, CRenderTarget* pdepth);
-		virtual void ConvertTo32(); // converts a psm==2 target, to a psm==0
-		virtual void ConvertTo16(); // converts a psm==0 target, to a psm==2
-
-		virtual bool IsDepth() { return false; }
-		void SetRenderTarget(int targ);
-
-		void* psys;   // system data used for comparison
-		u32 ptex;
-
-		int fbp, fbw, fbh; // if fbp is negative, virtual target (not mapped to any real addr)
-		int start, end; // in bytes
-		u32 lastused;	// time stamp since last used
-		Vector vposxy;
-
-		u32 fbm;
-		u16 status;
-		u8 psm;
-		u8 resv0;
-		Rect scissorrect;
-
-		//int startresolve, endresolve;
-		u32 nUpdateTarg; // use this target to update the texture if non 0 (one time only)
-
-		// this is optionally used when feedback effects are used (render target is used as a texture when rendering to itself)
-		u32 ptexFeedback;
-
-		enum TargetStatus {
-			TS_Resolved = 1,
-			TS_NeedUpdate = 2,
-			TS_Virtual = 4, // currently not mapped to memory
-			TS_FeedbackReady = 8, // feedback effect is ready and doesn't need to be updated
-			TS_NeedConvert32 = 16,
-			TS_NeedConvert16 = 32,
-		};
-
-	private:
-		void _CreateFeedback();
-	};
-
-	// manages zbuffers
-	class CDepthTarget : public CRenderTarget
-	{
-	public:
-		CDepthTarget();
-		virtual ~CDepthTarget();
-
-		virtual bool Create(const frameInfo& frame);
-		virtual void Destroy();
-
-		virtual void Resolve();
-		virtual void Resolve(int startrange, int endrange); // resolves only in the allowed range
-		virtual void Update(int context, CRenderTarget* prndr);
-
-		virtual bool IsDepth() { return true; }
-
-		void SetDepthStencilSurface();
-
-		u32 pdepth;		 // 24 bit, will contain the stencil buffer if possible
-		u32 pstencil;	   // if not 0, contains the stencil buffer
-		int icount;		 // internal counter
-	};
-
-	// manages contiguous chunks of memory (width is always 1024)
-	class CMemoryTarget
-	{
-	public:
-		struct TEXTURE
+// manages contiguous chunks of memory (width is always 1024)
+class CMemoryTarget
+{
+public:
+	struct TEXTURE {
+		inline TEXTURE() : tex(0), memptr(NULL), ref(0) {}
+		inline ~TEXTURE()
 		{
-			inline TEXTURE() : tex(0), memptr(NULL), ref(0) {}
-			inline ~TEXTURE() { glDeleteTextures(1, &tex); _aligned_free(memptr); }
+			glDeleteTextures(1, &tex);
+			_aligned_free(memptr);
+		}
 		u32 tex;
-			int ref;
-			u8* memptr;  // GPU memory used for comparison
-		};
-
-		inline CMemoryTarget() : ptex(NULL), starty(0), height(0), realy(0), realheight(0), usedstamp(0), psm(0), channels(0),cpsm(0), clearminy(0), clearmaxy(0), validatecount(0) {}
-
-		inline CMemoryTarget(const CMemoryTarget& r) {
-			ptex = r.ptex;
-			if( ptex != NULL ) ptex->ref++;
-			starty = r.starty;
-			height = r.height;
-			realy = r.realy;
-			realheight = r.realheight;
-			usedstamp = r.usedstamp;
-			psm = r.psm;
-			cpsm = r.cpsm;
-			clut = r.clut;
-			clearminy = r.clearminy;
-			clearmaxy = r.clearmaxy;
-			widthmult = r.widthmult;
-			channels = r.channels;
-			validatecount = r.validatecount;
-			fmt = r.fmt;
-		}
-
-		~CMemoryTarget() { Destroy(); }
-
-		inline void Destroy() {
-			if( ptex != NULL && ptex->ref > 0 ) {
-				if( --ptex->ref <= 0 )
-					delete ptex;
-			}
-
-			ptex = NULL;
-			}
-
-		// returns true if clut data is synced
-		bool ValidateClut(const tex0Info& tex0);
-		// returns true if tex data is synced
-		bool ValidateTex(const tex0Info& tex0, int starttex, int endtex, bool bDeleteBadTex);
-
-		int clearminy, clearmaxy; // when maxy > 0, need to check for clearing
-
-		// realy is offset in pixels from start of valid region
-		// so texture in memory is [realy,starty+height]
-		// valid texture is [starty,starty+height]
-		// offset in mem [starty-realy, height]
-		int starty, height; // assert(starty >= realy)
-		int realy, realheight; // this is never touched once allocated
-		u32 usedstamp;
-		TEXTURE* ptex; // can be 16bit
-		u32 fmt;
-
-		int widthmult;
-		int channels;
-
-		int validatecount; // count how many times has been validated, if too many, destroy
-
-		vector<u8> clut; // if nonzero, texture uses CLUT
-		u8 psm, cpsm; // texture and clut format. For psm, only 16bit/32bit differentiation matters
+		int ref;
+		u8* memptr;  // GPU memory used for comparison
 	};
 
+	inline CMemoryTarget() : ptex(NULL), starty(0), height(0), realy(0), realheight(0), usedstamp(0), psm(0), channels(0), cpsm(0), clearminy(0), clearmaxy(0), validatecount(0) {}
 
-	struct VB
+	inline CMemoryTarget(const CMemoryTarget &r)
 	{
-		VB();
-		~VB();
+		ptex = r.ptex;
+		if (ptex != NULL) ptex->ref++;
+		starty = r.starty;
+		height = r.height;
+		realy = r.realy;
+		realheight = r.realheight;
+		usedstamp = r.usedstamp;
+		psm = r.psm;
+		cpsm = r.cpsm;
+		clut = r.clut;
+		clearminy = r.clearminy;
+		clearmaxy = r.clearmaxy;
+		widthmult = r.widthmult;
+		channels = r.channels;
+		validatecount = r.validatecount;
+		fmt = r.fmt;
+	}
 
-		void Destroy();
+	~CMemoryTarget()
+	{
+		Destroy();
+	}
 
-		__forceinline bool CheckPrim();
-		void CheckFrame(int tbp);
-
-		// context specific state
-		Point offset;
-		Rect2 scissor;
-		tex0Info tex0;
-		tex1Info tex1;
-		miptbpInfo miptbp0;
-		miptbpInfo miptbp1;
-		alphaInfo alpha;
-		fbaInfo fba;
-		clampInfo clamp;
-		pixTest test;
-		u32 ptexClamp[2]; // textures for x and y dir region clamping
-
-	public:
-		void FlushTexData();
-
-		// notify VB that nVerts need to be written to pbuf
-		inline void NotifyWrite(int nVerts) {
-			assert( pBufferData != NULL && nCount <= nNumVertices && nVerts > 0 );
-
-			if( nCount + nVerts > nNumVertices ) {
-				// recreate except with a bigger count
-				VertexGPU* ptemp = (VertexGPU*)_aligned_malloc(sizeof(VertexGPU)*nNumVertices*2, 256);
-				memcpy_amd(ptemp, pBufferData, sizeof(VertexGPU) * nCount);
-				nNumVertices *= 2;
-				assert( nCount + nVerts <= nNumVertices );
-				_aligned_free(pBufferData);
-				pBufferData = ptemp;
-			}
+	inline void Destroy()
+	{
+		if (ptex != NULL && ptex->ref > 0) {
+			if (--ptex->ref <= 0)
+				delete ptex;
 		}
+		ptex = NULL;
+	}
 
-		void Init(int nVerts) {
-			if( pBufferData == NULL && nVerts > 0 ) {
-				pBufferData = (VertexGPU*)_aligned_malloc(sizeof(VertexGPU)*nVerts, 256);
-				nNumVertices = nVerts;
-			}
+	// returns true if clut data is synced
+	bool ValidateClut(const tex0Info &tex0);
+	// returns true if tex data is synced
+	bool ValidateTex(const tex0Info &tex0, int starttex, int endtex, bool bDeleteBadTex);
 
-			nCount = 0;
+	int clearminy, clearmaxy; // when maxy > 0, need to check for clearing
+
+	// realy is offset in pixels from start of valid region
+	// so texture in memory is [realy,starty+height]
+	// valid texture is [starty,starty+height]
+	// offset in mem [starty-realy, height]
+	int starty, height; // assert(starty >= realy)
+	int realy, realheight; // this is never touched once allocated
+	u32 usedstamp;
+	TEXTURE* ptex; // can be 16bit
+	u32 fmt;
+
+	int widthmult;
+	int channels;
+
+	int validatecount; // count how many times has been validated, if too many, destroy
+
+	vector<u8> clut; // if nonzero, texture uses CLUT
+	u8 psm, cpsm; // texture and clut format. For psm, only 16bit/32bit differentiation matters
+};
+
+
+struct VB {
+	VB();
+	~VB();
+
+	void Destroy();
+
+	__forceinline bool CheckPrim();
+	void CheckFrame(int tbp);
+
+	// context specific state
+	Point offset;
+	Rect2 scissor;
+	tex0Info tex0;
+	tex1Info tex1;
+	miptbpInfo miptbp0;
+	miptbpInfo miptbp1;
+	alphaInfo alpha;
+	fbaInfo fba;
+	clampInfo clamp;
+	pixTest test;
+	u32 ptexClamp[2]; // textures for x and y dir region clamping
+
+public:
+	void FlushTexData();
+
+	// notify VB that nVerts need to be written to pbuf
+	inline void NotifyWrite(int nVerts)
+	{
+		assert(pBufferData != NULL && nCount <= nNumVertices && nVerts > 0);
+		if (nCount + nVerts > nNumVertices) {
+			// recreate except with a bigger count
+			VertexGPU* ptemp = (VertexGPU*)_aligned_malloc(sizeof(VertexGPU) * nNumVertices * 2, 256);
+			memcpy_amd(ptemp, pBufferData, sizeof(VertexGPU) * nCount);
+			nNumVertices *= 2;
+			assert(nCount + nVerts <= nNumVertices);
+			_aligned_free(pBufferData);
+			pBufferData = ptemp;
 		}
+	}
 
-		u8 bNeedFrameCheck;
-		u8 bNeedZCheck;
-		u8 bNeedTexCheck;
-		u8 dummy0;
+	void Init(int nVerts)
+	{
+		if (pBufferData == NULL && nVerts > 0) {
+			pBufferData = (VertexGPU*)_aligned_malloc(sizeof(VertexGPU) * nVerts, 256);
+			nNumVertices = nVerts;
+		}
+		nCount = 0;
+	}
 
-		union {
-			struct {
-				u8 bTexConstsSync; // only pixel shader constants that context owns
-				u8 bVarsTexSync; // texture info
-				u8 bVarsSetTarg;
-				u8 dummy1;
-			};
-			u32 bSyncVars;
+	u8 bNeedFrameCheck;
+	u8 bNeedZCheck;
+	u8 bNeedTexCheck;
+	u8 dummy0;
+
+	union {
+		struct {
+			u8 bTexConstsSync; // only pixel shader constants that context owns
+			u8 bVarsTexSync; // texture info
+			u8 bVarsSetTarg;
+			u8 dummy1;
 		};
-
-		int ictx;
-		VertexGPU* pBufferData; // current allocated data
-
-		int nNumVertices;   // size of pBufferData in terms of VertexGPU objects
-		int nCount;
-		primInfo curprim;	// the previous prim the current buffers are set to
-
-		zbufInfo zbuf;
-		frameInfo gsfb; // the real info set by FRAME cmd
-		frameInfo frame;
-		int zprimmask; // zmask for incoming points
-
-		u32 uCurTex0Data[2]; // current tex0 data
-		u32 uNextTex0Data[2]; // tex0 data that has to be applied if bNeedTexCheck is 1
-
-		//int nFrameHeights[8];	// frame heights for the past frame changes
-		int nNextFrameHeight;
-
-		CMemoryTarget* pmemtarg; // the current mem target set
-		CRenderTarget* prndr;
-		CDepthTarget* pdepth;
+		u32 bSyncVars;
 	};
 
-	// visible members
-	extern DrawFn drawfn[8];
-	extern VB vb[2];
-	extern float fiTexWidth[2], fiTexHeight[2];	// current tex width and height
+	int ictx;
+	VertexGPU* pBufferData; // current allocated data
 
-	void AddMessage(const char* pstr, u32 ms = 5000);
-	void DrawText(const char* pstr, int left, int top, u32 color);
-	void ChangeWindowSize(int nNewWidth, int nNewHeight);
-	void SetChangeDeviceSize(int nNewWidth, int nNewHeight);
-	void ChangeDeviceSize(int nNewWidth, int nNewHeight);
-	void SetAA(int mode);
-	void SetCRC(int crc);
+	int nNumVertices;   // size of pBufferData in terms of VertexGPU objects
+	int nCount;
+	primInfo curprim;	// the previous prim the current buffers are set to
 
-	void ReloadEffects();
+	zbufInfo zbuf;
+	frameInfo gsfb; // the real info set by FRAME cmd
+	frameInfo frame;
+	int zprimmask; // zmask for incoming points
 
-	// Methods //
-	bool IsGLExt( const char* szTargetExtension ); ///< returns true if the the opengl extension is supported
-	bool Create(int width, int height);
-	void Destroy(BOOL bD3D);
+	u32 uCurTex0Data[2]; // current tex0 data
+	u32 uNextTex0Data[2]; // tex0 data that has to be applied if bNeedTexCheck is 1
 
-	void Restore(); // call to restore device
-	void Reset(); // call to destroy video resources
+	//int nFrameHeights[8];	// frame heights for the past frame changes
+	int nNextFrameHeight;
 
-	void GSStateReset();
-	void HandleGLError();
+	CMemoryTarget* pmemtarg; // the current mem target set
+	CRenderTarget* prndr;
+	CDepthTarget* pdepth;
+};
 
-	// called on a primitive switch
-	void Prim();
+// visible members
+extern DrawFn drawfn[8];
+extern VB vb[2];
+extern float fiTexWidth[2], fiTexHeight[2];	// current tex width and height
 
-	void SetTexFlush();
-	// flush current vertices, call before setting new registers (the main render method)
-	void Flush(int context);
+void AddMessage(const char* pstr, u32 ms = 5000);
+void DrawText(const char* pstr, int left, int top, u32 color);
+void ChangeWindowSize(int nNewWidth, int nNewHeight);
+void SetChangeDeviceSize(int nNewWidth, int nNewHeight);
+void ChangeDeviceSize(int nNewWidth, int nNewHeight);
+void SetAA(int mode);
+void SetCRC(int crc);
 
-	void ExtWrite();
+void ReloadEffects();
 
-	void SetWriteDepth();
-	BOOL IsWriteDepth();
+// Methods //
+bool IsGLExt(const char* szTargetExtension);   ///< returns true if the the opengl extension is supported
+bool Create(int width, int height);
+void Destroy(BOOL bD3D);
 
-	void SetDestAlphaTest();
-	BOOL IsWriteDestAlphaTest();
+void Restore(); // call to restore device
+void Reset(); // call to destroy video resources
 
-	void SetFogColor(u32 fog);
-	void SaveTex(tex0Info* ptex, int usevid);
+void GSStateReset();
+void HandleGLError();
 
-	// called when trxdir is accessed. If host is involved, transfers memory to temp buffer byTransferBuf.
-	// Otherwise performs the transfer. TODO: Perhaps divide the transfers into chunks?
-	void InitTransferHostLocal();
-	void TransferHostLocal(const void* pbyMem, u32 nQWordSize);
+// called on a primitive switch
+void Prim();
 
-	void InitTransferLocalHost();
-	void TransferLocalHost(void* pbyMem, u32 nQWordSize);
-	inline void TerminateLocalHost() {}
+void SetTexFlush();
+// flush current vertices, call before setting new registers (the main render method)
+void Flush(int context);
 
-	void TransferLocalLocal();
+void ExtWrite();
 
-	// switches the render target to the real target, flushes the current render targets and renders the real image
-	void RenderCRTC(int interlace);
-	void ResetRenderTarget(int index);
+void SetWriteDepth();
+BOOL IsWriteDepth();
 
-	bool CheckChangeInClut(u32 highdword, u32 psm); // returns true if clut will change after this tex0 op
+void SetDestAlphaTest();
+BOOL IsWriteDestAlphaTest();
 
-	// call to load CLUT data (depending on CLD)
-	void texClutWrite(int ctx);
-	RenderFormatType GetRenderFormat();
-	GLenum GetRenderTargetFormat();
+void SetFogColor(u32 fog);
+void SaveTex(tex0Info* ptex, int usevid);
 
-	int Save(char* pbydata);
-	bool Load(char* pbydata);
+// called when trxdir is accessed. If host is involved, transfers memory to temp buffer byTransferBuf.
+// Otherwise performs the transfer. TODO: Perhaps divide the transfers into chunks?
+void InitTransferHostLocal();
+void TransferHostLocal(const void* pbyMem, u32 nQWordSize);
 
-	void SaveSnapshot(const char* filename);
-	bool SaveRenderTarget(const char* filename, int width, int height, int jpeg);
-	bool SaveTexture(const char* filename, u32 textarget, u32 tex, int width, int height);
-	bool SaveJPEG(const char* filename, int width, int height, const void* pdata, int quality);
-	bool SaveTGA(const char* filename, int width, int height, void* pdata);
+void InitTransferLocalHost();
+void TransferLocalHost(void* pbyMem, u32 nQWordSize);
+inline void TerminateLocalHost() {}
 
-	// private methods
-	void FlushSysMem(const RECT* prc);
-	void _Resolve(const void* psrc, int fbp, int fbw, int fbh, int psm, u32 fbm);
+void TransferLocalLocal();
 
-	// returns the first and last addresses aligned to a page that cover
-	void GetRectMemAddress(int& start, int& end, int psm, int x, int y, int w, int h, int bp, int bw);
+// switches the render target to the real target, flushes the current render targets and renders the real image
+void RenderCRTC(int interlace);
+void ResetRenderTarget(int index);
 
-	// inits the smallest rectangle in ptexMem that covers this region in ptexMem
-	// returns the offset that needs to be added to the locked rect to get the beginning of the buffer
-	//void GetMemRect(RECT& rc, int psm, int x, int y, int w, int h, int bp, int bw);
+bool CheckChangeInClut(u32 highdword, u32 psm); // returns true if clut will change after this tex0 op
 
-	// only sets a limited amount of state (for Update)
-	void SetTexVariablesInt(int context, int bilinear, const tex0Info& tex0, ZeroGS::CMemoryTarget* pmemtarg, FRAGMENTSHADER* pfragment, int force);
+// call to load CLUT data (depending on CLD)
+void texClutWrite(int ctx);
+RenderFormatType GetRenderFormat();
+GLenum GetRenderTargetFormat();
 
-	void ResetAlphaVariables();
+int Save(char* pbydata);
+bool Load(char* pbydata);
 
-	void StartCapture();
-	void StopCapture();
-	void CaptureFrame();
+void SaveSnapshot(const char* filename);
+bool SaveRenderTarget(const char* filename, int width, int height, int jpeg);
+bool SaveTexture(const char* filename, u32 textarget, u32 tex, int width, int height);
+bool SaveJPEG(const char* filename, int width, int height, const void* pdata, int quality);
+bool SaveTGA(const char* filename, int width, int height, void* pdata);
+
+// private methods
+void FlushSysMem(const RECT* prc);
+void _Resolve(const void* psrc, int fbp, int fbw, int fbh, int psm, u32 fbm);
+
+// returns the first and last addresses aligned to a page that cover
+void GetRectMemAddress(int &start, int &end, int psm, int x, int y, int w, int h, int bp, int bw);
+
+// inits the smallest rectangle in ptexMem that covers this region in ptexMem
+// returns the offset that needs to be added to the locked rect to get the beginning of the buffer
+//void GetMemRect(RECT& rc, int psm, int x, int y, int w, int h, int bp, int bw);
+
+// only sets a limited amount of state (for Update)
+void SetTexVariablesInt(int context, int bilinear, const tex0Info &tex0, ZeroGS::CMemoryTarget* pmemtarg, FRAGMENTSHADER* pfragment, int force);
+
+void ResetAlphaVariables();
+
+void StartCapture();
+void StopCapture();
+void CaptureFrame();
 };
 
 // GL prototypes

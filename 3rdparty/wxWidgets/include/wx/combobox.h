@@ -28,45 +28,52 @@ extern WXDLLEXPORT_DATA(const wxChar) wxComboBoxNameStr[];
 class WXDLLEXPORT wxComboBoxBase : public wxItemContainer
 {
 public:
-    // wxTextCtrl-like methods wxComboBox must implement
-    virtual wxString GetValue() const = 0;
-    virtual void SetValue(const wxString& value) = 0;
+	// wxTextCtrl-like methods wxComboBox must implement
+	virtual wxString GetValue() const = 0;
+	virtual void SetValue(const wxString &value) = 0;
 
-    virtual void Copy() = 0;
-    virtual void Cut() = 0;
-    virtual void Paste() = 0;
-    virtual void SetInsertionPoint(long pos) = 0;
-    virtual long GetInsertionPoint() const = 0;
-    virtual wxTextPos GetLastPosition() const = 0;
-    virtual void Replace(long from, long to, const wxString& value) = 0;
-    virtual void SetSelection(long from, long to) = 0;
-    virtual void SetEditable(bool editable) = 0;
+	virtual void Copy() = 0;
+	virtual void Cut() = 0;
+	virtual void Paste() = 0;
+	virtual void SetInsertionPoint(long pos) = 0;
+	virtual long GetInsertionPoint() const = 0;
+	virtual wxTextPos GetLastPosition() const = 0;
+	virtual void Replace(long from, long to, const wxString &value) = 0;
+	virtual void SetSelection(long from, long to) = 0;
+	virtual void SetEditable(bool editable) = 0;
 
-    virtual void SetInsertionPointEnd()
-        { SetInsertionPoint(GetLastPosition()); }
-    virtual void Remove(long from, long to)
-        { Replace(from, to, wxEmptyString); }
+	virtual void SetInsertionPointEnd()
+	{
+		SetInsertionPoint(GetLastPosition());
+	}
+	virtual void Remove(long from, long to)
+	{
+		Replace(from, to, wxEmptyString);
+	}
 
-    virtual bool IsEditable() const = 0;
+	virtual bool IsEditable() const = 0;
 
-    virtual void Undo() = 0;
-    virtual void Redo() = 0;
-    virtual void SelectAll() = 0;
+	virtual void Undo() = 0;
+	virtual void Redo() = 0;
+	virtual void SelectAll() = 0;
 
-    virtual bool CanCopy() const = 0;
-    virtual bool CanCut() const = 0;
-    virtual bool CanPaste() const = 0;
-    virtual bool CanUndo() const = 0;
-    virtual bool CanRedo() const = 0;
+	virtual bool CanCopy() const = 0;
+	virtual bool CanCut() const = 0;
+	virtual bool CanPaste() const = 0;
+	virtual bool CanUndo() const = 0;
+	virtual bool CanRedo() const = 0;
 
-    // may return value different from GetSelection() when the combobox
-    // dropdown is shown and the user selected, but not yet accepted, a value
-    // different from the old one in it
-    virtual int GetCurrentSelection() const { return GetSelection(); }
+	// may return value different from GetSelection() when the combobox
+	// dropdown is shown and the user selected, but not yet accepted, a value
+	// different from the old one in it
+	virtual int GetCurrentSelection() const
+	{
+		return GetSelection();
+	}
 
-    // redeclare inherited SetSelection() overload here as well to avoid
-    // virtual function hiding
-    virtual void SetSelection(int n) = 0;
+	// redeclare inherited SetSelection() overload here as well to avoid
+	// virtual function hiding
+	virtual void SetSelection(int n) = 0;
 };
 
 // ----------------------------------------------------------------------------
@@ -74,24 +81,24 @@ public:
 // ----------------------------------------------------------------------------
 
 #if defined(__WXUNIVERSAL__)
-    #include "wx/univ/combobox.h"
+#include "wx/univ/combobox.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/combobox.h"
+#include "wx/msw/combobox.h"
 #elif defined(__WXMOTIF__)
-    #include "wx/motif/combobox.h"
+#include "wx/motif/combobox.h"
 #elif defined(__WXGTK20__)
-    #include "wx/gtk/combobox.h"
+#include "wx/gtk/combobox.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/combobox.h"
+#include "wx/gtk1/combobox.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/combobox.h"
+#include "wx/mac/combobox.h"
 #elif defined(__WXCOCOA__)
-    #include "wx/cocoa/combobox.h"
+#include "wx/cocoa/combobox.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/combobox.h"
+#include "wx/os2/combobox.h"
 #endif
 
 #endif // wxUSE_COMBOBOX
 
 #endif
-    // _WX_COMBOBOX_H_BASE_
+// _WX_COMBOBOX_H_BASE_

@@ -23,24 +23,33 @@
 class WXDLLIMPEXP_ADV wxDateEvent : public wxCommandEvent
 {
 public:
-    wxDateEvent() { }
-    wxDateEvent(wxWindow *win, const wxDateTime& dt, wxEventType type)
-        : wxCommandEvent(type, win->GetId()),
-          m_date(dt)
-    {
-        SetEventObject(win);
-    }
+	wxDateEvent() { }
+	wxDateEvent(wxWindow *win, const wxDateTime &dt, wxEventType type)
+		: wxCommandEvent(type, win->GetId()),
+		  m_date(dt)
+	{
+		SetEventObject(win);
+	}
 
-    const wxDateTime& GetDate() const { return m_date; }
-    void SetDate(const wxDateTime &date) { m_date = date; }
+	const wxDateTime &GetDate() const
+	{
+		return m_date;
+	}
+	void SetDate(const wxDateTime &date)
+	{
+		m_date = date;
+	}
 
-    // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const { return new wxDateEvent(*this); }
+	// default copy ctor, assignment operator and dtor are ok
+	virtual wxEvent *Clone() const
+	{
+		return new wxDateEvent(*this);
+	}
 
 private:
-    wxDateTime m_date;
+	wxDateTime m_date;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDateEvent)
+	DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDateEvent)
 };
 
 // ----------------------------------------------------------------------------
@@ -48,21 +57,21 @@ private:
 // ----------------------------------------------------------------------------
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_DATE_CHANGED, 1101)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_DATE_CHANGED, 1101)
 END_DECLARE_EVENT_TYPES()
 
-typedef void (wxEvtHandler::*wxDateEventFunction)(wxDateEvent&);
+typedef void (wxEvtHandler::*wxDateEventFunction)(wxDateEvent &);
 
 #define wxDateEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxDateEventFunction, &func)
+	(wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxDateEventFunction, &func)
 
 #define EVT_DATE_CHANGED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_DATE_CHANGED, id, wxDateEventHandler(fn))
+	wx__DECLARE_EVT1(wxEVT_DATE_CHANGED, id, wxDateEventHandler(fn))
 
 #ifdef _WX_DEFINE_DATE_EVENTS_
-    DEFINE_EVENT_TYPE(wxEVT_DATE_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_DATE_CHANGED)
 
-    IMPLEMENT_DYNAMIC_CLASS(wxDateEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxDateEvent, wxCommandEvent)
 #endif
 
 #endif // _WX_DATEEVT_H_

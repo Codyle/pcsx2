@@ -25,7 +25,7 @@ public:
 	bool enabled;
 	int  parentIndex;
 
-	Group(int nParent,bool nEnabled, string &nTitle);
+	Group(int nParent, bool nEnabled, string &nTitle);
 
 };
 
@@ -39,7 +39,7 @@ public:
 
 	Patch(int patch, int grp, bool en, string &ttl);
 
-	Patch operator =(const Patch&p);
+	Patch operator =(const Patch &p);
 };
 
 extern vector<Group> groups;

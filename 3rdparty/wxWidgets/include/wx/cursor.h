@@ -15,27 +15,27 @@
 #include "wx/defs.h"
 
 #if defined(__WXPALMOS__)
-    #include "wx/palmos/cursor.h"
+#include "wx/palmos/cursor.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/cursor.h"
+#include "wx/msw/cursor.h"
 #elif defined(__WXMOTIF__)
-    #include "wx/motif/cursor.h"
+#include "wx/motif/cursor.h"
 #elif defined(__WXGTK20__)
-    #include "wx/gtk/cursor.h"
+#include "wx/gtk/cursor.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/cursor.h"
+#include "wx/gtk1/cursor.h"
 #elif defined(__WXX11__)
-    #include "wx/x11/cursor.h"
+#include "wx/x11/cursor.h"
 #elif defined(__WXMGL__)
-    #include "wx/mgl/cursor.h"
+#include "wx/mgl/cursor.h"
 #elif defined(__WXDFB__)
-    #include "wx/dfb/cursor.h"
+#include "wx/dfb/cursor.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/cursor.h"
+#include "wx/mac/cursor.h"
 #elif defined(__WXCOCOA__)
-    #include "wx/cocoa/cursor.h"
+#include "wx/cocoa/cursor.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/cursor.h"
+#include "wx/os2/cursor.h"
 #endif
 
 #include "wx/utils.h"
@@ -60,20 +60,16 @@
 class wxBusyCursorSuspender
 {
 public:
-    wxBusyCursorSuspender()
-    {
-        if( wxIsBusy() )
-        {
-            wxSetCursor( wxBusyCursor::GetStoredCursor() );
-        }
-    }
-    ~wxBusyCursorSuspender()
-    {
-        if( wxIsBusy() )
-        {
-            wxSetCursor( wxBusyCursor::GetBusyCursor() );
-        }
-    }
+	wxBusyCursorSuspender()
+	{
+		if (wxIsBusy())
+			wxSetCursor(wxBusyCursor::GetStoredCursor());
+	}
+	~wxBusyCursorSuspender()
+	{
+		if (wxIsBusy())
+			wxSetCursor(wxBusyCursor::GetBusyCursor());
+	}
 };
 #endif
-    // _WX_CURSOR_H_BASE_
+// _WX_CURSOR_H_BASE_

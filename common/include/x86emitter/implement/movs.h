@@ -18,46 +18,46 @@
 // Header: ix86_impl_movs.h -- covers mov, cmov, movsx/movzx, and SETcc (which shares
 // with cmov many similarities).
 
-namespace x86Emitter {
+namespace x86Emitter
+{
 
 // --------------------------------------------------------------------------------------
 //  MovImplAll
 // --------------------------------------------------------------------------------------
 // MOV instruction Implementation, plus many SIMD sub-mov variants.
 //
-struct xImpl_Mov
-{
+struct xImpl_Mov {
 	xImpl_Mov() {} // Satisfy GCC's whims.
 
-	void operator()( const xRegister8& to, const xRegister8& from ) const;
-	void operator()( const xRegister16& to, const xRegister16& from ) const;
-	void operator()( const xRegister32& to, const xRegister32& from ) const;
+	void operator()(const xRegister8 &to, const xRegister8 &from) const;
+	void operator()(const xRegister16 &to, const xRegister16 &from) const;
+	void operator()(const xRegister32 &to, const xRegister32 &from) const;
 
-	void operator()( const xIndirectVoid& dest, const xRegisterInt& from ) const;
-	void operator()( const xRegisterInt& to, const xIndirectVoid& src ) const;
-	void operator()( const xIndirect32orLess& dest, int imm ) const;
-	void operator()( const xRegisterInt& to, int imm, bool preserve_flags=false ) const;
+	void operator()(const xIndirectVoid &dest, const xRegisterInt &from) const;
+	void operator()(const xRegisterInt &to, const xIndirectVoid &src) const;
+	void operator()(const xIndirect32orLess &dest, int imm) const;
+	void operator()(const xRegisterInt &to, int imm, bool preserve_flags = false) const;
 
 #if 0
-	template< typename T > __noinline void operator()( const ModSibBase& to, const xImmReg<T>& immOrReg ) const
+	template<typename T> __noinline void operator()(const ModSibBase &to, const xImmReg<T> &immOrReg) const
 	{
-		_DoI_helpermess( *this, to, immOrReg );
+		_DoI_helpermess(*this, to, immOrReg);
 	}
 
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, const xImmReg<T>& immOrReg ) const
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, const xImmReg<T> &immOrReg) const
 	{
-		_DoI_helpermess( *this, to, immOrReg );
+		_DoI_helpermess(*this, to, immOrReg);
 	}
 
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, int imm ) const
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, int imm) const
 	{
-		_DoI_helpermess( *this, to, imm );
+		_DoI_helpermess(*this, to, imm);
 	}
 
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, const xDirectOrIndirect<T>& from ) const
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, const xDirectOrIndirect<T> &from) const
 	{
-		if( to == from ) return;
-		_DoI_helpermess( *this, to, from );
+		if (to == from) return;
+		_DoI_helpermess(*this, to, from);
 	}
 
 	/*template< typename T > __noinline void operator()( const xRegister<T>& to, const xDirectOrIndirect<T>& from ) const
@@ -85,26 +85,24 @@ struct xImpl_Mov
 // *only* 32 and 16 bit register operand forms (8 bit registers are not valid in CMOV).
 //
 
-struct xImpl_CMov
-{
+struct xImpl_CMov {
 	JccComparisonType	ccType;
 
-	void operator()( const xRegister32& to, const xRegister32& from ) const;
-	void operator()( const xRegister32& to, const xIndirectVoid& sibsrc ) const;
+	void operator()(const xRegister32 &to, const xRegister32 &from) const;
+	void operator()(const xRegister32 &to, const xIndirectVoid &sibsrc) const;
 
-	void operator()( const xRegister16& to, const xRegister16& from ) const;
-	void operator()( const xRegister16& to, const xIndirectVoid& sibsrc ) const;
+	void operator()(const xRegister16 &to, const xRegister16 &from) const;
+	void operator()(const xRegister16 &to, const xIndirectVoid &sibsrc) const;
 
 	//void operator()( const xDirectOrIndirect32& to, const xDirectOrIndirect32& from );
 	//void operator()( const xDirectOrIndirect16& to, const xDirectOrIndirect16& from ) const;
 };
 
-struct xImpl_Set
-{
+struct xImpl_Set {
 	JccComparisonType ccType;
 
-	void operator()( const xRegister8& to ) const;
-	void operator()( const xIndirect8& dest ) const;
+	void operator()(const xRegister8 &to) const;
+	void operator()(const xIndirect8 &dest) const;
 
 	//void operator()( const xDirectOrIndirect8& dest ) const;
 };
@@ -115,14 +113,13 @@ struct xImpl_Set
 // --------------------------------------------------------------------------------------
 // Mov with sign/zero extension implementations (movsx / movzx)
 //
-struct xImpl_MovExtend
-{
+struct xImpl_MovExtend {
 	bool	SignExtend;
 
-	void operator()( const xRegister16or32& to, const xRegister8& from ) const;
-	void operator()( const xRegister16or32& to, const xIndirect8& sibsrc ) const;
-	void operator()( const xRegister32& to, const xRegister16& from ) const;
-	void operator()( const xRegister32& to, const xIndirect16& sibsrc ) const;
+	void operator()(const xRegister16or32 &to, const xRegister8 &from) const;
+	void operator()(const xRegister16or32 &to, const xIndirect8 &sibsrc) const;
+	void operator()(const xRegister32 &to, const xRegister16 &from) const;
+	void operator()(const xRegister32 &to, const xIndirect16 &sibsrc) const;
 
 	//void operator()( const xRegister32& to, const xDirectOrIndirect16& src ) const;
 	//void operator()( const xRegister16or32& to, const xDirectOrIndirect8& src ) const;

@@ -8,7 +8,7 @@ struct romdir {
 	u8  fileName[10];
 	u16 extInfoSize;
 	u32 fileSize;
-} __attribute__ ((packed));
+} __attribute__((packed));
 
 struct rominfo {
 	u32 fileOffset;

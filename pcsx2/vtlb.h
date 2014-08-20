@@ -25,15 +25,15 @@ static const uptr VTLB_AllocUpperBounds = _1gb * 2;
 typedef  mem8_t __fastcall vtlbMemR8FP(u32 addr);
 typedef  mem16_t __fastcall vtlbMemR16FP(u32 addr);
 typedef  mem32_t __fastcall vtlbMemR32FP(u32 addr);
-typedef  void __fastcall vtlbMemR64FP(u32 addr,mem64_t* data);
-typedef  void __fastcall vtlbMemR128FP(u32 addr,mem128_t* data);
+typedef  void __fastcall vtlbMemR64FP(u32 addr, mem64_t* data);
+typedef  void __fastcall vtlbMemR128FP(u32 addr, mem128_t* data);
 
 // Specialized function pointers for each write type
-typedef  void __fastcall vtlbMemW8FP(u32 addr,mem8_t data);
-typedef  void __fastcall vtlbMemW16FP(u32 addr,mem16_t data);
-typedef  void __fastcall vtlbMemW32FP(u32 addr,mem32_t data);
-typedef  void __fastcall vtlbMemW64FP(u32 addr,const mem64_t* data);
-typedef  void __fastcall vtlbMemW128FP(u32 addr,const mem128_t* data);
+typedef  void __fastcall vtlbMemW8FP(u32 addr, mem8_t data);
+typedef  void __fastcall vtlbMemW16FP(u32 addr, mem16_t data);
+typedef  void __fastcall vtlbMemW32FP(u32 addr, mem32_t data);
+typedef  void __fastcall vtlbMemW64FP(u32 addr, const mem64_t* data);
+typedef  void __fastcall vtlbMemW128FP(u32 addr, const mem128_t* data);
 
 typedef u32 vtlbHandler;
 
@@ -48,36 +48,36 @@ extern void vtlb_Term();
 extern vtlbHandler vtlb_NewHandler();
 
 extern vtlbHandler vtlb_RegisterHandler(
-	vtlbMemR8FP* r8,vtlbMemR16FP* r16,vtlbMemR32FP* r32,vtlbMemR64FP* r64,vtlbMemR128FP* r128,
-	vtlbMemW8FP* w8,vtlbMemW16FP* w16,vtlbMemW32FP* w32,vtlbMemW64FP* w64,vtlbMemW128FP* w128
+        vtlbMemR8FP* r8, vtlbMemR16FP* r16, vtlbMemR32FP* r32, vtlbMemR64FP* r64, vtlbMemR128FP* r128,
+        vtlbMemW8FP* w8, vtlbMemW16FP* w16, vtlbMemW32FP* w32, vtlbMemW64FP* w64, vtlbMemW128FP* w128
 );
 
-extern void vtlb_ReassignHandler( vtlbHandler rv,
-	vtlbMemR8FP* r8,vtlbMemR16FP* r16,vtlbMemR32FP* r32,vtlbMemR64FP* r64,vtlbMemR128FP* r128,
-	vtlbMemW8FP* w8,vtlbMemW16FP* w16,vtlbMemW32FP* w32,vtlbMemW64FP* w64,vtlbMemW128FP* w128
-);
+extern void vtlb_ReassignHandler(vtlbHandler rv,
+                                 vtlbMemR8FP* r8, vtlbMemR16FP* r16, vtlbMemR32FP* r32, vtlbMemR64FP* r64, vtlbMemR128FP* r128,
+                                 vtlbMemW8FP* w8, vtlbMemW16FP* w16, vtlbMemW32FP* w32, vtlbMemW64FP* w64, vtlbMemW128FP* w128
+                                );
 
 
-extern void vtlb_MapHandler(vtlbHandler handler,u32 start,u32 size);
-extern void vtlb_MapBlock(void* base,u32 start,u32 size,u32 blocksize=0);
+extern void vtlb_MapHandler(vtlbHandler handler, u32 start, u32 size);
+extern void vtlb_MapBlock(void* base, u32 start, u32 size, u32 blocksize = 0);
 extern void* vtlb_GetPhyPtr(u32 paddr);
 //extern void vtlb_Mirror(u32 new_region,u32 start,u32 size); // -> not working yet :(
 extern u32  vtlb_V2P(u32 vaddr);
 extern void vtlb_DynV2P();
 
 //virtual mappings
-extern void vtlb_VMap(u32 vaddr,u32 paddr,u32 sz);
-extern void vtlb_VMapBuffer(u32 vaddr,void* buffer,u32 sz);
-extern void vtlb_VMapUnmap(u32 vaddr,u32 sz);
+extern void vtlb_VMap(u32 vaddr, u32 paddr, u32 sz);
+extern void vtlb_VMapBuffer(u32 vaddr, void* buffer, u32 sz);
+extern void vtlb_VMapUnmap(u32 vaddr, u32 sz);
 
 //Memory functions
 
-template< typename DataType >
+template<typename DataType>
 extern DataType __fastcall vtlb_memRead(u32 mem);
 extern void __fastcall vtlb_memRead64(u32 mem, mem64_t *out);
 extern void __fastcall vtlb_memRead128(u32 mem, mem128_t *out);
 
-template< typename DataType >
+template<typename DataType>
 extern void __fastcall vtlb_memWrite(u32 mem, DataType value);
 extern void __fastcall vtlb_memWrite64(u32 mem, const mem64_t* value);
 extern void __fastcall vtlb_memWrite128(u32 mem, const mem128_t* value);
@@ -86,9 +86,9 @@ extern void vtlb_DynGenWrite(u32 sz);
 extern void vtlb_DynGenRead32(u32 bits, bool sign);
 extern void vtlb_DynGenRead64(u32 sz);
 
-extern void vtlb_DynGenWrite_Const( u32 bits, u32 addr_const );
-extern void vtlb_DynGenRead64_Const( u32 bits, u32 addr_const );
-extern void vtlb_DynGenRead32_Const( u32 bits, bool sign, u32 addr_const );
+extern void vtlb_DynGenWrite_Const(u32 bits, u32 addr_const);
+extern void vtlb_DynGenRead64_Const(u32 bits, u32 addr_const);
+extern void vtlb_DynGenRead32_Const(u32 bits, bool sign, u32 addr_const);
 
 // --------------------------------------------------------------------------------------
 //  VtlbMemoryReserve
@@ -99,20 +99,20 @@ protected:
 	VirtualMemoryReserve	m_reserve;
 
 public:
-	VtlbMemoryReserve( const wxString& name, size_t size );
+	VtlbMemoryReserve(const wxString &name, size_t size);
 	virtual ~VtlbMemoryReserve() throw()
 	{
 		m_reserve.Release();
 	}
 
-	void Reserve( sptr hostptr );
+	void Reserve(sptr hostptr);
 	virtual void Release();
 
 	virtual void Commit();
 	virtual void Reset();
 	virtual void Decommit();
-	virtual void SetBaseAddr( uptr newaddr );
-	
+	virtual void SetBaseAddr(uptr newaddr);
+
 	bool IsCommitted() const;
 };
 
@@ -180,36 +180,35 @@ public:
 
 namespace vtlb_private
 {
-	static const uint VTLB_PAGE_BITS = 12;
-	static const uint VTLB_PAGE_MASK = 4095;
-	static const uint VTLB_PAGE_SIZE = 4096;
+static const uint VTLB_PAGE_BITS = 12;
+static const uint VTLB_PAGE_MASK = 4095;
+static const uint VTLB_PAGE_SIZE = 4096;
 
-	static const uint VTLB_PMAP_SZ		= _1mb * 512;
-	static const uint VTLB_PMAP_ITEMS	= VTLB_PMAP_SZ / VTLB_PAGE_SIZE;
-	static const uint VTLB_VMAP_ITEMS	= _4gb / VTLB_PAGE_SIZE;
+static const uint VTLB_PMAP_SZ		= _1mb * 512;
+static const uint VTLB_PMAP_ITEMS	= VTLB_PMAP_SZ / VTLB_PAGE_SIZE;
+static const uint VTLB_VMAP_ITEMS	= _4gb / VTLB_PAGE_SIZE;
 
-	static const uint VTLB_HANDLER_ITEMS = 128;
+static const uint VTLB_HANDLER_ITEMS = 128;
 
-	struct MapData
+struct MapData {
+	// first indexer -- 8/16/32/64/128 bit tables [values 0-4]
+	// second indexer -- read/write  [0 or 1]
+	// third indexer -- 128 possible handlers!
+	void* RWFT[5][2][VTLB_HANDLER_ITEMS];
+
+	sptr pmap[VTLB_PMAP_ITEMS]; //512KB // PS2 physical to x86 physical
+
+	sptr* vmap;                //4MB (allocated by vtlb_init) // PS2 virtual to x86 physical
+
+	u32* ppmap;               //4MB (allocated by vtlb_init) // PS2 virtual to PS2 physical
+
+	MapData()
 	{
-		// first indexer -- 8/16/32/64/128 bit tables [values 0-4]
-		// second indexer -- read/write  [0 or 1]
-		// third indexer -- 128 possible handlers!
-		void* RWFT[5][2][VTLB_HANDLER_ITEMS];
+		vmap = NULL;
+	}
+};
 
-		sptr pmap[VTLB_PMAP_ITEMS]; //512KB // PS2 physical to x86 physical
-
-		sptr* vmap;                //4MB (allocated by vtlb_init) // PS2 virtual to x86 physical
-
-		u32* ppmap;               //4MB (allocated by vtlb_init) // PS2 virtual to PS2 physical
-
-		MapData()
-		{
-			vmap = NULL;
-		}
-	};
-
-	extern __aligned(64) MapData vtlbdata;
+extern __aligned(64) MapData vtlbdata;
 }
 
 // --------------------------------------------------------------------------------------

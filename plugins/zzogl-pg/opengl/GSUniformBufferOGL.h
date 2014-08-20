@@ -24,7 +24,8 @@
 #pragma once
 
 #ifdef GLSL4_API
-class GSUniformBufferOGL {
+class GSUniformBufferOGL
+{
 	GLuint buffer;		// data object
 	GLuint index;		// GLSL slot
 	uint   size;	    // size of the data
@@ -32,8 +33,8 @@ class GSUniformBufferOGL {
 
 public:
 	GSUniformBufferOGL(GLuint index, uint size) : index(index)
-												  , size(size)
-												  ,target(GL_UNIFORM_BUFFER)
+		, size(size)
+		, target(GL_UNIFORM_BUFFER)
 	{
 		glGenBuffers(1, &buffer);
 		bind();
@@ -68,7 +69,8 @@ public:
 		glBufferSubData(target, 0, size, src);
 	}
 
-	~GSUniformBufferOGL() {
+	~GSUniformBufferOGL()
+	{
 		glDeleteBuffers(1, &buffer);
 	}
 };

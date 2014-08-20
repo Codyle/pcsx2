@@ -29,54 +29,54 @@ I STRONGLY recommend reading and understanding these macros!!
 #include "wx/html/winpars.h"
 
 #define TAG_HANDLER_BEGIN(name,tags)                                      \
-    class wxHTML_Handler_##name : public wxHtmlWinTagHandler              \
-    {                                                                     \
-        public:                                                           \
-            wxString GetSupportedTags() {return wxT(tags);}
+	class wxHTML_Handler_##name : public wxHtmlWinTagHandler              \
+	{                                                                     \
+	public:                                                           \
+		wxString GetSupportedTags() {return wxT(tags);}
 
 
 
 #define TAG_HANDLER_VARS                                                  \
-        private:
+	private:
 
 #define TAG_HANDLER_CONSTR(name)                                                \
-        public:                                                           \
-        wxHTML_Handler_##name () : wxHtmlWinTagHandler()
+	public:                                                           \
+	wxHTML_Handler_##name () : wxHtmlWinTagHandler()
 
 
 #define TAG_HANDLER_PROC(varib)                                           \
-        public:                                                           \
-            bool HandleTag(const wxHtmlTag& varib)
+	public:                                                           \
+	bool HandleTag(const wxHtmlTag& varib)
 
 
 
 #define TAG_HANDLER_END(name)                                             \
-    };
+	};
 
 
 
 
 #define TAGS_MODULE_BEGIN(name)                                           \
-    class wxHTML_Module##name : public wxHtmlTagsModule                   \
-    {                                                                     \
-        DECLARE_DYNAMIC_CLASS(wxHTML_Module##name )                       \
-        public:                                                           \
-            void FillHandlersTable(wxHtmlWinParser *parser)               \
-                {
+	class wxHTML_Module##name : public wxHtmlTagsModule                   \
+	{                                                                     \
+		DECLARE_DYNAMIC_CLASS(wxHTML_Module##name )                       \
+	public:                                                           \
+		void FillHandlersTable(wxHtmlWinParser *parser)               \
+		{
 
 
 
 
 #define TAGS_MODULE_ADD(handler)                                          \
-                    parser->AddTagHandler(new wxHTML_Handler_##handler);
+	parser->AddTagHandler(new wxHTML_Handler_##handler);
 
 
 
 
 #define TAGS_MODULE_END(name)                                             \
-                }                                                         \
-    };                                                                    \
-    IMPLEMENT_DYNAMIC_CLASS(wxHTML_Module##name , wxHtmlTagsModule)
+	}                                                         \
+	};                                                                    \
+	IMPLEMENT_DYNAMIC_CLASS(wxHTML_Module##name , wxHtmlTagsModule)
 
 
 

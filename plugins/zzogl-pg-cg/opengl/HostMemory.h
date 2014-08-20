@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
- 
+
 #ifndef HOSTMEMORY_H_INCLUDED
 #define HOSTMEMORY_H_INCLUDED
 
@@ -31,71 +31,69 @@ extern u8* g_pbyGSMemory;
 
 class GSMemory
 {
-	public:
-		void init();
-		void destroy();
-		u8* get();
-		u8* get(u32 addr);
-		u8* get_raw(u32 addr);
+public:
+	void init();
+	void destroy();
+	u8* get();
+	u8* get(u32 addr);
+	u8* get_raw(u32 addr);
 };
 
 extern u8* g_pbyGSClut;		// the temporary clut buffer
 
 class GSClut
 {
-	public:
-		void init();
-		void destroy();
-		u8* get();
-		u8* get(u32 addr);
-		u8* get_raw(u32 addr);
+public:
+	void init();
+	void destroy();
+	u8* get();
+	u8* get(u32 addr);
+	u8* get_raw(u32 addr);
 };
 
 class ZeroGSInit
 {
 
-	public:
-		ZeroGSInit()
-		{
-			const u32 mem_size = MEMORY_END + 0x10000; // leave some room for out of range accesses (saves on the checks)
-			// clear
-			g_pbyGSMemory = (u8*)_aligned_malloc(mem_size, 1024);
-			memset(g_pbyGSMemory, 0, mem_size);
+public:
+	ZeroGSInit()
+	{
+		const u32 mem_size = MEMORY_END + 0x10000; // leave some room for out of range accesses (saves on the checks)
+		// clear
+		g_pbyGSMemory = (u8*)_aligned_malloc(mem_size, 1024);
+		memset(g_pbyGSMemory, 0, mem_size);
+		g_pbyGSClut = (u8*)_aligned_malloc(256 * 8, 1024); // need 512 alignment!
+		memset(g_pbyGSClut, 0, 256 * 8);
+		memset(&GLWin, 0, sizeof(GLWin));
+	}
 
-			g_pbyGSClut = (u8*)_aligned_malloc(256 * 8, 1024); // need 512 alignment!
-			memset(g_pbyGSClut, 0, 256*8);
-			memset(&GLWin, 0, sizeof(GLWin));
-		}
-
-		~ZeroGSInit()
-		{
-			_aligned_free(g_pbyGSMemory);
-			g_pbyGSMemory = NULL;
-			
-			_aligned_free(g_pbyGSClut);
-			g_pbyGSClut = NULL;
-		}
+	~ZeroGSInit()
+	{
+		_aligned_free(g_pbyGSMemory);
+		g_pbyGSMemory = NULL;
+		_aligned_free(g_pbyGSClut);
+		g_pbyGSClut = NULL;
+	}
 };
 
 // The size in bytes of x strings (of texture).
-inline int MemorySize(int x) 
+inline int MemorySize(int x)
 {
 	return 4 * GPU_TEXWIDTH * x;
 }
 
-// Return the address in memory of data block for string x. 
-inline u8* MemoryAddress(int x) 
+// Return the address in memory of data block for string x.
+inline u8* MemoryAddress(int x)
 {
 	return g_pbyGSMemory + MemorySize(x);
 }
 
 template <u32 mult>
-inline u8* _MemoryAddress(int x) 
+inline u8* _MemoryAddress(int x)
 {
 	return g_pbyGSMemory + mult * x;
 }
 
-extern void GetRectMemAddress(int& start, int& end, int psm, int x, int y, int w, int h, int bp, int bw);
+extern void GetRectMemAddress(int &start, int &end, int psm, int x, int y, int w, int h, int bp, int bw);
 
 
 // called when trxdir is accessed. If host is involved, transfers memory to temp buffer byTransferBuf.

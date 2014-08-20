@@ -23,8 +23,7 @@
 
 #include "GS.h"
 
-__aligned(class, 32) GSDrawingEnvironment
-{
+__aligned(class, 32) GSDrawingEnvironment {
 public:
 	GIFRegPRIM			PRIM;
 	GIFRegPRMODE		PRMODE;
@@ -64,10 +63,8 @@ public:
 		memset(&TRXDIR, 0, sizeof(TRXDIR));
 		memset(&TRXPOS, 0, sizeof(TRXPOS));
 		memset(&TRXREG, 0, sizeof(TRXREG));
-
 		CTXT[0].Reset();
 		CTXT[1].Reset();
-
 		memset(dimx, 0, sizeof(dimx));
 	}
 

@@ -29,8 +29,7 @@
 template<class KEY, class VALUE> class GSFunctionMap
 {
 protected:
-	struct ActivePtr
-	{
+	struct ActivePtr {
 		uint64 frame, frames;
 		uint64 ticks, actual, total;
 		VALUE f;
@@ -54,50 +53,34 @@ public:
 		for_each(m_map_active.begin(), m_map_active.end(), delete_second());
 	}
 
-	VALUE operator [] (KEY key)
+	VALUE operator [](KEY key)
 	{
 		m_active = NULL;
-
 		typename hash_map<KEY, ActivePtr*>::iterator i = m_map_active.find(key);
-
-		if(i != m_map_active.end())
-		{
+		if (i != m_map_active.end())
 			m_active = i->second;
-		}
-		else
-		{
+		else {
 			typename hash_map<KEY, VALUE>::iterator i = m_map.find(key);
-
 			ActivePtr* p = new ActivePtr();
-
 			memset(p, 0, sizeof(*p));
-
-			p->frame = (uint64)-1;
-
+			p->frame = (uint64) - 1;
 			p->f = i != m_map.end() ? i->second : GetDefaultFunction(key);
-
 			m_map_active[key] = p;
-
 			m_active = p;
 		}
-
 		return m_active->f;
 	}
 
 	void UpdateStats(uint64 frame, uint64 ticks, int actual, int total)
 	{
-		if(m_active)
-		{
-			if(m_active->frame != frame)
-			{
+		if (m_active) {
+			if (m_active->frame != frame) {
 				m_active->frame = frame;
 				m_active->frames++;
 			}
-
 			m_active->ticks += ticks;
 			m_active->actual += actual;
 			m_active->total += total;
-
 			ASSERT(m_active->total >= m_active->actual);
 		}
 	}
@@ -105,38 +88,26 @@ public:
 	virtual void PrintStats()
 	{
 		uint64 ttpf = 0;
-
 		typename hash_map<KEY, ActivePtr*>::iterator i;
-
-		for(i = m_map_active.begin(); i != m_map_active.end(); i++)
-		{
+		for (i = m_map_active.begin(); i != m_map_active.end(); i++) {
 			ActivePtr* p = i->second;
-
-			if(p->frames)
-			{
+			if (p->frames)
 				ttpf += p->ticks / p->frames;
-			}
 		}
-
 		printf("GS stats\n");
-
-		for(i = m_map_active.begin(); i != m_map_active.end(); i++)
-		{
+		for (i = m_map_active.begin(); i != m_map_active.end(); i++) {
 			KEY key = i->first;
 			ActivePtr* p = i->second;
-
-			if(p->frames > 0)
-			{
+			if (p->frames > 0) {
 				uint64 tpp = p->actual > 0 ? p->ticks / p->actual : 0;
 				uint64 tpf = p->frames > 0 ? p->ticks / p->frames : 0;
 				uint64 ppf = p->frames > 0 ? p->actual / p->frames : 0;
-
 				printf("[%014llx]%c %6.2f%% %5.2f%% f %4lld t %12lld p %12lld w %12lld tpp %4lld tpf %9lld ppf %9lld\n",
-					(uint64)key, m_map.find(key) == m_map.end() ? '*' : ' ',
-					(float)(tpf * 10000 / 34000000) / 100,
-					(float)(tpf * 10000 / ttpf) / 100,
-					p->frames, p->ticks, p->actual, p->total - p->actual,
-					tpp, tpf, ppf);
+				       (uint64)key, m_map.find(key) == m_map.end() ? '*' : ' ',
+				       (float)(tpf * 10000 / 34000000) / 100,
+				       (float)(tpf * 10000 / ttpf) / 100,
+				       p->frames, p->ticks, p->actual, p->total - p->actual,
+				       tpp, tpf, ppf);
 			}
 		}
 	}
@@ -174,68 +145,49 @@ public:
 	VALUE GetDefaultFunction(KEY key)
 	{
 		VALUE ret = NULL;
-
 		typename hash_map<uint64, VALUE>::iterator i = m_cgmap.find(key);
-
-		if(i != m_cgmap.end())
-		{
+		if (i != m_cgmap.end())
 			ret = i->second;
-		}
-		else
-		{
+		else {
 			CG* cg = new CG(m_param, key, m_cb.GetBuffer(MAX_SIZE), MAX_SIZE);
-
 			ASSERT(cg->getSize() < MAX_SIZE);
-
 			m_cb.ReleaseBuffer(cg->getSize());
-
 			ret = (VALUE)cg->getCode();
-
 			m_cgmap[key] = ret;
-
-			#ifdef ENABLE_VTUNE
-
+#ifdef ENABLE_VTUNE
 			// vtune method registration
-
 			// if(iJIT_IsProfilingActive()) // always > 0
 			{
 				string name = format("%s<%016llx>()", m_name.c_str(), (uint64)key);
-
 				iJIT_Method_Load ml;
-
 				memset(&ml, 0, sizeof(ml));
-
 				ml.method_id = iJIT_GetNewMethodID();
 				ml.method_name = (char*)name.c_str();
 				ml.method_load_address = (void*)cg->getCode();
 				ml.method_size = (unsigned int)cg->getSize();
-
 				iJIT_NotifyEvent(iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED, &ml);
-/*
-				name = format("c:/temp1/%s_%016llx.bin", m_name.c_str(), (uint64)key);
+				/*
+								name = format("c:/temp1/%s_%016llx.bin", m_name.c_str(), (uint64)key);
 
-				if(FILE* fp = fopen(name.c_str(), "wb"))
-				{
-					fputc(0x0F, fp); fputc(0x0B, fp);
-					fputc(0xBB, fp); fputc(0x6F, fp); fputc(0x00, fp); fputc(0x00, fp); fputc(0x00, fp);
-					fputc(0x64, fp); fputc(0x67, fp); fputc(0x90, fp);
+								if(FILE* fp = fopen(name.c_str(), "wb"))
+								{
+									fputc(0x0F, fp); fputc(0x0B, fp);
+									fputc(0xBB, fp); fputc(0x6F, fp); fputc(0x00, fp); fputc(0x00, fp); fputc(0x00, fp);
+									fputc(0x64, fp); fputc(0x67, fp); fputc(0x90, fp);
 
-					fwrite(cg->getCode(), cg->getSize(), 1, fp);
+									fwrite(cg->getCode(), cg->getSize(), 1, fp);
 
-					fputc(0xBB, fp); fputc(0xDE, fp); fputc(0x00, fp); fputc(0x00, fp); fputc(0x00, fp);
-					fputc(0x64, fp); fputc(0x67, fp); fputc(0x90, fp);
-					fputc(0x0F, fp); fputc(0x0B, fp);
+									fputc(0xBB, fp); fputc(0xDE, fp); fputc(0x00, fp); fputc(0x00, fp); fputc(0x00, fp);
+									fputc(0x64, fp); fputc(0x67, fp); fputc(0x90, fp);
+									fputc(0x0F, fp); fputc(0x0B, fp);
 
-					fclose(fp);
-				}
-*/
+									fclose(fp);
+								}
+				*/
 			}
-
-			#endif
-
+#endif
 			delete cg;
 		}
-
 		return ret;
 	}
 };

@@ -28,8 +28,7 @@
 //	u32 unknown;
 //};
 
-struct t_sif_dma_transfer
-{
+struct t_sif_dma_transfer {
 	void *src;
 	void *dest;
 	s32 size;

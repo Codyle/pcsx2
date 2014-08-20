@@ -15,15 +15,14 @@
 
 #pragma once
 
-enum FoldersEnum_t
-{
+enum FoldersEnum_t {
 	// FIXME : Plugins, Settings, and Themes folders are no longer part of the user-local
 	// ini storage.  They have been moved to an app-local ini storage class (which is currently
 	// handled lazily via global variables)
 	FolderId_Plugins = 0,
 	FolderId_Settings,
 	FolderId_Themes,
-	
+
 	FolderId_Bios,
 	FolderId_Snapshots,
 	FolderId_Savestates,
@@ -50,48 +49,48 @@ enum FoldersEnum_t
 //
 namespace PathDefs
 {
-	// complete pathnames are returned by these functions (may or may not be absolute)
+// complete pathnames are returned by these functions (may or may not be absolute)
 
-	extern wxDirName GetSnapshots();
-	extern wxDirName GetBios();
-	extern wxDirName GetThemes();
-	extern wxDirName GetPlugins();
-	extern wxDirName GetSavestates();
-	extern wxDirName GetMemoryCards();
-	extern wxDirName GetSettings();
-	extern wxDirName GetLogs();
-	extern wxDirName GetLangs();
-	extern wxDirName GetCheats();
-	extern wxDirName GetCheatsWS();
-	extern wxDirName GetDocs();
+extern wxDirName GetSnapshots();
+extern wxDirName GetBios();
+extern wxDirName GetThemes();
+extern wxDirName GetPlugins();
+extern wxDirName GetSavestates();
+extern wxDirName GetMemoryCards();
+extern wxDirName GetSettings();
+extern wxDirName GetLogs();
+extern wxDirName GetLangs();
+extern wxDirName GetCheats();
+extern wxDirName GetCheatsWS();
+extern wxDirName GetDocs();
 
-	extern wxDirName Get( FoldersEnum_t folderidx );
+extern wxDirName Get(FoldersEnum_t folderidx);
 
-	// Base folder names used to extend out the documents/approot folder base into a complete
-	// path.  These are typically for internal AppConfig use only, barring a few special cases.
-	namespace Base
-	{
-		extern const wxDirName& Snapshots();
-		extern const wxDirName& Savestates();
-		extern const wxDirName& MemoryCards();
-		extern const wxDirName& Settings();
-		extern const wxDirName& Plugins();
-		extern const wxDirName& Themes();
-		extern const wxDirName& Logs();
-		extern const wxDirName& Dumps();
-		extern const wxDirName& Langs();
-		extern const wxDirName& Cheats();
-		extern const wxDirName& CheatsWS();
-		extern const wxDirName& Docs();
-	}
+// Base folder names used to extend out the documents/approot folder base into a complete
+// path.  These are typically for internal AppConfig use only, barring a few special cases.
+namespace Base
+{
+extern const wxDirName &Snapshots();
+extern const wxDirName &Savestates();
+extern const wxDirName &MemoryCards();
+extern const wxDirName &Settings();
+extern const wxDirName &Plugins();
+extern const wxDirName &Themes();
+extern const wxDirName &Logs();
+extern const wxDirName &Dumps();
+extern const wxDirName &Langs();
+extern const wxDirName &Cheats();
+extern const wxDirName &CheatsWS();
+extern const wxDirName &Docs();
+}
 }
 
 namespace FilenameDefs
 {
-	extern wxFileName GetUiConfig();
-	extern wxFileName GetUiKeysConfig();
-	extern wxFileName GetVmConfig();
-	extern wxFileName GetUsermodeConfig();
-	extern const wxFileName& Memcard( uint port, uint slot );
+extern wxFileName GetUiConfig();
+extern wxFileName GetUiKeysConfig();
+extern wxFileName GetVmConfig();
+extern wxFileName GetUsermodeConfig();
+extern const wxFileName &Memcard(uint port, uint slot);
 };
 

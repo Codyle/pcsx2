@@ -29,16 +29,14 @@
 
 #include "stdafx.h"
 
-HINSTANCE hInst=NULL;
+HINSTANCE hInst = NULL;
 
-BOOL APIENTRY DllMain( HANDLE hModule,
-                       DWORD  dwReason,
-                       LPVOID lpReserved
-					 )
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
+                      LPVOID lpReserved
+                     )
 {
-
- hInst=(HINSTANCE)hModule;
-
- return TRUE;
+	hInst = (HINSTANCE)hModule;
+	return TRUE;
 }
 

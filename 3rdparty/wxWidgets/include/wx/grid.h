@@ -15,4 +15,4 @@
 #include "wx/generic/grid.h"
 
 #endif
-    // _WX_GRID_H_BASE_
+// _WX_GRID_H_BASE_

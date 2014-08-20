@@ -26,13 +26,13 @@
 // available.
 
 #if wxUSE_FILE
-wxString wxCreateTempFileName(const wxString& prefix,
+wxString wxCreateTempFileName(const wxString &prefix,
                               wxFile *fileTemp,
                               bool *deleteOnClose = NULL);
 #endif
 
 #if wxUSE_FFILE
-wxString wxCreateTempFileName(const wxString& prefix,
+wxString wxCreateTempFileName(const wxString &prefix,
                               wxFFile *fileTemp,
                               bool *deleteOnClose = NULL);
 #endif
@@ -42,13 +42,13 @@ wxString wxCreateTempFileName(const wxString& prefix,
 // possible, so that the caller can delete the file when done.
 
 #if wxUSE_FILE
-bool wxCreateTempFile(const wxString& prefix,
+bool wxCreateTempFile(const wxString &prefix,
                       wxFile *fileTemp,
                       wxString *name);
 #endif
 
 #if wxUSE_FFILE
-bool wxCreateTempFile(const wxString& prefix,
+bool wxCreateTempFile(const wxString &prefix,
                       wxFFile *fileTemp,
                       wxString *name);
 #endif

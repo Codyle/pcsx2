@@ -19,4 +19,4 @@
 #endif
 
 #endif
-    // _WX_CHOICDLG_H_BASE_
+// _WX_CHOICDLG_H_BASE_

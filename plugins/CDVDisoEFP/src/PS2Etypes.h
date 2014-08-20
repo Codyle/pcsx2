@@ -40,8 +40,7 @@ typedef u64 uptr;
 typedef u32 uptr;
 #endif
 #ifdef __LINUX__
-typedef union _LARGE_INTEGER
-{
+typedef union _LARGE_INTEGER {
 	long long QuadPart;
 } LARGE_INTEGER;
 #endif
@@ -54,8 +53,7 @@ typedef union _LARGE_INTEGER
 #define __forceinline inline
 #endif
 #endif
-typedef struct
-{
+typedef struct {
 	int size;
 	s8 *data;
 } freezeData;

@@ -17,47 +17,45 @@
 
 // Implementations found here: CALL and JMP!  (unconditional only)
 
-namespace x86Emitter {
+namespace x86Emitter
+{
 
 #ifdef __GNUG__
-	// GCC has a bug that causes the templated function handler for Jmp/Call emitters to generate
-	// bad asm code.  (error is something like "7#*_uber_379s_mangled_$&02_name is already defined!")
-	// Using GCC's always_inline attribute fixes it.  This differs from __fi in that it
-	// inlines *even in debug builds* which is (usually) undesirable.
-	//  ... except when it avoids compiler bugs.
+// GCC has a bug that causes the templated function handler for Jmp/Call emitters to generate
+// bad asm code.  (error is something like "7#*_uber_379s_mangled_$&02_name is already defined!")
+// Using GCC's always_inline attribute fixes it.  This differs from __fi in that it
+// inlines *even in debug builds* which is (usually) undesirable.
+//  ... except when it avoids compiler bugs.
 #	define __always_inline_tmpl_fail	__attribute__((always_inline))
 #else
 #	define __always_inline_tmpl_fail
 #endif
 
-extern void xJccKnownTarget( JccComparisonType comparison, const void* target, bool slideForward );
+extern void xJccKnownTarget(JccComparisonType comparison, const void* target, bool slideForward);
 
 // ------------------------------------------------------------------------
-struct xImpl_JmpCall
-{
+struct xImpl_JmpCall {
 	bool	isJmp;
 
-	void operator()( const xRegister32& absreg ) const;
-	void operator()( const xIndirect32& src ) const;
+	void operator()(const xRegister32 &absreg) const;
+	void operator()(const xIndirect32 &src) const;
 
-	void operator()( const xRegister16& absreg ) const;
-	void operator()( const xIndirect16& src ) const;
+	void operator()(const xRegister16 &absreg) const;
+	void operator()(const xIndirect16 &src) const;
 
 	// Special form for calling functions.  This form automatically resolves the
 	// correct displacement based on the size of the instruction being generated.
-	template< typename T > __fi __always_inline_tmpl_fail
-	void operator()( T* func ) const
+	template<typename T> __fi __always_inline_tmpl_fail
+	void operator()(T* func) const
 	{
-		if( isJmp )
-			xJccKnownTarget( Jcc_Unconditional, (void*)(uptr)func, false );	// double cast to/from (uptr) needed to appease GCC
-		else
-		{
+		if (isJmp)
+			xJccKnownTarget(Jcc_Unconditional, (void*)(uptr)func, false);	// double cast to/from (uptr) needed to appease GCC
+		else {
 			// calls are relative to the instruction after this one, and length is
 			// always 5 bytes (16 bit calls are bad mojo, so no bother to do special logic).
-
 			sptr dest = (sptr)func - ((sptr)xGetPtr() + 5);
-			xWrite8( 0xe8 );
-			xWrite32( dest );
+			xWrite8(0xe8);
+			xWrite32(dest);
 		}
 	}
 };

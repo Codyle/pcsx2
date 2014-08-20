@@ -38,9 +38,9 @@ public:
 
 	ConsoleLogSource_Event();
 
-	bool Write( const pxEvtQueue* evtHandler, const SysExecEvent* evt, const wxChar* msg );
-	bool Warn( const pxEvtQueue* evtHandler, const SysExecEvent* evt, const wxChar* msg );
-	bool Error( const pxEvtQueue* evtHandler, const SysExecEvent* evt, const wxChar* msg );
+	bool Write(const pxEvtQueue* evtHandler, const SysExecEvent* evt, const wxChar* msg);
+	bool Warn(const pxEvtQueue* evtHandler, const SysExecEvent* evt, const wxChar* msg);
+	bool Error(const pxEvtQueue* evtHandler, const SysExecEvent* evt, const wxChar* msg);
 };
 
 extern ConsoleLogSource_Event pxConLog_Event;
@@ -80,52 +80,75 @@ protected:
 
 public:
 	virtual ~SysExecEvent() throw() {}
-	SysExecEvent* Clone() const { return new SysExecEvent( *this ); }
+	SysExecEvent* Clone() const
+	{
+		return new SysExecEvent(*this);
+	}
 
-	SysExecEvent( SynchronousActionState* sync=NULL )
+	SysExecEvent(SynchronousActionState* sync = NULL)
 	{
 		m_sync = sync;
 	}
 
-	SysExecEvent( SynchronousActionState& sync )
+	SysExecEvent(SynchronousActionState &sync)
 	{
 		m_sync = &sync;
 	}
 
-	const SynchronousActionState* GetSyncState() const { return m_sync; }
-	SynchronousActionState* GetSyncState() { return m_sync; }
+	const SynchronousActionState* GetSyncState() const
+	{
+		return m_sync;
+	}
+	SynchronousActionState* GetSyncState()
+	{
+		return m_sync;
+	}
 
-	SysExecEvent& SetSyncState( SynchronousActionState* obj ) { m_sync = obj;	return *this; }
-	SysExecEvent& SetSyncState( SynchronousActionState& obj ) { m_sync = &obj;	return *this; }
+	SysExecEvent &SetSyncState(SynchronousActionState* obj)
+	{
+		m_sync = obj;
+		return *this;
+	}
+	SysExecEvent &SetSyncState(SynchronousActionState &obj)
+	{
+		m_sync = &obj;
+		return *this;
+	}
 
 	// Tells the Event Handler whether or not this event can be skipped when the system
 	// is being quit or reset.  Typically set this to true for events which shut down the
 	// system, since program crashes can occur if the program tries to exit while threads
 	// are running.
-	virtual bool IsCriticalEvent() const { return false; }
-	
+	virtual bool IsCriticalEvent() const
+	{
+		return false;
+	}
+
 	// Tells the Event Handler whether or not this event can be canceled.  Typically events
 	// should not prohibit cancellation, since it expedites program termination and helps
 	// avoid permanent deadlock.  Some actions like saving states and shutdown procedures
 	// should not allow cancellation since they could result in program crashes or corrupted
 	// data.
-	virtual bool AllowCancelOnExit() const { return true; }
+	virtual bool AllowCancelOnExit() const
+	{
+		return true;
+	}
 
 	virtual void _DoInvokeEvent();
 	virtual void PostResult() const;
 
 	virtual wxString GetEventName() const;
 	virtual wxString GetEventMessage() const;
-	
+
 	virtual int GetResult()
 	{
-		if( !pxAssertDev( m_sync != NULL, "SysEvent: Expecting return value, but no sync object provided." ) ) return 0;
+		if (!pxAssertDev(m_sync != NULL, "SysEvent: Expecting return value, but no sync object provided.")) return 0;
 		return m_sync->return_value;
 	}
 
-	virtual void SetException( BaseException* ex );
+	virtual void SetException(BaseException* ex);
 
-	void SetException( const BaseException& ex );
+	void SetException(const BaseException &ex);
 
 protected:
 	virtual void InvokeEvent();
@@ -143,38 +166,50 @@ protected:
 	wxString		m_TraceName;
 
 public:
-	wxString GetEventName() const { return m_TraceName; }
+	wxString GetEventName() const
+	{
+		return m_TraceName;
+	}
 
 	virtual ~SysExecEvent_MethodVoid() throw() {}
-	SysExecEvent_MethodVoid* Clone() const { return new SysExecEvent_MethodVoid( *this ); }
+	SysExecEvent_MethodVoid* Clone() const
+	{
+		return new SysExecEvent_MethodVoid(*this);
+	}
 
-	bool AllowCancelOnExit() const { return !m_IsCritical; }
-	bool IsCriticalEvent() const { return m_IsCritical; }
+	bool AllowCancelOnExit() const
+	{
+		return !m_IsCritical;
+	}
+	bool IsCriticalEvent() const
+	{
+		return m_IsCritical;
+	}
 
-	explicit SysExecEvent_MethodVoid( FnType_Void* method = NULL, const wxChar* traceName=NULL )	
-		: m_TraceName( traceName ? traceName : L"VoidMethod" )
+	explicit SysExecEvent_MethodVoid(FnType_Void* method = NULL, const wxChar* traceName = NULL)
+		: m_TraceName(traceName ? traceName : L"VoidMethod")
 	{
 		m_method = method;
 		m_IsCritical = false;
 	}
-	
-	SysExecEvent_MethodVoid& Critical()
+
+	SysExecEvent_MethodVoid &Critical()
 	{
 		m_IsCritical = true;
 		return *this;
 	}
-	
+
 protected:
 	void InvokeEvent()
 	{
-		if( m_method ) m_method();
+		if (m_method) m_method();
 	}
 };
 
 #ifdef _MSC_VER
-	typedef std::list< SysExecEvent*, WXObjectAllocator(SysExecEvent*) > pxEvtList;
+typedef std::list<SysExecEvent*, WXObjectAllocator(SysExecEvent*)> pxEvtList;
 #else
-	typedef std::list<SysExecEvent*> pxEvtList;
+typedef std::list<SysExecEvent*> pxEvtList;
 #endif
 
 // --------------------------------------------------------------------------------------
@@ -218,27 +253,33 @@ public:
 	pxEvtQueue();
 	virtual ~pxEvtQueue() throw() {}
 
-	virtual wxString GetEventHandlerName() const { return L"pxEvtQueue"; }
+	virtual wxString GetEventHandlerName() const
+	{
+		return L"pxEvtQueue";
+	}
 
 	virtual void ShutdownQueue();
-	bool IsShuttingDown() const { return !!m_Quitting; }
+	bool IsShuttingDown() const
+	{
+		return !!m_Quitting;
+	}
 
-	void ProcessEvents( pxEvtList& list, bool isIdle=false );
+	void ProcessEvents(pxEvtList &list, bool isIdle = false);
 	void ProcessPendingEvents();
 	void ProcessIdleEvents();
 	void Idle();
 
-	void AddPendingEvent( SysExecEvent& evt );
-	void PostEvent( SysExecEvent* evt );
-	void PostEvent( const SysExecEvent& evt );
-	void PostIdleEvent( SysExecEvent* evt );
-	void PostIdleEvent( const SysExecEvent& evt );
+	void AddPendingEvent(SysExecEvent &evt);
+	void PostEvent(SysExecEvent* evt);
+	void PostEvent(const SysExecEvent &evt);
+	void PostIdleEvent(SysExecEvent* evt);
+	void PostIdleEvent(const SysExecEvent &evt);
 
-	void ProcessEvent( SysExecEvent* evt );
-	void ProcessEvent( SysExecEvent& evt );
+	void ProcessEvent(SysExecEvent* evt);
+	void ProcessEvent(SysExecEvent &evt);
 
-	bool Rpc_TryInvokeAsync( FnType_Void* method, const wxChar* traceName=NULL );
-	bool Rpc_TryInvoke( FnType_Void* method, const wxChar* traceName=NULL );
+	bool Rpc_TryInvokeAsync(FnType_Void* method, const wxChar* traceName = NULL);
+	bool Rpc_TryInvoke(FnType_Void* method, const wxChar* traceName = NULL);
 	void SetActiveThread();
 
 protected:
@@ -274,29 +315,29 @@ protected:
 	ScopedPtr<pxEvtQueue>	m_EvtHandler;
 
 public:
-	ExecutorThread( pxEvtQueue* evtandler = NULL );
+	ExecutorThread(pxEvtQueue* evtandler = NULL);
 	virtual ~ExecutorThread() throw() { }
 
 	virtual void ShutdownQueue();
 	bool IsRunning() const;
-	
-	void PostEvent( SysExecEvent* evt );
-	void PostEvent( const SysExecEvent& evt );
 
-	void PostIdleEvent( SysExecEvent* evt );
-	void PostIdleEvent( const SysExecEvent& evt );
+	void PostEvent(SysExecEvent* evt);
+	void PostEvent(const SysExecEvent &evt);
 
-	void ProcessEvent( SysExecEvent* evt );
-	void ProcessEvent( SysExecEvent& evt );
+	void PostIdleEvent(SysExecEvent* evt);
+	void PostIdleEvent(const SysExecEvent &evt);
 
-	bool Rpc_TryInvokeAsync( void (*evt)(), const wxChar* traceName=NULL )
+	void ProcessEvent(SysExecEvent* evt);
+	void ProcessEvent(SysExecEvent &evt);
+
+	bool Rpc_TryInvokeAsync(void (*evt)(), const wxChar* traceName = NULL)
 	{
-		return m_EvtHandler ? m_EvtHandler->Rpc_TryInvokeAsync( evt, traceName ) : false;
+		return m_EvtHandler ? m_EvtHandler->Rpc_TryInvokeAsync(evt, traceName) : false;
 	}
 
-	bool Rpc_TryInvoke( void (*evt)(), const wxChar* traceName=NULL )
+	bool Rpc_TryInvoke(void (*evt)(), const wxChar* traceName = NULL)
 	{
-		return m_EvtHandler ? m_EvtHandler->Rpc_TryInvoke( evt, traceName ) : false;
+		return m_EvtHandler ? m_EvtHandler->Rpc_TryInvoke(evt, traceName) : false;
 	}
 
 protected:

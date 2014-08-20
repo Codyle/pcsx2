@@ -15,42 +15,42 @@
 class WXDLLEXPORT wxStaticText : public wxStaticTextBase
 {
 public:
-    wxStaticText() { }
+	wxStaticText() { }
 
-    wxStaticText(wxWindow *parent,
-                 wxWindowID id,
-                 const wxString& label,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = 0,
-                 const wxString& name = wxStaticTextNameStr)
-    {
-        Create(parent, id, label, pos, size, style, name);
-    }
+	wxStaticText(wxWindow *parent,
+	             wxWindowID id,
+	             const wxString &label,
+	             const wxPoint &pos = wxDefaultPosition,
+	             const wxSize &size = wxDefaultSize,
+	             long style = 0,
+	             const wxString &name = wxStaticTextNameStr)
+	{
+		Create(parent, id, label, pos, size, style, name);
+	}
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxString& label,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxString& name = wxStaticTextNameStr);
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            const wxString &label,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = 0,
+	            const wxString &name = wxStaticTextNameStr);
 
-    // override some methods to resize the window properly
-    virtual void SetLabel(const wxString& label);
-    virtual bool SetFont( const wxFont &font );
+	// override some methods to resize the window properly
+	virtual void SetLabel(const wxString &label);
+	virtual bool SetFont(const wxFont &font);
 
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+	virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
 protected:
-    // implement/override some base class virtuals
-    virtual wxBorder GetDefaultBorder() const;
-    virtual void DoSetSize(int x, int y, int w, int h,
-                           int sizeFlags = wxSIZE_AUTO);
-    virtual wxSize DoGetBestSize() const;
+	// implement/override some base class virtuals
+	virtual wxBorder GetDefaultBorder() const;
+	virtual void DoSetSize(int x, int y, int w, int h,
+	                       int sizeFlags = wxSIZE_AUTO);
+	virtual wxSize DoGetBestSize() const;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)
+	DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)
 };
 
 #endif
-    // _WX_STATTEXT_H_
+// _WX_STATTEXT_H_

@@ -20,49 +20,49 @@
 class WXDLLEXPORT wxPrinterDC : public wxDC
 {
 public:
-    // Create a printer DC (obsolete function: use wxPrintData version now)
-    wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = true, int orientation = wxPORTRAIT);
+	// Create a printer DC (obsolete function: use wxPrintData version now)
+	wxPrinterDC(const wxString &driver, const wxString &device, const wxString &output, bool interactive = true, int orientation = wxPORTRAIT);
 
-    // Create from print data
-    wxPrinterDC(const wxPrintData& data);
+	// Create from print data
+	wxPrinterDC(const wxPrintData &data);
 
-    wxPrinterDC(WXHDC theDC);
+	wxPrinterDC(WXHDC theDC);
 
-    // override some base class virtuals
-    virtual bool StartDoc(const wxString& message);
-    virtual void EndDoc();
-    virtual void StartPage();
-    virtual void EndPage();
+	// override some base class virtuals
+	virtual bool StartDoc(const wxString &message);
+	virtual void EndDoc();
+	virtual void StartPage();
+	virtual void EndPage();
 
-    wxRect GetPaperRect();
+	wxRect GetPaperRect();
 
 protected:
-    virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = false);
-    virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
-                        wxCoord width, wxCoord height,
-                        wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
-    virtual void DoGetSize(int *w, int *h) const
-    {
-        GetDeviceSize(w, h);
-    }
+	virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
+	                          bool useMask = false);
+	virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
+	                    wxCoord width, wxCoord height,
+	                    wxDC *source, wxCoord xsrc, wxCoord ysrc,
+	                    int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
+	virtual void DoGetSize(int *w, int *h) const
+	{
+		GetDeviceSize(w, h);
+	}
 
 
-    // init the dc
-    void Init();
+	// init the dc
+	void Init();
 
-    wxPrintData m_printData;
+	wxPrintData m_printData;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPrinterDC)
+	DECLARE_DYNAMIC_CLASS_NO_COPY(wxPrinterDC)
 };
 
 // Gets an HDC for the default printer configuration
 // WXHDC WXDLLEXPORT wxGetPrinterDC(int orientation);
 
 // Gets an HDC for the specified printer configuration
-WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& data);
+WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData &data);
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 

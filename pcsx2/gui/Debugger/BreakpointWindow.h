@@ -21,22 +21,22 @@
 class BreakpointWindow : public wxDialog
 {
 public:
-	BreakpointWindow( wxWindow* parent, DebugInterface* _cpu );
-	void loadFromMemcheck(MemCheck& memcheck);
-	void loadFromBreakpoint(BreakPoint& breakpoint);
+	BreakpointWindow(wxWindow* parent, DebugInterface* _cpu);
+	void loadFromMemcheck(MemCheck &memcheck);
+	void loadFromBreakpoint(BreakPoint &breakpoint);
 	void initBreakpoint(u32 _address);
 	void addBreakpoint();
 
 	DECLARE_EVENT_TABLE()
 protected:
-	void onRadioChange(wxCommandEvent& evt);
-	void onButtonOk(wxCommandEvent& evt);
+	void onRadioChange(wxCommandEvent &evt);
+	void onButtonOk(wxCommandEvent &evt);
 private:
 	void setDefaultValues();
 	bool fetchDialogData();
 
 	DebugInterface* cpu;
-	
+
 	wxTextCtrl* editAddress;
 	wxTextCtrl* editSize;
 	wxRadioButton* radioMemory;

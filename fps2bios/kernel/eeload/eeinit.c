@@ -33,7 +33,7 @@ void InitializeGS()
 void InitializeGIF()
 {
 	GIF_CTRL = 1;
-	__asm__ ("sync\n");
+	__asm__("sync\n");
 	GIF_FIFO = 0;
 }
 
@@ -42,16 +42,36 @@ void InitializeGIF()
 ////////////////////////////////////////////////////////////////////
 int  _ResetEE(int init)
 {
-	if (init & 0x01) { __printf("# Initialize DMAC ...\n"); InitializeDMAC(0x31F); }
-	if (init & 0x02) { __printf("# Initialize VU1 ...\n");  InitializeVU1(); }
-	if (init & 0x04) { __printf("# Initialize VIF1 ...\n"); InitializeVIF1(); }
-	if (init & 0x08) { __printf("# Initialize GIF ...\n");  InitializeGIF(); }
-	if (init & 0x10) { __printf("# Initialize VU0 ...\n");  InitializeVU0(); }
-	if (init & 0x04) { __printf("# Initialize VIF0 ...\n"); InitializeVIF0(); }
-	if (init & 0x40) { __printf("# Initialize IPU ...\n");  InitializeIPU(); }
-
+	if (init & 0x01) {
+		__printf("# Initialize DMAC ...\n");
+		InitializeDMAC(0x31F);
+	}
+	if (init & 0x02) {
+		__printf("# Initialize VU1 ...\n");
+		InitializeVU1();
+	}
+	if (init & 0x04) {
+		__printf("# Initialize VIF1 ...\n");
+		InitializeVIF1();
+	}
+	if (init & 0x08) {
+		__printf("# Initialize GIF ...\n");
+		InitializeGIF();
+	}
+	if (init & 0x10) {
+		__printf("# Initialize VU0 ...\n");
+		InitializeVU0();
+	}
+	if (init & 0x04) {
+		__printf("# Initialize VIF0 ...\n");
+		InitializeVIF0();
+	}
+	if (init & 0x40) {
+		__printf("# Initialize IPU ...\n");
+		InitializeIPU();
+	}
 	InitializeINTC(0xC);
-//	return (*(int*)0x1000F410 &= 0xFFFBFFFF); code never reached :)
+	//	return (*(int*)0x1000F410 &= 0xFFFBFFFF); code never reached :)
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -61,28 +81,20 @@ int Initialize()
 {
 	__printf("# Initialize Start.\n");
 	__printf("# Initialize GS ...");
-
 	InitializeGS();
 	_SetGsCrt(1, 2, 1);
 	__printf("\n");
-
 	__printf("# Initialize INTC ...\n");
 	InitializeINTC(0xFFFF);
-
 	__printf("# Initialize TIMER ...\n");
 	InitializeTIMER();
-
 	ResetEE(0x7F);
-
 	__printf("# Initialize FPU ...\n");
 	InitializeFPU();
-
 	__printf("# Initialize User Memory ...\n");
 	InitializeUserMemory(0x80000);
-
 	__printf("# Initialize Scratch Pad ...\n");
 	InitializeScratchPad();
-
 	__printf("# Initialize Done.\n");
 }
 
@@ -93,38 +105,29 @@ int  Restart()
 {
 	__printf("# Restart.\n");
 	__printf("# Initialize GS ...");
-
 	INTC_STAT = 4;
-	while (INTC_STAT & 4) { __asm__ ("nop\nnop\nnop\n"); }
+	while (INTC_STAT & 4)
+		__asm__("nop\nnop\nnop\n");
 	INTC_STAT = 4;
-
 	InitializeGS();
 	_SetGsCrt(1, 2, 1);
 	__printf("\n");
-
 	__printf("# Initialize INTC ...\n");
 	InitializeINTC(0xDFFD);
-
 	__printf("# Initialize TIMER ...\n");
 	InitializeTIMER();
-
 	ResetEE(0x7F);
-
 	__printf("# Initialize FPU ...\n");
 	InitializeFPU();
-
 	__printf("# Initialize User Memory ...\n");
 	InitializeUserMemory(0x82000);
-
 	__printf("# Initialize Scratch Pad ...\n");
 	InitializeScratchPad();
-
 	__printf("# Restart Done.\n");
-
 	//wait for syncing IOP
-	while (SBUS_SMFLG & SBFLG_IOPSYNC) { __asm__ ("nop\nnop\nnop\n"); }
-
-	SBUS_SMFLG=SBFLG_IOPSYNC;
+	while (SBUS_SMFLG & SBFLG_IOPSYNC)
+		__asm__("nop\nnop\nnop\n");
+	SBUS_SMFLG = SBFLG_IOPSYNC;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -134,22 +137,18 @@ void InitializeDMAC(int code)
 {
 	int i;
 	int *addr;
-
-	for (i=0; i<10; i++) {
-		if (!(code & (1<<i))) continue;
-
+	for (i = 0; i < 10; i++) {
+		if (!(code & (1 << i))) continue;
 		addr = (int*)dmac_CHCR[i];
-		addr[0x80/4] = 0;
-		addr[0x00/4] = 0;
-		addr[0x30/4] = 0;
-		addr[0x10/4] = 0;
-		addr[0x50/4] = 0;
-		addr[0x40/4] = 0;
+		addr[0x80 / 4] = 0;
+		addr[0x00 / 4] = 0;
+		addr[0x30 / 4] = 0;
+		addr[0x10 / 4] = 0;
+		addr[0x50 / 4] = 0;
+		addr[0x40 / 4] = 0;
 	}
-
 	DMAC_STAT = (code & 0xFFFF) | 0xE000;
 	DMAC_STAT = (DMAC_STAT & 0xFFFF0000) & ((code | 0x6000) << 16);
-
 	if ((code & 0x7F) == 0x7F) {
 		DMAC_CTRL = 0;
 		DMAC_PCR  = 0;
@@ -157,7 +156,6 @@ void InitializeDMAC(int code)
 		DMAC_CTRL = 0;
 		DMAC_PCR  = DMAC_PCR & (((~code) << 16) | (~code));
 	}
-
 	DMAC_SQWC = 0;
 	DMAC_RBSR = 0;
 	DMAC_RBOR = 0;
@@ -203,42 +201,42 @@ void InitializeVU0()
 ////////////////////////////////////////////////////////////////////
 void InitializeFPU()
 {
-	__asm__ (
-		"mtc1    $0, $0\n"
-		"mtc1    $0, $1\n"
-		"mtc1    $0, $2\n"
-		"mtc1    $0, $3\n"
-		"mtc1    $0, $4\n"
-		"mtc1    $0, $5\n"
-		"mtc1    $0, $6\n"
-		"mtc1    $0, $7\n"
-		"mtc1    $0, $8\n"
-		"mtc1    $0, $9\n"
-		"mtc1    $0, $10\n"
-		"mtc1    $0, $11\n"
-		"mtc1    $0, $12\n"
-		"mtc1    $0, $13\n"
-		"mtc1    $0, $14\n"
-		"mtc1    $0, $15\n"
-		"mtc1    $0, $16\n"
-		"mtc1    $0, $17\n"
-		"mtc1    $0, $18\n"
-		"mtc1    $0, $19\n"
-		"mtc1    $0, $20\n"
-		"mtc1    $0, $21\n"
-		"mtc1    $0, $22\n"
-		"mtc1    $0, $23\n"
-		"mtc1    $0, $24\n"
-		"mtc1    $0, $25\n"
-		"mtc1    $0, $26\n"
-		"mtc1    $0, $27\n"
-		"mtc1    $0, $28\n"
-		"mtc1    $0, $29\n"
-		"mtc1    $0, $30\n"
-		"mtc1    $0, $31\n"
-		"adda.s  $f0, $f1\n"
-		"sync\n"
-		"ctc1    $0, $31\n"
+	__asm__(
+	        "mtc1    $0, $0\n"
+	        "mtc1    $0, $1\n"
+	        "mtc1    $0, $2\n"
+	        "mtc1    $0, $3\n"
+	        "mtc1    $0, $4\n"
+	        "mtc1    $0, $5\n"
+	        "mtc1    $0, $6\n"
+	        "mtc1    $0, $7\n"
+	        "mtc1    $0, $8\n"
+	        "mtc1    $0, $9\n"
+	        "mtc1    $0, $10\n"
+	        "mtc1    $0, $11\n"
+	        "mtc1    $0, $12\n"
+	        "mtc1    $0, $13\n"
+	        "mtc1    $0, $14\n"
+	        "mtc1    $0, $15\n"
+	        "mtc1    $0, $16\n"
+	        "mtc1    $0, $17\n"
+	        "mtc1    $0, $18\n"
+	        "mtc1    $0, $19\n"
+	        "mtc1    $0, $20\n"
+	        "mtc1    $0, $21\n"
+	        "mtc1    $0, $22\n"
+	        "mtc1    $0, $23\n"
+	        "mtc1    $0, $24\n"
+	        "mtc1    $0, $25\n"
+	        "mtc1    $0, $26\n"
+	        "mtc1    $0, $27\n"
+	        "mtc1    $0, $28\n"
+	        "mtc1    $0, $29\n"
+	        "mtc1    $0, $30\n"
+	        "mtc1    $0, $31\n"
+	        "adda.s  $f0, $f1\n"
+	        "sync\n"
+	        "ctc1    $0, $31\n"
 	);
 }
 
@@ -248,8 +246,7 @@ void InitializeFPU()
 void InitializeScratchPad()
 {
 	u128 *p;
-
-	for (p=(u128*)0x70000000; (u32)p<0x70004000; p++) *p=0;
+	for (p = (u128*)0x70000000; (u32)p < 0x70004000; p++) *p = 0;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -259,9 +256,8 @@ void InitializeUserMemory(u32 base)
 {
 	u128 *memsz;
 	u128 *p = (u128*)base;
-
-	for (memsz=(u128*)_GetMemorySize(); p<memsz; p++)
-        *p = 0;
+	for (memsz = (u128*)_GetMemorySize(); p < memsz; p++)
+		*p = 0;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -283,20 +279,16 @@ void InitializeTIMER()
 	RCNT0_COUNT  = 0;
 	RCNT0_TARGET = 0xFFFF;
 	RCNT0_HOLD   = 0;
-
 	RCNT1_MODE   = 0xC00;
 	RCNT1_COUNT  = 0;
 	RCNT1_TARGET = 0xFFFF;
 	RCNT1_HOLD   = 0;
-
 	RCNT2_MODE   = 0xC80;
 	RCNT2_COUNT  = 0;
 	RCNT2_TARGET = 0xFFFF;
-
 	RCNT3_MODE   = 0xC83;
 	RCNT3_COUNT  = 0;
 	RCNT3_TARGET = 0xFFFF;
-
 	InitializeINTC(0x1E00);
 	_InitRCNT3();
 }
@@ -355,70 +347,55 @@ u32 tlb_config[] = {
 };
 
 
-void _TlbSet(u32 Index, u32 PageMask, u32 EntryHi, u32 EntryLo0, u32 EntryLo1) {
-	__asm__ (
-		"mtc0 $4, $0\n"
-		"mtc0 $5, $5\n"
-		"mtc0 $6, $10\n"
-		"mtc0 $7, $2\n"
-		"mtc0 $8, $3\n"
-		"sync\n"
-		"tlbwi\n"
-		"sync\n"
+void _TlbSet(u32 Index, u32 PageMask, u32 EntryHi, u32 EntryLo0, u32 EntryLo1)
+{
+	__asm__(
+	        "mtc0 $4, $0\n"
+	        "mtc0 $5, $5\n"
+	        "mtc0 $6, $10\n"
+	        "mtc0 $7, $2\n"
+	        "mtc0 $8, $3\n"
+	        "sync\n"
+	        "tlbwi\n"
+	        "sync\n"
 	);
 }
 
-void TlbInit() {
+void TlbInit()
+{
 	int i, last;
 	u32 *ptr;
-
 	__printf("TlbInit... ");
-
-	__asm__ ("mtc0 $0, $6\n");
-
+	__asm__("mtc0 $0, $6\n");
 	_TlbSet(1, 0, 0xE0000000, 0, 0);
-	for (i=2; i<48; i++) {
+	for (i = 2; i < 48; i++)
 		_TlbSet(i, 0, 0xE0002000, 0, 0);
-	}
-
 	last = tlb_config[0];
-	if (last > 48) {
+	if (last > 48)
 		__printf("# TLB over flow (1)\n");
-	}
-
 	ptr = (u32*)(tlb_config[4] + 0x10);
-	for (i=1; i<last; i++, ptr+= 4) {
+	for (i = 1; i < last; i++, ptr += 4)
 		_TlbSet(i, ptr[0], ptr[1], ptr[2], ptr[3]);
-	}
-
 	last = tlb_config[1] + i;
-	if (last > 48) {
+	if (last > 48)
 		__printf("# TLB over flow (2)\n");
-	}
-
 	if (tlb_config[1]) {
 		ptr = (u32*)(tlb_config[5]);
-		for (; i<last; i++, ptr+= 4) {
+		for (; i < last; i++, ptr += 4)
 			_TlbSet(i, ptr[0], ptr[1], ptr[2], ptr[3]);
-		}
 	}
-
-	__asm__ (
-		"mtc0 %0, $6\n"
-		"sync\n"
-		: : "r"(tlb_config[3])
+	__asm__(
+	        "mtc0 %0, $6\n"
+	        "sync\n"
+	        : : "r"(tlb_config[3])
 	);
-//	if (tlb_config[2] <= 0)	return;
-
+	//	if (tlb_config[2] <= 0)	return;
 	last = tlb_config[2] + i;
-	if (last > 48) {
+	if (last > 48)
 		__printf("# TLB over flow (3)\n");
-	}
-
 	ptr = (u32*)(tlb_config[6]);
-	for (; i<last; i++, ptr+= 4) {
+	for (; i < last; i++, ptr += 4)
 		_TlbSet(i, ptr[0], ptr[1], ptr[2], ptr[3]);
-	}
 	__printf("Ok\n");
 }
 
@@ -430,43 +407,35 @@ void sbusHandler();
 ////////////////////////////////////////////////////////////////////
 //80002050
 ////////////////////////////////////////////////////////////////////
-int InitPgifHandler() {
+int InitPgifHandler()
+{
 	int i;
-
 	_HandlersCount = 0;
-
-	for (i=0; i<15; i++) {
+	for (i = 0; i < 15; i++) {
 		intcs_array[i].count = 0;
-        // intcs_array[-1] = ihandlers_last,first
-		intcs_array[i-1].l.prev = (struct ll*)&intcs_array[i-1].l.next;
-		intcs_array[i-1].l.next = (struct ll*)&intcs_array[i-1].l.next;
-        setINTCHandler(i, DefaultINTCHandler);
+		// intcs_array[-1] = ihandlers_last,first
+		intcs_array[i - 1].l.prev = (struct ll*)&intcs_array[i - 1].l.next;
+		intcs_array[i - 1].l.next = (struct ll*)&intcs_array[i - 1].l.next;
+		setINTCHandler(i, DefaultINTCHandler);
 	}
-
-    setINTCHandler(12, rcnt3Handler);
-    setINTCHandler(1,  sbusHandler);
-
-	for (i=0; i<32; i++) {
+	setINTCHandler(12, rcnt3Handler);
+	setINTCHandler(1,  sbusHandler);
+	for (i = 0; i < 32; i++)
 		sbus_handlers[i] = 0;
-	}
-
 	__EnableIntc(INTC_SBUS);
-
-	for (i=0; i<16; i++) {
+	for (i = 0; i < 16; i++) {
 		dmacs_array[i].count = 0;
-		dmacs_array[i-1].l.prev = (struct ll*)&dmacs_array[i-1].l.next;
-		dmacs_array[i-1].l.next = (struct ll*)&dmacs_array[i-1].l.next;
-        setDMACHandler(i, DefaultDMACHandler);
+		dmacs_array[i - 1].l.prev = (struct ll*)&dmacs_array[i - 1].l.next;
+		dmacs_array[i - 1].l.next = (struct ll*)&dmacs_array[i - 1].l.next;
+		setDMACHandler(i, DefaultDMACHandler);
 	}
-
 	handler_ll_free.next = &handler_ll_free;
 	handler_ll_free.prev = &handler_ll_free;
-	for (i=0; i<160; i++) {
-		pgifhandlers_array[i+1].handler = 0;
-		pgifhandlers_array[i+1].flag    = 3;
-		LL_add(&handler_ll_free, (struct ll*)&pgifhandlers_array[i+1].next);
+	for (i = 0; i < 160; i++) {
+		pgifhandlers_array[i + 1].handler = 0;
+		pgifhandlers_array[i + 1].flag    = 3;
+		LL_add(&handler_ll_free, (struct ll*)&pgifhandlers_array[i + 1].next);
 	}
-
 	return 0x81;
 }
 
@@ -477,35 +446,29 @@ int InitPgifHandler() {
 int InitPgifHandler2()
 {
 	int i;
-
 	_HandlersCount = 0;
-
-    for(i = 0; i < 15; ++i) {
-        if(i != 1 ) {
-            intcs_array[i].count = 0;
-            // intcs_array[-1] = ihandlers_last,first
-            intcs_array[i-1].l.prev = (struct ll*)&intcs_array[i-1].l.next;
-            intcs_array[i-1].l.next = (struct ll*)&intcs_array[i-1].l.next;
-            setINTCHandler(i, DefaultINTCHandler);
-        }
+	for (i = 0; i < 15; ++i) {
+		if (i != 1) {
+			intcs_array[i].count = 0;
+			// intcs_array[-1] = ihandlers_last,first
+			intcs_array[i - 1].l.prev = (struct ll*)&intcs_array[i - 1].l.next;
+			intcs_array[i - 1].l.next = (struct ll*)&intcs_array[i - 1].l.next;
+			setINTCHandler(i, DefaultINTCHandler);
+		}
 	}
-
-    setINTCHandler(12, rcnt3Handler);
-
-	for (i=0; i<16; i++) {
+	setINTCHandler(12, rcnt3Handler);
+	for (i = 0; i < 16; i++) {
 		dmacs_array[i].count = 0;
-		dmacs_array[i-1].l.prev = (struct ll*)&dmacs_array[i-1].l.next;
-		dmacs_array[i-1].l.next = (struct ll*)&dmacs_array[i-1].l.next;
-        setDMACHandler(i, DefaultDMACHandler);
+		dmacs_array[i - 1].l.prev = (struct ll*)&dmacs_array[i - 1].l.next;
+		dmacs_array[i - 1].l.next = (struct ll*)&dmacs_array[i - 1].l.next;
+		setDMACHandler(i, DefaultDMACHandler);
 	}
-
 	handler_ll_free.next = &handler_ll_free;
 	handler_ll_free.prev = &handler_ll_free;
-	for (i=0; i<160; i++) {
-		pgifhandlers_array[i+1].handler = 0;
-		pgifhandlers_array[i+1].flag    = 3;
-		LL_add(&handler_ll_free, (struct ll*)&pgifhandlers_array[i+1].next);
+	for (i = 0; i < 160; i++) {
+		pgifhandlers_array[i + 1].handler = 0;
+		pgifhandlers_array[i + 1].flag    = 3;
+		LL_add(&handler_ll_free, (struct ll*)&pgifhandlers_array[i + 1].next);
 	}
-
 	return 0x81;
 }

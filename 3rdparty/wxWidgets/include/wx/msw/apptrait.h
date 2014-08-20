@@ -19,11 +19,11 @@
 class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
-    virtual void *BeforeChildWaitLoop();
-    virtual void AlwaysYield();
-    virtual void AfterChildWaitLoop(void *data);
+	virtual void *BeforeChildWaitLoop();
+	virtual void AlwaysYield();
+	virtual void AfterChildWaitLoop(void *data);
 
-    virtual bool DoMessageFromThreadWait();
+	virtual bool DoMessageFromThreadWait();
 };
 
 #if wxUSE_GUI
@@ -31,12 +31,12 @@ public:
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual void *BeforeChildWaitLoop();
-    virtual void AlwaysYield();
-    virtual void AfterChildWaitLoop(void *data);
+	virtual void *BeforeChildWaitLoop();
+	virtual void AlwaysYield();
+	virtual void AfterChildWaitLoop(void *data);
 
-    virtual bool DoMessageFromThreadWait();
-    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
+	virtual bool DoMessageFromThreadWait();
+	virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 };
 
 #endif // wxUSE_GUI

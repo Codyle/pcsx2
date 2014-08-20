@@ -24,37 +24,37 @@
 #define wxMakeMetaFilePlaceable wxMakeMetafilePlaceable
 
 #if defined(__WXMSW__)
-    #if wxUSE_ENH_METAFILE
-        #if defined(__WXPALMOS__)
-            #include "wx/palmos/enhmeta.h"
-        #else
-            #include "wx/msw/enhmeta.h"
-        #endif
+#if wxUSE_ENH_METAFILE
+#if defined(__WXPALMOS__)
+#include "wx/palmos/enhmeta.h"
+#else
+#include "wx/msw/enhmeta.h"
+#endif
 
-        #if wxUSE_WIN_METAFILES_ALWAYS
-            // use normal metafiles as well
-            #include "wx/msw/metafile.h"
-        #else // also map all metafile classes to enh metafile
-            typedef wxEnhMetaFile wxMetafile;
-            typedef wxEnhMetaFileDC wxMetafileDC;
-            #if wxUSE_DRAG_AND_DROP
-                typedef wxEnhMetaFileDataObject wxMetafileDataObject;
-            #endif
+#if wxUSE_WIN_METAFILES_ALWAYS
+// use normal metafiles as well
+#include "wx/msw/metafile.h"
+#else // also map all metafile classes to enh metafile
+typedef wxEnhMetaFile wxMetafile;
+typedef wxEnhMetaFileDC wxMetafileDC;
+#if wxUSE_DRAG_AND_DROP
+typedef wxEnhMetaFileDataObject wxMetafileDataObject;
+#endif
 
-            // this flag will be set if wxMetafile class is wxEnhMetaFile
-            #define wxMETAFILE_IS_ENH
-        #endif // wxUSE_WIN_METAFILES_ALWAYS
-    #else // !wxUSE_ENH_METAFILE
-        #if defined(__WXPALMOS__)
-            #include "wx/palmos/metafile.h"
-        #else
-            #include "wx/msw/metafile.h"
-        #endif
-    #endif
+// this flag will be set if wxMetafile class is wxEnhMetaFile
+#define wxMETAFILE_IS_ENH
+#endif // wxUSE_WIN_METAFILES_ALWAYS
+#else // !wxUSE_ENH_METAFILE
+#if defined(__WXPALMOS__)
+#include "wx/palmos/metafile.h"
+#else
+#include "wx/msw/metafile.h"
+#endif
+#endif
 #elif defined(__WXPM__)
-    #include "wx/os2/metafile.h"
+#include "wx/os2/metafile.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/metafile.h"
+#include "wx/mac/metafile.h"
 #endif
 
 #endif // wxUSE_METAFILE

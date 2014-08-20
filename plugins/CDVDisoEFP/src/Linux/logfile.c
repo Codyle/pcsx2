@@ -44,18 +44,16 @@ int OpenLog()
 #ifdef VERBOSE_LOGFILE
 	logfile = -1;
 	logfile = open("./logs/CDVDlog.txt", O_WRONLY | O_CREAT | O_APPEND, 0755);
-	if (logfile == -1)  return(-1);
+	if (logfile == -1)  return (-1);
 #endif /* VERBOSE LOGFILE */
-
-	return(0);
+	return (0);
 } // END OpenLog();
 
 void CloseLog()
 {
 	// Token comment line
 #ifdef VERBOSE_LOGFILE
-	if (logfile != -1)
-	{
+	if (logfile != -1) {
 		close(logfile);
 		logfile = -1;
 	} // ENDIF- Is the log file actually open? Close it.
@@ -74,8 +72,8 @@ void PrintLog(const char *fmt, ...)
 	va_end(list);
 	len = 0;
 	while ((len < 2048) && (logfiletemp[len] != 0))  len++;
-	if ((len > 0) && (logfiletemp[len-1] == '\n'))  len--;
-	if ((len > 0) && (logfiletemp[len-1] == '\r'))  len--;
+	if ((len > 0) && (logfiletemp[len - 1] == '\n'))  len--;
+	if ((len > 0) && (logfiletemp[len - 1] == '\r'))  len--;
 	logfiletemp[len] = 0; // Slice off the last "\r\n"...
 	write(logfile, logfiletemp, len);
 	write(logfile, "\r\n", 2); // ... and write out your own.

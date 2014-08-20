@@ -20,7 +20,7 @@
 // define this to 0 when building wxBase library - this can also be done from
 // makefile/project file overriding the value here
 #ifndef wxUSE_GUI
-    #define wxUSE_GUI            1
+#define wxUSE_GUI            1
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -157,7 +157,7 @@
 //
 // Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
+#define wxUSE_UNICODE 0
 #endif
 
 // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
@@ -283,9 +283,9 @@
 // many warnings that can't be turned off when compiled at warning level 4.
 #if defined(__DMC__) || defined(__WATCOMC__) \
         || (defined(_MSC_VER) && _MSC_VER < 1200)
-    #define wxUSE_STD_STRING  0
+#define wxUSE_STD_STRING  0
 #else
-    #define wxUSE_STD_STRING  1
+#define wxUSE_STD_STRING  1
 #endif
 
 // Support for positional parameters (e.g. %1$d, %2$s ...) in wxVsnprintf.
@@ -1053,9 +1053,9 @@
 #define wxUSE_DRAGIMAGE 1
 
 #define wxUSE_IPC         1
-                                // 0 for no interprocess comms
+// 0 for no interprocess comms
 #define wxUSE_HELP        1
-                                // 0 for no help facility
+// 0 for no help facility
 
 // Should we use MS HTML help for wxHelpController? If disabled, neither
 // wxCHMHelpController nor wxBestHelpController are available.
@@ -1071,15 +1071,15 @@
 #define wxUSE_WXHTML_HELP 1
 
 #define wxUSE_RESOURCES   0
-                                // 0 for no wxGetResource/wxWriteResource
+// 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 0
-                                // 0 for no window layout constraint system
+// 0 for no window layout constraint system
 
 #define wxUSE_SPLINES     1
-                                // 0 for no splines
+// 0 for no splines
 
 #define wxUSE_MOUSEWHEEL        1
-                                // Include mouse wheel support
+// Include mouse wheel support
 
 // ----------------------------------------------------------------------------
 // postscript support settings
@@ -1221,7 +1221,7 @@
 //
 // Recommended setting: 0 (1 if you want to deploy Unicode apps on 9x systems)
 #ifndef wxUSE_UNICODE_MSLU
-    #define wxUSE_UNICODE_MSLU 0
+#define wxUSE_UNICODE_MSLU 0
 #endif
 
 // Set this to 1 if you want to use wxWidgets and MFC in the same program. This

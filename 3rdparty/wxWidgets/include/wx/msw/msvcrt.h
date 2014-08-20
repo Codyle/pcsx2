@@ -24,45 +24,45 @@
 #undef wxUSE_VC_CRTDBG
 #if defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ >= 1000) \
     && !defined(UNDER_CE)
-    // it doesn't combine well with wxWin own memory debugging methods
-    #if !wxUSE_GLOBAL_MEMORY_OPERATORS && !wxUSE_MEMORY_TRACING && !defined(__NO_VC_CRTDBG__)
-        #define wxUSE_VC_CRTDBG
-    #endif
+// it doesn't combine well with wxWin own memory debugging methods
+#if !wxUSE_GLOBAL_MEMORY_OPERATORS && !wxUSE_MEMORY_TRACING && !defined(__NO_VC_CRTDBG__)
+#define wxUSE_VC_CRTDBG
+#endif
 #endif
 
 #ifdef wxUSE_VC_CRTDBG
-    // VC++ uses this macro as debug/release mode indicator
-    #ifndef _DEBUG
-        #define _DEBUG
-    #endif
+// VC++ uses this macro as debug/release mode indicator
+#ifndef _DEBUG
+#define _DEBUG
+#endif
 
-    // Need to undef new if including crtdbg.h which may redefine new itself
-    #ifdef new
-        #undef new
-    #endif
+// Need to undef new if including crtdbg.h which may redefine new itself
+#ifdef new
+#undef new
+#endif
 
-    #include <stdlib.h>
-    #ifndef _CRTBLD
-        // Need when builded with pure MS SDK
-        #define _CRTBLD
-    #endif
+#include <stdlib.h>
+#ifndef _CRTBLD
+// Need when builded with pure MS SDK
+#define _CRTBLD
+#endif
 
-    #include <crtdbg.h>
+#include <crtdbg.h>
 
-    #undef WXDEBUG_NEW
-    #define WXDEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#undef WXDEBUG_NEW
+#define WXDEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 
-    // this define works around a bug with inline declarations of new, see
-    //
-    //      http://support.microsoft.com/support/kb/articles/Q140/8/58.asp
-    //
-    // for the details
-    #define new  WXDEBUG_NEW
+// this define works around a bug with inline declarations of new, see
+//
+//      http://support.microsoft.com/support/kb/articles/Q140/8/58.asp
+//
+// for the details
+#define new  WXDEBUG_NEW
 
-    #define wxCrtSetDbgFlag(flag) \
-        _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | (flag))
+#define wxCrtSetDbgFlag(flag) \
+	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | (flag))
 #else // !using VC CRT
-    #define wxCrtSetDbgFlag(flag)
+#define wxCrtSetDbgFlag(flag)
 #endif // wxUSE_VC_CRTDBG
 
 #endif // _MSW_MSVCRT_H_

@@ -22,34 +22,34 @@ class CRenderedInputPin : public CBaseInputPin
 {
 public:
 
-    CRenderedInputPin(TCHAR *pObjectName,
-                      CBaseFilter *pFilter,
-                      CCritSec *pLock,
-                      HRESULT *phr,
-                      LPCWSTR pName);
+	CRenderedInputPin(TCHAR *pObjectName,
+	                  CBaseFilter *pFilter,
+	                  CCritSec *pLock,
+	                  HRESULT *phr,
+	                  LPCWSTR pName);
 #ifdef UNICODE
-    CRenderedInputPin(CHAR *pObjectName,
-                      CBaseFilter *pFilter,
-                      CCritSec *pLock,
-                      HRESULT *phr,
-                      LPCWSTR pName);
+	CRenderedInputPin(CHAR *pObjectName,
+	                  CBaseFilter *pFilter,
+	                  CCritSec *pLock,
+	                  HRESULT *phr,
+	                  LPCWSTR pName);
 #endif
 
-    // Override methods to track end of stream state
-    STDMETHODIMP EndOfStream();
-    STDMETHODIMP EndFlush();
+	// Override methods to track end of stream state
+	STDMETHODIMP EndOfStream();
+	STDMETHODIMP EndFlush();
 
-    HRESULT Active();
-    HRESULT Run(REFERENCE_TIME tStart);
+	HRESULT Active();
+	HRESULT Run(REFERENCE_TIME tStart);
 
 protected:
 
-    // Member variables to track state
-    BOOL m_bAtEndOfStream;      // Set by EndOfStream
-    BOOL m_bCompleteNotified;   // Set when we notify for EC_COMPLETE
+	// Member variables to track state
+	BOOL m_bAtEndOfStream;      // Set by EndOfStream
+	BOOL m_bCompleteNotified;   // Set when we notify for EC_COMPLETE
 
 private:
-    void DoCompleteHandling();
+	void DoCompleteHandling();
 };
 
 #endif // __AMEXTRA__

@@ -70,7 +70,7 @@ class GSState : public GSAlignedClass<32>
 	template<uint32 prim> void GIFPackedRegHandlerSTQRGBAXYZ2(const GIFPackedReg* RESTRICT r, uint32 size);
 	void GIFPackedRegHandlerNOP(const GIFPackedReg* RESTRICT r, uint32 size);
 
-	template<int i> void ApplyTEX0(GIFRegTEX0& TEX0);
+	template<int i> void ApplyTEX0(GIFRegTEX0 &TEX0);
 	void ApplyPRIM(uint32 prim);
 
 	void GIFRegHandlerNull(const GIFReg* RESTRICT r);
@@ -124,8 +124,7 @@ class GSState : public GSAlignedClass<32>
 	bool m_path3hack;
 	bool m_init_read_fifo_supported;
 
-	struct GSTransferBuffer
-	{
+	struct GSTransferBuffer {
 		int x, y;
 		int start, end, total;
 		bool overflow;
@@ -135,35 +134,33 @@ class GSState : public GSAlignedClass<32>
 		virtual ~GSTransferBuffer();
 
 		void Init(int tx, int ty);
-		bool Update(int tw, int th, int bpp, int& len);
+		bool Update(int tw, int th, int bpp, int &len);
 
 	} m_tr;
 
 protected:
-	bool IsBadFrame(int& skip, int UserHacks_SkipDraw);
+	bool IsBadFrame(int &skip, int UserHacks_SkipDraw);
 
 	int UserHacks_AggressiveCRC;
 	int UserHacks_DisableCrcHacks;
 	int UserHacks_WildHack;
-    bool isPackedUV_HackFlag;
+	bool isPackedUV_HackFlag;
 
 	GSVertex m_v;
 	float m_q;
 	GSVector4i m_scissor;
 	GSVector4i m_ofxy;
 	bool m_texflush;
-	
-	struct 
-	{
-		GSVertex* buff; 
+
+	struct {
+		GSVertex* buff;
 		size_t head, tail, next, maxcount; // head: first vertex, tail: last vertex + 1, next: last indexed + 1
 		size_t xy_tail;
 		uint64 xy[4];
-	} m_vertex; 
+	} m_vertex;
 
-	struct 
-	{
-		uint32* buff; 
+	struct {
+		uint32* buff;
 		size_t tail;
 	} m_index;
 
@@ -174,16 +171,16 @@ protected:
 
 	void GrowVertexBuffer();
 
-	template<uint32 prim> 
+	template<uint32 prim>
 	void VertexKick(uint32 skip);
 
 	// following functions need m_vt to be initialized
 
 	GSVertexTrace m_vt;
 
-	void GetTextureMinMax(GSVector4i& r, const GIFRegTEX0& TEX0, const GIFRegCLAMP& CLAMP, bool linear);
+	void GetTextureMinMax(GSVector4i &r, const GIFRegTEX0 &TEX0, const GIFRegCLAMP &CLAMP, bool linear);
 	void GetAlphaMinMax();
-	bool TryAlphaTest(uint32& fm, uint32& zm);
+	bool TryAlphaTest(uint32 &fm, uint32 &zm);
 	bool IsOpaque();
 
 public:
@@ -227,8 +224,8 @@ public:
 	virtual void FlushPrim();
 	virtual void FlushWrite();
 	virtual void Draw() = 0;
-	virtual void InvalidateVideoMem(const GIFRegBITBLTBUF& BITBLTBUF, const GSVector4i& r) {}
-	virtual void InvalidateLocalMem(const GIFRegBITBLTBUF& BITBLTBUF, const GSVector4i& r, bool clut = false) {}
+	virtual void InvalidateVideoMem(const GIFRegBITBLTBUF &BITBLTBUF, const GSVector4i &r) {}
+	virtual void InvalidateLocalMem(const GIFRegBITBLTBUF &BITBLTBUF, const GSVector4i &r, bool clut = false) {}
 
 	void Move();
 	void Write(const uint8* mem, int len);
@@ -236,12 +233,19 @@ public:
 	void InitReadFIFO(uint8* mem, int len);
 
 	void SoftReset(uint32 mask);
-	void WriteCSR(uint32 csr) {m_regs->CSR.u32[1] = csr;}
+	void WriteCSR(uint32 csr)
+	{
+		m_regs->CSR.u32[1] = csr;
+	}
 	void ReadFIFO(uint8* mem, int size);
 	template<int index> void Transfer(const uint8* mem, uint32 size);
 	int Freeze(GSFreezeData* fd, bool sizeonly);
 	int Defrost(const GSFreezeData* fd);
-	void GetLastTag(uint32* tag) {*tag = m_path3hack; m_path3hack = 0;}
+	void GetLastTag(uint32* tag)
+	{
+		*tag = m_path3hack;
+		m_path3hack = 0;
+	}
 	virtual void SetGameCRC(uint32 crc, int options);
 	void SetFrameSkip(int skip);
 	void SetRegsMem(uint8* basemem);

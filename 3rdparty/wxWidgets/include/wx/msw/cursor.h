@@ -20,28 +20,34 @@ class WXDLLIMPEXP_FWD_CORE wxImage;
 class WXDLLEXPORT wxCursor : public wxGDIImage
 {
 public:
-    // constructors
-    wxCursor();
-    wxCursor(const wxImage& image);
-    wxCursor(const char bits[], int width, int height,
-             int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
-    wxCursor(const wxString& name,
-             long flags = wxBITMAP_TYPE_CUR_RESOURCE,
-             int hotSpotX = 0, int hotSpotY = 0);
-    wxCursor(int idCursor);
-    virtual ~wxCursor();
+	// constructors
+	wxCursor();
+	wxCursor(const wxImage &image);
+	wxCursor(const char bits[], int width, int height,
+	         int hotSpotX = -1, int hotSpotY = -1,
+	         const char maskBits[] = NULL);
+	wxCursor(const wxString &name,
+	         long flags = wxBITMAP_TYPE_CUR_RESOURCE,
+	         int hotSpotX = 0, int hotSpotY = 0);
+	wxCursor(int idCursor);
+	virtual ~wxCursor();
 
-    // implementation only
-    void SetHCURSOR(WXHCURSOR cursor) { SetHandle((WXHANDLE)cursor); }
-    WXHCURSOR GetHCURSOR() const { return (WXHCURSOR)GetHandle(); }
+	// implementation only
+	void SetHCURSOR(WXHCURSOR cursor)
+	{
+		SetHandle((WXHANDLE)cursor);
+	}
+	WXHCURSOR GetHCURSOR() const
+	{
+		return (WXHCURSOR)GetHandle();
+	}
 
 protected:
-    virtual wxGDIImageRefData *CreateData() const;
+	virtual wxGDIImageRefData *CreateData() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCursor)
+	DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 
 #endif
-    // _WX_CURSOR_H_
+// _WX_CURSOR_H_

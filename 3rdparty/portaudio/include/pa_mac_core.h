@@ -28,13 +28,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -60,14 +60,13 @@ extern "C" {
  * defaults. Note that for duplex streams, flags for input and output
  * should be the same or behaviour is undefined.
  */
-typedef struct
-{
-    unsigned long size;           /**size of whole structure including this header */
-    PaHostApiTypeId hostApiType;  /**host API for which this data is intended */
-    unsigned long version;        /**structure version */
-    unsigned long flags;          /** flags to modify behaviour */
-    SInt32 const * channelMap;    /** Channel map for HAL channel mapping , if not needed, use NULL;*/ 
-    unsigned long channelMapSize; /** Channel map size for HAL channel mapping , if not needed, use 0;*/ 
+typedef struct {
+	unsigned long size;           /**size of whole structure including this header */
+	PaHostApiTypeId hostApiType;  /**host API for which this data is intended */
+	unsigned long version;        /**structure version */
+	unsigned long flags;          /** flags to modify behaviour */
+	SInt32 const * channelMap;    /** Channel map for HAL channel mapping , if not needed, use NULL;*/
+	unsigned long channelMapSize; /** Channel map size for HAL channel mapping , if not needed, use 0;*/
 } PaMacCoreStreamInfo;
 
 /**
@@ -81,14 +80,14 @@ typedef struct
  * @param data The datastructure to initialize
  * @param flags The flags to initialize the datastructure with.
 */
-void PaMacCore_SetupStreamInfo( PaMacCoreStreamInfo *data, unsigned long flags );
+void PaMacCore_SetupStreamInfo(PaMacCoreStreamInfo *data, unsigned long flags);
 
 /** call this after pa_SetupMacCoreStreamInfo to use channel mapping as described in notes.txt.
  * @param data The stream info structure to assign a channel mapping to
  * @param channelMap The channel map array, as described in notes.txt. This array pointer will be used directly (ie the underlying data will not be copied), so the caller should not free the array until after the stream has been opened.
  * @param channelMapSize The size of the channel map array.
  */
-void PaMacCore_SetupChannelMap( PaMacCoreStreamInfo *data, const SInt32 * const channelMap, unsigned long channelMapSize );
+void PaMacCore_SetupChannelMap(PaMacCoreStreamInfo *data, const SInt32 * const channelMap, unsigned long channelMapSize);
 
 /**
  * Retrieve the AudioDeviceID of the input device assigned to an open stream
@@ -97,8 +96,8 @@ void PaMacCore_SetupChannelMap( PaMacCoreStreamInfo *data, const SInt32 * const 
  *
  * @return A valid AudioDeviceID, or NULL if an error occurred.
  */
-AudioDeviceID PaMacCore_GetStreamInputDevice( PaStream* s );
- 
+AudioDeviceID PaMacCore_GetStreamInputDevice(PaStream* s);
+
 /**
  * Retrieve the AudioDeviceID of the output device assigned to an open stream
  *
@@ -106,7 +105,7 @@ AudioDeviceID PaMacCore_GetStreamInputDevice( PaStream* s );
  *
  * @return A valid AudioDeviceID, or NULL if an error occurred.
  */
-AudioDeviceID PaMacCore_GetStreamOutputDevice( PaStream* s );
+AudioDeviceID PaMacCore_GetStreamOutputDevice(PaStream* s);
 
 /**
  * Returns a statically allocated string with the device's name
@@ -122,19 +121,19 @@ AudioDeviceID PaMacCore_GetStreamOutputDevice( PaStream* s );
  *         another call to this function.
  *
  */
-const char *PaMacCore_GetChannelName( int device, int channelIndex, bool input );
+const char *PaMacCore_GetChannelName(int device, int channelIndex, bool input);
 
-    
+
 /** Retrieve the range of legal native buffer sizes for the specificed device, in sample frames.
- 
+
  @param device The global index of the PortAudio device about which the query is being made.
  @param minBufferSizeFrames A pointer to the location which will receive the minimum buffer size value.
  @param maxBufferSizeFrames A pointer to the location which will receive the maximum buffer size value.
- 
+
  @see kAudioDevicePropertyBufferFrameSizeRange in the CoreAudio SDK.
  */
-PaError PaMacCore_GetBufferSizeRange( PaDeviceIndex device,
-                                       long *minBufferSizeFrames, long *maxBufferSizeFrames );
+PaError PaMacCore_GetBufferSizeRange(PaDeviceIndex device,
+                                     long *minBufferSizeFrames, long *maxBufferSizeFrames);
 
 
 /**

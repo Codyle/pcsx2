@@ -32,77 +32,86 @@ class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxSpinCtrl : public wxControl
 {
 public:
-    wxSpinCtrl() { Init(); }
+	wxSpinCtrl()
+	{
+		Init();
+	}
 
-    wxSpinCtrl(wxWindow *parent,
-               wxWindowID id = wxID_ANY,
-               const wxString& value = wxEmptyString,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS,
-               int min = 0, int max = 100, int initial = 0,
-               const wxString& name = _T("wxSpinCtrl"))
-    {
-        Init();
-        Create(parent, id, value, pos, size, style, min, max, initial, name);
-    }
+	wxSpinCtrl(wxWindow *parent,
+	           wxWindowID id = wxID_ANY,
+	           const wxString &value = wxEmptyString,
+	           const wxPoint &pos = wxDefaultPosition,
+	           const wxSize &size = wxDefaultSize,
+	           long style = wxSP_ARROW_KEYS,
+	           int min = 0, int max = 100, int initial = 0,
+	           const wxString &name = _T("wxSpinCtrl"))
+	{
+		Init();
+		Create(parent, id, value, pos, size, style, min, max, initial, name);
+	}
 
-    bool Create(wxWindow *parent,
-                wxWindowID id = wxID_ANY,
-                const wxString& value = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS,
-                int min = 0, int max = 100, int initial = 0,
-                const wxString& name = _T("wxSpinCtrl"));
+	bool Create(wxWindow *parent,
+	            wxWindowID id = wxID_ANY,
+	            const wxString &value = wxEmptyString,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxSP_ARROW_KEYS,
+	            int min = 0, int max = 100, int initial = 0,
+	            const wxString &name = _T("wxSpinCtrl"));
 
-    virtual ~wxSpinCtrl();
+	virtual ~wxSpinCtrl();
 
-    // operations
-    void SetValue(int val);
-    void SetValue(const wxString& text);
-    void SetRange(int min, int max);
-    void SetSelection(long from, long to);
+	// operations
+	void SetValue(int val);
+	void SetValue(const wxString &text);
+	void SetRange(int min, int max);
+	void SetSelection(long from, long to);
 
-    // accessors
-    int GetValue() const;
-    int GetMin() const;
-    int GetMax() const;
+	// accessors
+	int GetValue() const;
+	int GetMin() const;
+	int GetMax() const;
 
-    // implementation from now on
+	// implementation from now on
 
-    // forward these functions to all subcontrols
-    virtual bool Enable(bool enable = true);
-    virtual bool Show(bool show = true);
-    virtual bool Reparent(wxWindow *newParent);
+	// forward these functions to all subcontrols
+	virtual bool Enable(bool enable = true);
+	virtual bool Show(bool show = true);
+	virtual bool Reparent(wxWindow *newParent);
 
-    // get the subcontrols
-    wxTextCtrl *GetText() const { return m_text; }
-    wxSpinButton *GetSpinButton() const { return m_btn; }
+	// get the subcontrols
+	wxTextCtrl *GetText() const
+	{
+		return m_text;
+	}
+	wxSpinButton *GetSpinButton() const
+	{
+		return m_btn;
+	}
 
-    // set the value of the text (only)
-    void SetTextValue(int val);
+	// set the value of the text (only)
+	void SetTextValue(int val);
 
-    // put the numeric value of the string in the text ctrl into val and return
-    // true or return false if the text ctrl doesn't contain a number or if the
-    // number is out of range
-    bool GetTextValue(int *val) const;
+	// put the numeric value of the string in the text ctrl into val and return
+	// true or return false if the text ctrl doesn't contain a number or if the
+	// number is out of range
+	bool GetTextValue(int *val) const;
 
 protected:
-    // override the base class virtuals involved into geometry calculations
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoMoveWindow(int x, int y, int width, int height);
+	// override the base class virtuals involved into geometry calculations
+	virtual wxSize DoGetBestSize() const;
+	virtual void DoMoveWindow(int x, int y, int width, int height);
 
-    // common part of all ctors
-    void Init();
-
-private:
-    // the subcontrols
-    wxTextCtrl *m_text;
-    wxSpinButton *m_btn;
+	// common part of all ctors
+	void Init();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
+	// the subcontrols
+	wxTextCtrl *m_text;
+	wxSpinButton *m_btn;
+
+private:
+	DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
 
 #else // !wxUSE_SPINBTN
@@ -116,65 +125,86 @@ private:
 class WXDLLEXPORT wxSpinCtrl : public wxTextCtrl
 {
 public:
-    wxSpinCtrl() { Init(); }
+	wxSpinCtrl()
+	{
+		Init();
+	}
 
-    wxSpinCtrl(wxWindow *parent,
-               wxWindowID id = wxID_ANY,
-               const wxString& value = wxEmptyString,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS,
-               int min = 0, int max = 100, int initial = 0,
-               const wxString& name = _T("wxSpinCtrl"))
-    {
-        Create(parent, id, value, pos, size, style, min, max, initial, name);
-    }
+	wxSpinCtrl(wxWindow *parent,
+	           wxWindowID id = wxID_ANY,
+	           const wxString &value = wxEmptyString,
+	           const wxPoint &pos = wxDefaultPosition,
+	           const wxSize &size = wxDefaultSize,
+	           long style = wxSP_ARROW_KEYS,
+	           int min = 0, int max = 100, int initial = 0,
+	           const wxString &name = _T("wxSpinCtrl"))
+	{
+		Create(parent, id, value, pos, size, style, min, max, initial, name);
+	}
 
-    bool Create(wxWindow *parent,
-                wxWindowID id = wxID_ANY,
-                const wxString& value = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS,
-                int min = 0, int max = 100, int initial = 0,
-                const wxString& name = _T("wxSpinCtrl"))
-    {
-        SetRange(min, max);
+	bool Create(wxWindow *parent,
+	            wxWindowID id = wxID_ANY,
+	            const wxString &value = wxEmptyString,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxSP_ARROW_KEYS,
+	            int min = 0, int max = 100, int initial = 0,
+	            const wxString &name = _T("wxSpinCtrl"))
+	{
+		SetRange(min, max);
+		bool ok = wxTextCtrl::Create(parent, id, value, pos, size, style,
+		                             wxDefaultValidator, name);
+		SetValue(initial);
+		return ok;
+	}
 
-        bool ok = wxTextCtrl::Create(parent, id, value, pos, size, style,
-                                     wxDefaultValidator, name);
-        SetValue(initial);
+	// accessors
+	int GetValue(int WXUNUSED(dummy) = 1) const
+	{
+		int n;
+		if ((wxSscanf(wxTextCtrl::GetValue(), wxT("%d"), &n) != 1))
+			n = INT_MIN;
+		return n;
+	}
 
-        return ok;
-    }
+	int GetMin() const
+	{
+		return m_min;
+	}
+	int GetMax() const
+	{
+		return m_max;
+	}
 
-    // accessors
-    int GetValue(int WXUNUSED(dummy) = 1) const
-    {
-        int n;
-        if ( (wxSscanf(wxTextCtrl::GetValue(), wxT("%d"), &n) != 1) )
-            n = INT_MIN;
-
-        return n;
-    }
-
-    int GetMin() const { return m_min; }
-    int GetMax() const { return m_max; }
-
-    // operations
-    void SetValue(const wxString& value) { wxTextCtrl::SetValue(value); }
-    void SetValue(int val) { wxString s; s << val; wxTextCtrl::SetValue(s); }
-    void SetRange(int min, int max) { m_min = min; m_max = max; }
+	// operations
+	void SetValue(const wxString &value)
+	{
+		wxTextCtrl::SetValue(value);
+	}
+	void SetValue(int val)
+	{
+		wxString s;
+		s << val;
+		wxTextCtrl::SetValue(s);
+	}
+	void SetRange(int min, int max)
+	{
+		m_min = min;
+		m_max = max;
+	}
 
 protected:
-    // initialize m_min/max with the default values
-    void Init() { SetRange(0, 100); }
+	// initialize m_min/max with the default values
+	void Init()
+	{
+		SetRange(0, 100);
+	}
 
-    int   m_min;
-    int   m_max;
+	int   m_min;
+	int   m_max;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
+	DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
 
 #endif // wxUSE_SPINBTN/!wxUSE_SPINBTN

@@ -19,15 +19,15 @@
 
 #if !defined(__WXUNIVERSAL__) && defined(__WXMAC__) && defined(__WXMAC_OSX__) \
         && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3)
-    // search control was introduced in Mac OS X 10.3 Panther
-    #define wxUSE_NATIVE_SEARCH_CONTROL 1
+// search control was introduced in Mac OS X 10.3 Panther
+#define wxUSE_NATIVE_SEARCH_CONTROL 1
 
-    #define wxSearchCtrlBaseBaseClass wxTextCtrl
+#define wxSearchCtrlBaseBaseClass wxTextCtrl
 #else
-    // no native version, use the generic one
-    #define wxUSE_NATIVE_SEARCH_CONTROL 0
+// no native version, use the generic one
+#define wxUSE_NATIVE_SEARCH_CONTROL 0
 
-    #define wxSearchCtrlBaseBaseClass wxTextCtrlBase
+#define wxSearchCtrlBaseBaseClass wxTextCtrlBase
 #endif
 
 // ----------------------------------------------------------------------------
@@ -37,8 +37,8 @@
 extern WXDLLEXPORT_DATA(const wxChar) wxSearchCtrlNameStr[];
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, 1119)
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, 1120)
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, 1119)
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, 1120)
 END_DECLARE_EVENT_TYPES()
 
 // ----------------------------------------------------------------------------
@@ -49,31 +49,31 @@ END_DECLARE_EVENT_TYPES()
 class WXDLLEXPORT wxSearchCtrlBase : public wxSearchCtrlBaseBaseClass
 {
 public:
-    wxSearchCtrlBase() { }
-    virtual ~wxSearchCtrlBase() { }
+	wxSearchCtrlBase() { }
+	virtual ~wxSearchCtrlBase() { }
 
-    // search control
+	// search control
 #if wxUSE_MENUS
-    virtual void SetMenu(wxMenu *menu) = 0;
-    virtual wxMenu *GetMenu() = 0;
+	virtual void SetMenu(wxMenu *menu) = 0;
+	virtual wxMenu *GetMenu() = 0;
 #endif // wxUSE_MENUS
 
-    // get/set options
-    virtual void ShowSearchButton( bool show ) = 0;
-    virtual bool IsSearchButtonVisible() const = 0;
+	// get/set options
+	virtual void ShowSearchButton(bool show) = 0;
+	virtual bool IsSearchButtonVisible() const = 0;
 
-    virtual void ShowCancelButton( bool show ) = 0;
-    virtual bool IsCancelButtonVisible() const = 0;
+	virtual void ShowCancelButton(bool show) = 0;
+	virtual bool IsCancelButtonVisible() const = 0;
 };
 
 
 // include the platform-dependent class implementation
 #if wxUSE_NATIVE_SEARCH_CONTROL
-    #if defined(__WXMAC__)
-        #include "wx/mac/srchctrl.h"
-    #endif
+#if defined(__WXMAC__)
+#include "wx/mac/srchctrl.h"
+#endif
 #else
-    #include "wx/generic/srchctlg.h"
+#include "wx/generic/srchctlg.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -81,10 +81,10 @@ public:
 // ----------------------------------------------------------------------------
 
 #define EVT_SEARCHCTRL_CANCEL_BTN(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, id, wxCommandEventHandler(fn))
+	wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, id, wxCommandEventHandler(fn))
 
 #define EVT_SEARCHCTRL_SEARCH_BTN(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, id, wxCommandEventHandler(fn))
+	wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, id, wxCommandEventHandler(fn))
 
 #endif // wxUSE_SEARCHCTRL
 

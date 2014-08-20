@@ -30,62 +30,55 @@
 
 #pragma pack(1)
 
-typedef struct _FRAMEBUF
-{
- DWORD         dwFrame;
- DWORD         dwFrameCnt;
- DWORD         dwBufLen;
- unsigned char BufData[1024*1024];
+typedef struct _FRAMEBUF {
+	DWORD         dwFrame;
+	DWORD         dwFrameCnt;
+	DWORD         dwBufLen;
+	unsigned char BufData[1024 * 1024];
 } FRAMEBUF;
 
 #pragma pack()
 
 // raw ioctl structs:
 
-typedef enum _TRACK_MODE_TYPE
-{
- YellowMode2,
- XAForm2,
- CDDA
+typedef enum _TRACK_MODE_TYPE {
+	YellowMode2,
+	XAForm2,
+	CDDA
 } TRACK_MODE_TYPE, *PTRACK_MODE_TYPE;
 
-typedef struct _RAW_READ_INFO
-{
- LARGE_INTEGER   DiskOffset;
- ULONG           SectorCount;
- TRACK_MODE_TYPE TrackMode;
+typedef struct _RAW_READ_INFO {
+	LARGE_INTEGER   DiskOffset;
+	ULONG           SectorCount;
+	TRACK_MODE_TYPE TrackMode;
 } RAW_READ_INFO, *PRAW_READ_INFO;
 
 // sub cache:
 
-typedef struct
-{
- long   addr;
- void * pNext;
- unsigned char subq[10];
+typedef struct {
+	long   addr;
+	void * pNext;
+	unsigned char subq[10];
 } SUB_DATA;
 
-typedef struct
-{
- long   addr;
- void * pNext;
+typedef struct {
+	long   addr;
+	void * pNext;
 } SUB_CACHE;
 
 // ppf cache:
 
-typedef struct
-{
- long   addr;
- void * pNext;
- long   pos;
- long   anz;
- // memdata
+typedef struct {
+	long   addr;
+	void * pNext;
+	long   pos;
+	long   anz;
+	// memdata
 } PPF_DATA;
 
-typedef struct
-{
- long   addr;
- void * pNext;
+typedef struct {
+	long   addr;
+	void * pNext;
 } PPF_CACHE;
 
 /////////////////////////////////////////////////////////
@@ -118,16 +111,16 @@ unsigned long reOrder(unsigned long value);
 
 #ifndef _IN_CDR
 #ifdef DBGOUT
-void auxprintf (LPCTSTR pFormat, ...);
+void auxprintf(LPCTSTR pFormat, ...);
 #endif
 #endif
 
 /////////////////////////////////////////////////////////
 
-typedef DWORD (*READFUNC)(BOOL bWait,FRAMEBUF * f);
+typedef DWORD (*READFUNC)(BOOL bWait, FRAMEBUF * f);
 typedef DWORD (*DEINITFUNC)(void);
-typedef BOOL  (*READTRACKFUNC)(unsigned long addr);
-typedef void  (*GETPTRFUNC)(void);
+typedef BOOL (*READTRACKFUNC)(unsigned long addr);
+typedef void (*GETPTRFUNC)(void);
 
 /////////////////////////////////////////////////////////
 
@@ -144,8 +137,7 @@ typedef void  (*GETPTRFUNC)(void);
 
 #pragma pack(1)
 
-struct rootDirTocHeader
-{
+struct rootDirTocHeader {
 	u16	length;			//+00
 	u32 tocLBA;			//+02
 	u32 tocLBA_bigend;	//+06
@@ -157,8 +149,7 @@ struct rootDirTocHeader
 	u8	reserved3;		//+21
 };						//+22
 
-struct asciiDate
-{
+struct asciiDate {
 	char	year[4];
 	char	month[2];
 	char	day[2];
@@ -169,8 +160,7 @@ struct asciiDate
 	char	terminator[1];
 };
 
-struct cdVolDesc
-{
+struct cdVolDesc {
 	u8		filesystemType;	// 0x01 = ISO9660, 0x02 = Joliet, 0xFF = NULL
 	u8		volID[5];		// "CD001"
 	u8		reserved2;

@@ -30,10 +30,10 @@ protected:
 	wxString	m_filename;
 	uptr		m_dataidx;
 	size_t		m_datasize;
-	
+
 public:
-	ArchiveEntry( const wxString& filename=wxEmptyString )
-		: m_filename( filename )
+	ArchiveEntry(const wxString &filename = wxEmptyString)
+		: m_filename(filename)
 	{
 		m_dataidx	= 0;
 		m_datasize	= 0;
@@ -41,13 +41,13 @@ public:
 
 	virtual ~ArchiveEntry() throw() {}
 
-	ArchiveEntry& SetDataIndex( uptr idx )
+	ArchiveEntry &SetDataIndex(uptr idx)
 	{
 		m_dataidx = idx;
 		return *this;
 	}
 
-	ArchiveEntry& SetDataSize( size_t size )
+	ArchiveEntry &SetDataSize(size_t size)
 	{
 		m_datasize = size;
 		return *this;
@@ -57,7 +57,7 @@ public:
 	{
 		return m_filename;
 	}
-	
+
 	uptr GetDataIndex() const
 	{
 		return m_dataidx;
@@ -69,14 +69,14 @@ public:
 	}
 };
 
-typedef SafeArray< u8 > ArchiveDataBuffer;
+typedef SafeArray<u8> ArchiveDataBuffer;
 
 // --------------------------------------------------------------------------------------
 //  ArchiveEntryList
 // --------------------------------------------------------------------------------------
 class ArchiveEntryList
 {
-	DeclareNoncopyableObject( ArchiveEntryList );
+	DeclareNoncopyableObject(ArchiveEntryList);
 
 protected:
 	std::vector<ArchiveEntry>		m_list;
@@ -87,16 +87,16 @@ public:
 
 	ArchiveEntryList() {}
 
-	ArchiveEntryList( ArchiveDataBuffer* data )
+	ArchiveEntryList(ArchiveDataBuffer* data)
 	{
 		m_data = data;
 	}
 
-	ArchiveEntryList( ArchiveDataBuffer& data )
+	ArchiveEntryList(ArchiveDataBuffer &data)
 	{
 		m_data = &data;
 	}
-	
+
 	const VmStateBuffer* GetBuffer() const
 	{
 		return m_data;
@@ -106,34 +106,34 @@ public:
 	{
 		return m_data;
 	}
-	
-	u8* GetPtr( uint idx )
+
+	u8* GetPtr(uint idx)
 	{
 		return &(*m_data)[idx];
 	}
 
-	const u8* GetPtr( uint idx ) const
+	const u8* GetPtr(uint idx) const
 	{
 		return &(*m_data)[idx];
 	}
 
-	ArchiveEntryList& Add( const ArchiveEntry& src )
+	ArchiveEntryList &Add(const ArchiveEntry &src)
 	{
-		m_list.push_back( src );
+		m_list.push_back(src);
 		return *this;
 	}
-	
+
 	size_t GetLength() const
 	{
 		return m_list.size();
 	}
-	
-	ArchiveEntry& operator[](uint idx)
+
+	ArchiveEntry &operator[](uint idx)
 	{
 		return m_list[idx];
 	}
-	
-	const ArchiveEntry& operator[](uint idx) const
+
+	const ArchiveEntry &operator[](uint idx) const
 	{
 		return m_list[idx];
 	}
@@ -151,50 +151,53 @@ protected:
 	pxOutputStream*					m_gzfp;
 	ArchiveEntryList*				m_src_list;
 	bool							m_PendingSaveFlag;
-	
+
 	wxString						m_final_filename;
 
 public:
 	virtual ~BaseCompressThread() throw();
 
-	BaseCompressThread& SetSource( ArchiveEntryList* srcdata )
+	BaseCompressThread &SetSource(ArchiveEntryList* srcdata)
 	{
 		m_src_list = srcdata;
 		return *this;
 	}
 
-	BaseCompressThread& SetSource( ArchiveEntryList& srcdata )
+	BaseCompressThread &SetSource(ArchiveEntryList &srcdata)
 	{
 		m_src_list = &srcdata;
 		return *this;
 	}
 
-	BaseCompressThread& SetOutStream( pxOutputStream* out )
+	BaseCompressThread &SetOutStream(pxOutputStream* out)
 	{
 		m_gzfp = out;
 		return *this;
 	}
 
-	BaseCompressThread& SetOutStream( pxOutputStream& out )
+	BaseCompressThread &SetOutStream(pxOutputStream &out)
 	{
 		m_gzfp = &out;
 		return *this;
 	}
 
-	BaseCompressThread& SetFinishedPath( const wxString& path )
+	BaseCompressThread &SetFinishedPath(const wxString &path)
 	{
 		m_final_filename = path;
 		return *this;
 	}
 
-	wxString GetStreamName() const { return m_gzfp->GetStreamName(); }
+	wxString GetStreamName() const
+	{
+		return m_gzfp->GetStreamName();
+	}
 
-	BaseCompressThread& SetTargetFilename(const wxString& filename)
+	BaseCompressThread &SetTargetFilename(const wxString &filename)
 	{
 		m_final_filename = filename;
 		return *this;
 	}
-	
+
 protected:
 	BaseCompressThread()
 	{

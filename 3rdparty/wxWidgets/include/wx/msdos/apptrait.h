@@ -19,7 +19,7 @@ public:
 class wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
+	virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 };
 
 #endif // wxUSE_GUI

@@ -26,8 +26,7 @@
 #include <gtk/gtkwidget.h>
 
 
-struct SelectionBoxData
-{
+struct SelectionBoxData {
 	GtkWidget *window; // GtkWindow
 
 	int wherefrom; // Which box called you?

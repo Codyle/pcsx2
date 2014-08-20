@@ -24,8 +24,7 @@
 #include "GS.h"
 #include "Regs.h"
 
-enum GIF_FLG
-{
+enum GIF_FLG {
 	GIF_FLG_PACKED	= 0,
 	GIF_FLG_REGLIST	= 1,
 	GIF_FLG_IMAGE	= 2,
@@ -34,13 +33,11 @@ enum GIF_FLG
 
 //
 // GIFTag
-union GIFTag
-{
+union GIFTag {
 	u64 ai64[2];
 	u32 ai32[4];
 
-	struct
-	{
+	struct {
 		u32 NLOOP : 15;
 		u32 EOP : 1;
 		u32 _PAD1 : 16;
@@ -52,26 +49,24 @@ union GIFTag
 		u64 REGS : 64;
 	};
 
-	void set(const u32 *data)
-	{
+	void set(const u32 *data) {
 		for (int i = 0; i <= 3; i++)
-		{
 			ai32[i] = data[i];
-		}
 	}
 
-	GIFTag(u32 *data)
-	{
+	GIFTag(u32 *data) {
 		set(data);
 	}
 
-	GIFTag(){ ai64[0] = 0; ai64[1] = 0; }
+	GIFTag() {
+		ai64[0] = 0;
+		ai64[1] = 0;
+	}
 };
 
 // EE part. Data transfer packet description
 
-typedef struct
-{
+typedef struct {
 	u32 mode;
 	int reg;
 	u64 regs;
@@ -84,19 +79,16 @@ typedef struct
 	void setTag(const u32 *data)
 	{
 		tag.set(data);
-
 		nloop	= tag.NLOOP;
 		eop		= tag.EOP;
 		mode	= tag.FLG;
 		adonly = false;
-
 		// Hmm....
 		nreg	= tag.NREG << 2;
 		if (nreg == 0) nreg = 64;
 		regs = tag.REGS;
 		reg = 0;
 		if ((nreg == 4) && (regs == GIF_REG_A_D)) adonly = true;
-
 		//      ZZLog::GS_Log("GIFtag: %8.8lx_%8.8lx_%8.8lx_%8.8lx: EOP=%d, NLOOP=%x, FLG=%x, NREG=%d, PRE=%d",
 		//                      data[3], data[2], data[1], data[0],
 		//                      path->eop, path->nloop, mode, path->nreg, tag.PRE);
@@ -110,15 +102,11 @@ typedef struct
 	bool StepReg()
 	{
 		reg += 4;
-
-		if (reg == nreg)
-		{
+		if (reg == nreg) {
 			reg = 0;
 			nloop--;
-
 			if (nloop == 0) return false;
 		}
-
 		return true;
 	}
 

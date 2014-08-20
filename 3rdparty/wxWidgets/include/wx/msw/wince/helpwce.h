@@ -19,37 +19,40 @@
 class WXDLLEXPORT wxWinceHelpController : public wxHelpControllerBase
 {
 public:
-    wxWinceHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}
-    virtual ~wxWinceHelpController() {}
+	wxWinceHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}
+	virtual ~wxWinceHelpController() {}
 
-    // Must call this to set the filename
-    virtual bool Initialize(const wxString& file);
+	// Must call this to set the filename
+	virtual bool Initialize(const wxString &file);
 
-    // If file is "", reloads file given in Initialize
-    virtual bool LoadFile(const wxString& file = wxEmptyString);
-    virtual bool DisplayContents();
-    virtual bool DisplaySection(int sectionNo);
-    virtual bool DisplaySection(const wxString& section);
-    virtual bool DisplayBlock(long blockNo);
-    virtual bool DisplayContextPopup(int contextId);
-    virtual bool DisplayTextPopup(const wxString& text, const wxPoint& pos);
-    virtual bool KeywordSearch(const wxString& k,
-                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
-    virtual bool Quit();
+	// If file is "", reloads file given in Initialize
+	virtual bool LoadFile(const wxString &file = wxEmptyString);
+	virtual bool DisplayContents();
+	virtual bool DisplaySection(int sectionNo);
+	virtual bool DisplaySection(const wxString &section);
+	virtual bool DisplayBlock(long blockNo);
+	virtual bool DisplayContextPopup(int contextId);
+	virtual bool DisplayTextPopup(const wxString &text, const wxPoint &pos);
+	virtual bool KeywordSearch(const wxString &k,
+	                           wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
+	virtual bool Quit();
 
-    wxString GetHelpFile() const { return m_helpFile; }
+	wxString GetHelpFile() const
+	{
+		return m_helpFile;
+	}
 
 protected:
-    // Append extension if necessary.
-    wxString GetValidFilename(const wxString& file) const;
+	// Append extension if necessary.
+	wxString GetValidFilename(const wxString &file) const;
 
-    // View topic, or just the HTML file
-    bool ViewURL(const wxString& topic = wxEmptyString);
+	// View topic, or just the HTML file
+	bool ViewURL(const wxString &topic = wxEmptyString);
 
 private:
-    wxString m_helpFile;
+	wxString m_helpFile;
 
-    DECLARE_CLASS(wxWinceHelpController)
+	DECLARE_CLASS(wxWinceHelpController)
 };
 
 #endif // wxUSE_MS_HTML_HELP

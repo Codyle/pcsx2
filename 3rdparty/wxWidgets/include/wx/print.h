@@ -36,4 +36,4 @@
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 #endif
-    // _WX_PRINT_H_BASE_
+// _WX_PRINT_H_BASE_

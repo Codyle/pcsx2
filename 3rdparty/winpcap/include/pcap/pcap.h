@@ -38,13 +38,13 @@
 #define lib_pcap_pcap_h
 
 #if defined(WIN32)
-  #include <pcap-stdinc.h>
+#include <pcap-stdinc.h>
 #elif defined(MSDOS)
-  #include <sys/types.h>
-  #include <sys/socket.h>  /* u_int, u_char etc. */
+#include <sys/types.h>
+#include <sys/socket.h>  /* u_int, u_char etc. */
 #else /* UN*X */
-  #include <sys/types.h>
-  #include <sys/time.h>
+#include <sys/types.h>
+#include <sys/time.h>
 #endif /* WIN32/MSDOS/UN*X */
 
 #ifndef PCAP_DONT_INCLUDE_PCAP_BPF_H
@@ -54,16 +54,16 @@
 #include <stdio.h>
 
 #ifdef HAVE_REMOTE
-	// We have to define the SOCKET here, although it has been defined in sockutils.h
-	// This is to avoid the distribution of the 'sockutils.h' file around
-	// (for example in the WinPcap developer's pack)
-	#ifndef SOCKET
-		#ifdef WIN32
-			#define SOCKET unsigned int
-		#else
-			#define SOCKET int
-		#endif
-	#endif
+// We have to define the SOCKET here, although it has been defined in sockutils.h
+// This is to avoid the distribution of the 'sockutils.h' file around
+// (for example in the WinPcap developer's pack)
+#ifndef SOCKET
+#ifdef WIN32
+#define SOCKET unsigned int
+#else
+#define SOCKET int
+#endif
+#endif
 #endif
 
 #ifdef __cplusplus
@@ -138,7 +138,7 @@ struct pcap_file_header {
 
 /*
  * Macros for the value returned by pcap_datalink_ext().
- * 
+ *
  * If LT_FCS_LENGTH_PRESENT(x) is true, the LT_FCS_LENGTH(x) macro
  * gives the FCS length of packets in the capture.
  */
@@ -147,9 +147,9 @@ struct pcap_file_header {
 #define LT_FCS_DATALINK_EXT(x)		((((x) & 0xF) << 28) | 0x04000000)
 
 typedef enum {
-       PCAP_D_INOUT = 0,
-       PCAP_D_IN,
-       PCAP_D_OUT
+	PCAP_D_INOUT = 0,
+	PCAP_D_IN,
+	PCAP_D_OUT
 } pcap_direction_t;
 
 /*
@@ -189,32 +189,32 @@ struct pcap_stat {
  * As returned by the pcap_stats_ex()
  */
 struct pcap_stat_ex {
-       u_long  rx_packets;        /* total packets received       */
-       u_long  tx_packets;        /* total packets transmitted    */
-       u_long  rx_bytes;          /* total bytes received         */
-       u_long  tx_bytes;          /* total bytes transmitted      */
-       u_long  rx_errors;         /* bad packets received         */
-       u_long  tx_errors;         /* packet transmit problems     */
-       u_long  rx_dropped;        /* no space in Rx buffers       */
-       u_long  tx_dropped;        /* no space available for Tx    */
-       u_long  multicast;         /* multicast packets received   */
-       u_long  collisions;
+	u_long  rx_packets;        /* total packets received       */
+	u_long  tx_packets;        /* total packets transmitted    */
+	u_long  rx_bytes;          /* total bytes received         */
+	u_long  tx_bytes;          /* total bytes transmitted      */
+	u_long  rx_errors;         /* bad packets received         */
+	u_long  tx_errors;         /* packet transmit problems     */
+	u_long  rx_dropped;        /* no space in Rx buffers       */
+	u_long  tx_dropped;        /* no space available for Tx    */
+	u_long  multicast;         /* multicast packets received   */
+	u_long  collisions;
 
-       /* detailed rx_errors: */
-       u_long  rx_length_errors;
-       u_long  rx_over_errors;    /* receiver ring buff overflow  */
-       u_long  rx_crc_errors;     /* recv'd pkt with crc error    */
-       u_long  rx_frame_errors;   /* recv'd frame alignment error */
-       u_long  rx_fifo_errors;    /* recv'r fifo overrun          */
-       u_long  rx_missed_errors;  /* recv'r missed packet         */
+	/* detailed rx_errors: */
+	u_long  rx_length_errors;
+	u_long  rx_over_errors;    /* receiver ring buff overflow  */
+	u_long  rx_crc_errors;     /* recv'd pkt with crc error    */
+	u_long  rx_frame_errors;   /* recv'd frame alignment error */
+	u_long  rx_fifo_errors;    /* recv'r fifo overrun          */
+	u_long  rx_missed_errors;  /* recv'r missed packet         */
 
-       /* detailed tx_errors */
-       u_long  tx_aborted_errors;
-       u_long  tx_carrier_errors;
-       u_long  tx_fifo_errors;
-       u_long  tx_heartbeat_errors;
-       u_long  tx_window_errors;
-     };
+	/* detailed tx_errors */
+	u_long  tx_aborted_errors;
+	u_long  tx_carrier_errors;
+	u_long  tx_fifo_errors;
+	u_long  tx_heartbeat_errors;
+	u_long  tx_window_errors;
+};
 #endif
 
 /*
@@ -242,7 +242,7 @@ struct pcap_addr {
 };
 
 typedef void (*pcap_handler)(u_char *, const struct pcap_pkthdr *,
-			     const u_char *);
+                             const u_char *);
 
 /*
  * Error codes for the pcap API.
@@ -299,7 +299,7 @@ void	pcap_close(pcap_t *);
 int	pcap_loop(pcap_t *, int, pcap_handler, u_char *);
 int	pcap_dispatch(pcap_t *, int, pcap_handler, u_char *);
 const u_char*
-	pcap_next(pcap_t *, struct pcap_pkthdr *);
+pcap_next(pcap_t *, struct pcap_pkthdr *);
 int 	pcap_next_ex(pcap_t *, struct pcap_pkthdr **, const u_char **);
 void	pcap_breakloop(pcap_t *);
 int	pcap_stats(pcap_t *, struct pcap_stat *);
@@ -314,12 +314,12 @@ const char *pcap_strerror(int);
 char	*pcap_geterr(pcap_t *);
 void	pcap_perror(pcap_t *, char *);
 int	pcap_compile(pcap_t *, struct bpf_program *, const char *, int,
-	    bpf_u_int32);
+                     bpf_u_int32);
 int	pcap_compile_nopcap(int, int, struct bpf_program *,
-	    const char *, int, bpf_u_int32);
+                            const char *, int, bpf_u_int32);
 void	pcap_freecode(struct bpf_program *);
 int	pcap_offline_filter(struct bpf_program *, const struct pcap_pkthdr *,
-	    const u_char *);
+                            const u_char *);
 int	pcap_datalink(pcap_t *);
 int	pcap_datalink_ext(pcap_t *);
 int	pcap_list_datalinks(pcap_t *, int **);
@@ -381,9 +381,9 @@ int pcap_setmintocopy(pcap_t *p, int size);
  * MS-DOS definitions
  */
 
-int  pcap_stats_ex (pcap_t *, struct pcap_stat_ex *);
-void pcap_set_wait (pcap_t *p, void (*yield)(void), int wait);
-u_long pcap_mac_packets (void);
+int  pcap_stats_ex(pcap_t *, struct pcap_stat_ex *);
+void pcap_set_wait(pcap_t *p, void (*yield)(void), int wait);
+u_long pcap_mac_packets(void);
 
 #else /* UN*X */
 

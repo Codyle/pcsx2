@@ -57,10 +57,10 @@ union __aligned16 microRegInfo {
 			regInfo VF[32];
 		};
 	};
-	
-	u128 full128[160/sizeof(u128)];
-	u64  full64[160/sizeof(u64)];
-	u32  full32[160/sizeof(u32)];
+
+	u128 full128[160 / sizeof(u128)];
+	u64  full64[160 / sizeof(u64)];
+	u32  full32[160 / sizeof(u32)];
 };
 
 C_ASSERT(sizeof(microRegInfo) == 160);
@@ -177,7 +177,7 @@ struct microIR {
 	microBlock		 block;			// Block/Pipeline info
 	microBlock*		 pBlock;		// Pointer to a block in mVUblocks
 	microTempRegInfo regsTemp;		// Temp Pipeline info (used so that new pipeline info isn't conflicting between upper and lower instructions in the same cycle)
-	microOp			 info[pSize/2];	// Info for Instructions in current block
+	microOp			 info[pSize / 2];	// Info for Instructions in current block
 	microConstInfo	 constReg[16];	// Simple Const Propagation Info for VI regs within blocks
 	u8  branch;
 	u32 cycles;		// Cycles for current block
@@ -198,7 +198,8 @@ struct microMapXMM {
 	bool isNeeded;	// Is needed for current instruction
 };
 
-class microRegAlloc {
+class microRegAlloc
+{
 protected:
 	static const int   xmmTotal = 7; // Don't allocate PQ?
 	microMapXMM	xmmMap[xmmTotal];
@@ -206,19 +207,30 @@ protected:
 	int			index;   // VU0 or VU1
 
 	// Helper functions to get VU regs
-	VURegs& regs()				 const	{ return ::vuRegs[index]; }
-	__fi REG_VI& getVI(uint reg) const	{ return regs().VI[reg]; }
-	__fi VECTOR& getVF(uint reg) const	{ return regs().VF[reg]; }
+	VURegs &regs()				 const
+	{
+		return ::vuRegs[index];
+	}
+	__fi REG_VI &getVI(uint reg) const
+	{
+		return regs().VI[reg];
+	}
+	__fi VECTOR &getVF(uint reg) const
+	{
+		return regs().VF[reg];
+	}
 
-	__ri void loadIreg(const xmm& reg, int xyzw) {
+	__ri void loadIreg(const xmm &reg, int xyzw)
+	{
 		xMOVSSZX(reg, ptr32[&getVI(REG_I)]);
 		if (!_XYZWss(xyzw)) xSHUF.PS(reg, reg, 0);
 	}
-	
-	int findFreeRegRec(int startIdx) {
-		for(int i = startIdx; i < xmmTotal; i++) {
+
+	int findFreeRegRec(int startIdx)
+	{
+		for (int i = startIdx; i < xmmTotal; i++) {
 			if (!xmmMap[i].isNeeded) {
-				int x = findFreeRegRec(i+1);
+				int x = findFreeRegRec(i + 1);
 				if (x == -1) return i;
 				return ((xmmMap[i].count < xmmMap[x].count) ? i : x);
 			}
@@ -226,63 +238,71 @@ protected:
 		return -1;
 	}
 
-	int findFreeReg() {
-		for(int i = 0; i < xmmTotal; i++) {
+	int findFreeReg()
+	{
+		for (int i = 0; i < xmmTotal; i++) {
 			if (!xmmMap[i].isNeeded && (xmmMap[i].VFreg < 0)) {
 				return i; // Reg is not needed and was a temp reg
 			}
 		}
 		int x = findFreeRegRec(0);
-		pxAssertDev( x >= 0, "microVU register allocation failure!" );
+		pxAssertDev(x >= 0, "microVU register allocation failure!");
 		return x;
 	}
 
 public:
-	microRegAlloc(int _index) {
+	microRegAlloc(int _index)
+	{
 		index = _index;
 	}
 
 	// Fully resets the regalloc by clearing all cached data
-	void reset() {
-		for(int i = 0; i < xmmTotal; i++) {
+	void reset()
+	{
+		for (int i = 0; i < xmmTotal; i++)
 			clearReg(i);
-		}
 		counter = 0;
 	}
 
 	// Flushes all allocated registers (i.e. writes-back to memory all modified registers).
 	// If clearState is 0, then it keeps cached reg data valid
 	// If clearState is 1, then it invalidates all cached reg data after write-back
-	void flushAll(bool clearState = 1) {
-		for(int i = 0; i < xmmTotal; i++) {
+	void flushAll(bool clearState = 1)
+	{
+		for (int i = 0; i < xmmTotal; i++) {
 			writeBackReg(xmm(i));
 			if (clearState) clearReg(i);
 		}
 	}
 
-	void TDwritebackAll(bool clearState = 0) {
-		for(int i = 0; i < xmmTotal; i++) {
-			microMapXMM& mapX = xmmMap[xmm(i).Id];
-
+	void TDwritebackAll(bool clearState = 0)
+	{
+		for (int i = 0; i < xmmTotal; i++) {
+			microMapXMM &mapX = xmmMap[xmm(i).Id];
 			if ((mapX.VFreg > 0) && mapX.xyzw) { // Reg was modified and not Temp or vf0
-				if   (mapX.VFreg == 33) xMOVSS(ptr32[&getVI(REG_I)], xmm(i));
-				elif (mapX.VFreg == 32) mVUsaveReg(xmm(i), ptr[&regs().ACC],		 mapX.xyzw, 1);
+				if (mapX.VFreg == 33) xMOVSS(ptr32[&getVI(REG_I)], xmm(i));
+				elif(mapX.VFreg == 32) mVUsaveReg(xmm(i), ptr[&regs().ACC],		 mapX.xyzw, 1);
 				else					mVUsaveReg(xmm(i), ptr[&getVF(mapX.VFreg)], mapX.xyzw, 1);
 			}
 		}
 	}
 
-	void clearReg(const xmm& reg) { clearReg(reg.Id); }
-	void clearReg(int regId) {
-		microMapXMM& clear = xmmMap[regId];
+	void clearReg(const xmm &reg)
+	{
+		clearReg(reg.Id);
+	}
+	void clearReg(int regId)
+	{
+		microMapXMM &clear = xmmMap[regId];
 		clear.VFreg		= -1;
 		clear.count		=  0;
 		clear.xyzw		=  0;
 		clear.isNeeded	=  0;
 	}
 
-	void clearRegVF(int VFreg) {
-		for(int i = 0; i < xmmTotal; i++) {
+	void clearRegVF(int VFreg)
+	{
+		for (int i = 0; i < xmmTotal; i++) {
 			if (xmmMap[i].VFreg == VFreg) clearReg(i);
 		}
 	}
@@ -290,16 +310,16 @@ public:
 	// Writes back modified reg to memory.
 	// If all vectors modified, then keeps the VF reg cached in the xmm register.
 	// If reg was not modified, then keeps the VF reg cached in the xmm register.
-	void writeBackReg(const xmm& reg, bool invalidateRegs = 1) {
-		microMapXMM& mapX = xmmMap[reg.Id];
-
+	void writeBackReg(const xmm &reg, bool invalidateRegs = 1)
+	{
+		microMapXMM &mapX = xmmMap[reg.Id];
 		if ((mapX.VFreg > 0) && mapX.xyzw) { // Reg was modified and not Temp or vf0
-			if   (mapX.VFreg == 33) xMOVSS(ptr32[&getVI(REG_I)], reg);
-			elif (mapX.VFreg == 32) mVUsaveReg(reg, ptr[&regs().ACC],		 mapX.xyzw, 1);
+			if (mapX.VFreg == 33) xMOVSS(ptr32[&getVI(REG_I)], reg);
+			elif(mapX.VFreg == 32) mVUsaveReg(reg, ptr[&regs().ACC],		 mapX.xyzw, 1);
 			else					mVUsaveReg(reg, ptr[&getVF(mapX.VFreg)], mapX.xyzw, 1);
 			if (invalidateRegs) {
-				for(int i = 0; i < xmmTotal; i++) {
-					microMapXMM& mapI = xmmMap[i];
+				for (int i = 0; i < xmmTotal; i++) {
+					microMapXMM &mapI = xmmMap[i];
 					if ((i == reg.Id) || mapI.isNeeded) continue;
 					if (mapI.VFreg == mapX.VFreg) {
 						if (mapI.xyzw && mapI.xyzw < 0xf) DevCon.Error("microVU Error: writeBackReg() [%d]", mapI.VFreg);
@@ -315,7 +335,7 @@ public:
 			}
 			clearReg(reg);
 		}
-		elif (mapX.xyzw) clearReg(reg); // Clear reg if modified and is VF0 or temp reg...
+		elif(mapX.xyzw) clearReg(reg);  // Clear reg if modified and is VF0 or temp reg...
 	}
 
 	// Use this when done using the allocated register, it clears its "Needed" status.
@@ -323,39 +343,35 @@ public:
 	// This is to guarantee proper merging between registers... When a written-to reg is cleared,
 	// it invalidates other cached registers of the same VF reg, and merges partial-vector
 	// writes into them.
-	void clearNeeded(const xmm& reg) {
-
+	void clearNeeded(const xmm &reg)
+	{
 		if ((reg.Id < 0) || (reg.Id >= xmmTotal)) return; // Sometimes xmmPQ hits this
-
-		microMapXMM& clear = xmmMap[reg.Id];
+		microMapXMM &clear = xmmMap[reg.Id];
 		clear.isNeeded = 0;
 		if (clear.xyzw) { // Reg was modified
 			if (clear.VFreg > 0) {
 				int mergeRegs = 0;
 				if (clear.xyzw < 0xf) mergeRegs = 1; // Try to merge partial writes
-				for(int i = 0; i < xmmTotal; i++) {  // Invalidate any other read-only regs of same vfReg
+				for (int i = 0; i < xmmTotal; i++) { // Invalidate any other read-only regs of same vfReg
 					if (i == reg.Id) continue;
-					microMapXMM& mapI = xmmMap[i];
+					microMapXMM &mapI = xmmMap[i];
 					if (mapI.VFreg == clear.VFreg) {
-						if (mapI.xyzw && mapI.xyzw < 0xf) {
+						if (mapI.xyzw && mapI.xyzw < 0xf)
 							DevCon.Error("microVU Error: clearNeeded() [%d]", mapI.VFreg);
-						}
 						if (mergeRegs == 1) {
 							mVUmergeRegs(xmm(i), reg, clear.xyzw, 1);
 							mapI.xyzw  = 0xf;
 							mapI.count = counter;
 							mergeRegs  = 2;
-						}
-						else clearReg(i); // Clears when mergeRegs is 0 or 2
+						} else clearReg(i); // Clears when mergeRegs is 0 or 2
 					}
 				}
-				if   (mergeRegs==2) clearReg(reg);	   // Clear Current Reg if Merged
-				elif (mergeRegs==1) writeBackReg(reg); // Write Back Partial Writes if couldn't merge
-			}
-			else clearReg(reg); // If Reg was temp or vf0, then invalidate itself
+				if (mergeRegs == 2) clearReg(reg);	   // Clear Current Reg if Merged
+				elif(mergeRegs == 1) writeBackReg(reg); // Write Back Partial Writes if couldn't merge
+			} else clearReg(reg); // If Reg was temp or vf0, then invalidate itself
 		}
 	}
-	
+
 	// vfLoadReg  = VF reg to be loaded to the xmm register
 	// vfWriteReg = VF reg that the returned xmm register will be considered as
 	// xyzw       = XYZW vectors that will be modified (and loaded)
@@ -365,32 +381,32 @@ public:
 	// To load a temp reg use the default param values, vfLoadReg = -1 and vfWriteReg = -1.
 	// To load a full reg which won't be modified and you want cached, specify vfLoadReg >= 0 and vfWriteReg = -1
 	// To load a reg which you don't want written back or cached, specify vfLoadReg >= 0 and vfWriteReg = 0
-	const xmm& allocReg(int vfLoadReg = -1, int vfWriteReg = -1, int xyzw = 0, bool cloneWrite = 1) {
+	const xmm &allocReg(int vfLoadReg = -1, int vfWriteReg = -1, int xyzw = 0, bool cloneWrite = 1)
+	{
 		//DevCon.WriteLn("vfLoadReg = %02d, vfWriteReg = %02d, xyzw = %x, clone = %d",vfLoadReg,vfWriteReg,xyzw,(int)cloneWrite);
 		counter++;
 		if (vfLoadReg >= 0) { // Search For Cached Regs
-			for(int i = 0; i < xmmTotal; i++) {
-				const xmm&   xmmI = xmm::GetInstance(i);
-				microMapXMM& mapI = xmmMap[i];
+			for (int i = 0; i < xmmTotal; i++) {
+				const xmm   &xmmI = xmm::GetInstance(i);
+				microMapXMM &mapI = xmmMap[i];
 				if ((mapI.VFreg == vfLoadReg) && (!mapI.xyzw // Reg Was Not Modified
-				||  (mapI.VFreg && (mapI.xyzw==0xf)))) {	 // Reg Had All Vectors Modified and != VF0
+				                                  || (mapI.VFreg && (mapI.xyzw == 0xf)))) {	 // Reg Had All Vectors Modified and != VF0
 					int z = i;
 					if (vfWriteReg >= 0) { // Reg will be modified
 						if (cloneWrite) {  // Clone Reg so as not to use the same Cached Reg
 							z = findFreeReg();
-							const xmm&   xmmZ = xmm::GetInstance(z);
+							const xmm   &xmmZ = xmm::GetInstance(z);
 							writeBackReg(xmmZ);
-							if   (xyzw == 4) xPSHUF.D(xmmZ, xmmI, 1);
-							elif (xyzw == 2) xPSHUF.D(xmmZ, xmmI, 2);
-							elif (xyzw == 1) xPSHUF.D(xmmZ, xmmI, 3);
-							elif (z != i)	 xMOVAPS (xmmZ, xmmI);
+							if (xyzw == 4) xPSHUF.D(xmmZ, xmmI, 1);
+							elif(xyzw == 2) xPSHUF.D(xmmZ, xmmI, 2);
+							elif(xyzw == 1) xPSHUF.D(xmmZ, xmmI, 3);
+							elif(z != i)	 xMOVAPS(xmmZ, xmmI);
 							mapI.count = counter; // Reg i was used, so update counter
-						}
-						else { // Don't clone reg, but shuffle to adjust for SS ops
-							if ((vfLoadReg!=vfWriteReg)||(xyzw!=0xf)) writeBackReg(xmmI);
-							if	 (xyzw == 4) xPSHUF.D(xmmI, xmmI, 1);
-							elif (xyzw == 2) xPSHUF.D(xmmI, xmmI, 2);
-							elif (xyzw == 1) xPSHUF.D(xmmI, xmmI, 3);
+						} else { // Don't clone reg, but shuffle to adjust for SS ops
+							if ((vfLoadReg != vfWriteReg) || (xyzw != 0xf)) writeBackReg(xmmI);
+							if (xyzw == 4) xPSHUF.D(xmmI, xmmI, 1);
+							elif(xyzw == 2) xPSHUF.D(xmmI, xmmI, 2);
+							elif(xyzw == 1) xPSHUF.D(xmmI, xmmI, 3);
 						}
 						xmmMap[z].VFreg = vfWriteReg;
 						xmmMap[z].xyzw  = xyzw;
@@ -402,21 +418,19 @@ public:
 			}
 		}
 		int x = findFreeReg();
-		const xmm&   xmmX = xmm::GetInstance(x);
+		const xmm   &xmmX = xmm::GetInstance(x);
 		writeBackReg(xmmX);
-
 		if (vfWriteReg >= 0) { // Reg Will Be Modified (allow partial reg loading)
-			if  ((vfLoadReg ==  0) && !(xyzw & 1)) xPXOR(xmmX, xmmX);
-			elif (vfLoadReg == 33) loadIreg  (xmmX, xyzw);
-			elif (vfLoadReg == 32) mVUloadReg(xmmX, ptr[&regs().ACC], xyzw);
-			elif (vfLoadReg >=  0) mVUloadReg(xmmX, ptr[&getVF(vfLoadReg)], xyzw);
+			if ((vfLoadReg ==  0) && !(xyzw & 1)) xPXOR(xmmX, xmmX);
+			elif(vfLoadReg == 33) loadIreg(xmmX, xyzw);
+			elif(vfLoadReg == 32) mVUloadReg(xmmX, ptr[&regs().ACC], xyzw);
+			elif(vfLoadReg >=  0) mVUloadReg(xmmX, ptr[&getVF(vfLoadReg)], xyzw);
 			xmmMap[x].VFreg = vfWriteReg;
 			xmmMap[x].xyzw  = xyzw;
-		}
-		else { // Reg Will Not Be Modified (always load full reg for caching)
-			if   (vfLoadReg == 33) loadIreg(xmmX, 0xf);
-			elif (vfLoadReg == 32) xMOVAPS (xmmX, ptr128[&regs().ACC]);
-			elif (vfLoadReg >=  0) xMOVAPS (xmmX, ptr128[&getVF(vfLoadReg)]);
+		} else { // Reg Will Not Be Modified (always load full reg for caching)
+			if (vfLoadReg == 33) loadIreg(xmmX, 0xf);
+			elif(vfLoadReg == 32) xMOVAPS(xmmX, ptr128[&regs().ACC]);
+			elif(vfLoadReg >=  0) xMOVAPS(xmmX, ptr128[&getVF(vfLoadReg)]);
 			xmmMap[x].VFreg = vfLoadReg;
 			xmmMap[x].xyzw  = 0;
 		}

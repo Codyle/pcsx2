@@ -17,16 +17,16 @@ class WXDLLIMPEXP_FWD_CORE wxListbook;
 
 class WXDLLIMPEXP_XRC wxListbookXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxListbookXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxListbookXmlHandler)
 
 public:
-    wxListbookXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxListbookXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_isInside;
-    wxListbook *m_listbook;
+	bool m_isInside;
+	wxListbook *m_listbook;
 };
 
 #endif // wxUSE_XRC && wxUSE_LISTBOOK

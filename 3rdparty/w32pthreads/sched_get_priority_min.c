@@ -116,19 +116,17 @@
 
 
 int
-sched_get_priority_min (int policy)
+sched_get_priority_min(int policy)
 {
-  if (policy < SCHED_MIN || policy > SCHED_MAX)
-    {
-      errno = EINVAL;
-      return -1;
-    }
-
+	if (policy < SCHED_MIN || policy > SCHED_MAX) {
+		errno = EINVAL;
+		return -1;
+	}
 #if (THREAD_PRIORITY_LOWEST > THREAD_PRIORITY_NORMAL)
-  /* WinCE? */
-  return PTW32_MIN (THREAD_PRIORITY_IDLE, THREAD_PRIORITY_TIME_CRITICAL);
+	/* WinCE? */
+	return PTW32_MIN(THREAD_PRIORITY_IDLE, THREAD_PRIORITY_TIME_CRITICAL);
 #else
-  /* This is independent of scheduling policy in Win32. */
-  return PTW32_MIN (THREAD_PRIORITY_IDLE, THREAD_PRIORITY_TIME_CRITICAL);
+	/* This is independent of scheduling policy in Win32. */
+	return PTW32_MIN(THREAD_PRIORITY_IDLE, THREAD_PRIORITY_TIME_CRITICAL);
 #endif
 }

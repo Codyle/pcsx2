@@ -20,23 +20,23 @@
 
 class WXDLLEXPORT wxWindowsPrinter : public wxPrinterBase
 {
-    DECLARE_DYNAMIC_CLASS(wxWindowsPrinter)
+	DECLARE_DYNAMIC_CLASS(wxWindowsPrinter)
 
 public:
-    wxWindowsPrinter(wxPrintDialogData *data = NULL);
-    virtual ~wxWindowsPrinter();
+	wxWindowsPrinter(wxPrintDialogData *data = NULL);
+	virtual ~wxWindowsPrinter();
 
-    virtual bool Print(wxWindow *parent,
-                       wxPrintout *printout,
-                       bool prompt = true);
+	virtual bool Print(wxWindow *parent,
+	                   wxPrintout *printout,
+	                   bool prompt = true);
 
-    virtual wxDC *PrintDialog(wxWindow *parent);
-    virtual bool Setup(wxWindow *parent);
+	virtual wxDC *PrintDialog(wxWindow *parent);
+	virtual bool Setup(wxWindow *parent);
 
 private:
-    WXFARPROC     m_lpAbortProc;
+	WXFARPROC     m_lpAbortProc;
 
-    DECLARE_NO_COPY_CLASS(wxWindowsPrinter)
+	DECLARE_NO_COPY_CLASS(wxWindowsPrinter)
 };
 
 // ---------------------------------------------------------------------------
@@ -47,19 +47,19 @@ private:
 class WXDLLEXPORT wxWindowsPrintPreview : public wxPrintPreviewBase
 {
 public:
-    wxWindowsPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting = NULL,
-                          wxPrintDialogData *data = NULL);
-    wxWindowsPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting,
-                          wxPrintData *data);
-    virtual ~wxWindowsPrintPreview();
+	wxWindowsPrintPreview(wxPrintout *printout,
+	                      wxPrintout *printoutForPrinting = NULL,
+	                      wxPrintDialogData *data = NULL);
+	wxWindowsPrintPreview(wxPrintout *printout,
+	                      wxPrintout *printoutForPrinting,
+	                      wxPrintData *data);
+	virtual ~wxWindowsPrintPreview();
 
-    virtual bool Print(bool interactive);
-    virtual void DetermineScaling();
+	virtual bool Print(bool interactive);
+	virtual void DetermineScaling();
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowsPrintPreview)
+	DECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowsPrintPreview)
 };
 
 #endif

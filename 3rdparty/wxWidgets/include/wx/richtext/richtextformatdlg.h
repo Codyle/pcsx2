@@ -51,16 +51,16 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
  */
 
 enum {
-    wxRICHTEXT_BULLETINDEX_NONE = 0,
-    wxRICHTEXT_BULLETINDEX_ARABIC,
-    wxRICHTEXT_BULLETINDEX_UPPER_CASE,
-    wxRICHTEXT_BULLETINDEX_LOWER_CASE,
-    wxRICHTEXT_BULLETINDEX_UPPER_CASE_ROMAN,
-    wxRICHTEXT_BULLETINDEX_LOWER_CASE_ROMAN,
-    wxRICHTEXT_BULLETINDEX_OUTLINE,
-    wxRICHTEXT_BULLETINDEX_SYMBOL,
-    wxRICHTEXT_BULLETINDEX_BITMAP,
-    wxRICHTEXT_BULLETINDEX_STANDARD
+	wxRICHTEXT_BULLETINDEX_NONE = 0,
+	wxRICHTEXT_BULLETINDEX_ARABIC,
+	wxRICHTEXT_BULLETINDEX_UPPER_CASE,
+	wxRICHTEXT_BULLETINDEX_LOWER_CASE,
+	wxRICHTEXT_BULLETINDEX_UPPER_CASE_ROMAN,
+	wxRICHTEXT_BULLETINDEX_LOWER_CASE_ROMAN,
+	wxRICHTEXT_BULLETINDEX_OUTLINE,
+	wxRICHTEXT_BULLETINDEX_SYMBOL,
+	wxRICHTEXT_BULLETINDEX_BITMAP,
+	wxRICHTEXT_BULLETINDEX_STANDARD
 };
 
 /*!
@@ -78,34 +78,40 @@ enum {
 class WXDLLIMPEXP_RICHTEXT wxRichTextFormattingDialogFactory: public wxObject
 {
 public:
-    wxRichTextFormattingDialogFactory() {}
-    virtual ~wxRichTextFormattingDialogFactory() {}
+	wxRichTextFormattingDialogFactory() {}
+	virtual ~wxRichTextFormattingDialogFactory() {}
 
-// Overrideables
+	// Overrideables
 
-    /// Create all pages, under the dialog's book control, also calling AddPage
-    virtual bool CreatePages(long pages, wxRichTextFormattingDialog* dialog);
+	/// Create all pages, under the dialog's book control, also calling AddPage
+	virtual bool CreatePages(long pages, wxRichTextFormattingDialog* dialog);
 
-    /// Create a page, given a page identifier
-    virtual wxPanel* CreatePage(int page, wxString& title, wxRichTextFormattingDialog* dialog);
+	/// Create a page, given a page identifier
+	virtual wxPanel* CreatePage(int page, wxString &title, wxRichTextFormattingDialog* dialog);
 
-    /// Enumerate all available page identifiers
-    virtual int GetPageId(int i) const;
+	/// Enumerate all available page identifiers
+	virtual int GetPageId(int i) const;
 
-    /// Get the number of available page identifiers
-    virtual int GetPageIdCount() const;
+	/// Get the number of available page identifiers
+	virtual int GetPageIdCount() const;
 
-    /// Get the image index for the given page identifier
-    virtual int GetPageImage(int WXUNUSED(id)) const { return -1; }
+	/// Get the image index for the given page identifier
+	virtual int GetPageImage(int WXUNUSED(id)) const
+	{
+		return -1;
+	}
 
-    /// Invoke help for the dialog
-    virtual bool ShowHelp(int WXUNUSED(page), wxRichTextFormattingDialog* WXUNUSED(dialog)) { return false; }
+	/// Invoke help for the dialog
+	virtual bool ShowHelp(int WXUNUSED(page), wxRichTextFormattingDialog* WXUNUSED(dialog))
+	{
+		return false;
+	}
 
-    /// Set the sheet style, called at the start of wxRichTextFormattingDialog::Create
-    virtual bool SetSheetStyle(wxRichTextFormattingDialog* dialog);
+	/// Set the sheet style, called at the start of wxRichTextFormattingDialog::Create
+	virtual bool SetSheetStyle(wxRichTextFormattingDialog* dialog);
 
-    /// Create the main dialog buttons
-    virtual bool CreateButtons(wxRichTextFormattingDialog* dialog);
+	/// Create the main dialog buttons
+	virtual bool CreateButtons(wxRichTextFormattingDialog* dialog);
 };
 
 /*!
@@ -114,101 +120,137 @@ public:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextFormattingDialog: public wxPropertySheetDialog
 {
-DECLARE_CLASS(wxRichTextFormattingDialog)
+	DECLARE_CLASS(wxRichTextFormattingDialog)
 public:
-    wxRichTextFormattingDialog() { Init(); }
+	wxRichTextFormattingDialog()
+	{
+		Init();
+	}
 
-    wxRichTextFormattingDialog(long flags, wxWindow* parent, const wxString& title = wxGetTranslation(wxT("Formatting")), wxWindowID id = wxID_ANY,
-        const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize,
-        long style = wxDEFAULT_DIALOG_STYLE)
-    {
-        Init();
-        Create(flags, parent, title, id, pos, sz, style);
-    }
+	wxRichTextFormattingDialog(long flags, wxWindow* parent, const wxString &title = wxGetTranslation(wxT("Formatting")), wxWindowID id = wxID_ANY,
+	                           const wxPoint &pos = wxDefaultPosition, const wxSize &sz = wxDefaultSize,
+	                           long style = wxDEFAULT_DIALOG_STYLE)
+	{
+		Init();
+		Create(flags, parent, title, id, pos, sz, style);
+	}
 
-    ~wxRichTextFormattingDialog();
+	~wxRichTextFormattingDialog();
 
-    void Init();
+	void Init();
 
-    bool Create(long flags, wxWindow* parent, const wxString& title = wxGetTranslation(wxT("Formatting")), wxWindowID id = wxID_ANY,
-        const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize,
-        long style = wxDEFAULT_DIALOG_STYLE);
+	bool Create(long flags, wxWindow* parent, const wxString &title = wxGetTranslation(wxT("Formatting")), wxWindowID id = wxID_ANY,
+	            const wxPoint &pos = wxDefaultPosition, const wxSize &sz = wxDefaultSize,
+	            long style = wxDEFAULT_DIALOG_STYLE);
 
-    /// Get attributes from the given range
-    virtual bool GetStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range);
+	/// Get attributes from the given range
+	virtual bool GetStyle(wxRichTextCtrl* ctrl, const wxRichTextRange &range);
 
-    /// Set the attributes and optionally update the display
-    virtual bool SetStyle(const wxTextAttrEx& style, bool update = true);
+	/// Set the attributes and optionally update the display
+	virtual bool SetStyle(const wxTextAttrEx &style, bool update = true);
 
-    /// Set the style definition and optionally update the display
-    virtual bool SetStyleDefinition(const wxRichTextStyleDefinition& styleDef, wxRichTextStyleSheet* sheet, bool update = true);
+	/// Set the style definition and optionally update the display
+	virtual bool SetStyleDefinition(const wxRichTextStyleDefinition &styleDef, wxRichTextStyleSheet* sheet, bool update = true);
 
-    /// Get the style definition, if any
-    virtual wxRichTextStyleDefinition* GetStyleDefinition() const { return m_styleDefinition; }
+	/// Get the style definition, if any
+	virtual wxRichTextStyleDefinition* GetStyleDefinition() const
+	{
+		return m_styleDefinition;
+	}
 
-    /// Get the style sheet, if any
-    virtual wxRichTextStyleSheet* GetStyleSheet() const { return m_styleSheet; }
+	/// Get the style sheet, if any
+	virtual wxRichTextStyleSheet* GetStyleSheet() const
+	{
+		return m_styleSheet;
+	}
 
-    /// Update the display
-    virtual bool UpdateDisplay();
+	/// Update the display
+	virtual bool UpdateDisplay();
 
-    /// Apply attributes to the given range
-    virtual bool ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE);
+	/// Apply attributes to the given range
+	virtual bool ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTextRange &range, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO | wxRICHTEXT_SETSTYLE_OPTIMIZE);
 
-    /// Gets and sets the attributes
-    const wxTextAttrEx& GetAttributes() const { return m_attributes; }
-    wxTextAttrEx& GetAttributes() { return m_attributes; }
-    void SetAttributes(const wxTextAttrEx& attr) { m_attributes = attr; }
+	/// Gets and sets the attributes
+	const wxTextAttrEx &GetAttributes() const
+	{
+		return m_attributes;
+	}
+	wxTextAttrEx &GetAttributes()
+	{
+		return m_attributes;
+	}
+	void SetAttributes(const wxTextAttrEx &attr)
+	{
+		m_attributes = attr;
+	}
 
-    /// Transfers the data and from to the window
-    virtual bool TransferDataToWindow();
-    virtual bool TransferDataFromWindow();
+	/// Transfers the data and from to the window
+	virtual bool TransferDataToWindow();
+	virtual bool TransferDataFromWindow();
 
-    /// Apply the styles when a different tab is selected, so the previews are
-    /// up to date
-    void OnTabChanged(wxBookCtrlEvent& event);
+	/// Apply the styles when a different tab is selected, so the previews are
+	/// up to date
+	void OnTabChanged(wxBookCtrlEvent &event);
 
-    /// Respond to help command
-    void OnHelp(wxCommandEvent& event);
+	/// Respond to help command
+	void OnHelp(wxCommandEvent &event);
 
-    /// Set/get image list
-    void SetImageList(wxImageList* imageList) { m_imageList = imageList; }
-    wxImageList* GetImageList() const { return m_imageList; }
+	/// Set/get image list
+	void SetImageList(wxImageList* imageList)
+	{
+		m_imageList = imageList;
+	}
+	wxImageList* GetImageList() const
+	{
+		return m_imageList;
+	}
 
-    /// Get/set formatting factory object
-    static void SetFormattingDialogFactory(wxRichTextFormattingDialogFactory* factory);
-    static wxRichTextFormattingDialogFactory* GetFormattingDialogFactory() { return ms_FormattingDialogFactory; }
+	/// Get/set formatting factory object
+	static void SetFormattingDialogFactory(wxRichTextFormattingDialogFactory* factory);
+	static wxRichTextFormattingDialogFactory* GetFormattingDialogFactory()
+	{
+		return ms_FormattingDialogFactory;
+	}
 
-    /// Helper for pages to get the top-level dialog
-    static wxRichTextFormattingDialog* GetDialog(wxWindow* win);
+	/// Helper for pages to get the top-level dialog
+	static wxRichTextFormattingDialog* GetDialog(wxWindow* win);
 
-    /// Helper for pages to get the attributes
-    static wxTextAttrEx* GetDialogAttributes(wxWindow* win);
+	/// Helper for pages to get the attributes
+	static wxTextAttrEx* GetDialogAttributes(wxWindow* win);
 
-    /// Helper for pages to get the style
-    static wxRichTextStyleDefinition* GetDialogStyleDefinition(wxWindow* win);
+	/// Helper for pages to get the style
+	static wxRichTextStyleDefinition* GetDialogStyleDefinition(wxWindow* win);
 
-    /// Should we show tooltips?
-    static bool ShowToolTips() { return sm_showToolTips; }
+	/// Should we show tooltips?
+	static bool ShowToolTips()
+	{
+		return sm_showToolTips;
+	}
 
-    /// Determines whether tooltips will be shown
-    static void SetShowToolTips(bool show) { sm_showToolTips = show; }
+	/// Determines whether tooltips will be shown
+	static void SetShowToolTips(bool show)
+	{
+		sm_showToolTips = show;
+	}
 
-    /// Map book control page index to our page id
-    void AddPageId(int id) { m_pageIds.Add(id); }
+	/// Map book control page index to our page id
+	void AddPageId(int id)
+	{
+		m_pageIds.Add(id);
+	}
 
 protected:
 
-    wxImageList*                                m_imageList;
-    wxTextAttrEx                                m_attributes;
-    wxRichTextStyleDefinition*                  m_styleDefinition;
-    wxRichTextStyleSheet*                       m_styleSheet;
-    wxArrayInt                                  m_pageIds; // mapping of book control indexes to page ids
+	wxImageList*                                m_imageList;
+	wxTextAttrEx                                m_attributes;
+	wxRichTextStyleDefinition*                  m_styleDefinition;
+	wxRichTextStyleSheet*                       m_styleSheet;
+	wxArrayInt                                  m_pageIds; // mapping of book control indexes to page ids
 
-    static wxRichTextFormattingDialogFactory*   ms_FormattingDialogFactory;
-    static bool                                 sm_showToolTips;
+	static wxRichTextFormattingDialogFactory*   ms_FormattingDialogFactory;
+	static bool                                 sm_showToolTips;
 
-DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };
 
 //-----------------------------------------------------------------------------
@@ -218,28 +260,33 @@ DECLARE_EVENT_TABLE()
 class WXDLLIMPEXP_RICHTEXT wxRichTextFontPreviewCtrl : public wxWindow
 {
 public:
-    wxRichTextFontPreviewCtrl(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = 0)
-    {
-        if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+	wxRichTextFontPreviewCtrl(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition, const wxSize &sz = wxDefaultSize, long style = 0)
+	{
+		if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
 #ifdef __WXMSW__
-            style |= GetThemedBorderStyle();
+			style |= GetThemedBorderStyle();
 #else
-            style |= wxBORDER_SUNKEN;
+			style |= wxBORDER_SUNKEN;
 #endif
-        wxWindow::Create(parent, id, pos, sz, style);
+		wxWindow::Create(parent, id, pos, sz, style);
+		SetBackgroundColour(*wxWHITE);
+		m_textEffects = 0;
+	}
 
-        SetBackgroundColour(*wxWHITE);
-        m_textEffects = 0;
-    }
-
-    void SetTextEffects(int effects) { m_textEffects = effects; }
-    int GetTextEffects() const { return m_textEffects; }
+	void SetTextEffects(int effects)
+	{
+		m_textEffects = effects;
+	}
+	int GetTextEffects() const
+	{
+		return m_textEffects;
+	}
 
 private:
-    int m_textEffects;
+	int m_textEffects;
 
-    void OnPaint(wxPaintEvent& event);
-    DECLARE_EVENT_TABLE()
+	void OnPaint(wxPaintEvent &event);
+	DECLARE_EVENT_TABLE()
 };
 
 /*
@@ -248,23 +295,33 @@ private:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextColourSwatchCtrl: public wxControl
 {
-    DECLARE_CLASS(wxRichTextColourSwatchCtrl)
+	DECLARE_CLASS(wxRichTextColourSwatchCtrl)
 public:
-    wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
-    ~wxRichTextColourSwatchCtrl();
+	wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, long style = 0);
+	~wxRichTextColourSwatchCtrl();
 
-    void OnMouseEvent(wxMouseEvent& event);
+	void OnMouseEvent(wxMouseEvent &event);
 
-    void SetColour(const wxColour& colour) { m_colour = colour; SetBackgroundColour(m_colour); }
+	void SetColour(const wxColour &colour)
+	{
+		m_colour = colour;
+		SetBackgroundColour(m_colour);
+	}
 
-    wxColour& GetColour() { return m_colour; }
+	wxColour &GetColour()
+	{
+		return m_colour;
+	}
 
-    virtual wxSize DoGetBestSize() const { return GetSize(); }
+	virtual wxSize DoGetBestSize() const
+	{
+		return GetSize();
+	}
 
 protected:
-    wxColour    m_colour;
+	wxColour    m_colour;
 
-DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };
 
 /*!
@@ -274,54 +331,60 @@ DECLARE_EVENT_TABLE()
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextFontListBox: public wxHtmlListBox
 {
-    DECLARE_CLASS(wxRichTextFontListBox)
-    DECLARE_EVENT_TABLE()
+	DECLARE_CLASS(wxRichTextFontListBox)
+	DECLARE_EVENT_TABLE()
 
 public:
-    wxRichTextFontListBox()
-    {
-        Init();
-    }
-    wxRichTextFontListBox(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = 0);
-    virtual ~wxRichTextFontListBox();
+	wxRichTextFontListBox()
+	{
+		Init();
+	}
+	wxRichTextFontListBox(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition,
+	                      const wxSize &size = wxDefaultSize, long style = 0);
+	virtual ~wxRichTextFontListBox();
 
-    void Init()
-    {
-    }
+	void Init()
+	{
+	}
 
-    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = 0);
+	bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize, long style = 0);
 
-    /// Creates a suitable HTML fragment for a font
-    wxString CreateHTML(const wxString& facename) const;
+	/// Creates a suitable HTML fragment for a font
+	wxString CreateHTML(const wxString &facename) const;
 
-    /// Get font name for index
-    wxString GetFaceName(size_t i) const ;
+	/// Get font name for index
+	wxString GetFaceName(size_t i) const ;
 
-    /// Set selection for string, returning the index.
-    int SetFaceNameSelection(const wxString& name);
+	/// Set selection for string, returning the index.
+	int SetFaceNameSelection(const wxString &name);
 
-    /// Updates the font list
-    void UpdateFonts();
+	/// Updates the font list
+	void UpdateFonts();
 
-    /// Does this face name exist?
-    bool HasFaceName(const wxString& faceName) const { return m_faceNames.Index(faceName) != wxNOT_FOUND; }
+	/// Does this face name exist?
+	bool HasFaceName(const wxString &faceName) const
+	{
+		return m_faceNames.Index(faceName) != wxNOT_FOUND;
+	}
 
-    /// Returns the array of face names
-    const wxArrayString& GetFaceNames() const { return m_faceNames; }
+	/// Returns the array of face names
+	const wxArrayString &GetFaceNames() const
+	{
+		return m_faceNames;
+	}
 
 protected:
-    /// Returns the HTML for this item
-    virtual wxString OnGetItem(size_t n) const;
+	/// Returns the HTML for this item
+	virtual wxString OnGetItem(size_t n) const;
 
 private:
 
-    wxArrayString           m_faceNames;
+	wxArrayString           m_faceNames;
 };
 
 #endif
-    // wxUSE_RICHTEXT
+// wxUSE_RICHTEXT
 
 #endif
-    // _WX_RICHTEXTFORMATDLG_H_
+// _WX_RICHTEXTFORMATDLG_H_

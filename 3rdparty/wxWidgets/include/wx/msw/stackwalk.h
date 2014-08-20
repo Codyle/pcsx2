@@ -28,55 +28,59 @@ struct _SYMBOL_INFO;
 class WXDLLIMPEXP_BASE wxStackFrame : public wxStackFrameBase
 {
 private:
-    wxStackFrame *ConstCast() const
-        { return wx_const_cast(wxStackFrame *, this); }
+	wxStackFrame *ConstCast() const
+	{
+		return wx_const_cast(wxStackFrame *, this);
+	}
 
-    size_t DoGetParamCount() const { return m_paramTypes.GetCount(); }
+	size_t DoGetParamCount() const
+	{
+		return m_paramTypes.GetCount();
+	}
 
 public:
-    wxStackFrame(size_t level, void *address, size_t addrFrame)
-        : wxStackFrameBase(level, address)
-    {
-        m_hasName =
-        m_hasLocation = false;
+	wxStackFrame(size_t level, void *address, size_t addrFrame)
+		: wxStackFrameBase(level, address)
+	{
+		m_hasName =
+		        m_hasLocation = false;
+		m_addrFrame = addrFrame;
+	}
 
-        m_addrFrame = addrFrame;
-    }
+	virtual size_t GetParamCount() const
+	{
+		ConstCast()->OnGetParam();
+		return DoGetParamCount();
+	}
 
-    virtual size_t GetParamCount() const
-    {
-        ConstCast()->OnGetParam();
-        return DoGetParamCount();
-    }
+	virtual bool
+	GetParam(size_t n, wxString *type, wxString *name, wxString *value) const;
 
-    virtual bool
-    GetParam(size_t n, wxString *type, wxString *name, wxString *value) const;
-
-    // callback used by OnGetParam(), don't call directly
-    void OnParam(_SYMBOL_INFO *pSymInfo);
+	// callback used by OnGetParam(), don't call directly
+	void OnParam(_SYMBOL_INFO *pSymInfo);
 
 protected:
-    virtual void OnGetName();
-    virtual void OnGetLocation();
+	virtual void OnGetName();
+	virtual void OnGetLocation();
 
-    void OnGetParam();
+	void OnGetParam();
 
 
-    // helper for debug API: it wants to have addresses as DWORDs
-    size_t GetSymAddr() const
-    {
-        return wx_reinterpret_cast(size_t, m_address);
-    }
+	// helper for debug API: it wants to have addresses as DWORDs
+	size_t GetSymAddr() const
+	{
+		return wx_reinterpret_cast(size_t, m_address);
+	}
 
 private:
-    bool m_hasName,
-         m_hasLocation;
+	bool m_hasName,
+	     m_hasLocation;
 
-    size_t m_addrFrame;
+	size_t m_addrFrame;
 
-    wxArrayString m_paramTypes,
-                  m_paramNames,
-                  m_paramValues;
+	wxArrayString m_paramTypes,
+	              m_paramNames,
+	              m_paramValues;
 };
 
 // ----------------------------------------------------------------------------
@@ -86,17 +90,17 @@ private:
 class WXDLLIMPEXP_BASE wxStackWalker : public wxStackWalkerBase
 {
 public:
-    // we don't use ctor argument, it is for compatibility with Unix version
-    // only
-    wxStackWalker(const char * WXUNUSED(argv0) = NULL) { }
+	// we don't use ctor argument, it is for compatibility with Unix version
+	// only
+	wxStackWalker(const char * WXUNUSED(argv0) = NULL) { }
 
-    virtual void Walk(size_t skip = 1, size_t maxDepth = 200);
-    virtual void WalkFromException();
+	virtual void Walk(size_t skip = 1, size_t maxDepth = 200);
+	virtual void WalkFromException();
 
 
-    // enumerate stack frames from the given context
-    void WalkFrom(const _CONTEXT *ctx, size_t skip = 1);
-    void WalkFrom(const _EXCEPTION_POINTERS *ep, size_t skip = 1);
+	// enumerate stack frames from the given context
+	void WalkFrom(const _CONTEXT *ctx, size_t skip = 1);
+	void WalkFrom(const _EXCEPTION_POINTERS *ep, size_t skip = 1);
 };
 
 #endif // _WX_MSW_STACKWALK_H_

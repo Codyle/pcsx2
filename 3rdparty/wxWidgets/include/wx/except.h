@@ -19,11 +19,11 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_EXCEPTIONS
-    #define wxTRY try
-    #define wxCATCH_ALL(code) catch ( ... ) { code }
+#define wxTRY try
+#define wxCATCH_ALL(code) catch ( ... ) { code }
 #else // !wxUSE_EXCEPTIONS
-    #define wxTRY
-    #define wxCATCH_ALL(code)
+#define wxTRY
+#define wxCATCH_ALL(code)
 #endif // wxUSE_EXCEPTIONS/!wxUSE_EXCEPTIONS
 
 #endif // _WX_EXCEPT_H_

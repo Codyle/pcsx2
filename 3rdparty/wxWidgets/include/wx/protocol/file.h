@@ -18,18 +18,25 @@
 
 #include "wx/protocol/protocol.h"
 
-class WXDLLIMPEXP_NET wxFileProto: public wxProtocol {
-  DECLARE_DYNAMIC_CLASS_NO_COPY(wxFileProto)
-  DECLARE_PROTOCOL(wxFileProto)
+class WXDLLIMPEXP_NET wxFileProto: public wxProtocol
+{
+	DECLARE_DYNAMIC_CLASS_NO_COPY(wxFileProto)
+	DECLARE_PROTOCOL(wxFileProto)
 protected:
-  wxProtocolError m_error;
+	wxProtocolError m_error;
 public:
-  wxFileProto();
-  virtual ~wxFileProto();
+	wxFileProto();
+	virtual ~wxFileProto();
 
-  wxProtocolError GetError() { return m_error; }
-  bool Abort() { return TRUE; }
-  wxInputStream *GetInputStream(const wxString& path);
+	wxProtocolError GetError()
+	{
+		return m_error;
+	}
+	bool Abort()
+	{
+		return TRUE;
+	}
+	wxInputStream *GetInputStream(const wxString &path);
 };
 
 #endif // wxUSE_PROTOCOL_FILE

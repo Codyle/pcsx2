@@ -89,7 +89,7 @@
 #endif
 
 #if defined(__GNUWIN32__)
-    /* These don't work as expected for mingw32 and cygwin32 */
+/* These don't work as expected for mingw32 and cygwin32 */
 #   undef  wxUSE_MEMORY_TRACING
 #   define wxUSE_MEMORY_TRACING            0
 
@@ -112,7 +112,7 @@
 /* wxUSE_MFC is not defined when using configure as it doesn't make sense for
    gcc or mingw32 anyhow */
 #ifndef wxUSE_MFC
-    #define wxUSE_MFC 0
+#define wxUSE_MFC 0
 #endif /* !defined(wxUSE_MFC) */
 
 /* MFC duplicates these operators */
@@ -125,7 +125,7 @@
 #endif /* wxUSE_MFC */
 
 #if (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
-    /* GnuWin32 doesn't have appropriate headers for e.g. IUnknown. */
+/* GnuWin32 doesn't have appropriate headers for e.g. IUnknown. */
 #   undef wxUSE_DRAG_AND_DROP
 #   define wxUSE_DRAG_AND_DROP 0
 #endif
@@ -151,8 +151,8 @@
  */
 #ifdef __WIN64__
 #   if wxUSE_STACKWALKER
-        /* this is not currently supported under Win64, volunteers needed to
-           make it work */
+/* this is not currently supported under Win64, volunteers needed to
+   make it work */
 #       undef wxUSE_STACKWALKER
 #       define wxUSE_STACKWALKER 0
 
@@ -166,7 +166,7 @@
    Compiler-specific checks.
  */
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
-    /* BC++ 4.0 can't compile JPEG library */
+/* BC++ 4.0 can't compile JPEG library */
 #   undef wxUSE_LIBJPEG
 #   define wxUSE_LIBJPEG 0
 #endif
@@ -260,11 +260,11 @@
    defined
  */
 #ifdef __WINE__
-    /* apparently it doesn't compile under Wine, remove it/when it does */
-    #if wxUSE_ACTIVEX
-        #undef wxUSE_ACTIVEX
-        #define wxUSE_ACTIVEX 0
-    #endif // wxUSE_ACTIVEX
+/* apparently it doesn't compile under Wine, remove it/when it does */
+#if wxUSE_ACTIVEX
+#undef wxUSE_ACTIVEX
+#define wxUSE_ACTIVEX 0
+#endif // wxUSE_ACTIVEX
 #endif // __WINE__
 
 

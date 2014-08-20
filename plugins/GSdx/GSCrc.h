@@ -24,8 +24,7 @@
 class CRC
 {
 public:
-	enum Title
-	{
+	enum Title {
 		NoTitle,
 		MetalSlug6,
 		TomoyoAfter,
@@ -178,8 +177,7 @@ public:
 		TitleCount,
 	};
 
-	enum Region
-	{
+	enum Region {
 		NoRegion,
 		US,
 		EU,
@@ -196,14 +194,12 @@ public:
 		RegionCount,
 	};
 
-	enum Flags
-	{
+	enum Flags {
 		PointListPalette = 1,
 		ZWriteMustNotClear = 2,
 	};
 
-	struct Game
-	{
+	struct Game {
 		uint32 crc;
 		Title title;
 		Region region;

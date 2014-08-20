@@ -68,8 +68,7 @@ struct DeviceBoxData devicebox;
 
 void DeviceBoxDestroy()
 {
-	if (devicebox.window != NULL)
-	{
+	if (devicebox.window != NULL) {
 		gtk_widget_destroy(devicebox.window);
 		devicebox.window = NULL;
 		devicebox.device = NULL;
@@ -103,22 +102,17 @@ gint DeviceBoxDeviceEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 {
 	struct stat filestat;
 	int returnval;
-
 	returnval = stat(gtk_entry_get_text(GTK_ENTRY(devicebox.device)), &filestat);
-	if (returnval == -1)
-	{
+	if (returnval == -1) {
 		gtk_label_set_text(GTK_LABEL(devicebox.devicedesc), "Device Type: ---");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not a name of any sort?
-
-	if (S_ISDIR(filestat.st_mode) != 0)
-	{
+	if (S_ISDIR(filestat.st_mode) != 0) {
 		gtk_label_set_text(GTK_LABEL(devicebox.devicedesc), "Device Type: Not a device");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not a regular file?
-
 	gtk_label_set_text(GTK_LABEL(devicebox.devicedesc), "Device Type: Device Likely");
-	return(TRUE);
+	return (TRUE);
 } // END DeviceBoxDeviceEvent()
 
 
@@ -127,32 +121,23 @@ gint DeviceBoxFileEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	int returnval;
 	char templine[256];
 	struct IsoFile *tempfile;
-
 	returnval = IsIsoFile(gtk_entry_get_text(GTK_ENTRY(devicebox.file)));
-	if (returnval == -1)
-	{
+	if (returnval == -1) {
 		gtk_label_set_text(GTK_LABEL(devicebox.filedesc), "File Type: ---");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not a name of any sort?
-
-	if (returnval == -2)
-	{
+	if (returnval == -2) {
 		gtk_label_set_text(GTK_LABEL(devicebox.filedesc), "File Type: Not a file");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not a regular file?
-
-	if (returnval == -3)
-	{
+	if (returnval == -3) {
 		gtk_label_set_text(GTK_LABEL(devicebox.filedesc), "File Type: Not a valid image file");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not an image file?
-
-	if (returnval == -4)
-	{
+	if (returnval == -4) {
 		gtk_label_set_text(GTK_LABEL(devicebox.filedesc), "File Type: Missing Table File (will rebuild)");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not a regular file?
-
 	tempfile = IsoFileOpenForRead(gtk_entry_get_text(GTK_ENTRY(devicebox.file)));
 	sprintf(templine, "File Type: %s%s%s",
 	        multinames[tempfile->multi],
@@ -160,17 +145,15 @@ gint DeviceBoxFileEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	        compressdesc[tempfile->compress]);
 	gtk_label_set_text(GTK_LABEL(devicebox.filedesc), templine);
 	tempfile = IsoFileClose(tempfile);
-	return(TRUE);
+	return (TRUE);
 } // END DeviceBoxFileEvent()
 
 
 void DeviceBoxRefocus()
 {
 	GdkEvent event;
-
 	DeviceBoxDeviceEvent(NULL, event, NULL);
 	DeviceBoxFileEvent(NULL, event, NULL);
-
 	gtk_widget_set_sensitive(devicebox.device, TRUE);
 	gtk_widget_set_sensitive(devicebox.file, TRUE);
 	gtk_widget_set_sensitive(devicebox.selectbutton, TRUE);
@@ -188,7 +171,7 @@ gint DeviceBoxCancelEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 {
 	gtk_widget_hide(devicebox.window);
 	MainBoxRefocus();
-	return(TRUE);
+	return (TRUE);
 } // END DeviceBoxCancelEvent()
 
 
@@ -205,140 +188,106 @@ gint DeviceBoxOKEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	int multi;
 	int imagetype;
 	int i;
-
 	DeviceBoxUnfocus();
-
 	tempdevice = gtk_entry_get_text(GTK_ENTRY(devicebox.device));
 	strcpy(conf.devicename, tempdevice); // Temporarily put in new device name
 	tempdevice = NULL;
 	retval = DeviceOpen();
-	if (retval != 0)
-	{
+	if (retval != 0) {
 		DeviceClose();
 		MessageBoxShow("Could not open the device", 2);
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Trouble opening device? Abort here.
-
 	DeviceTrayStatus();
 	retval = DiscInserted();
-	if (retval != 0)
-	{
+	if (retval != 0) {
 		DeviceClose();
 		MessageBoxShow("No disc in the device\r\nPlease put a disc in and try again.", 2);
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Trouble opening device? Abort here.
-
 	retval = DeviceGetTD(0, &cdvdtd); // Fish for Ending Sector
-	if (retval < 0)
-	{
+	if (retval < 0) {
 		DeviceClose();
 		MessageBoxShow("Could not retrieve disc sector size", 2);
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Trouble getting disc sector count?
-
 	compressmethod = gtk_combo_box_get_active(GTK_COMBO_BOX(devicebox.compress));
 	if (compressmethod > 0)  compressmethod += 2;
 	multi = 0;
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(devicebox.multi)) == TRUE)
 		multi = 1;
-
 	imagetype = 0;
 	if ((disctype != CDVD_TYPE_PS2DVD) &&
-	        (disctype != CDVD_TYPE_DVDV))  imagetype = 8;
-
+	    (disctype != CDVD_TYPE_DVDV))  imagetype = 8;
 	tofile = IsoFileOpenForWrite(gtk_entry_get_text(GTK_ENTRY(devicebox.file)),
 	                             imagetype,
 	                             multi,
 	                             compressmethod);
-	if (tofile == NULL)
-	{
+	if (tofile == NULL) {
 		DeviceClose();
 		MessageBoxShow("Could not create the new ISO file", 2);
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Trouble opening the ISO file?
-
 	// Open Progress Bar
 	sprintf(templine, "%s -> %s",
 	        gtk_entry_get_text(GTK_ENTRY(devicebox.device)), tofile->name);
 	ProgressBoxStart(templine, (off64_t) cdvdtd.lsn);
-
 	tofile->cdvdtype = disctype;
 	for (i = 0; i < 2048; i++)  tofile->toc[i] = tocbuffer[i];
-
 	stop = 0;
 	mainbox.stop = 0;
 	progressbox.stop = 0;
-	while ((stop == 0) && (tofile->sectorpos < cdvdtd.lsn))
-	{
-		if (imagetype == 0)
-		{
+	while ((stop == 0) && (tofile->sectorpos < cdvdtd.lsn)) {
+		if (imagetype == 0) {
 			retval = DeviceReadTrack((u32) tofile->sectorpos,
 			                         CDVD_MODE_2048,
 			                         tempbuffer);
-		}
-		else
-		{
+		} else {
 			retval = DeviceReadTrack((u32) tofile->sectorpos,
 			                         CDVD_MODE_2352,
 			                         tempbuffer);
 		} // ENDIF- Are we reading a DVD sector? (Or a CD sector?)
-		if (retval < 0)
-		{
+		if (retval < 0) {
 			for (i = 0; i < 2352; i++)
-			{
-				tempbuffer[i] = 0;
-			} // NEXT i- Zeroing the buffer
+				tempbuffer[i] = 0; // NEXT i- Zeroing the buffer
 		} // ENDIF- Trouble reading next block?
 		retval = IsoFileWrite(tofile, tempbuffer);
-		if (retval < 0)
-		{
+		if (retval < 0) {
 			MessageBoxShow("Trouble writing new file", 3);
 			stop = 1;
 		} // ENDIF- Trouble writing out the next block?
-
 		ProgressBoxTick(tofile->sectorpos);
 		while (gtk_events_pending())  gtk_main_iteration();
-
 		if (mainbox.stop != 0)  stop = 2;
 		if (progressbox.stop != 0)  stop = 2;
 	} // ENDWHILE- No reason found to stop...
-
 	ProgressBoxStop();
-
-	if (stop == 0)
-	{
+	if (stop == 0) {
 		if (tofile->multi == 1)  tofile->name[tofile->multipos] = '0'; // First file
 		strcpy(templine, tofile->name);
 	} // ENDIF- Did we succeed with the transfer?
-
 	DeviceClose();
-	if (stop == 0)
-	{
+	if (stop == 0) {
 		IsoSaveTOC(tofile);
 		tofile = IsoFileClose(tofile);
 		gtk_entry_set_text(GTK_ENTRY(mainbox.file), templine);
-	}
-	else
-	{
-		tofile = IsoFileCloseAndDelete(tofile);
-	} // ENDIF- (Failed to complete writing file? Get rid of the garbage files.)
-
+	} else
+		tofile = IsoFileCloseAndDelete(tofile); // ENDIF- (Failed to complete writing file? Get rid of the garbage files.)
 	if (stop != 1)  DeviceBoxRefocus();
 	if (stop == 0)  DeviceBoxCancelEvent(widget, event, data);
-	return(TRUE);
+	return (TRUE);
 } // END DeviceBoxOKEvent()
 
 
 gint DeviceBoxBrowseEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 {
 	DeviceBoxUnfocus();
-
 	// Transfer file name to file selection
 	gtk_file_selection_set_filename(GTK_FILE_SELECTION(selectionbox.window),
 	                                gtk_entry_get_text(GTK_ENTRY(devicebox.file)));
 	selectionbox.wherefrom = 2; // From the Device Window
 	SelectionBoxRefocus();
-	return(TRUE);
+	return (TRUE);
 } // END DeviceBoxBrowseEvent()
 
 
@@ -348,85 +297,68 @@ void DeviceBoxDisplay()
 	GtkWidget *hbox1;
 	GtkWidget *vbox1;
 	int nameptr;
-
 	devicebox.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_container_set_border_width(GTK_CONTAINER(devicebox.window), 5);
 	gtk_window_set_title(GTK_WINDOW(devicebox.window), "CDVDisoEFP ISO Creation");
 	gtk_window_set_position(GTK_WINDOW(devicebox.window), GTK_WIN_POS_CENTER);
-
 	g_signal_connect(G_OBJECT(devicebox.window), "delete_event",
 	                 G_CALLBACK(DeviceBoxCancelEvent), NULL);
-
 	vbox1 = gtk_vbox_new(FALSE, 5);
 	gtk_container_add(GTK_CONTAINER(devicebox.window), vbox1);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox1), 5);
 	gtk_widget_show(vbox1);
-
 	hbox1 = gtk_hbox_new(FALSE, 10);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, TRUE, 0);
 	gtk_widget_show(hbox1);
-
 	item = gtk_label_new("Source CD/DVD Device:");
 	gtk_box_pack_start(GTK_BOX(hbox1), item, FALSE, FALSE, 0);
 	gtk_widget_show(item);
 	item = NULL;
-
 	devicebox.device = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox1), devicebox.device, TRUE, TRUE, 0);
 	gtk_widget_show(devicebox.device);
 	g_signal_connect(G_OBJECT(devicebox.device), "changed",
 	                 G_CALLBACK(DeviceBoxDeviceEvent), NULL);
 	hbox1 = NULL;
-
 	devicebox.devicedesc = gtk_label_new("Device Type: ---");
 	gtk_box_pack_start(GTK_BOX(vbox1), devicebox.devicedesc, FALSE, FALSE, 0);
 	gtk_widget_show(devicebox.devicedesc);
-
 	item = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox1), item, TRUE, TRUE, 0);
 	gtk_widget_show(item);
 	item = NULL;
-
 	hbox1 = gtk_hbox_new(FALSE, 10);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, TRUE, 0);
 	gtk_widget_show(hbox1);
-
 	item = gtk_label_new("Iso File:");
 	gtk_box_pack_start(GTK_BOX(hbox1), item, FALSE, FALSE, 0);
 	gtk_widget_show(item);
 	item = NULL;
-
 	devicebox.file = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox1), devicebox.file, TRUE, TRUE, 0);
 	gtk_widget_show(devicebox.file);
 	g_signal_connect(G_OBJECT(devicebox.file), "changed",
 	                 G_CALLBACK(DeviceBoxFileEvent), NULL);
-
 	devicebox.selectbutton = gtk_button_new_with_label("Browse");
 	gtk_box_pack_start(GTK_BOX(hbox1), devicebox.selectbutton, FALSE, FALSE, 0);
 	gtk_widget_show(devicebox.selectbutton);
 	g_signal_connect(G_OBJECT(devicebox.selectbutton), "clicked",
 	                 G_CALLBACK(DeviceBoxBrowseEvent), NULL);
 	hbox1 = NULL;
-
 	devicebox.filedesc = gtk_label_new("File Type: ---");
 	gtk_box_pack_start(GTK_BOX(vbox1), devicebox.filedesc, FALSE, FALSE, 0);
 	gtk_widget_show(devicebox.filedesc);
-
 	hbox1 = gtk_hbox_new(FALSE, 10);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, TRUE, 0);
 	gtk_widget_show(hbox1);
-
 	item = gtk_label_new("New File Compression:");
 	gtk_box_pack_start(GTK_BOX(hbox1), item, FALSE, FALSE, 0);
 	gtk_widget_show(item);
 	item = NULL;
-
 	devicebox.compress = gtk_combo_box_new_text();
 	gtk_box_pack_start(GTK_BOX(hbox1), devicebox.compress, FALSE, FALSE, 0);
 	nameptr = 0;
-	while (compressnames[nameptr] != NULL)
-	{
+	while (compressnames[nameptr] != NULL) {
 		gtk_combo_box_append_text(GTK_COMBO_BOX(devicebox.compress),
 		                          compressnames[nameptr]);
 		nameptr++;
@@ -434,32 +366,26 @@ void DeviceBoxDisplay()
 	gtk_combo_box_set_active(GTK_COMBO_BOX(devicebox.compress), 0); // Temp Line
 	gtk_widget_show(devicebox.compress);
 	hbox1 = NULL;
-
 	hbox1 = gtk_hbox_new(FALSE, 10);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, TRUE, 0);
 	gtk_widget_show(hbox1);
-
 	item = gtk_label_new("Multiple Files (all under 2 GB):");
 	gtk_box_pack_start(GTK_BOX(hbox1), item, FALSE, FALSE, 0);
 	gtk_widget_show(item);
 	item = NULL;
-
 	devicebox.multi = gtk_check_button_new();
 	gtk_box_pack_start(GTK_BOX(hbox1), devicebox.multi, FALSE, FALSE, 0);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(devicebox.multi), FALSE);
 	gtk_widget_show(devicebox.multi);
 	hbox1 = NULL;
-
 	hbox1 = gtk_hbutton_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, TRUE, 0);
 	gtk_widget_show(hbox1);
-
 	devicebox.okbutton = gtk_button_new_with_label("Make File");
 	gtk_box_pack_start(GTK_BOX(hbox1), devicebox.okbutton, TRUE, TRUE, 0);
 	gtk_widget_show(devicebox.okbutton);
 	g_signal_connect(G_OBJECT(devicebox.okbutton), "clicked",
 	                 G_CALLBACK(DeviceBoxOKEvent), NULL);
-
 	devicebox.cancelbutton = gtk_button_new_with_label("Cancel");
 	gtk_box_pack_start(GTK_BOX(hbox1), devicebox.cancelbutton, TRUE, TRUE, 0);
 	gtk_widget_show(devicebox.cancelbutton);
@@ -467,9 +393,7 @@ void DeviceBoxDisplay()
 	                 G_CALLBACK(DeviceBoxCancelEvent), NULL);
 	hbox1 = NULL;
 	vbox1 = NULL;
-
 	// Device text not set until now to get the correct description.
 	gtk_entry_set_text(GTK_ENTRY(devicebox.device), conf.devicename);
-
 	DeviceInit(); // Initialize device access
 } // END DeviceBoxDisplay()

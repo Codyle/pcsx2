@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxHtmlWindowXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlWindowXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxHtmlWindowXmlHandler)
 
 public:
-    wxHtmlWindowXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxHtmlWindowXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_HTML

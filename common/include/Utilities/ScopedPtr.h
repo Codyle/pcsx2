@@ -21,7 +21,7 @@
 //  ScopedPtr
 // --------------------------------------------------------------------------------------
 
-template< typename T >
+template<typename T>
 class ScopedPtr
 {
 	DeclareNoncopyableObject(ScopedPtr);
@@ -30,45 +30,45 @@ protected:
 	T* m_ptr;
 
 public:
-    typedef T element_type;
+	typedef T element_type;
 
-    wxEXPLICIT ScopedPtr(T * ptr = NULL)
-    {
-		m_ptr = ptr;
-    }
-
-    ~ScopedPtr() throw() { Delete(); }
-
-	ScopedPtr& Reassign(T * ptr = NULL)
+	wxEXPLICIT ScopedPtr(T * ptr = NULL)
 	{
-		if ( ptr != m_ptr )
-		{
+		m_ptr = ptr;
+	}
+
+	~ScopedPtr() throw()
+	{
+		Delete();
+	}
+
+	ScopedPtr &Reassign(T * ptr = NULL)
+	{
+		if (ptr != m_ptr) {
 			Delete();
 			m_ptr = ptr;
 		}
 		return *this;
 	}
 
-	ScopedPtr& Delete() throw()
+	ScopedPtr &Delete() throw()
 	{
 		// Thread-safe deletion: Set the pointer to NULL first, and then issue
 		// the deletion.  This allows pending Application messages that might be
 		// dependent on the current object to nullify their actions.
-
 		T* deleteme = m_ptr;
 		m_ptr = NULL;
 		delete deleteme;
-
 		return *this;
 	}
 
 	// Removes the pointer from scoped management, but does not delete!
-    T *DetachPtr()
-    {
-        T *ptr = m_ptr;
-        m_ptr = NULL;
-        return ptr;
-    }
+	T *DetachPtr()
+	{
+		T *ptr = m_ptr;
+		m_ptr = NULL;
+		return ptr;
+	}
 
 	// Returns the managed pointer.  Can return NULL as a valid result if the ScopedPtr
 	// has no object in management.
@@ -82,7 +82,7 @@ public:
 	// throw exceptions -- and thusly should be disposed if the initialization fails.  Use
 	// SwapPtr to assign the new object into the persistent ScopedPtr instance, and have
 	// the old object assigned to the local-scope ScopedPtr instance.
-	void SwapPtr(ScopedPtr& other)
+	void SwapPtr(ScopedPtr &other)
 	{
 		T * const tmp = other.m_ptr;
 		other.m_ptr = m_ptr;
@@ -120,31 +120,31 @@ public:
 
 	// Convenient assignment operator.  ScopedPtr = NULL will issue an automatic deletion
 	// of the managed pointer.
-	ScopedPtr& operator=( T* src )
+	ScopedPtr &operator=(T* src)
 	{
-		return Reassign( src );
+		return Reassign(src);
 	}
 
 	// Dereference operator, returns a handle to the managed pointer.
 	// Generates a debug assertion if the object is NULL!
-    T& operator*() const
-    {
-        pxAssert(m_ptr != NULL);
-        return *m_ptr;
-    }
+	T &operator*() const
+	{
+		pxAssert(m_ptr != NULL);
+		return *m_ptr;
+	}
 
-    T* operator->() const
-    {
-        pxAssert(m_ptr != NULL);
-        return m_ptr;
-    }
+	T* operator->() const
+	{
+		pxAssert(m_ptr != NULL);
+		return m_ptr;
+	}
 };
 
 // --------------------------------------------------------------------------------------
 //  ScopedArray  -  same as ScopedPtr but uses delete[], and has operator[]
 // --------------------------------------------------------------------------------------
 
-template< typename T >
+template<typename T>
 class ScopedArray
 {
 	DeclareNoncopyableObject(ScopedArray);
@@ -154,27 +154,28 @@ protected:
 	uint	m_valid_range;
 
 public:
-    typedef T element_type;
+	typedef T element_type;
 
-    wxEXPLICIT ScopedArray(T * ptr = NULL)
-    {
+	wxEXPLICIT ScopedArray(T * ptr = NULL)
+	{
 		m_array			= ptr;
 		m_valid_range	= 0xffffffff;
-    }
+	}
 
-	wxEXPLICIT ScopedArray( size_t size )
+	wxEXPLICIT ScopedArray(size_t size)
 	{
 		m_array = new T[size];
 		m_valid_range = size;
 	}
 
-    ~ScopedArray() throw()
-		{ Delete(); }
-
-	ScopedArray& Reassign(T * ptr = NULL)
+	~ScopedArray() throw()
 	{
-		if( ptr != m_array )
-		{
+		Delete();
+	}
+
+	ScopedArray &Reassign(T * ptr = NULL)
+	{
+		if (ptr != m_array) {
 			Delete();
 			m_array = ptr;
 			m_valid_range = 0xffffffff;
@@ -182,26 +183,24 @@ public:
 		return *this;
 	}
 
-	ScopedArray& Delete() throw()
+	ScopedArray &Delete() throw()
 	{
 		// Thread-safe deletion: Set the pointer to NULL first, and then issue
 		// the deletion.  This allows pending Application messages that might be
 		// dependent on the current object to nullify their actions.
-
 		T* deleteme = m_array;
 		m_array = NULL;
 		delete[] deleteme;
-
 		return *this;
 	}
 
 	// Removes the pointer from scoped management, but does not delete!
-    T *DetachPtr()
-    {
-        T *ptr = m_array;
-        m_array = NULL;
-        return ptr;
-    }
+	T *DetachPtr()
+	{
+		T *ptr = m_array;
+		m_array = NULL;
+		return ptr;
+	}
 
 	// Returns the managed pointer.  Can return NULL as a valid result if the ScopedPtr
 	// has no object in management.
@@ -210,7 +209,7 @@ public:
 		return m_array;
 	}
 
-	void SwapPtr(ScopedArray& other)
+	void SwapPtr(ScopedArray &other)
 	{
 		T * const tmp = other.m_array;
 		other.m_array = m_array;
@@ -243,14 +242,14 @@ public:
 
 	// Convenient assignment operator.  ScopedPtr = NULL will issue an automatic deletion
 	// of the managed pointer.
-	ScopedArray& operator=( T* src )
+	ScopedArray &operator=(T* src)
 	{
-		return Reassign( src );
+		return Reassign(src);
 	}
 
-	T& operator[]( uint idx ) const
+	T &operator[](uint idx) const
 	{
-		pxAssertDev( idx < m_valid_range, "Array index out of bounds on ScopedArray." );
+		pxAssertDev(idx < m_valid_range, "Array index out of bounds on ScopedArray.");
 		return m_array[idx];
 	}
 };
@@ -271,76 +270,74 @@ public:
 //  * This class intentionally does not implement the "release" API, because it doesn't
 //    really make sense within the context of a non-nullable pointer specification.
 //
-template< typename T, T& DefaultStaticInst >
+template<typename T, T &DefaultStaticInst>
 class pxObjPtr
 {
 	DeclareNoncopyableObject(pxObjPtr);
 
 protected:
-    T * m_ptr;
+	T * m_ptr;
 
 public:
-    typedef T element_type;
+	typedef T element_type;
 
-    explicit pxObjPtr(T * ptr = &DefaultStaticInst) : m_ptr(ptr) { }
+	explicit pxObjPtr(T * ptr = &DefaultStaticInst) : m_ptr(ptr) { }
 
 	bool IsEmpty() const
 	{
 		return m_ptr != &DefaultStaticInst;
 	}
 
-    ~pxObjPtr()
-    {
-		if( !IsEmpty() ) delete m_ptr;
+	~pxObjPtr()
+	{
+		if (!IsEmpty()) delete m_ptr;
 		m_ptr = NULL;
 	}
 
-    // test for pointer validity: defining conversion to unspecified_bool_type
-    // and not more obvious bool to avoid implicit conversions to integer types
-    typedef T *(pxObjPtr<T,DefaultStaticInst>::*unspecified_bool_type)() const;
+	// test for pointer validity: defining conversion to unspecified_bool_type
+	// and not more obvious bool to avoid implicit conversions to integer types
+	typedef T *(pxObjPtr<T, DefaultStaticInst>::*unspecified_bool_type)() const;
 
-    operator unspecified_bool_type() const
-    {
-        return ( !IsEmpty() ) ? &ScopedPtr<T>::get : NULL;
-    }
+	operator unspecified_bool_type() const
+	{
+		return (!IsEmpty()) ? &ScopedPtr<T>::get : NULL;
+	}
 
-    void reset(T * ptr = &DefaultStaticInst)
-    {
-        if ( ptr != m_ptr )
-        {
-			if( !IsEmpty() )
+	void reset(T * ptr = &DefaultStaticInst)
+	{
+		if (ptr != m_ptr) {
+			if (!IsEmpty())
 				delete m_ptr;
-            m_ptr = ptr;
-        }
-    }
+			m_ptr = ptr;
+		}
+	}
 
-    T& operator*() const
-    {
-        pxAssert(m_ptr != NULL);
-        return *m_ptr;
-    }
+	T &operator*() const
+	{
+		pxAssert(m_ptr != NULL);
+		return *m_ptr;
+	}
 
-    T* operator->() const
-    {
-        pxAssert(m_ptr != NULL);
-        return m_ptr;
-    }
+	T* operator->() const
+	{
+		pxAssert(m_ptr != NULL);
+		return m_ptr;
+	}
 
-    T* get() const
-    {
-        pxAssert(m_ptr != NULL);
-        return m_ptr;
-    }
+	T* get() const
+	{
+		pxAssert(m_ptr != NULL);
+		return m_ptr;
+	}
 
-    void swap(pxObjPtr& other)
-    {
+	void swap(pxObjPtr &other)
+	{
 		// Neither pointer in either container should ever be NULL...
 		pxAssert(m_ptr != NULL);
 		pxAssert(other.m_ptr != NULL);
-
-        T * const tmp = other.m_ptr;
-        other.m_ptr = m_ptr;
-        m_ptr = tmp;
-    }
+		T * const tmp = other.m_ptr;
+		other.m_ptr = m_ptr;
+		m_ptr = tmp;
+	}
 };
 

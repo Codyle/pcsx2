@@ -88,27 +88,23 @@ protected:
 
 	int s_n;
 
-	void Dump(const string& s, uint32 TP, const GSVector4i& r, int inc = true)
+	void Dump(const string &s, uint32 TP, const GSVector4i &r, int inc = true)
 	{
 		//if(m_perfmon.GetFrame() < 1000)
 		//if((m_env.TWIN.u32 & 0xfffff) == 0)
 		//if(!m_env.STATUS.ME && !m_env.STATUS.MD)
-			return;
-
-		if(inc) s_n++;
-
+		return;
+		if (inc) s_n++;
 		//if(s_n < 86) return;
-
 		int dir = 1;
 #ifdef DEBUG
 		dir = 2;
 #endif
-        string path = format("c:\\temp%d\\%04d_%s.bmp", dir, s_n, s.c_str());
-
+		string path = format("c:\\temp%d\\%04d_%s.bmp", dir, s_n, s.c_str());
 		m_mem.SaveBMP(path, r, TP, m_env.CLUT.X, m_env.CLUT.Y);
 	}
 
-	void Dump(const string& s, int inc = true)
+	void Dump(const string &s, int inc = true)
 	{
 		Dump(s, 2, GSVector4i(0, 0, 1024, 512), inc);
 	}
@@ -129,7 +125,7 @@ public:
 	virtual void FlushPrim() = 0;
 	virtual void ResetPrim() = 0;
 	virtual void VertexKick() = 0;
-	virtual void Invalidate(const GSVector4i& r);
+	virtual void Invalidate(const GSVector4i &r);
 
 	void WriteData(const uint8* mem, uint32 size);
 	void ReadData(uint8* mem, uint32 size);

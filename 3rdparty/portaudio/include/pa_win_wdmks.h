@@ -28,13 +28,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -52,55 +52,52 @@
 extern "C"
 {
 #endif /* __cplusplus */
-    typedef struct PaWinWDMKSInfo{
-        unsigned long size;             /**< sizeof(PaWinWDMKSInfo) */
-        PaHostApiTypeId hostApiType;    /**< paWDMKS */
-        unsigned long version;          /**< 1 */
+typedef struct PaWinWDMKSInfo {
+	unsigned long size;             /**< sizeof(PaWinWDMKSInfo) */
+	PaHostApiTypeId hostApiType;    /**< paWDMKS */
+	unsigned long version;          /**< 1 */
 
-        /* The number of packets to use for WaveCyclic devices, range is [2, 8]. Set to zero for default value of 2. */
-        unsigned noOfPackets;
-    } PaWinWDMKSInfo;
+	/* The number of packets to use for WaveCyclic devices, range is [2, 8]. Set to zero for default value of 2. */
+	unsigned noOfPackets;
+} PaWinWDMKSInfo;
 
-    typedef enum PaWDMKSType
-    {
-        Type_kNotUsed,
-        Type_kWaveCyclic,
-        Type_kWaveRT,
-        Type_kCnt,
-    } PaWDMKSType;
+typedef enum PaWDMKSType {
+	Type_kNotUsed,
+	Type_kWaveCyclic,
+	Type_kWaveRT,
+	Type_kCnt,
+} PaWDMKSType;
 
-    typedef enum PaWDMKSSubType
-    {
-        SubType_kUnknown,
-        SubType_kNotification,
-        SubType_kPolled,
-        SubType_kCnt,
-    } PaWDMKSSubType;
+typedef enum PaWDMKSSubType {
+	SubType_kUnknown,
+	SubType_kNotification,
+	SubType_kPolled,
+	SubType_kCnt,
+} PaWDMKSSubType;
 
-    typedef struct PaWinWDMKSDeviceInfo {
-        wchar_t filterPath[MAX_PATH];     /**< KS filter path in Unicode! */
-        wchar_t topologyPath[MAX_PATH];   /**< Topology filter path in Unicode! */
-        PaWDMKSType streamingType;
-        GUID deviceProductGuid;           /**< The product GUID of the device (if supported) */
-    } PaWinWDMKSDeviceInfo;
+typedef struct PaWinWDMKSDeviceInfo {
+	wchar_t filterPath[MAX_PATH];     /**< KS filter path in Unicode! */
+	wchar_t topologyPath[MAX_PATH];   /**< Topology filter path in Unicode! */
+	PaWDMKSType streamingType;
+	GUID deviceProductGuid;           /**< The product GUID of the device (if supported) */
+} PaWinWDMKSDeviceInfo;
 
-    typedef struct PaWDMKSDirectionSpecificStreamInfo
-    {
-        PaDeviceIndex device;
-        unsigned channels;                  /**< No of channels the device is opened with */
-        unsigned framesPerHostBuffer;       /**< No of frames of the device buffer */
-        int endpointPinId;                  /**< Endpoint pin ID (on topology filter if topologyName is not empty) */
-        int muxNodeId;                      /**< Only valid for input */
-        PaWDMKSSubType streamingSubType;       /**< Not known until device is opened for streaming */
-    } PaWDMKSDirectionSpecificStreamInfo;
+typedef struct PaWDMKSDirectionSpecificStreamInfo {
+	PaDeviceIndex device;
+	unsigned channels;                  /**< No of channels the device is opened with */
+	unsigned framesPerHostBuffer;       /**< No of frames of the device buffer */
+	int endpointPinId;                  /**< Endpoint pin ID (on topology filter if topologyName is not empty) */
+	int muxNodeId;                      /**< Only valid for input */
+	PaWDMKSSubType streamingSubType;       /**< Not known until device is opened for streaming */
+} PaWDMKSDirectionSpecificStreamInfo;
 
-    typedef struct PaWDMKSSpecificStreamInfo {
-        PaWDMKSDirectionSpecificStreamInfo input;
-        PaWDMKSDirectionSpecificStreamInfo output;
-    } PaWDMKSSpecificStreamInfo;
+typedef struct PaWDMKSSpecificStreamInfo {
+	PaWDMKSDirectionSpecificStreamInfo input;
+	PaWDMKSDirectionSpecificStreamInfo output;
+} PaWDMKSSpecificStreamInfo;
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* PA_WIN_DS_H */                                  
+#endif /* PA_WIN_DS_H */

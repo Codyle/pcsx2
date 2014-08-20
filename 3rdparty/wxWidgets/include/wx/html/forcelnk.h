@@ -47,16 +47,16 @@ See mod_*.cpp and htmlwin.cpp for example :-)
 #define FORCE_LINK_ME wxFORCE_LINK_THIS_MODULE
 
 #define FORCE_WXHTML_MODULES() \
-    FORCE_LINK(m_layout) \
-    FORCE_LINK(m_fonts) \
-    FORCE_LINK(m_image) \
-    FORCE_LINK(m_list) \
-    FORCE_LINK(m_dflist) \
-    FORCE_LINK(m_pre) \
-    FORCE_LINK(m_hline) \
-    FORCE_LINK(m_links) \
-    FORCE_LINK(m_tables) \
-    FORCE_LINK(m_style)
+	FORCE_LINK(m_layout) \
+	FORCE_LINK(m_fonts) \
+	FORCE_LINK(m_image) \
+	FORCE_LINK(m_list) \
+	FORCE_LINK(m_dflist) \
+	FORCE_LINK(m_pre) \
+	FORCE_LINK(m_hline) \
+	FORCE_LINK(m_links) \
+	FORCE_LINK(m_tables) \
+	FORCE_LINK(m_style)
 
 
 #endif // _WX_FORCELNK_H_

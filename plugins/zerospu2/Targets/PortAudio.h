@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- // PortAudio support implemented by Zedr0n.
+// PortAudio support implemented by Zedr0n.
 #ifndef PORTAUDIO_H_INCLUDED
 #define PORTAUDIO_H_INCLUDED
 
@@ -26,11 +26,10 @@
 extern int paSetupSound();
 extern void paRemoveSound();
 extern int paSoundGetBytesBuffered();
-extern void paSoundFeedVoiceData(unsigned char* pSound,long lBytes);
+extern void paSoundFeedVoiceData(unsigned char* pSound, long lBytes);
 
 // Pull in from Alsa.cpp
-static SoundCallbacks PACmds =
-{
+static SoundCallbacks PACmds = {
 	(intFunction)paSetupSound,
 	(voidFunction)paRemoveSound,
 	(intFunction)paSoundGetBytesBuffered,

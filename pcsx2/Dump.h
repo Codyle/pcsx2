@@ -19,5 +19,5 @@ extern void iDumpRegisters(u32 startpc, u32 temp);
 extern void iDumpPsxRegisters(u32 startpc, u32 temp);
 extern void iDumpVU0Registers();
 extern void iDumpVU1Registers();
-extern void iDumpBlock( int startpc, u8 * ptr );
-extern void iIopDumpBlock( int startpc, u8 * ptr );
+extern void iDumpBlock(int startpc, u8 * ptr);
+extern void iIopDumpBlock(int startpc, u8 * ptr);

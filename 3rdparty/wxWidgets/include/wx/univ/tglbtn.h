@@ -23,48 +23,54 @@ extern WXDLLEXPORT_DATA(const wxChar) wxCheckBoxNameStr[];
 class WXDLLIMPEXP_CORE wxToggleButton: public wxButton
 {
 public:
-    wxToggleButton();
+	wxToggleButton();
 
-    wxToggleButton(wxWindow *parent,
-             wxWindowID id,
-             const wxBitmap& bitmap,
-             const wxString& label = wxEmptyString,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxCheckBoxNameStr);
+	wxToggleButton(wxWindow *parent,
+	               wxWindowID id,
+	               const wxBitmap &bitmap,
+	               const wxString &label = wxEmptyString,
+	               const wxPoint &pos = wxDefaultPosition,
+	               const wxSize &size = wxDefaultSize,
+	               long style = 0,
+	               const wxValidator &validator = wxDefaultValidator,
+	               const wxString &name = wxCheckBoxNameStr);
 
-    wxToggleButton(wxWindow *parent,
-             wxWindowID id,
-             const wxString& label = wxEmptyString,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxCheckBoxNameStr);
+	wxToggleButton(wxWindow *parent,
+	               wxWindowID id,
+	               const wxString &label = wxEmptyString,
+	               const wxPoint &pos = wxDefaultPosition,
+	               const wxSize &size = wxDefaultSize,
+	               long style = 0,
+	               const wxValidator &validator = wxDefaultValidator,
+	               const wxString &name = wxCheckBoxNameStr);
 
-    virtual ~wxToggleButton();
+	virtual ~wxToggleButton();
 
-    virtual bool IsPressed() const { return m_isPressed || m_value; }
+	virtual bool IsPressed() const
+	{
+		return m_isPressed || m_value;
+	}
 
-    // wxToggleButton actions
-    virtual void Toggle();
-    virtual void Click();
+	// wxToggleButton actions
+	virtual void Toggle();
+	virtual void Click();
 
-    // Get/set the value
-    void SetValue(bool state);
-    bool GetValue() const { return m_value; }
+	// Get/set the value
+	void SetValue(bool state);
+	bool GetValue() const
+	{
+		return m_value;
+	}
 
 protected:
-    // the current value
-    bool m_value;
+	// the current value
+	bool m_value;
 
 private:
-    // common part of all ctors
-    void Init();
+	// common part of all ctors
+	void Init();
 
-    DECLARE_DYNAMIC_CLASS(wxToggleButton)
+	DECLARE_DYNAMIC_CLASS(wxToggleButton)
 };
 
 #endif // _WX_UNIV_TGLBTN_H_

@@ -24,8 +24,7 @@
 #include "GS.h"
 #include "GSLocalMemory.h"
 
-__aligned(class, 32) GSDrawingContext
-{
+__aligned(class, 32) GSDrawingContext {
 public:
 	GIFRegXYOFFSET	XYOFFSET;
 	GIFRegTEX0		TEX0;
@@ -61,7 +60,6 @@ public:
 	GSDrawingContext()
 	{
 		memset(&offset, 0, sizeof(offset));
-
 		Reset();
 	}
 
@@ -85,29 +83,25 @@ public:
 	void UpdateScissor()
 	{
 		ASSERT(XYOFFSET.OFX <= 0xf800 && XYOFFSET.OFY <= 0xf800);
-
 		scissor.ex.u16[0] = (uint16)((SCISSOR.SCAX0 << 4) + XYOFFSET.OFX - 0x8000);
 		scissor.ex.u16[1] = (uint16)((SCISSOR.SCAY0 << 4) + XYOFFSET.OFY - 0x8000);
 		scissor.ex.u16[2] = (uint16)((SCISSOR.SCAX1 << 4) + XYOFFSET.OFX - 0x8000);
 		scissor.ex.u16[3] = (uint16)((SCISSOR.SCAY1 << 4) + XYOFFSET.OFY - 0x8000);
-
 		scissor.ofex = GSVector4(
-			(int)((SCISSOR.SCAX0 << 4) + XYOFFSET.OFX),
-			(int)((SCISSOR.SCAY0 << 4) + XYOFFSET.OFY),
-			(int)((SCISSOR.SCAX1 << 4) + XYOFFSET.OFX),
-			(int)((SCISSOR.SCAY1 << 4) + XYOFFSET.OFY));
-
+		        (int)((SCISSOR.SCAX0 << 4) + XYOFFSET.OFX),
+		        (int)((SCISSOR.SCAY0 << 4) + XYOFFSET.OFY),
+		        (int)((SCISSOR.SCAX1 << 4) + XYOFFSET.OFX),
+		        (int)((SCISSOR.SCAY1 << 4) + XYOFFSET.OFY));
 		scissor.in = GSVector4(
-			(int)SCISSOR.SCAX0,
-			(int)SCISSOR.SCAY0,
-			(int)SCISSOR.SCAX1 + 1,
-			(int)SCISSOR.SCAY1 + 1);
-
+		        (int)SCISSOR.SCAX0,
+		        (int)SCISSOR.SCAY0,
+		        (int)SCISSOR.SCAX1 + 1,
+		        (int)SCISSOR.SCAY1 + 1);
 		scissor.ofxy = GSVector4i(
-			0x8000, 
-			0x8000, 
-			(int)XYOFFSET.OFX - 15, 
-			(int)XYOFFSET.OFY - 15);
+		        0x8000,
+		        0x8000,
+		        (int)XYOFFSET.OFX - 15,
+		        (int)XYOFFSET.OFY - 15);
 	}
 
 	bool DepthRead() const
@@ -117,10 +111,8 @@ public:
 
 	bool DepthWrite() const
 	{
-		if(TEST.ATE && TEST.ATST == ATST_NEVER && TEST.AFAIL != AFAIL_ZB_ONLY) // alpha test, all pixels fail, z buffer is not updated
-		{
+		if (TEST.ATE && TEST.ATST == ATST_NEVER && TEST.AFAIL != AFAIL_ZB_ONLY) // alpha test, all pixels fail, z buffer is not updated
 			return false;
-		}
 
 		return ZBUF.ZMSK == 0 && TEST.ZTE != 0; // ZTE == 0 is bug on the real hardware, write is blocked then
 	}

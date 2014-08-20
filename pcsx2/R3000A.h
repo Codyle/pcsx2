@@ -21,9 +21,9 @@
 union GPRRegs {
 	struct {
 		u32 r0, at, v0, v1, a0, a1, a2, a3,
-			t0, t1, t2, t3, t4, t5, t6, t7,
-			s0, s1, s2, s3, s4, s5, s6, s7,
-			t8, t9, k0, k1, gp, sp, s8, ra, hi, lo; // hi needs to be at index 32! don't change
+		    t0, t1, t2, t3, t4, t5, t6, t7,
+		    s0, s1, s2, s3, s4, s5, s6, s7,
+		    t8, t9, k0, k1, gp, sp, s8, ra, hi, lo; // hi needs to be at index 32! don't change
 	} n;
 	u32 r[34]; /* Lo, Hi in r[33] and r[32] */
 };
@@ -31,13 +31,13 @@ union GPRRegs {
 union CP0Regs {
 	struct {
 		u32 Index,     Random,    EntryLo0,  EntryLo1,
-			Context,   PageMask,  Wired,     Reserved0,
-			BadVAddr,  Count,     EntryHi,   Compare,
-			Status,    Cause,     EPC,       PRid,
-			Config,    LLAddr,    WatchLO,   WatchHI,
-			XContext,  Reserved1, Reserved2, Reserved3,
-			Reserved4, Reserved5, ECC,       CacheErr,
-			TagLo,     TagHi,     ErrorEPC,  Reserved6;
+		    Context,   PageMask,  Wired,     Reserved0,
+		    BadVAddr,  Count,     EntryHi,   Compare,
+		    Status,    Cause,     EPC,       PRid,
+		    Config,    LLAddr,    WatchLO,   WatchHI,
+		    XContext,  Reserved1, Reserved2, Reserved3,
+		    Reserved4, Reserved5, ECC,       CacheErr,
+		    TagLo,     TagHi,     ErrorEPC,  Reserved6;
 	} n;
 	u32 r[32];
 };
@@ -186,12 +186,12 @@ struct R3000Acpu {
 	void (*Reserve)();
 	void (*Reset)();
 	void (*Execute)();
-	s32 (*ExecuteBlock)( s32 eeCycles );		// executes the given number of EE cycles.
+	s32(*ExecuteBlock)(s32 eeCycles);		// executes the given number of EE cycles.
 	void (*Clear)(u32 Addr, u32 Size);
 	void (*Shutdown)();
-	
-	uint (*GetCacheReserve)();
-	void (*SetCacheReserve)( uint reserveInMegs );
+
+	uint(*GetCacheReserve)();
+	void (*SetCacheReserve)(uint reserveInMegs);
 };
 
 extern R3000Acpu *psxCpu;

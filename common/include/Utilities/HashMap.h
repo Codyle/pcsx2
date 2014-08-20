@@ -30,7 +30,8 @@
 
 #include <wx/string.h>
 
-namespace HashTools {
+namespace HashTools
+{
 
 #define HashFriend(Key,T) friend class HashMap<Key,T>
 
@@ -200,13 +201,12 @@ extern const CommonHashClass GetCommonHash;
 ///   <c>operator ()</c>, such that the object instance itself acts as a method.
 /// </remarks>
 /// <seealso cref="GetCommonHash"/>
-struct CommonHashClass
-{
+struct CommonHashClass {
 public:
 	// GCC needs empty constructors on const instances, because it likes pointlessness.
 	CommonHashClass() {}
 
-	hash_key_t DoInt( u32 val ) const
+	hash_key_t DoInt(u32 val) const
 	{
 		u32 key = val;
 		key = ~key + (key << 15);
@@ -215,45 +215,43 @@ public:
 		key = key ^ (key >> 4);
 		key = key * 2057;
 		key = key ^ (key >> 16);
-
 		return val;
 	}
 
-	hash_key_t operator()(const std::string& src) const
+	hash_key_t operator()(const std::string &src) const
 	{
-		return Hash( src.data(), src.length() );
+		return Hash(src.data(), src.length());
 	}
 
-	hash_key_t operator()( const std::wstring& src ) const
+	hash_key_t operator()(const std::wstring &src) const
 	{
-		return Hash( (const char *)src.data(), src.length() * sizeof( wchar_t ) );
+		return Hash((const char *)src.data(), src.length() * sizeof(wchar_t));
 	}
 
-	hash_key_t operator()( const wxString& src ) const
+	hash_key_t operator()(const wxString &src) const
 	{
-		return Hash( (const char *)src.data(), src.length() * sizeof( wxChar ) );
+		return Hash((const char *)src.data(), src.length() * sizeof(wxChar));
 	}
 
 	// Returns a hashcode for a character.
 	// This has function has been optimized to return an even distribution
 	// across the range of an int value.  In theory that should be more rewarding
 	// to hastable performance than a straight up char lookup.
-	hash_key_t operator()( const char c1 ) const
+	hash_key_t operator()(const char c1) const
 	{
 		// Most chars contain values between 0 and 128, so let's mix it up a bit:
-		int cs = (int)( c1 + (char)64 );
-		return ( cs + ( cs<<8 ) + ( cs << 16 ) + (cs << 24 ) );
+		int cs = (int)(c1 + (char)64);
+		return (cs + (cs << 8) + (cs << 16) + (cs << 24));
 	}
 
-	hash_key_t operator()( const wchar_t wc1 ) const
+	hash_key_t operator()(const wchar_t wc1) const
 	{
 		// Most unicode values are between 0 and 128, with 0-1024
 		// making up the bulk of the rest.  Everything else is spatially used.
 		/*int wcs = (int) ( wc1 + 0x2000 );
 		return wcs ^ ( wcs + 0x19000 );*/
-
 		// or maybe I'll just feed it into the int hash:
-		return GetCommonHash( (u32)wc1 );
+		return GetCommonHash((u32)wc1);
 	}
 
 	/// <summary>
@@ -266,7 +264,7 @@ public:
 	///   Note:
 	///   Implementation is based on an article found here: http://www.concentric.net/~Ttwang/tech/inthash.htm
 	/// </remarks>
-	hash_key_t operator()( const u32 val ) const
+	hash_key_t operator()(const u32 val) const
 	{
 		return DoInt(val);
 	}
@@ -281,7 +279,7 @@ public:
 	///   Note:
 	///   Implementation is based on an article found here: http://www.concentric.net/~Ttwang/tech/inthash.htm
 	/// </remarks>
-	hash_key_t operator()( const s32 val ) const
+	hash_key_t operator()(const s32 val) const
 	{
 		return DoInt(val);
 	}
@@ -296,7 +294,7 @@ public:
 	///   Note:
 	///   Implementation is based on an article found here: http://www.concentric.net/~Ttwang/tech/inthash.htm
 	/// </remarks>
-	hash_key_t operator()( const u64 val ) const
+	hash_key_t operator()(const u64 val) const
 	{
 		u64 key = val;
 		key = (~key) + (key << 18);
@@ -318,22 +316,22 @@ public:
 	///   Note:
 	///   Implementation is based on an article found here: http://www.concentric.net/~Ttwang/tech/inthash.htm
 	/// </remarks>
-	hash_key_t operator()( const s64 val ) const
+	hash_key_t operator()(const s64 val) const
 	{
 		return GetCommonHash((u64)val);
 	}
 
-	hash_key_t operator()( const float val ) const
+	hash_key_t operator()(const float val) const
 	{
 		// floats do a fine enough job of being scattered about
 		// the universe:
 		return *((hash_key_t *)&val);
 	}
 
-	hash_key_t operator()( const double val ) const
+	hash_key_t operator()(const double val) const
 	{
 		// doubles have to be compressed into a 32 bit value:
-		return GetCommonHash( *((u64*)&val) );
+		return GetCommonHash(*((u64*)&val));
 	}
 
 	/// <summary>
@@ -346,7 +344,7 @@ public:
 	///   This method is optimized for 32 bit pointers only.
 	///   64 bit pointer support is implemented but not optimized.
 	/// </remarks>
-	hash_key_t operator()( const void* addr ) const
+	hash_key_t operator()(const void* addr) const
 	{
 #ifdef _ARCH_64
 		return GetCommonHash((u64)addr);
@@ -355,8 +353,8 @@ public:
 		return (hash_key_t)((key >> 3) * 2654435761ul);
 #endif
 	}
-	
-	
+
+
 };
 
 }

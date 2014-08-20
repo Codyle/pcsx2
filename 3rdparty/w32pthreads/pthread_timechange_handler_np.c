@@ -61,46 +61,40 @@
  */
 
 void *
-pthread_timechange_handler_np (void *arg)
-     /*
-      * ------------------------------------------------------
-      * DOCPUBLIC
-      *      Broadcasts all CVs to force re-evaluation and
-      *      new timeouts if required.
-      *
-      * PARAMETERS
-      *      NONE
-      *
-      *
-      * DESCRIPTION
-      *      Broadcasts all CVs to force re-evaluation and
-      *      new timeouts if required.
-      *
-      *      This routine may be passed directly to pthread_create()
-      *      as a new thread in order to run asynchronously.
-      *
-      *
-      * RESULTS
-      *              0               successfully broadcast all CVs
-      *              EAGAIN          Not all CVs were broadcast
-      *
-      * ------------------------------------------------------
-      */
+pthread_timechange_handler_np(void *arg)
+/*
+ * ------------------------------------------------------
+ * DOCPUBLIC
+ *      Broadcasts all CVs to force re-evaluation and
+ *      new timeouts if required.
+ *
+ * PARAMETERS
+ *      NONE
+ *
+ *
+ * DESCRIPTION
+ *      Broadcasts all CVs to force re-evaluation and
+ *      new timeouts if required.
+ *
+ *      This routine may be passed directly to pthread_create()
+ *      as a new thread in order to run asynchronously.
+ *
+ *
+ * RESULTS
+ *              0               successfully broadcast all CVs
+ *              EAGAIN          Not all CVs were broadcast
+ *
+ * ------------------------------------------------------
+ */
 {
-  int result = 0;
-  pthread_cond_t cv;
-
-  EnterCriticalSection (&ptw32_cond_list_lock);
-
-  cv = ptw32_cond_list_head;
-
-  while (cv != NULL && 0 == result)
-    {
-      result = pthread_cond_broadcast (&cv);
-      cv = cv->next;
-    }
-
-  LeaveCriticalSection (&ptw32_cond_list_lock);
-
-  return (void *) (result != 0 ? EAGAIN : 0);
+	int result = 0;
+	pthread_cond_t cv;
+	EnterCriticalSection(&ptw32_cond_list_lock);
+	cv = ptw32_cond_list_head;
+	while (cv != NULL && 0 == result) {
+		result = pthread_cond_broadcast(&cv);
+		cv = cv->next;
+	}
+	LeaveCriticalSection(&ptw32_cond_list_lock);
+	return (void *)(result != 0 ? EAGAIN : 0);
 }

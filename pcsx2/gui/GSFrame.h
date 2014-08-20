@@ -20,8 +20,7 @@
 #include "CpuUsageProvider.h"
 
 
-enum LimiterModeType
-{
+enum LimiterModeType {
 	Limit_Nominal,
 	Limit_Turbo,
 	Limit_Slomo,
@@ -45,13 +44,13 @@ protected:
 	bool					m_HasFocus;
 
 public:
-	GSPanel( wxWindow* parent );
+	GSPanel(wxWindow* parent);
 	virtual ~GSPanel() throw();
 
 	void DoResize();
 	void DoShowMouse();
-	void DirectKeyCommand( wxKeyEvent& evt );
-	void DirectKeyCommand( const KeyAcceleratorCode& kac );
+	void DirectKeyCommand(wxKeyEvent &evt);
+	void DirectKeyCommand(const KeyAcceleratorCode &kac);
 
 protected:
 	void AppStatusEvent_OnSettingsApplied();
@@ -62,15 +61,15 @@ protected:
 
 	void InitDefaultAccelerators();
 
-	void OnCloseWindow( wxCloseEvent& evt );
-	void OnResize(wxSizeEvent& event);
-	void OnMouseEvent( wxMouseEvent& evt );
-	void OnHideMouseTimeout( wxTimerEvent& evt );
-	void OnKeyDown( wxKeyEvent& evt );
-	void OnFocus( wxFocusEvent& evt );
-	void OnFocusLost( wxFocusEvent& evt );
+	void OnCloseWindow(wxCloseEvent &evt);
+	void OnResize(wxSizeEvent &event);
+	void OnMouseEvent(wxMouseEvent &evt);
+	void OnHideMouseTimeout(wxTimerEvent &evt);
+	void OnKeyDown(wxKeyEvent &evt);
+	void OnFocus(wxFocusEvent &evt);
+	void OnFocusLost(wxFocusEvent &evt);
 
-	void OnLeftDclick( wxMouseEvent& evt );
+	void OnLeftDclick(wxMouseEvent &evt);
 
 };
 
@@ -95,22 +94,22 @@ protected:
 	CpuUsageProvider		m_CpuUsage;
 
 public:
-	GSFrame(wxWindow* parent, const wxString& title);
+	GSFrame(wxWindow* parent, const wxString &title);
 	virtual ~GSFrame() throw();
 
 	GSPanel* GetViewport();
 	void SetFocus();
-	bool Show( bool shown=true );
+	bool Show(bool shown = true);
 	wxStaticText* GetLabel_OutputDisabled() const;
 
 	bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
 
 protected:
-	void OnCloseWindow( wxCloseEvent& evt );
-	void OnMove( wxMoveEvent& evt );
-	void OnResize( wxSizeEvent& evt );
-	void OnActivate( wxActivateEvent& evt );
-	void OnUpdateTitle( wxTimerEvent& evt );
+	void OnCloseWindow(wxCloseEvent &evt);
+	void OnMove(wxMoveEvent &evt);
+	void OnResize(wxSizeEvent &evt);
+	void OnActivate(wxActivateEvent &evt);
+	void OnUpdateTitle(wxTimerEvent &evt);
 
 	void AppStatusEvent_OnSettingsApplied();
 	void CoreThread_OnResumed();

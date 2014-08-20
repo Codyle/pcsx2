@@ -48,7 +48,7 @@ inline void* wglGetProcAddress(const char* x)
 #endif
 
 // FIX compilation issue with Mesa 10
-// Note it might be possible to do better with the right include 
+// Note it might be possible to do better with the right include
 // in the rigth order but I don't have time
 #ifndef APIENTRY
 #define APIENTRY
@@ -68,22 +68,22 @@ extern u32 s_stencilfunc, s_stencilref, s_stencilmask;
 #endif
 
 #define GL_STENCILFUNC(func, ref, mask) { \
-	s_stencilfunc  = func; \
-	s_stencilref = ref; \
-	s_stencilmask = mask; \
-	glStencilFunc(func, ref, mask); \
-}
+		s_stencilfunc  = func; \
+		s_stencilref = ref; \
+		s_stencilmask = mask; \
+		glStencilFunc(func, ref, mask); \
+	}
 
 #define GL_STENCILFUNC_SET() glStencilFunc(s_stencilfunc, s_stencilref, s_stencilmask)
 
 
 // sets the data stream
 #define SET_STREAM() { \
-	glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(VertexGPU), (void*)8); \
-	glSecondaryColorPointerEXT(4, GL_UNSIGNED_BYTE, sizeof(VertexGPU), (void*)12); \
-	glTexCoordPointer(3, GL_FLOAT, sizeof(VertexGPU), (void*)16); \
-	glVertexPointer(4, GL_SHORT, sizeof(VertexGPU), (void*)0); \
-}
+		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(VertexGPU), (void*)8); \
+		glSecondaryColorPointerEXT(4, GL_UNSIGNED_BYTE, sizeof(VertexGPU), (void*)12); \
+		glTexCoordPointer(3, GL_FLOAT, sizeof(VertexGPU), (void*)16); \
+		glVertexPointer(4, GL_SHORT, sizeof(VertexGPU), (void*)0); \
+	}
 
 
 // global alpha blending settings

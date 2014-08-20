@@ -38,15 +38,15 @@
 #define iswitch(mem)
 
 // hw read functions
-template< uint page > extern mem8_t  __fastcall hwRead8  (u32 mem);
-template< uint page > extern mem16_t __fastcall hwRead16 (u32 mem);
-template< uint page > extern mem32_t __fastcall hwRead32 (u32 mem);
-template< uint page > extern void    __fastcall hwRead64 (u32 mem, mem64_t* out );
-template< uint page > extern void    __fastcall hwRead128(u32 mem, mem128_t* out);
+template<uint page> extern mem8_t  __fastcall hwRead8(u32 mem);
+template<uint page> extern mem16_t __fastcall hwRead16(u32 mem);
+template<uint page> extern mem32_t __fastcall hwRead32(u32 mem);
+template<uint page> extern void    __fastcall hwRead64(u32 mem, mem64_t* out);
+template<uint page> extern void    __fastcall hwRead128(u32 mem, mem128_t* out);
 
 // Internal hwRead32 which does not log reads, used by hwWrite8/16 to perform
 // read-modify-write operations.
-template< uint page, bool intcstathack >
+template<uint page, bool intcstathack>
 extern mem32_t __fastcall _hwRead32(u32 mem);
 
 extern mem16_t __fastcall hwRead16_page_0F_INTC_HACK(u32 mem);
@@ -54,11 +54,11 @@ extern mem32_t __fastcall hwRead32_page_0F_INTC_HACK(u32 mem);
 
 
 // hw write functions
-template<uint page> extern void __fastcall hwWrite8  (u32 mem, u8  value);
-template<uint page> extern void __fastcall hwWrite16 (u32 mem, u16 value);
+template<uint page> extern void __fastcall hwWrite8(u32 mem, u8  value);
+template<uint page> extern void __fastcall hwWrite16(u32 mem, u16 value);
 
-template<uint page> extern void __fastcall hwWrite32 (u32 mem, mem32_t value);
-template<uint page> extern void __fastcall hwWrite64 (u32 mem, const mem64_t* srcval);
+template<uint page> extern void __fastcall hwWrite32(u32 mem, mem32_t value);
+template<uint page> extern void __fastcall hwWrite64(u32 mem, const mem64_t* srcval);
 template<uint page> extern void __fastcall hwWrite128(u32 mem, const mem128_t* srcval);
 
 // --------------------------------------------------------------------------------------

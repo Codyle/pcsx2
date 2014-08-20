@@ -31,92 +31,112 @@
 
 class WXDLLEXPORT wxTextValidator: public wxValidator
 {
-DECLARE_DYNAMIC_CLASS(wxTextValidator)
+	DECLARE_DYNAMIC_CLASS(wxTextValidator)
 public:
 
-    wxTextValidator(long style = wxFILTER_NONE, wxString *val = 0);
-    wxTextValidator(const wxTextValidator& val);
+	wxTextValidator(long style = wxFILTER_NONE, wxString *val = 0);
+	wxTextValidator(const wxTextValidator &val);
 
-    virtual ~wxTextValidator(){}
+	virtual ~wxTextValidator() {}
 
-    // Make a clone of this validator (or return NULL) - currently necessary
-    // if you're passing a reference to a validator.
-    // Another possibility is to always pass a pointer to a new validator
-    // (so the calling code can use a copy constructor of the relevant class).
-    virtual wxObject *Clone() const { return new wxTextValidator(*this); }
-    bool Copy(const wxTextValidator& val);
+	// Make a clone of this validator (or return NULL) - currently necessary
+	// if you're passing a reference to a validator.
+	// Another possibility is to always pass a pointer to a new validator
+	// (so the calling code can use a copy constructor of the relevant class).
+	virtual wxObject *Clone() const
+	{
+		return new wxTextValidator(*this);
+	}
+	bool Copy(const wxTextValidator &val);
 
-    // Called when the value in the window must be validated.
-    // This function can pop up an error message.
-    virtual bool Validate(wxWindow *parent);
+	// Called when the value in the window must be validated.
+	// This function can pop up an error message.
+	virtual bool Validate(wxWindow *parent);
 
-    // Called to transfer data to the window
-    virtual bool TransferToWindow();
+	// Called to transfer data to the window
+	virtual bool TransferToWindow();
 
-    // Called to transfer data from the window
-    virtual bool TransferFromWindow();
+	// Called to transfer data from the window
+	virtual bool TransferFromWindow();
 
-    // ACCESSORS
-    inline long GetStyle() const { return m_validatorStyle; }
-    inline void SetStyle(long style) { m_validatorStyle = style; }
+	// ACCESSORS
+	inline long GetStyle() const
+	{
+		return m_validatorStyle;
+	}
+	inline void SetStyle(long style)
+	{
+		m_validatorStyle = style;
+	}
 
 #if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( void SetIncludeList(const wxStringList& list) );
-    wxDEPRECATED( wxStringList& GetIncludeList() );
+	wxDEPRECATED(void SetIncludeList(const wxStringList &list));
+	wxDEPRECATED(wxStringList &GetIncludeList());
 
-    wxDEPRECATED( void SetExcludeList(const wxStringList& list) );
-    wxDEPRECATED( wxStringList& GetExcludeList() );
+	wxDEPRECATED(void SetExcludeList(const wxStringList &list));
+	wxDEPRECATED(wxStringList &GetExcludeList());
 
-    wxDEPRECATED( bool IsInCharIncludeList(const wxString& val) );
-    wxDEPRECATED( bool IsNotInCharExcludeList(const wxString& val) );
+	wxDEPRECATED(bool IsInCharIncludeList(const wxString &val));
+	wxDEPRECATED(bool IsNotInCharExcludeList(const wxString &val));
 #endif
 
-    void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
-    inline wxArrayString& GetIncludes() { return m_includes; }
+	void SetIncludes(const wxArrayString &includes)
+	{
+		m_includes = includes;
+	}
+	inline wxArrayString &GetIncludes()
+	{
+		return m_includes;
+	}
 
-    void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
-    inline wxArrayString& GetExcludes() { return m_excludes; }
+	void SetExcludes(const wxArrayString &excludes)
+	{
+		m_excludes = excludes;
+	}
+	inline wxArrayString &GetExcludes()
+	{
+		return m_excludes;
+	}
 
-    bool IsInCharIncludes(const wxString& val);
-    bool IsNotInCharExcludes(const wxString& val);
+	bool IsInCharIncludes(const wxString &val);
+	bool IsNotInCharExcludes(const wxString &val);
 
-    // Filter keystrokes
-    void OnChar(wxKeyEvent& event);
+	// Filter keystrokes
+	void OnChar(wxKeyEvent &event);
 
 
-DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 
 protected:
-    long            m_validatorStyle;
-    wxString *      m_stringValue;
+	long            m_validatorStyle;
+	wxString *      m_stringValue;
 #if WXWIN_COMPATIBILITY_2_4
-    wxStringList    m_includeList;
-    wxStringList    m_excludeList;
+	wxStringList    m_includeList;
+	wxStringList    m_excludeList;
 #endif
-    wxArrayString   m_includes;
-    wxArrayString   m_excludes;
+	wxArrayString   m_includes;
+	wxArrayString   m_excludes;
 
-    bool CheckValidator() const
-    {
-        wxCHECK_MSG( m_validatorWindow, false,
-                     _T("No window associated with validator") );
-        wxCHECK_MSG( m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)), false,
-                     _T("wxTextValidator is only for wxTextCtrl's") );
-
-        return true;
-    }
+	bool CheckValidator() const
+	{
+		wxCHECK_MSG(m_validatorWindow, false,
+		            _T("No window associated with validator"));
+		wxCHECK_MSG(m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)), false,
+		            _T("wxTextValidator is only for wxTextCtrl's"));
+		return true;
+	}
 
 private:
-// Cannot use
-//  DECLARE_NO_COPY_CLASS(wxTextValidator)
-// because copy constructor is explicitly declared above;
-// but no copy assignment operator is defined, so declare
-// it private to prevent the compiler from defining it:
-    wxTextValidator& operator=(const wxTextValidator&);
+	// Cannot use
+	//  DECLARE_NO_COPY_CLASS(wxTextValidator)
+	// because copy constructor is explicitly declared above;
+	// but no copy assignment operator is defined, so declare
+	// it private to prevent the compiler from defining it:
+	wxTextValidator &operator=(const wxTextValidator &);
 };
 
 #endif
-  // wxUSE_VALIDATORS && wxUSE_TEXTCTRL
+// wxUSE_VALIDATORS && wxUSE_TEXTCTRL
 
 #endif
-  // _WX_VALTEXTH__
+// _WX_VALTEXTH__

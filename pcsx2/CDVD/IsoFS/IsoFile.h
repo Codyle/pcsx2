@@ -24,7 +24,7 @@ public:
 	static const int sectorLength = 2048;
 
 protected:
-	SectorSource&		internalReader;
+	SectorSource		&internalReader;
 	IsoFileDescriptor	fileEntry;
 
 	u32 currentOffset;
@@ -35,9 +35,9 @@ protected:
 	int sectorOffset;
 
 public:
-	IsoFile(const IsoDirectory& dir, const wxString& filename);
-	IsoFile(SectorSource& reader, const wxString& filename);
-	IsoFile(SectorSource& reader, const IsoFileDescriptor& fileEntry);
+	IsoFile(const IsoDirectory &dir, const wxString &filename);
+	IsoFile(SectorSource &reader, const wxString &filename);
+	IsoFile(SectorSource &reader, const IsoFileDescriptor &fileEntry);
 	virtual ~IsoFile() throw();
 
 	u32 seek(u32 absoffset);
@@ -49,22 +49,21 @@ public:
 	u32 getLength();
 	bool eof() const;
 
-	const IsoFileDescriptor& getEntry();
+	const IsoFileDescriptor &getEntry();
 
 	u8	 readByte();
 	s32  read(void* dest, s32 len);
 	std::string readLine();
 
 	// Tool to read a specific value type, including structs.
-	template< class T >
+	template<class T>
 	T read()
 	{
-		if(sizeof(T)==1)
+		if (sizeof(T) == 1)
 			return (T)readByte();
-		else
-		{
+		else {
 			T t;
-			read((u8*)&t,sizeof(t));
+			read((u8*)&t, sizeof(t));
 			return t;
 		}
 	}

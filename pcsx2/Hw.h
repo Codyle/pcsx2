@@ -17,84 +17,83 @@
 
 namespace EEMemoryMap
 {
-	static const uint RCNT0_Start		= 0x10000000;
-	static const uint RCNT0_End			= 0x10000800;
-	static const uint RCNT1_Start		= 0x10000800;
-	static const uint RCNT1_End			= 0x10001000;
-	static const uint RCNT2_Start		= 0x10001000;
-	static const uint RCNT2_End			= 0x10001800;
-	static const uint RCNT3_Start		= 0x10001800;
-	static const uint RCNT3_End			= 0x10002000;
+static const uint RCNT0_Start		= 0x10000000;
+static const uint RCNT0_End			= 0x10000800;
+static const uint RCNT1_Start		= 0x10000800;
+static const uint RCNT1_End			= 0x10001000;
+static const uint RCNT2_Start		= 0x10001000;
+static const uint RCNT2_End			= 0x10001800;
+static const uint RCNT3_Start		= 0x10001800;
+static const uint RCNT3_End			= 0x10002000;
 
-	static const uint IPU_Start			= 0x10002000;
-	static const uint IPU_End			= 0x10003000;
+static const uint IPU_Start			= 0x10002000;
+static const uint IPU_End			= 0x10003000;
 
-	static const uint GIF_Start			= 0x10003000;
-	static const uint GIF_End			= 0x10003800;
+static const uint GIF_Start			= 0x10003000;
+static const uint GIF_End			= 0x10003800;
 
-	static const uint VIF0_Start		= 0x10003800;
-	static const uint VIF0_End			= 0x10003C00;
-	static const uint VIF1_Start		= 0x10003C00;
-	static const uint VIF1_End			= 0x10004000;
+static const uint VIF0_Start		= 0x10003800;
+static const uint VIF0_End			= 0x10003C00;
+static const uint VIF1_Start		= 0x10003C00;
+static const uint VIF1_End			= 0x10004000;
 
-	static const uint VIF0_FIFO_Start	= 0x10004000;
-	static const uint VIF0_FIFO_End		= 0x10005000;
-	static const uint VIF1_FIFO_Start	= 0x10005000;
-	static const uint VIF1_FIFO_End		= 0x10006000;
-	static const uint GIF_FIFO_Start	= 0x10006000;
-	static const uint GIF_FIFO_End		= 0x10007000;
-	static const uint IPU_FIFO_Start	= 0x10007000;
-	static const uint IPU_FIFO_End		= 0x10008000;
+static const uint VIF0_FIFO_Start	= 0x10004000;
+static const uint VIF0_FIFO_End		= 0x10005000;
+static const uint VIF1_FIFO_Start	= 0x10005000;
+static const uint VIF1_FIFO_End		= 0x10006000;
+static const uint GIF_FIFO_Start	= 0x10006000;
+static const uint GIF_FIFO_End		= 0x10007000;
+static const uint IPU_FIFO_Start	= 0x10007000;
+static const uint IPU_FIFO_End		= 0x10008000;
 
-	static const uint VIF0dma_Start		= 0x10008000;
-	static const uint VIF0dma_End		= 0x10009000;
-	static const uint VIF1dma_Start		= 0x10009000;
-	static const uint VIF1dma_End		= 0x1000A000;
+static const uint VIF0dma_Start		= 0x10008000;
+static const uint VIF0dma_End		= 0x10009000;
+static const uint VIF1dma_Start		= 0x10009000;
+static const uint VIF1dma_End		= 0x1000A000;
 
-	static const uint GIFdma_Start		= 0x1000A000;
-	static const uint GIFdma_End		= 0x1000B000;
+static const uint GIFdma_Start		= 0x1000A000;
+static const uint GIFdma_End		= 0x1000B000;
 
-	static const uint fromIPU_Start		= 0x1000B000;
-	static const uint fromIPU_End		= 0x1000B400;
-	static const uint toIPU_Start		= 0x1000B400;
-	static const uint toIPU_End			= 0x1000C000;
+static const uint fromIPU_Start		= 0x1000B000;
+static const uint fromIPU_End		= 0x1000B400;
+static const uint toIPU_Start		= 0x1000B400;
+static const uint toIPU_End			= 0x1000C000;
 
-	static const uint SIF0dma_Start		= 0x1000C000;
-	static const uint SIF0dma_End		= 0x1000C400;
-	static const uint SIF1dma_Start		= 0x1000C400;
-	static const uint SIF1dma_End		= 0x1000C800;
-	static const uint SIF2dma_Start		= 0x1000C800;
-	static const uint SIF2dma_End		= 0x1000D000;
+static const uint SIF0dma_Start		= 0x1000C000;
+static const uint SIF0dma_End		= 0x1000C400;
+static const uint SIF1dma_Start		= 0x1000C400;
+static const uint SIF1dma_End		= 0x1000C800;
+static const uint SIF2dma_Start		= 0x1000C800;
+static const uint SIF2dma_End		= 0x1000D000;
 
-	static const uint fromSPR_Start		= 0x1000D000;
-	static const uint fromSPR_End		= 0x1000D400;
-	static const uint toSPR_Start		= 0x1000D400;
-	static const uint toSPR_End			= 0x1000E000;
+static const uint fromSPR_Start		= 0x1000D000;
+static const uint fromSPR_End		= 0x1000D400;
+static const uint toSPR_Start		= 0x1000D400;
+static const uint toSPR_End			= 0x1000E000;
 
-	static const uint DMAC_Start		= 0x1000E000;
-	static const uint DMAC_End			= 0x1000F000;
+static const uint DMAC_Start		= 0x1000E000;
+static const uint DMAC_End			= 0x1000F000;
 
-	static const uint INTC_Start		= 0x1000F000;
-	static const uint INTC_End			= 0x1000F100;
+static const uint INTC_Start		= 0x1000F000;
+static const uint INTC_End			= 0x1000F100;
 
-	static const uint SIO_Start			= 0x1000F100;
-	static const uint SIO_End			= 0x1000F200;
-	static const uint SBUS_Start		= 0x1000F200;
-	static const uint SBUS_End			= 0x1000F400;
+static const uint SIO_Start			= 0x1000F100;
+static const uint SIO_End			= 0x1000F200;
+static const uint SBUS_Start		= 0x1000F200;
+static const uint SBUS_End			= 0x1000F400;
 
-	// MCH area --  Really not sure what this area is.  Information is lacking.
-	static const uint MCH_Start			= 0x1000F400;
-	static const uint MCH_End			= 0x1000F500;
+// MCH area --  Really not sure what this area is.  Information is lacking.
+static const uint MCH_Start			= 0x1000F400;
+static const uint MCH_End			= 0x1000F500;
 
-	// Extended master control register area for DMAC.
-	static const uint DMACext_Start		= 0x1000F500;
-	static const uint DMACext_End		= 0x1000F600;
+// Extended master control register area for DMAC.
+static const uint DMACext_Start		= 0x1000F500;
+static const uint DMACext_End		= 0x1000F600;
 
 };
 
 // HW defines
-enum EERegisterAddresses
-{
+enum EERegisterAddresses {
 	RCNT0_COUNT		=	0x10000000,
 	RCNT0_MODE		=	0x10000010,
 	RCNT0_TARGET	=	0x10000020,
@@ -182,7 +181,7 @@ enum EERegisterAddresses
 	IPUout_FIFO		=	0x10007000,
 	IPUin_FIFO		=	0x10007010,
 
-//VIF0
+	//VIF0
 	D0_CHCR			=	0x10008000,
 	D0_MADR			=	0x10008010,
 	D0_QWC			=	0x10008020,
@@ -197,7 +196,7 @@ enum EERegisterAddresses
 	VIF0_ASR0		=	0x10008040,
 	VIF0_ASR1		=	0x10008050,
 
-//VIF1
+	//VIF1
 	D1_CHCR			=	0x10009000,
 	D1_MADR			=	0x10009010,
 	D1_QWC			=	0x10009020,
@@ -212,7 +211,7 @@ enum EERegisterAddresses
 	VIF1_ASR0		=	0x10009040,
 	VIF1_ASR1		=	0x10009050,
 
-//GS
+	//GS
 	D2_CHCR			=	0x1000A000,
 	D2_MADR			=	0x1000A010,
 	D2_QWC			=	0x1000A020,
@@ -227,7 +226,7 @@ enum EERegisterAddresses
 	GIF_ASR0		=	0x1000A040,
 	GIF_ASR1		=	0x1000A050,
 
-//fromIPU
+	//fromIPU
 	D3_CHCR			=	0x1000B000,
 	D3_MADR			=	0x1000B010,
 	D3_QWC			=	0x1000B020,
@@ -238,7 +237,7 @@ enum EERegisterAddresses
 	fromIPU_QWC		=	0x1000B020,
 	fromIPU_TADR	=	0x1000B030,
 
-//toIPU
+	//toIPU
 	D4_CHCR			=	0x1000B400,
 	D4_MADR			=	0x1000B410,
 	D4_QWC			=	0x1000B420,
@@ -249,7 +248,7 @@ enum EERegisterAddresses
 	toIPU_QWC		=	0x1000B420,
 	toIPU_TADR		=	0x1000B430,
 
-//SIF0
+	//SIF0
 	D5_CHCR			=	0x1000C000,
 	D5_MADR			=	0x1000C010,
 	D5_QWC			=	0x1000C020,
@@ -258,7 +257,7 @@ enum EERegisterAddresses
 	SIF0_MADR		=	0x1000C010,
 	SIF0_QWC		=	0x1000C020,
 
-//SIF1
+	//SIF1
 	D6_CHCR			=	0x1000C400,
 	D6_MADR			=	0x1000C410,
 	D6_QWC			=	0x1000C420,
@@ -269,7 +268,7 @@ enum EERegisterAddresses
 	SIF1_QWC		=	0x1000C420,
 	SIF1_TADR		=	0x1000C430,
 
-//SIF2
+	//SIF2
 	D7_CHCR			=	0x1000C800,
 	D7_MADR			=	0x1000C810,
 	D7_QWC			=	0x1000C820,
@@ -279,7 +278,7 @@ enum EERegisterAddresses
 	SIF2_QWC		=	0x1000C820,
 	SIF2_TADR		=	0x1000C830,
 
-//fromSPR
+	//fromSPR
 	D8_CHCR			=	0x1000D000,
 	D8_MADR			=	0x1000D010,
 	D8_QWC			=	0x1000D020,
@@ -290,7 +289,7 @@ enum EERegisterAddresses
 	fromSPR_TADR	=	0x1000D030,
 	fromSPR_SADR	=	0x1000D080,
 
-//toSPR
+	//toSPR
 	D9_CHCR			=	0x1000D400,
 	D9_MADR			=	0x1000D010,
 	D9_QWC			=	0x1000D020,
@@ -339,8 +338,7 @@ enum EERegisterAddresses
 	DMAC_ENABLEW	=	0x1000F590
 };
 
-enum GSRegisterAddresses
-{
+enum GSRegisterAddresses {
 	GS_PMODE		=	0x12000000,
 	GS_SMODE1		=	0x12000010,
 	GS_SMODE2		=	0x12000020,
@@ -363,20 +361,20 @@ enum GSRegisterAddresses
 };
 
 // bleh, I'm graindead -- air
-union tGS_SMODE2
-{
-	struct
-	{
-		u32 INT:1;
-		u32 FFMD:1;
-		u32 DPMS:2;
-		u32 _PAD2:28;
-		u32 _PAD3:32;
+union tGS_SMODE2 {
+	struct {
+		u32 INT: 1;
+		u32 FFMD: 1;
+		u32 DPMS: 2;
+		u32 _PAD2: 28;
+		u32 _PAD3: 32;
 	};
 
 	u64 _u64;
 
-	bool IsInterlaced() const { return INT; }
+	bool IsInterlaced() const {
+		return INT;
+	}
 };
 
 extern void hwReset();

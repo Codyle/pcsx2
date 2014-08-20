@@ -21,24 +21,24 @@
 class WXDLLIMPEXP_BASE wxSystemOptions : public wxObject
 {
 public:
-    wxSystemOptions() { }
+	wxSystemOptions() { }
 
-    // User-customizable hints to wxWidgets or associated libraries
-    // These could also be used to influence GetSystem... calls, indeed
-    // to implement SetSystemColour/Font/Metric
+	// User-customizable hints to wxWidgets or associated libraries
+	// These could also be used to influence GetSystem... calls, indeed
+	// to implement SetSystemColour/Font/Metric
 
 #if wxUSE_SYSTEM_OPTIONS
-    static void SetOption(const wxString& name, const wxString& value);
-    static void SetOption(const wxString& name, int value);
+	static void SetOption(const wxString &name, const wxString &value);
+	static void SetOption(const wxString &name, int value);
 #endif // wxUSE_SYSTEM_OPTIONS
-    static wxString GetOption(const wxString& name);
-    static int GetOptionInt(const wxString& name);
-    static bool HasOption(const wxString& name);
+	static wxString GetOption(const wxString &name);
+	static int GetOptionInt(const wxString &name);
+	static bool HasOption(const wxString &name);
 
-    static bool IsFalse(const wxString& name)
-    {
-        return HasOption(name) && GetOptionInt(name) == 0;
-    }
+	static bool IsFalse(const wxString &name)
+	{
+		return HasOption(name) && GetOptionInt(name) == 0;
+	}
 };
 
 #if !wxUSE_SYSTEM_OPTIONS
@@ -47,25 +47,25 @@ public:
 // in the library itself without checking for wxUSE_SYSTEM_OPTIONS all the time
 
 /* static */ inline
-wxString wxSystemOptions::GetOption(const wxString& WXUNUSED(name))
+wxString wxSystemOptions::GetOption(const wxString &WXUNUSED(name))
 {
-    return wxEmptyString;
+	return wxEmptyString;
 }
 
 /* static */ inline
-int wxSystemOptions::GetOptionInt(const wxString& WXUNUSED(name))
+int wxSystemOptions::GetOptionInt(const wxString &WXUNUSED(name))
 {
-    return 0;
+	return 0;
 }
 
 /* static */ inline
-bool wxSystemOptions::HasOption(const wxString& WXUNUSED(name))
+bool wxSystemOptions::HasOption(const wxString &WXUNUSED(name))
 {
-    return false;
+	return false;
 }
 
 #endif // !wxUSE_SYSTEM_OPTIONS
 
 #endif
-    // _WX_SYSOPT_H_
+// _WX_SYSOPT_H_
 

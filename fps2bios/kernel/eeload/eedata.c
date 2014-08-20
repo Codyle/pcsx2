@@ -22,8 +22,9 @@ u32 _CpuConfig_2(u32);
 u32 _CpuConfig_3(u32);
 u32 _CpuConfig_4(u32);
 u32 _CpuConfig_5(u32);
-u32 (*table_CpuConfig[6])(u32) = {_CpuConfig_0, _CpuConfig_1, _CpuConfig_2,
-                          _CpuConfig_3, _CpuConfig_4, _CpuConfig_5};
+u32(*table_CpuConfig[6])(u32) = {_CpuConfig_0, _CpuConfig_1, _CpuConfig_2,
+                                 _CpuConfig_3, _CpuConfig_4, _CpuConfig_5
+                                };
 
 u32 dmac_CHCR[10] = {
 	0xB0008000,
@@ -54,16 +55,18 @@ void _DummyINTCHandler(int);
 void _DummyDMACHandler(int);
 
 void (*INTCTable[16])(int) = {
-    _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler,
-    _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler,
-    _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler,
-    _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler };
+	_DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler,
+	_DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler,
+	_DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler,
+	_DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler, _DummyINTCHandler
+};
 
 void (*DMACTable[16])(int) = {
-    _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler,
-    _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler,
-    _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler,
-    _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler };
+	_DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler,
+	_DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler,
+	_DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler,
+	_DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler, _DummyDMACHandler
+};
 
 
 void (*table_SYSCALL[0x80])() = {

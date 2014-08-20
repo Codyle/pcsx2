@@ -62,8 +62,8 @@ EXPORT_C_(void) SPU2interruptDMA7();
 // all addresses passed by dma will be pointers to the array starting at baseaddr
 // This function is necessary to successfully save and reload the spu2 state
 EXPORT_C_(u32)  SPU2ReadMemAddr(int core);
-EXPORT_C_(void) SPU2WriteMemAddr(int core,u32 value);
-EXPORT_C_(void) SPU2irqCallback(void (*SPU2callback)(),void (*DMA4callback)(),void (*DMA7callback)());
+EXPORT_C_(void) SPU2WriteMemAddr(int core, u32 value);
+EXPORT_C_(void) SPU2irqCallback(void (*SPU2callback)(), void (*DMA4callback)(), void (*DMA7callback)());
 #endif
 #endif
 
@@ -101,9 +101,9 @@ extern int recording;
 extern u32 lClocks;
 extern u32* cyclePtr;
 
-extern void SPU2writeLog( const char* action, u32 rmem, u16 value );
+extern void SPU2writeLog(const char* action, u32 rmem, u16 value);
 extern void TimeUpdate(u32 cClocks);
-extern void SPU2_FastWrite( u32 rmem, u16 value );
+extern void SPU2_FastWrite(u32 rmem, u16 value);
 
 extern void LowPassFilterInit();
 

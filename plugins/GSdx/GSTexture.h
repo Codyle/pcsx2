@@ -33,7 +33,10 @@ protected:
 	bool m_msaa;
 
 public:
-	struct GSMap {uint8* bits; int pitch;};
+	struct GSMap {
+		uint8* bits;
+		int pitch;
+	};
 
 	enum {RenderTarget = 1, DepthStencil, Texture, Offscreen, Backbuffer};
 
@@ -41,24 +44,52 @@ public:
 	GSTexture();
 	virtual ~GSTexture() {}
 
-	virtual operator bool() {ASSERT(0); return false;}
+	virtual operator bool()
+	{
+		ASSERT(0);
+		return false;
+	}
 
-	virtual bool Update(const GSVector4i& r, const void* data, int pitch) = 0;
-	virtual bool Map(GSMap& m, const GSVector4i* r = NULL) = 0;
+	virtual bool Update(const GSVector4i &r, const void* data, int pitch) = 0;
+	virtual bool Map(GSMap &m, const GSVector4i* r = NULL) = 0;
 	virtual void Unmap() = 0;
-	virtual bool Save(const string& fn, bool dds = false) = 0;
+	virtual bool Save(const string &fn, bool dds = false) = 0;
 
-	GSVector2 GetScale() const {return m_scale;}
-	void SetScale(const GSVector2& scale) {m_scale = scale;}
+	GSVector2 GetScale() const
+	{
+		return m_scale;
+	}
+	void SetScale(const GSVector2 &scale)
+	{
+		m_scale = scale;
+	}
 
-	int GetWidth() const {return m_size.x;}
-	int GetHeight() const {return m_size.y;}
-	GSVector2i GetSize() const {return m_size;}
+	int GetWidth() const
+	{
+		return m_size.x;
+	}
+	int GetHeight() const
+	{
+		return m_size.y;
+	}
+	GSVector2i GetSize() const
+	{
+		return m_size;
+	}
 
-	int GetType() const {return m_type;}
-	int GetFormat() const {return m_format;}
+	int GetType() const
+	{
+		return m_type;
+	}
+	int GetFormat() const
+	{
+		return m_format;
+	}
 
-	bool IsMSAA() const {return m_msaa;}
+	bool IsMSAA() const
+	{
+		return m_msaa;
+	}
 
 	// frame number (arbitrary base) the texture was recycled on
 	// different purpose than texture cache ages, do not attempt to merge

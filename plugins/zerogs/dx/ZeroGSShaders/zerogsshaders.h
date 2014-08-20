@@ -23,69 +23,62 @@ const static char* g_pTexTypes[] = { "32", "tex32", "clut32", "tex32to16", "tex1
 
 inline int GET_SHADER_INDEX(int type, int texfilter, int texwrap, int fog, int writedepth, int testaem, int exactcolor, int context, int ps)
 {
-	return type + texfilter*NUM_TYPES + NUM_FILTERS*NUM_TYPES*texwrap + NUM_TEXWRAPS*NUM_FILTERS*NUM_TYPES*(fog+2*writedepth+4*testaem+8*exactcolor+16*context+32*ps);
+	return type + texfilter * NUM_TYPES + NUM_FILTERS * NUM_TYPES * texwrap + NUM_TEXWRAPS * NUM_FILTERS * NUM_TYPES * (fog + 2 * writedepth + 4 * testaem + 8 * exactcolor + 16 * context + 32 * ps);
 }
 
 static HRESULT LoadShaderFromType(const char* srcfile, int type, int texfilter, int texwrap, int fog, int writedepth, int testaem, int exactcolor, int ps, DWORD flags,
-						   IDirect3DDevice9* pd3dDevice, ID3DXInclude* pInclude, IDirect3DPixelShader9** pps)
+                                  IDirect3DDevice9* pd3dDevice, ID3DXInclude* pInclude, IDirect3DPixelShader9** pps)
 {
-	assert( texwrap < NUM_TEXWRAPS);
-	assert( type < NUM_TYPES );
-
+	assert(texwrap < NUM_TEXWRAPS);
+	assert(type < NUM_TYPES);
 	char str[255];
-	sprintf(str, "Texture%s%d_%sPS", fog?"Fog":"", texfilter, g_pTexTypes[type]);
-
+	sprintf(str, "Texture%s%d_%sPS", fog ? "Fog" : "", texfilter, g_pTexTypes[type]);
 	LPD3DXBUFFER pShader = NULL, pError = NULL;
 	SAFE_RELEASE(*pps);
-
 	vector<D3DXMACRO> macros;
-	D3DXMACRO dummy; dummy.Definition = NULL; dummy.Name = NULL;
-	if( g_pPsTexWrap[texwrap] != NULL ) {
+	D3DXMACRO dummy;
+	dummy.Definition = NULL;
+	dummy.Name = NULL;
+	if (g_pPsTexWrap[texwrap] != NULL) {
 		D3DXMACRO m;
 		m.Name = g_pPsTexWrap[texwrap];
 		m.Definition = "1";
 		macros.push_back(m);
 	}
-	if( writedepth ) {
+	if (writedepth) {
 		D3DXMACRO m;
 		m.Name = "WRITE_DEPTH";
 		m.Definition = "1";
 		macros.push_back(m);
 	}
-	if( testaem ) {
+	if (testaem) {
 		D3DXMACRO m;
 		m.Name = "TEST_AEM";
 		m.Definition = "1";
 		macros.push_back(m);
 	}
-	if( exactcolor ) {
+	if (exactcolor) {
 		D3DXMACRO m;
 		m.Name = "EXACT_COLOR";
 		m.Definition = "1";
 		macros.push_back(m);
 	}
-
 	macros.push_back(dummy);
 	HRESULT hr = D3DXCompileShaderFromFile(srcfile, &macros[0], pInclude, str, g_pShaders[ps], flags, &pShader, &pError, NULL);
-
-	if( FAILED(hr) )
-	{
+	if (FAILED(hr)) {
 		DEBUG_LOG("Failed to load %s\n%s\n", str, reinterpret_cast<const char*>(pError->GetBufferPointer()));
 		SAFE_RELEASE(pShader);
 		SAFE_RELEASE(pError);
 		return hr;
 	}
-
 	DWORD* ptr = (DWORD*)pShader->GetBufferPointer();
 	hr = pd3dDevice->CreatePixelShader(ptr, pps);
 	SAFE_RELEASE(pShader);
 	SAFE_RELEASE(pError);
-
 	return hr;
 }
 
-struct SHADERHEADER
-{
+struct SHADERHEADER {
 	DWORD index, offset, size; // if highest bit of index is set, pixel shader
 };
 

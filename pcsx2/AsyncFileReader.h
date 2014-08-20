@@ -23,9 +23,12 @@
 #endif
 
 class AsyncFileReader
-{	
+{
 protected:
-	AsyncFileReader(void) {m_dataoffset=0;}
+	AsyncFileReader(void)
+	{
+		m_dataoffset = 0;
+	}
 
 	wxString m_filename;
 
@@ -35,24 +38,27 @@ protected:
 public:
 	virtual ~AsyncFileReader(void) {};
 
-	virtual bool Open(const wxString& fileName)=0;
+	virtual bool Open(const wxString &fileName) = 0;
 
-	virtual int ReadSync(void* pBuffer, uint sector, uint count)=0;
+	virtual int ReadSync(void* pBuffer, uint sector, uint count) = 0;
 
-	virtual void BeginRead(void* pBuffer, uint sector, uint count)=0;
-	virtual int FinishRead(void)=0;
-	virtual void CancelRead(void)=0;
+	virtual void BeginRead(void* pBuffer, uint sector, uint count) = 0;
+	virtual int FinishRead(void) = 0;
+	virtual void CancelRead(void) = 0;
 
-	virtual void Close(void)=0;
+	virtual void Close(void) = 0;
 
-	virtual uint GetBlockCount(void) const=0;
-	
+	virtual uint GetBlockCount(void) const = 0;
+
 	virtual void SetBlockSize(uint bytes) {}
 	virtual void SetDataOffset(uint bytes) {}
 
-	uint GetBlockSize() const { return m_blocksize; }
+	uint GetBlockSize() const
+	{
+		return m_blocksize;
+	}
 
-	const wxString& GetFilename() const
+	const wxString &GetFilename() const
 	{
 		return m_filename;
 	}
@@ -60,7 +66,7 @@ public:
 
 class FlatFileReader : public AsyncFileReader
 {
-	DeclareNoncopyableObject( FlatFileReader );
+	DeclareNoncopyableObject(FlatFileReader);
 
 #ifdef WIN32
 	HANDLE hOverlappedFile;
@@ -79,7 +85,7 @@ public:
 	FlatFileReader(void);
 	virtual ~FlatFileReader(void);
 
-	virtual bool Open(const wxString& fileName);
+	virtual bool Open(const wxString &fileName);
 
 	virtual int ReadSync(void* pBuffer, uint sector, uint count);
 
@@ -91,12 +97,19 @@ public:
 
 	virtual uint GetBlockCount(void) const;
 
-	virtual void SetBlockSize(uint bytes) { m_blocksize = bytes; }
-	virtual void SetDataOffset(uint bytes) { m_dataoffset = bytes; }
+	virtual void SetBlockSize(uint bytes)
+	{
+		m_blocksize = bytes;
+	}
+	virtual void SetDataOffset(uint bytes)
+	{
+		m_dataoffset = bytes;
+	}
 };
 
 // Factory - creates an AsyncFileReader derived instance which can read a compressed file
-class CompressedFileReader {
+class CompressedFileReader
+{
 public:
 	// Checks if any of the available compressed file handlers can open this
 	static bool DetectCompressed(AsyncFileReader* pReader);
@@ -105,7 +118,7 @@ public:
 	// If no matching handler is found then an arbitrary handlers will be returned.
 	// The returned instance still needs ->Open(filename) before usage.
 	// Open(filename) may still fail.
-	static AsyncFileReader* GetNewReader(const wxString& fileName);
+	static AsyncFileReader* GetNewReader(const wxString &fileName);
 
 private:
 	virtual ~CompressedFileReader() = 0;
@@ -113,10 +126,10 @@ private:
 
 class MultipartFileReader : public AsyncFileReader
 {
-	DeclareNoncopyableObject( MultipartFileReader );
+	DeclareNoncopyableObject(MultipartFileReader);
 
 	static const int MaxParts = 8;
-	
+
 	struct Part {
 		uint start;
 		uint end; // exclusive
@@ -124,7 +137,7 @@ class MultipartFileReader : public AsyncFileReader
 		AsyncFileReader* reader;
 	} m_parts[MaxParts];
 	uint m_numparts;
-	
+
 	uint GetFirstPart(uint lsn);
 	void FindParts();
 
@@ -132,7 +145,7 @@ public:
 	MultipartFileReader(AsyncFileReader* firstPart);
 	virtual ~MultipartFileReader(void);
 
-	virtual bool Open(const wxString& fileName);
+	virtual bool Open(const wxString &fileName);
 
 	virtual int ReadSync(void* pBuffer, uint sector, uint count);
 
@@ -143,7 +156,7 @@ public:
 	virtual void Close(void);
 
 	virtual uint GetBlockCount(void) const;
-	
+
 	virtual void SetBlockSize(uint bytes);
 
 	static AsyncFileReader* DetectMultipart(AsyncFileReader* reader);
@@ -151,12 +164,12 @@ public:
 
 class BlockdumpFileReader : public AsyncFileReader
 {
-	DeclareNoncopyableObject( BlockdumpFileReader );
+	DeclareNoncopyableObject(BlockdumpFileReader);
 
 	wxFileInputStream* m_file;
-	
+
 	// total number of blocks in the ISO image (including all parts)
-	u32			m_blocks;	
+	u32			m_blocks;
 	s32			m_blockofs;
 
 	// index table
@@ -169,7 +182,7 @@ public:
 	BlockdumpFileReader(void);
 	virtual ~BlockdumpFileReader(void);
 
-	virtual bool Open(const wxString& fileName);
+	virtual bool Open(const wxString &fileName);
 
 	virtual int ReadSync(void* pBuffer, uint sector, uint count);
 
@@ -183,5 +196,8 @@ public:
 
 	static bool DetectBlockdump(AsyncFileReader* reader);
 
-	int GetBlockOffset() { return m_blockofs; }
+	int GetBlockOffset()
+	{
+		return m_blockofs;
+	}
 };

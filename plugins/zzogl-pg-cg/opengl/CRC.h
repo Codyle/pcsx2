@@ -23,8 +23,7 @@
 #include "ZZHacks.h"
 
 // CRC Information
-enum Title_Info
-{
+enum Title_Info {
 	Unknown_Title,
 	MetalSlug6,
 	TomoyoAfter,
@@ -119,8 +118,7 @@ enum Title_Info
 	NUMBER_OF_TITLES
 };
 
-enum Region_Info
-{
+enum Region_Info {
 	Unknown_Region,
 	US,
 	EU,
@@ -135,8 +133,7 @@ enum Region_Info
 	RegionCount,
 };
 
-struct Game_Info
-{
+struct Game_Info {
 	u32 crc;
 	Title_Info title;
 	Region_Info region;
@@ -144,10 +141,9 @@ struct Game_Info
 	s32 v_thresh, t_thresh;
 };
 
-static const Game_Info crc_game_list[] =
-{
+static const Game_Info crc_game_list[] = {
 	// This section is straight from GSdx. Ones that also have ZZOgl hacks are commented out.
-	
+
 	{0x00000000, Unknown_Title, Unknown_Region, 0, -1, -1},
 	{0x2113EA2E, MetalSlug6, Unknown_Region, 0, -1, -1},
 	{0x42E05BAF, TomoyoAfter, JP, 0, -1, -1},
@@ -224,7 +220,7 @@ static const Game_Info crc_game_list[] =
 	{0x6F8545DB, ICO, US, 0, -1, -1},
 	{0xB01A4C95, ICO, JP, 0, -1, -1},
 	{0x5C991F4E, ICO, Unknown_Region, 0, -1, -1},
-    // FIXME multiple CRC
+	// FIXME multiple CRC
 	{0x7ACF7E03, ICO, Unknown_Region, 0, -1, -1},
 	{0xAEAD1CA3, GT4, JP, 0, -1, -1},
 	{0x44A61C8F, GT4, Unknown_Region, 0, -1, -1},
@@ -299,7 +295,7 @@ static const Game_Info crc_game_list[] =
 	{0xD568B684, SMTDDS2, EU, 0, -1, -1},	// SMT Digital Devil Saga 2
 	{0xE47C1A9C, SMTDDS2, JP, 0, -1, -1},		// SMT Digital Devil Saga 2
 	{0x0B8AB37B, RozenMaidenGebetGarden, JP, 0, -1, -1},
-	
+
 	// And these are here for ZZogl hacks.
 	{0xA3D63039, Xenosaga, JP, GAME_DOPARALLELCTX, 64, 32},
 	{0x0E7807B2, Xenosaga, US, GAME_DOPARALLELCTX, 64, 32},
@@ -337,7 +333,7 @@ static const Game_Info crc_game_list[] =
 	//{0x4437F4B1, ArTonelico1, US, GAME_GUSTHACK, -1, -1},
 	{0xF95F37EE, ArTonelico2, US, GAME_GUSTHACK, -1, -1},
 	{0xF46142D3, ArTonelico2, JPUNDUB, GAME_GUSTHACK, -1, -1},
-	
+
 	// According to Zeydlitz, Mana Khemia no longer needs the Gust Hack.
 	//{0x77b0236f, ManaKhemia1, US, GAME_GUSTHACK, -1, -1},
 	//{0x433951e7, ManaKhemia2, US, GAME_GUSTHACK, -1, -1},
@@ -349,57 +345,57 @@ static const Game_Info crc_game_list[] =
 	{0xA5C05C78, DarkCloud1, Unknown_Region, GAME_NOTARGETRESOLVE, -1, -1},
 	//{0x1DF41F33, DarkCloud2, US, 0, -1, -1},
 	{0x95cc86ef, GhostInTheShell, Unknown_Region, GAME_NOALPHAFAIL, -1, -1}
-	
-//	Game settings that used to be in the Patches folder. Commented out until I decide what to do with them.
-//	{0x951555A0, Disgaea2, US, GAME_NODEPTHRESOLVE, -1, -1},
-//	{0x4334E17D, Disgaea2, JP, GAME_NODEPTHRESOLVE, -1, -1},
-//	
-//	{0x5EB127E7, Gradius, JP, GAME_INTERLACE2X, -1, -1},
-//	{0x6ADBC24B, Gradius, EU, GAME_INTERLACE2X, -1, -1},
-//	{0xF22CDDAF, Gradius, US, GAME_INTERLACE2X, -1, -1},
-//	
-//	{0xF52FB2BE, KingdomHearts, EU, GAME_QUICKRESOLVE1, -1, -1},
-//	{0xAE3EAA05, KingdomHearts, DE, GAME_QUICKRESOLVE1, -1, -1},
-//	{0xF6DC728D, KingdomHearts, FR, GAME_QUICKRESOLVE1, -1, -1},
-//	{0x0F6B6315, KingdomHearts, US, GAME_QUICKRESOLVE1, -1, -1},
-//	{0x3E68955A, KingdomHeartsFM, JP, GAME_QUICKRESOLVE1, -1, -1},
-//	
-//	{0xC398F477, KingdomHearts2, EU, GAME_NODEPTHRESOLVE, -1, -1},
-//	{0xDA0535FD, KingdomHearts2, US, GAME_NODEPTHRESOLVE, -1, -1},
-//	{0x93F8A60B, KingdomHearts2, JP, GAME_NODEPTHRESOLVE, -1, -1},
-//	{0xF266B00B, KingdomHearts2FM, JP, GAME_NODEPTHRESOLVE, -1, -1},
-//	
-//	//The patch claimed to stop characters appearing as wigs on GeForce 8x00 series cards (Disable Alpha Testing)
-//	{0x2251E14D, Tekken4, EU, GAME_NOALPHATEST, -1, -1},
-//	
-//	// This one is supposed to fix a refresh bug.
-//	{0x51F91783, Kaena, JP, GAME_NOTARGETRESOLVE, -1, -1},
-//	
-//	{0xDEFA4763, ShadowHearts, EU, 	GAME_NODEPTHRESOLVE | GAME_NOQUICKRESOLVE | GAME_NOTARGETRESOLVE | GAME_AUTORESET, -1, -1},
-//	{0x8BE3D7B2, ShadowHearts, US, GAME_NODEPTHUPDATE | GAME_AUTORESET | GAME_NOQUICKRESOLVE, -1, -1},
-//	
-//	{0x015314A2, Sims_The_Urbz, US, GAME_NOQUICKRESOLVE, -1, -1},
-//	
-//	// "Required fixes to visuals"
-//	{0x086273D2, MetalGearSolid3, US, GAME_FULL16BITRES | GAME_NODEPTHRESOLVE, -1, -1},
-//	
-//	{0x4D228733, MarvelxCapcom2, US, GAME_QUICKRESOLVE1, -1, -1},
-//	{0x934F9081, NeoPets_Darkest_Faerie, US, GAME_RESOLVEPROMOTED | GAME_FULL16BITRES | GAME_NODEPTHRESOLVE, -1, -1},
-//	
-//	{0x21068223, Okami, US, GAME_FULL16BITRES|GAME_NODEPTHRESOLVE|GAME_FASTUPDATE, -1, -1},
-//	{0xC5DEFEA0, Okami, JP, GAME_FULL16BITRES|GAME_NODEPTHRESOLVE|GAME_FASTUPDATE, -1, -1},
-//	
-//	// Speed up
-//	{0x6BA2F6B9, ResidentEvil4, EU, GAME_NOTARGETRESOLVE | GAME_32BITTARGS, -1, -1},
-//	{0x013E349D, ResidentEvil4, US, GAME_NOTARGETCLUT, -1, -1},
-//	
-//	{0x2088950A, Xenosaga2, JP, GAME_FULL16BITRES | GAME_NODEPTHRESOLVE, -1, -1},
-//	{0x901AAC09, HauntingGround, US, GAME_FULL16BITRES | GAME_NODEPTHRESOLVE, -1, -1},
-//	{0x625AF967, NightmareBeforeChristmas, JP, GAME_TEXAHACK, -1, -1},
-//	
-//	{0x3CFE3B37, PowershotPinball, EU, GAME_AUTORESET, -1, -1},
-//	{0x60FA8C69, BioHazard4, JP, GAME_NOTARGETCLUT, -1, -1}
-//  End of game settings from the patch folder.
+
+	//	Game settings that used to be in the Patches folder. Commented out until I decide what to do with them.
+	//	{0x951555A0, Disgaea2, US, GAME_NODEPTHRESOLVE, -1, -1},
+	//	{0x4334E17D, Disgaea2, JP, GAME_NODEPTHRESOLVE, -1, -1},
+	//
+	//	{0x5EB127E7, Gradius, JP, GAME_INTERLACE2X, -1, -1},
+	//	{0x6ADBC24B, Gradius, EU, GAME_INTERLACE2X, -1, -1},
+	//	{0xF22CDDAF, Gradius, US, GAME_INTERLACE2X, -1, -1},
+	//
+	//	{0xF52FB2BE, KingdomHearts, EU, GAME_QUICKRESOLVE1, -1, -1},
+	//	{0xAE3EAA05, KingdomHearts, DE, GAME_QUICKRESOLVE1, -1, -1},
+	//	{0xF6DC728D, KingdomHearts, FR, GAME_QUICKRESOLVE1, -1, -1},
+	//	{0x0F6B6315, KingdomHearts, US, GAME_QUICKRESOLVE1, -1, -1},
+	//	{0x3E68955A, KingdomHeartsFM, JP, GAME_QUICKRESOLVE1, -1, -1},
+	//
+	//	{0xC398F477, KingdomHearts2, EU, GAME_NODEPTHRESOLVE, -1, -1},
+	//	{0xDA0535FD, KingdomHearts2, US, GAME_NODEPTHRESOLVE, -1, -1},
+	//	{0x93F8A60B, KingdomHearts2, JP, GAME_NODEPTHRESOLVE, -1, -1},
+	//	{0xF266B00B, KingdomHearts2FM, JP, GAME_NODEPTHRESOLVE, -1, -1},
+	//
+	//	//The patch claimed to stop characters appearing as wigs on GeForce 8x00 series cards (Disable Alpha Testing)
+	//	{0x2251E14D, Tekken4, EU, GAME_NOALPHATEST, -1, -1},
+	//
+	//	// This one is supposed to fix a refresh bug.
+	//	{0x51F91783, Kaena, JP, GAME_NOTARGETRESOLVE, -1, -1},
+	//
+	//	{0xDEFA4763, ShadowHearts, EU, 	GAME_NODEPTHRESOLVE | GAME_NOQUICKRESOLVE | GAME_NOTARGETRESOLVE | GAME_AUTORESET, -1, -1},
+	//	{0x8BE3D7B2, ShadowHearts, US, GAME_NODEPTHUPDATE | GAME_AUTORESET | GAME_NOQUICKRESOLVE, -1, -1},
+	//
+	//	{0x015314A2, Sims_The_Urbz, US, GAME_NOQUICKRESOLVE, -1, -1},
+	//
+	//	// "Required fixes to visuals"
+	//	{0x086273D2, MetalGearSolid3, US, GAME_FULL16BITRES | GAME_NODEPTHRESOLVE, -1, -1},
+	//
+	//	{0x4D228733, MarvelxCapcom2, US, GAME_QUICKRESOLVE1, -1, -1},
+	//	{0x934F9081, NeoPets_Darkest_Faerie, US, GAME_RESOLVEPROMOTED | GAME_FULL16BITRES | GAME_NODEPTHRESOLVE, -1, -1},
+	//
+	//	{0x21068223, Okami, US, GAME_FULL16BITRES|GAME_NODEPTHRESOLVE|GAME_FASTUPDATE, -1, -1},
+	//	{0xC5DEFEA0, Okami, JP, GAME_FULL16BITRES|GAME_NODEPTHRESOLVE|GAME_FASTUPDATE, -1, -1},
+	//
+	//	// Speed up
+	//	{0x6BA2F6B9, ResidentEvil4, EU, GAME_NOTARGETRESOLVE | GAME_32BITTARGS, -1, -1},
+	//	{0x013E349D, ResidentEvil4, US, GAME_NOTARGETCLUT, -1, -1},
+	//
+	//	{0x2088950A, Xenosaga2, JP, GAME_FULL16BITRES | GAME_NODEPTHRESOLVE, -1, -1},
+	//	{0x901AAC09, HauntingGround, US, GAME_FULL16BITRES | GAME_NODEPTHRESOLVE, -1, -1},
+	//	{0x625AF967, NightmareBeforeChristmas, JP, GAME_TEXAHACK, -1, -1},
+	//
+	//	{0x3CFE3B37, PowershotPinball, EU, GAME_AUTORESET, -1, -1},
+	//	{0x60FA8C69, BioHazard4, JP, GAME_NOTARGETCLUT, -1, -1}
+	//  End of game settings from the patch folder.
 };
 
 #define GAME_INFO_INDEX (sizeof(crc_game_list)/sizeof(Game_Info))

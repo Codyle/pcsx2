@@ -26,56 +26,66 @@
 // FIXME find the optimal number of PBO
 #define PBO_POOL_SIZE 4
 
-namespace PboPool {
-	void BindPbo();
-	void UnbindPbo();
-	void NextPbo();
+namespace PboPool
+{
+void BindPbo();
+void UnbindPbo();
+void NextPbo();
 
-	char* Map(uint32 size);
-	void MapAll();
-	void Unmap();
-	void UnmapAll();
-	uint32 Offset();
-	void EndTransfer();
+char* Map(uint32 size);
+void MapAll();
+void Unmap();
+void UnmapAll();
+uint32 Offset();
+void EndTransfer();
 
-	void Init();
-	void Destroy();
+void Init();
+void Destroy();
 }
 
 class GSTextureOGL : public GSTexture
 {
-	private:
-		GLuint m_texture_id;	 // the texture id
-		uint32 m_pbo_id;
-		int m_pbo_size;
-		GLuint m_fbo_read;
+private:
+	GLuint m_texture_id;	 // the texture id
+	uint32 m_pbo_id;
+	int m_pbo_size;
+	GLuint m_fbo_read;
 
-		// internal opengl format/type/alignment
-		GLenum m_int_format;
-		GLenum m_int_type;
-		uint32 m_int_alignment;
-		uint32 m_int_shift;
+	// internal opengl format/type/alignment
+	GLenum m_int_format;
+	GLenum m_int_type;
+	uint32 m_int_alignment;
+	uint32 m_int_shift;
 
-		GLuint64 m_handles[12];
+	GLuint64 m_handles[12];
 
-	public:
-		explicit GSTextureOGL(int type, int w, int h, int format, GLuint fbo_read);
-		virtual ~GSTextureOGL();
+public:
+	explicit GSTextureOGL(int type, int w, int h, int format, GLuint fbo_read);
+	virtual ~GSTextureOGL();
 
-		bool Update(const GSVector4i& r, const void* data, int pitch);
-		bool Map(GSMap& m, const GSVector4i* r = NULL);
-		void Unmap();
-		bool Save(const string& fn, bool dds = false);
-		void Save(const string& fn, const void* image, uint32 pitch);
-		void SaveRaw(const string& fn, const void* image, uint32 pitch);
+	bool Update(const GSVector4i &r, const void* data, int pitch);
+	bool Map(GSMap &m, const GSVector4i* r = NULL);
+	void Unmap();
+	bool Save(const string &fn, bool dds = false);
+	void Save(const string &fn, const void* image, uint32 pitch);
+	void SaveRaw(const string &fn, const void* image, uint32 pitch);
 
-		void Clear(const void *data);
+	void Clear(const void *data);
 
-		void EnableUnit();
+	void EnableUnit();
 
-		bool IsBackbuffer() { return (m_type == GSTexture::Backbuffer); }
-		bool IsDss() { return (m_type == GSTexture::DepthStencil); }
+	bool IsBackbuffer()
+	{
+		return (m_type == GSTexture::Backbuffer);
+	}
+	bool IsDss()
+	{
+		return (m_type == GSTexture::DepthStencil);
+	}
 
-		GLuint GetID() { return m_texture_id; }
-		GLuint64 GetHandle(GLuint sampler_id);
+	GLuint GetID()
+	{
+		return m_texture_id;
+	}
+	GLuint64 GetHandle(GLuint sampler_id);
 };

@@ -35,7 +35,7 @@ private:
 	bool m_reset;
 	int m_upscale_multiplier;
 	int m_userhacks_skipdraw;
-	
+
 	#pragma region hacks
 
 	typedef bool (GSRendererHW::*OI_Ptr)(GSTexture* rt, GSTexture* ds, GSTextureCache::Source* t);
@@ -86,31 +86,26 @@ private:
 
 		template<class T> class FunctionMap : public GSFunctionMap<uint32, T>
 		{
-			list<HackEntry<T> >& m_tbl;
+			list<HackEntry<T>> &m_tbl;
 
 			T GetDefaultFunction(uint32 key)
 			{
 				CRC::Title title = (CRC::Title)(key & 0xffffff);
 				CRC::Region region = (CRC::Region)(key >> 24);
-
-				for(typename list<HackEntry<T> >::iterator i = m_tbl.begin(); i != m_tbl.end(); i++)
-				{
-					if(i->title == title && (i->region == CRC::RegionCount || i->region == region))
-					{
+				for (typename list<HackEntry<T>>::iterator i = m_tbl.begin(); i != m_tbl.end(); i++) {
+					if (i->title == title && (i->region == CRC::RegionCount || i->region == region))
 						return i->func;
-					}
 				}
-
 				return NULL;
 			}
 
 		public:
-			FunctionMap(list<HackEntry<T> >& tbl) : m_tbl(tbl) {}
+			FunctionMap(list<HackEntry<T>> &tbl) : m_tbl(tbl) {}
 		};
 
-		list<HackEntry<OI_Ptr> > m_oi_list;
-		list<HackEntry<OO_Ptr> > m_oo_list;
-		list<HackEntry<CU_Ptr> > m_cu_list;
+		list<HackEntry<OI_Ptr>> m_oi_list;
+		list<HackEntry<OO_Ptr>> m_oo_list;
+		list<HackEntry<CU_Ptr>> m_cu_list;
 
 		FunctionMap<OI_Ptr> m_oi_map;
 		FunctionMap<OO_Ptr> m_oo_map;
@@ -123,7 +118,7 @@ private:
 
 		Hacks();
 
-		void SetGameCRC(const CRC::Game& game);
+		void SetGameCRC(const CRC::Game &game);
 
 	} m_hacks;
 
@@ -146,7 +141,7 @@ public:
 	void VSync(int field);
 	void ResetDevice();
 	GSTexture* GetOutput(int i);
-	void InvalidateVideoMem(const GIFRegBITBLTBUF& BITBLTBUF, const GSVector4i& r);
-	void InvalidateLocalMem(const GIFRegBITBLTBUF& BITBLTBUF, const GSVector4i& r, bool clut = false);
+	void InvalidateVideoMem(const GIFRegBITBLTBUF &BITBLTBUF, const GSVector4i &r);
+	void InvalidateLocalMem(const GIFRegBITBLTBUF &BITBLTBUF, const GSVector4i &r, bool clut = false);
 	void Draw();
 };

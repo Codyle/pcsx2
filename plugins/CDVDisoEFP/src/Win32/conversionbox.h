@@ -28,8 +28,8 @@ extern void ConversionBoxDestroy();
 extern void ConversionBoxRefocus();
 extern void ConversionBoxDisplay();
 extern BOOL CALLBACK ConversionBoxCallback(HWND window,
-	        UINT msg,
-	        WPARAM param,
-	        LPARAM param2);
+                UINT msg,
+                WPARAM param,
+                LPARAM param2);
 
 #endif /* CONVERSIONBOX_H */

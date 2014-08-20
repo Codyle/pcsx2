@@ -18,17 +18,17 @@
 
 #if WXWIN_COMPATIBILITY_2_4
 #if defined(__DMC__) || defined(__BORLANDC__)
-    #pragma message "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
+#pragma message "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
 #elif defined(__WATCOMC__) || defined(__VISUALC__)
-    #pragma message ("wx/wave.h header is deprecated, use wx/sound.h and wxSound")
+#pragma message ("wx/wave.h header is deprecated, use wx/sound.h and wxSound")
 #else
-    #warning "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
+#warning "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
 #endif
-    #include "wx/sound.h"
-    // wxSound used to be called wxWave before wxWidgets 2.5.1:
-    typedef wxSound wxWave;
+#include "wx/sound.h"
+// wxSound used to be called wxWave before wxWidgets 2.5.1:
+typedef wxSound wxWave;
 #else
-    #error "wx/wave.h is only available in compatibility mode"
+#error "wx/wave.h is only available in compatibility mode"
 #endif
 
 #endif

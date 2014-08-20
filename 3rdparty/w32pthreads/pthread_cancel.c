@@ -37,117 +37,86 @@
 #include "ptw32pch.h"
 
 int
-pthread_cancel (pthread_t thread)
-     /*
-      * ------------------------------------------------------
-      * DOCPUBLIC
-      *      This function requests cancellation of 'thread'.
-      *
-      * PARAMETERS
-      *      thread
-      *              reference to an instance of pthread_t
-      *
-      *
-      * DESCRIPTION
-      *      This function requests cancellation of 'thread'.
-      *      NOTE: cancellation is asynchronous; use pthread_join to
-      *                wait for termination of 'thread' if necessary.
-      *
-      * RESULTS
-      *              0               successfully requested cancellation,
-      *              ESRCH           no thread found corresponding to 'thread',
-      *              ENOMEM          implicit self thread create failed.
-      * ------------------------------------------------------
-      */
+pthread_cancel(pthread_t thread)
+/*
+ * ------------------------------------------------------
+ * DOCPUBLIC
+ *      This function requests cancellation of 'thread'.
+ *
+ * PARAMETERS
+ *      thread
+ *              reference to an instance of pthread_t
+ *
+ *
+ * DESCRIPTION
+ *      This function requests cancellation of 'thread'.
+ *      NOTE: cancellation is asynchronous; use pthread_join to
+ *                wait for termination of 'thread' if necessary.
+ *
+ * RESULTS
+ *              0               successfully requested cancellation,
+ *              ESRCH           no thread found corresponding to 'thread',
+ *              ENOMEM          implicit self thread create failed.
+ * ------------------------------------------------------
+ */
 {
-  int result;
-  int cancel_self;
-  pthread_t self;
-  ptw32_thread_t * tp;
-
-  result = pthread_kill (thread, 0);
-
-  if (0 != result)
-    {
-      return result;
-    }
-
-  if ((self = pthread_self ()).p == NULL)
-    {
-      return ENOMEM;
-    }
-
-  /*
-   * FIXME!!
-   *
-   * Can a thread cancel itself?
-   *
-   * The standard doesn't
-   * specify an error to be returned if the target
-   * thread is itself.
-   *
-   * If it may, then we need to ensure that a thread can't
-   * deadlock itself trying to cancel itself asynchronously
-   * (pthread_cancel is required to be an async-cancel
-   * safe function).
-   */
-  cancel_self = pthread_equal (thread, self);
-  tp = (ptw32_thread_t *) thread.p;
-
-  /*
-   * Lock for async-cancel safety.
-   */
-  (void) pthread_mutex_lock (&tp->cancelLock);
-
-  if (tp->cancelType == PTHREAD_CANCEL_ASYNCHRONOUS
-      && tp->cancelState == PTHREAD_CANCEL_ENABLE
-      && tp->state < PThreadStateCanceling)
-    {
-      if (cancel_self)
-	{
-	  tp->state = PThreadStateCanceling;
-	  tp->cancelState = PTHREAD_CANCEL_DISABLE;
-
-	  (void) pthread_mutex_unlock (&tp->cancelLock);
-	  ptw32_throw (PTW32_EPS_CANCEL);
-
-	  /* Never reached */
+	int result;
+	int cancel_self;
+	pthread_t self;
+	ptw32_thread_t * tp;
+	result = pthread_kill(thread, 0);
+	if (0 != result)
+		return result;
+	if ((self = pthread_self()).p == NULL)
+		return ENOMEM;
+	/*
+	 * FIXME!!
+	 *
+	 * Can a thread cancel itself?
+	 *
+	 * The standard doesn't
+	 * specify an error to be returned if the target
+	 * thread is itself.
+	 *
+	 * If it may, then we need to ensure that a thread can't
+	 * deadlock itself trying to cancel itself asynchronously
+	 * (pthread_cancel is required to be an async-cancel
+	 * safe function).
+	 */
+	cancel_self = pthread_equal(thread, self);
+	tp = (ptw32_thread_t *) thread.p;
+	/*
+	 * Lock for async-cancel safety.
+	 */
+	(void) pthread_mutex_lock(&tp->cancelLock);
+	if (tp->cancelType == PTHREAD_CANCEL_ASYNCHRONOUS
+	    && tp->cancelState == PTHREAD_CANCEL_ENABLE
+	    && tp->state < PThreadStateCanceling) {
+		if (cancel_self) {
+			tp->state = PThreadStateCanceling;
+			tp->cancelState = PTHREAD_CANCEL_DISABLE;
+			(void) pthread_mutex_unlock(&tp->cancelLock);
+			ptw32_throw(PTW32_EPS_CANCEL);
+			/* Never reached */
+		} else
+			ptw32_PrepCancel(tp);
+	} else {
+		/*
+		 * Set for deferred cancellation.
+		 */
+		if (tp->state < PThreadStateCancelPending) {
+			// enables full cancel testing in pthread_testcancel, which is normally disabled because
+			// the full test requires a DLL function invocation and TLS lookup.  This provides an
+			// inlinable first-step shortcut for much speedier testing. :)
+			// Increment is performed here such that a thread that is already canceling won't get
+			// counted multiple times.
+			_InterlockedIncrement(&ptw32_testcancel_enable);
+			tp->state = PThreadStateCancelPending;
+			if (!SetEvent(tp->cancelEvent))
+				result = ESRCH;
+		} else if (tp->state >= PThreadStateCanceling)
+			result = ESRCH;
+		(void) pthread_mutex_unlock(&tp->cancelLock);
 	}
-      else
-	{
-	  ptw32_PrepCancel( tp );
-	}
-    }
-  else
-    {
-      /*
-       * Set for deferred cancellation.
-       */
-
-      if (tp->state < PThreadStateCancelPending)
-	{
-		// enables full cancel testing in pthread_testcancel, which is normally disabled because
-		// the full test requires a DLL function invocation and TLS lookup.  This provides an
-		// inlinable first-step shortcut for much speedier testing. :)
-
-		// Increment is performed here such that a thread that is already canceling won't get
-		// counted multiple times.
-
-		_InterlockedIncrement( &ptw32_testcancel_enable );
-
-	  tp->state = PThreadStateCancelPending;
-	  if (!SetEvent (tp->cancelEvent))
-	    {
-	      result = ESRCH;
-	    }
-	}
-      else if (tp->state >= PThreadStateCanceling)
-	{
-	  result = ESRCH;
-	}
-
-      (void) pthread_mutex_unlock (&tp->cancelLock);
-    }
-
-  return (result);
+	return (result);
 }

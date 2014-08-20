@@ -28,8 +28,7 @@
 class GSRendererDX9 : public GSRendererDX
 {
 protected:
-	struct
-	{
+	struct {
 		Direct3DDepthStencilState9 dss;
 		Direct3DBlendState9 bs;
 	} m_fba;

@@ -26,7 +26,8 @@
 // - This class should only be accessed from the EE thread...
 // - buffer_size must be power of 2
 // - ring-buffer has no complete pending packets when read_pos==write_pos
-class VU_Thread : public pxThread {
+class VU_Thread : public pxThread
+{
 	static const s32 buffer_size = (_1mb * 16) / sizeof(s32);
 	static const u32 buffer_mask = buffer_size - 1;
 	__aligned(4) u32 buffer[buffer_size];
@@ -36,8 +37,8 @@ class VU_Thread : public pxThread {
 	__aligned(4) s32  write_offset; // Only modified by EE thread
 	__aligned(4) Mutex     mtxBusy;
 	__aligned(4) Semaphore semaEvent;
-	__aligned(4) BaseVUmicroCPU*& vuCPU;
-	__aligned(4) VURegs&          vuRegs;
+	__aligned(4) BaseVUmicroCPU* &vuCPU;
+	__aligned(4) VURegs          &vuRegs;
 
 public:
 	__aligned16  vifStruct        vif;
@@ -46,7 +47,7 @@ public:
 	__aligned(4) u32 vuCycles[4]; // Used for VU cycle stealing hack
 	__aligned(4) u32 vuCycleIdx;  // Used for VU cycle stealing hack
 
-	VU_Thread(BaseVUmicroCPU*& _vuCPU, VURegs& _vuRegs);
+	VU_Thread(BaseVUmicroCPU* &_vuCPU, VURegs &_vuRegs);
 	virtual ~VU_Thread() throw();
 
 	void Reset();
@@ -62,7 +63,7 @@ public:
 
 	void ExecuteVU(u32 vu_addr, u32 vif_top, u32 vif_itop);
 
-	void VifUnpack(vifStruct& _vif, VIFregisters& _vifRegs, u8* data, u32 size);
+	void VifUnpack(vifStruct &_vif, VIFregisters &_vifRegs, u8* data, u32 size);
 
 	// Writes to VU's Micro Memory (size in bytes)
 	void WriteMicroMem(u32 vu_micro_addr, void* data, u32 size);
@@ -70,9 +71,9 @@ public:
 	// Writes to VU's Data Memory (size in bytes)
 	void WriteDataMem(u32 vu_data_addr, void* data, u32 size);
 
-	void WriteCol(vifStruct& _vif);
+	void WriteCol(vifStruct &_vif);
 
-	void WriteRow(vifStruct& _vif);
+	void WriteRow(vifStruct &_vif);
 
 protected:
 	void ExecuteTaskInThread();

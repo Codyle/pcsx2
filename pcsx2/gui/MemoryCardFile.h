@@ -19,12 +19,12 @@
 // memorycard system is properly extracted into a plugin system (which would make it a
 // separate project file).
 //
-// Please do not move contents from MemoryCardfile.cpp, such as class definitions, into 
+// Please do not move contents from MemoryCardfile.cpp, such as class definitions, into
 // this file.  I'd prefer they stay in MemoryCardFile.cpp for now. --air
 
 extern uint FileMcd_GetMtapPort(uint slot);
 extern uint FileMcd_GetMtapSlot(uint slot);
-extern bool FileMcd_IsMultitapSlot( uint slot );
+extern bool FileMcd_IsMultitapSlot(uint slot);
 //extern wxFileName FileMcd_GetSimpleName(uint slot);
 extern wxString FileMcd_GetDefaultName(uint slot);
-extern bool isValidNewFilename( wxString filenameStringToTest, wxDirName atBasePath, wxString& out_errorMessage, uint minNumCharacters=5 );
+extern bool isValidNewFilename(wxString filenameStringToTest, wxDirName atBasePath, wxString &out_errorMessage, uint minNumCharacters = 5);

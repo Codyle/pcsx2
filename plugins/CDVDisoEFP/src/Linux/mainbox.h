@@ -26,8 +26,7 @@
 #include <gtk/gtkwidget.h>
 
 
-struct MainBoxData
-{
+struct MainBoxData {
 	GtkWidget *window; // GtkWindow
 	GtkWidget *file; // GtkEntry
 	GtkWidget *selectbutton; // GtkButton

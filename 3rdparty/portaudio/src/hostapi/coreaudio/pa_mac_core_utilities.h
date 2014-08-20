@@ -15,7 +15,7 @@
  * Olivier Tristan for feedback and testing
  * Glenn Zelniker and Z-Systems engineering for sponsoring the Blocking I/O
  * interface.
- * 
+ *
  *
  * Based on the Open Source API proposed by Ross Bencina
  * Copyright (c) 1999-2002 Ross Bencina, Phil Burk
@@ -41,13 +41,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -73,7 +73,7 @@
 #define MAX(a, b)  (((a)<(b))?(b):(a))
 #endif
 
-#define ERR(mac_error) PaMacCore_SetError(mac_error, __LINE__, 1 ) 
+#define ERR(mac_error) PaMacCore_SetError(mac_error, __LINE__, 1 )
 #define WARNING(mac_error) PaMacCore_SetError(mac_error, __LINE__, 0 )
 
 
@@ -117,7 +117,7 @@
 
 #define UNIX_ERR(err) PaMacCore_SetUnixError( err, __LINE__ )
 
-PaError PaMacCore_SetUnixError( int err, int line );
+PaError PaMacCore_SetUnixError(int err, int line);
 
 /*
  * Translates MacOS generated errors into PaErrors
@@ -137,32 +137,32 @@ PaError PaMacCore_SetError(OSStatus error, int line, int isError);
  * This function attempts to compute the minimum such size.
  *
  */
-long computeRingBufferSize( const PaStreamParameters *inputParameters,
-                                   const PaStreamParameters *outputParameters,
-                                   long inputFramesPerBuffer,
-                                   long outputFramesPerBuffer,
-                                   double sampleRate );
+long computeRingBufferSize(const PaStreamParameters *inputParameters,
+                           const PaStreamParameters *outputParameters,
+                           long inputFramesPerBuffer,
+                           long outputFramesPerBuffer,
+                           double sampleRate);
 
 OSStatus propertyProc(
-    AudioDeviceID inDevice, 
-    UInt32 inChannel, 
-    Boolean isInput, 
-    AudioDevicePropertyID inPropertyID, 
-    void* inClientData );
+        AudioDeviceID inDevice,
+        UInt32 inChannel,
+        Boolean isInput,
+        AudioDevicePropertyID inPropertyID,
+        void* inClientData);
 
-/* sets the value of the given property and waits for the change to 
+/* sets the value of the given property and waits for the change to
    be acknowledged, and returns the final value, which is not guaranteed
    by this function to be the same as the desired value. Obviously, this
    function can only be used for data whose input and output are the
    same size and format, and their size and format are known in advance.*/
 PaError AudioDeviceSetPropertyNowAndWaitForChange(
-    AudioDeviceID inDevice,
-    UInt32 inChannel, 
-    Boolean isInput, 
-    AudioDevicePropertyID inPropertyID,
-    UInt32 inPropertyDataSize, 
-    const void *inPropertyData,
-    void *outPropertyData );
+        AudioDeviceID inDevice,
+        UInt32 inChannel,
+        Boolean isInput,
+        AudioDevicePropertyID inPropertyID,
+        UInt32 inPropertyDataSize,
+        const void *inPropertyData,
+        void *outPropertyData);
 
 /*
  * Sets the sample rate the HAL device.
@@ -173,10 +173,10 @@ PaError AudioDeviceSetPropertyNowAndWaitForChange(
  *             higher than the requested rate. If there isn't a higher one,
  *             just use the highest available.
  */
-PaError setBestSampleRateForDevice( const AudioDeviceID device,
-                                    const bool isOutput,
-                                    const bool requireExact,
-                                    const Float64 desiredSrate );
+PaError setBestSampleRateForDevice(const AudioDeviceID device,
+                                   const bool isOutput,
+                                   const bool requireExact,
+                                   const Float64 desiredSrate);
 /*
    Attempts to set the requestedFramesPerBuffer. If it can't set the exact
    value, it settles for something smaller if available. If nothing smaller
@@ -186,10 +186,10 @@ PaError setBestSampleRateForDevice( const AudioDeviceID device,
    The logic is very simmilar too setBestSampleRate only failure here is
    not usually catastrophic.
 */
-PaError setBestFramesPerBuffer( const AudioDeviceID device,
-                                const bool isOutput,
-                                UInt32 requestedFramesPerBuffer, 
-                                UInt32 *actualFramesPerBuffer );
+PaError setBestFramesPerBuffer(const AudioDeviceID device,
+                               const bool isOutput,
+                               UInt32 requestedFramesPerBuffer,
+                               UInt32 *actualFramesPerBuffer);
 
 
 /*********************
@@ -199,11 +199,11 @@ PaError setBestFramesPerBuffer( const AudioDeviceID device,
  *********************/
 
 OSStatus xrunCallback(
-    AudioDeviceID inDevice, 
-    UInt32 inChannel, 
-    Boolean isInput, 
-    AudioDevicePropertyID inPropertyID, 
-    void* inClientData ) ;
+        AudioDeviceID inDevice,
+        UInt32 inChannel,
+        Boolean isInput,
+        AudioDevicePropertyID inPropertyID,
+        void* inClientData) ;
 
 /** returns zero on success or a unix style error code. */
 int initializeXRunListenerList();
@@ -211,8 +211,8 @@ int initializeXRunListenerList();
 int destroyXRunListenerList();
 
 /**Returns the list, so that it can be passed to CorAudio.*/
-void *addToXRunListenerList( void *stream );
+void *addToXRunListenerList(void *stream);
 /**Returns the number of Listeners in the list remaining.*/
-int removeFromXRunListenerList( void *stream );
+int removeFromXRunListenerList(void *stream);
 
 #endif /* PA_MAC_CORE_UTILITIES_H__*/

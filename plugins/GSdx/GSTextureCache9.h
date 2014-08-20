@@ -27,9 +27,12 @@
 class GSTextureCache9 : public GSTextureCache
 {
 protected:
-	int Get8bitFormat() {return D3DFMT_A8;}
+	int Get8bitFormat()
+	{
+		return D3DFMT_A8;
+	}
 
-	void Read(Target* t, const GSVector4i& r);
+	void Read(Target* t, const GSVector4i &r);
 
 public:
 	GSTextureCache9(GSRenderer* r);

@@ -23,32 +23,32 @@
 class WXDLLIMPEXP_BASE wxStringInputStream : public wxInputStream
 {
 public:
-    // ctor associates the stream with the given string which makes a copy of
-    // it
-    wxStringInputStream(const wxString& s);
-    virtual ~wxStringInputStream();
+	// ctor associates the stream with the given string which makes a copy of
+	// it
+	wxStringInputStream(const wxString &s);
+	virtual ~wxStringInputStream();
 
-    virtual wxFileOffset GetLength() const;
+	virtual wxFileOffset GetLength() const;
 
 protected:
-    virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode);
-    virtual wxFileOffset OnSysTell() const;
-    virtual size_t OnSysRead(void *buffer, size_t size);
+	virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode);
+	virtual wxFileOffset OnSysTell() const;
+	virtual size_t OnSysRead(void *buffer, size_t size);
 
 private:
-    // the string that was passed in the ctor
-    wxString m_str;
+	// the string that was passed in the ctor
+	wxString m_str;
 
-    // the buffer we're reading from
-    char* m_buf;
+	// the buffer we're reading from
+	char* m_buf;
 
-    // length of the buffer we're reading from
-    size_t m_len;
+	// length of the buffer we're reading from
+	size_t m_len;
 
-    // position in the stream in bytes, *not* in chars
-    size_t m_pos;
+	// position in the stream in bytes, *not* in chars
+	size_t m_pos;
 
-    DECLARE_NO_COPY_CLASS(wxStringInputStream)
+	DECLARE_NO_COPY_CLASS(wxStringInputStream)
 };
 
 // ----------------------------------------------------------------------------
@@ -58,43 +58,46 @@ private:
 class WXDLLIMPEXP_BASE wxStringOutputStream : public wxOutputStream
 {
 public:
-    // The stream will write data either to the provided string or to an
-    // internal string which can be retrieved using GetString()
-    wxStringOutputStream(wxString *pString = NULL)
-    {
-        m_str = pString ? pString : &m_strInternal;
-        m_pos = m_str->length() / sizeof(wxChar);
-    }
+	// The stream will write data either to the provided string or to an
+	// internal string which can be retrieved using GetString()
+	wxStringOutputStream(wxString *pString = NULL)
+	{
+		m_str = pString ? pString : &m_strInternal;
+		m_pos = m_str->length() / sizeof(wxChar);
+	}
 
 #if wxABI_VERSION >= 20804 && wxUSE_UNICODE
-    virtual ~wxStringOutputStream();
+	virtual ~wxStringOutputStream();
 #endif // wx 2.8.4+
 
-    // get the string containing current output
-    const wxString& GetString() const { return *m_str; }
+	// get the string containing current output
+	const wxString &GetString() const
+	{
+		return *m_str;
+	}
 
 protected:
-    virtual wxFileOffset OnSysTell() const;
-    virtual size_t OnSysWrite(const void *buffer, size_t size);
+	virtual wxFileOffset OnSysTell() const;
+	virtual size_t OnSysWrite(const void *buffer, size_t size);
 
 private:
-    // internal string, not used if caller provided his own string
-    wxString m_strInternal;
+	// internal string, not used if caller provided his own string
+	wxString m_strInternal;
 
-    // pointer given by the caller or just pointer to m_strInternal
-    wxString *m_str;
+	// pointer given by the caller or just pointer to m_strInternal
+	wxString *m_str;
 
-    // position in the stream in bytes, *not* in chars
-    size_t m_pos;
+	// position in the stream in bytes, *not* in chars
+	size_t m_pos;
 
 #if wxUSE_WCHAR_T
-    // string encoding converter (UTF8 is the standard)
-    wxMBConvUTF8 m_conv;
+	// string encoding converter (UTF8 is the standard)
+	wxMBConvUTF8 m_conv;
 #else
-    wxMBConv m_conv;
+	wxMBConv m_conv;
 #endif
 
-    DECLARE_NO_COPY_CLASS(wxStringOutputStream)
+	DECLARE_NO_COPY_CLASS(wxStringOutputStream)
 };
 
 #endif // wxUSE_STREAMS

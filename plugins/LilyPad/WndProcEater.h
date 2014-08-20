@@ -27,7 +27,7 @@ enum ExtraWndProcResult {
 	NO_WND_PROC
 };
 
-typedef ExtraWndProcResult (*ExtraWndProc)(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *out);
+typedef ExtraWndProcResult(*ExtraWndProc)(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *out);
 
 struct ExtraWndProcInfo {
 	ExtraWndProc proc;

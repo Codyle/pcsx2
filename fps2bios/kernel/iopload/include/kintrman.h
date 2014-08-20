@@ -26,7 +26,7 @@
 typedef int (*intrh_func)(void*);
 
 int	RegisterIntrHandler(int interrupt, int, intrh_func intrh, void*);
-						//4 (13,18)
+//4 (13,18)
 int	ReleaseIntrHandler(int interrupt);	//5 (18)
 int	EnableIntr(int interrupt);		//6 (13,18)
 int	DisableIntr(int interrupt, int *oldstat);		//7 (18)

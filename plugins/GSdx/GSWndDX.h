@@ -36,12 +36,18 @@ public:
 	GSWndDX();
 	virtual ~GSWndDX();
 
-	bool Create(const string& title, int w, int h);
+	bool Create(const string &title, int w, int h);
 	bool Attach(void* handle, bool managed = true);
 	void Detach();
 
-	void* GetDisplay() {return m_hWnd;}
-	void* GetHandle() {return m_hWnd;}
+	void* GetDisplay()
+	{
+		return m_hWnd;
+	}
+	void* GetHandle()
+	{
+		return m_hWnd;
+	}
 	GSVector4i GetClientRect();
 	bool SetWindowText(const char* title);
 

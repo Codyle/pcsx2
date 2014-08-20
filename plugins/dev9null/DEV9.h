@@ -26,7 +26,7 @@
 #include "PS2Eext.h"
 
 typedef struct {
-  s32 Log;
+	s32 Log;
 } Config;
 
 extern Config conf;

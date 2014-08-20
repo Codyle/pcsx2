@@ -29,9 +29,9 @@
 // 0x0600                      6.00              WinXP
 
 #ifndef _WIN32_IE
-    // use maximal set of features by default, we check for them during
-    // run-time anyhow
-    #define _WIN32_IE 0x0600
+// use maximal set of features by default, we check for them during
+// run-time anyhow
+#define _WIN32_IE 0x0600
 #endif // !defined(_WIN32_IE)
 
 #include "wx/msw/wrapwin.h"
@@ -45,9 +45,9 @@
 inline void wxSetCCUnicodeFormat(HWND WXUNUSED_IN_WINCE(hwnd))
 {
 #ifndef __WXWINCE__
-    ::SendMessage(hwnd, CCM_SETUNICODEFORMAT, wxUSE_UNICODE, 0);
+	::SendMessage(hwnd, CCM_SETUNICODEFORMAT, wxUSE_UNICODE, 0);
 #else // !__WXWINCE__
-    // here it should be already in Unicode anyhow
+	// here it should be already in Unicode anyhow
 #endif // __WXWINCE__/!__WXWINCE__
 }
 

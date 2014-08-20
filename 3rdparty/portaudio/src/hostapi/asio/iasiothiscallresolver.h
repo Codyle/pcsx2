@@ -124,35 +124,36 @@
 // We need to do this because IASIOThiscallResolver works by eclipsing the
 // original definition of ASIOInit() with a macro (see below).
 #if !defined(iasiothiscallresolver_sourcefile)
-	#if !defined(__ASIO_H)
-	#error iasiothiscallresolver.h must be included AFTER asio.h
-	#endif
+#if !defined(__ASIO_H)
+#error iasiothiscallresolver.h must be included AFTER asio.h
+#endif
 #endif
 
 #include <windows.h>
 #include <asiodrvr.h> /* From ASIO SDK */
 
 
-class IASIOThiscallResolver : public IASIO {
+class IASIOThiscallResolver : public IASIO
+{
 private:
 	IASIO* that_; // Points to the real IASIO
 
 	static IASIOThiscallResolver instance; // Singleton instance
 
 	// Constructors - declared private so construction is limited to
-    // our Singleton instance
-    IASIOThiscallResolver();
+	// our Singleton instance
+	IASIOThiscallResolver();
 	IASIOThiscallResolver(IASIO* that);
 public:
 
-    // Methods from the IUnknown interface. We don't fully implement IUnknown
-    // because the ASIO SDK never calls these methods through theAsioDriver ptr.
-    // These methods are implemented as assert(false).
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppv);
-    virtual ULONG STDMETHODCALLTYPE AddRef();
-    virtual ULONG STDMETHODCALLTYPE Release();
+	// Methods from the IUnknown interface. We don't fully implement IUnknown
+	// because the ASIO SDK never calls these methods through theAsioDriver ptr.
+	// These methods are implemented as assert(false).
+	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppv);
+	virtual ULONG STDMETHODCALLTYPE AddRef();
+	virtual ULONG STDMETHODCALLTYPE Release();
 
-    // Methods from the IASIO interface, implemented as forwarning calls to that.
+	// Methods from the IASIO interface, implemented as forwarning calls to that.
 	virtual ASIOBool init(void *sysHandle);
 	virtual void getDriverName(char *name);
 	virtual long getDriverVersion();
@@ -172,11 +173,11 @@ public:
 	virtual ASIOError createBuffers(ASIOBufferInfo *bufferInfos, long numChannels, long bufferSize, ASIOCallbacks *callbacks);
 	virtual ASIOError disposeBuffers();
 	virtual ASIOError controlPanel();
-	virtual ASIOError future(long selector,void *opt);
+	virtual ASIOError future(long selector, void *opt);
 	virtual ASIOError outputReady();
 
-    // Class method, see ASIOInit() macro below.
-    static ASIOError ASIOInit(ASIODriverInfo *info); // Delegates to ::ASIOInit
+	// Class method, see ASIOInit() macro below.
+	static ASIOError ASIOInit(ASIODriverInfo *info); // Delegates to ::ASIOInit
 };
 
 

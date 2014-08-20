@@ -1,7 +1,9 @@
 #ifndef __HEAPLIB_H__
 #define __HEAPLIB_H__
 
-struct ll{ struct ll *next, *prev; };			//linked list
+struct ll {
+	struct ll *next, *prev;
+};			//linked list
 
 
 struct Heap {
@@ -20,7 +22,7 @@ struct Chunk {
 	u32 unk5;
 };
 
-void *CreateHeap(int chunkSize, int memoryType );
+void *CreateHeap(int chunkSize, int memoryType);
 int  DestroyHeap(void *heap);
 
 void *HeapMalloc(void *heap, int size);

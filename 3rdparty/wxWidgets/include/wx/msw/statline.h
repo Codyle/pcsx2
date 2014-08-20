@@ -18,33 +18,36 @@
 class WXDLLEXPORT wxStaticLine : public wxStaticLineBase
 {
 public:
-    // constructors and pseudo-constructors
-    wxStaticLine() { }
+	// constructors and pseudo-constructors
+	wxStaticLine() { }
 
-    wxStaticLine( wxWindow *parent,
-                  wxWindowID id = wxID_ANY,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxDefaultSize,
-                  long style = wxLI_HORIZONTAL,
-                  const wxString &name = wxStaticLineNameStr )
-    {
-        Create(parent, id, pos, size, style, name);
-    }
+	wxStaticLine(wxWindow *parent,
+	             wxWindowID id = wxID_ANY,
+	             const wxPoint &pos = wxDefaultPosition,
+	             const wxSize &size = wxDefaultSize,
+	             long style = wxLI_HORIZONTAL,
+	             const wxString &name = wxStaticLineNameStr)
+	{
+		Create(parent, id, pos, size, style, name);
+	}
 
-    bool Create( wxWindow *parent,
-                 wxWindowID id = wxID_ANY,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxLI_HORIZONTAL,
-                 const wxString &name = wxStaticLineNameStr );
+	bool Create(wxWindow *parent,
+	            wxWindowID id = wxID_ANY,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxLI_HORIZONTAL,
+	            const wxString &name = wxStaticLineNameStr);
 
-    // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return false; }
+	// overriden base class virtuals
+	virtual bool AcceptsFocus() const
+	{
+		return false;
+	}
 
-    // usually overridden base class virtuals
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+	// usually overridden base class virtuals
+	virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticLine)
+	DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticLine)
 };
 
 #endif // _WX_MSW_STATLINE_H_

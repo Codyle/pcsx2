@@ -40,11 +40,8 @@ int mainboxstop;
 void MainBoxDestroy()
 {
 	if (progressboxwindow != NULL)
-	{
-		ProgressBoxDestroy();
-	} // ENDIF- Do we have a Progress Window still?
-	if (mainboxwindow != NULL)
-	{
+		ProgressBoxDestroy(); // ENDIF- Do we have a Progress Window still?
+	if (mainboxwindow != NULL) {
 		EndDialog(mainboxwindow, FALSE);
 		mainboxwindow = NULL;
 	} // ENDIF- Do we have a Main Window still?
@@ -64,30 +61,24 @@ void MainBoxFileEvent()
 	int returnval;
 	char templine[256];
 	struct IsoFile *tempfile;
-
 	GetDlgItemText(mainboxwindow, IDC_0202, templine, 256);
 	returnval = IsIsoFile(templine);
-	if (returnval == -1)
-	{
+	if (returnval == -1) {
 		SetDlgItemText(mainboxwindow, IDC_0204, "File Type: ---");
 		return;
 	} // ENDIF- Not a name of any sort?
-	if (returnval == -2)
-	{
+	if (returnval == -2) {
 		SetDlgItemText(mainboxwindow, IDC_0204, "File Type: Not a file");
 		return;
 	} // ENDIF- Not a regular file?
-	if (returnval == -3)
-	{
+	if (returnval == -3) {
 		SetDlgItemText(mainboxwindow, IDC_0204, "File Type: Not a valid image file");
 		return;
 	} // ENDIF- Not an Image file?
-	if (returnval == -4)
-	{
+	if (returnval == -4) {
 		SetDlgItemText(mainboxwindow, IDC_0204, "File Type: Missing Table File (will rebuild)");
 		return;
 	} // ENDIF- Missing Compression seek table?
-
 	tempfile = IsoFileOpenForRead(templine);
 	sprintf(templine, "File Type: %s%s%s",
 	        multinames[tempfile->multi],
@@ -124,16 +115,13 @@ void MainBoxOKEvent()
 	char tempisoname[256];
 	MainBoxUnfocus();
 	GetDlgItemText(mainboxwindow, IDC_0202, tempisoname, 256);
-	if (*(tempisoname) != 0)
-	{
-		if (IsIsoFile(tempisoname) == -4)
-		{
+	if (*(tempisoname) != 0) {
+		if (IsIsoFile(tempisoname) == -4) {
 			IsoTableRebuild(tempisoname);
 			MainBoxRefocus();
 			return;
 		} // ENDIF- Do we need to rebuild an image file's index before using it?
-		if (IsIsoFile(tempisoname) < 0)
-		{
+		if (IsIsoFile(tempisoname) < 0) {
 			MainBoxRefocus();
 			MessageBox(mainboxwindow,
 			           "Not a Valid Image File.",
@@ -143,24 +131,17 @@ void MainBoxOKEvent()
 		} // ENDIF- Not an ISO file? Message and Stop here.
 	} // ENDIF- Do we have a name to check out?
 	strcpy(conf.isoname, tempisoname);
-	if (Button_GetCheck(GetDlgItem(mainboxwindow, IDC_0209)) == BST_UNCHECKED)
-	{
+	if (Button_GetCheck(GetDlgItem(mainboxwindow, IDC_0209)) == BST_UNCHECKED) {
 		conf.startconfigure = 0; // FALSE
-	}
-	else
-	{
+	} else {
 		conf.startconfigure = 1; // TRUE
 	} // ENDIF- Was this checkbox unchecked?
-	if (Button_GetCheck(GetDlgItem(mainboxwindow, IDC_0210)) == BST_UNCHECKED)
-	{
+	if (Button_GetCheck(GetDlgItem(mainboxwindow, IDC_0210)) == BST_UNCHECKED) {
 		conf.restartconfigure = 0; // FALSE
-	}
-	else
-	{
+	} else {
 		conf.restartconfigure = 1; // TRUE
 	} // ENDIF- Was this checkbox unchecked?
 	SaveConf();
-
 	MainBoxCancelEvent();
 	return;
 } // END MainBoxOKEvent()
@@ -194,9 +175,7 @@ void MainBoxBrowseEvent()
 	GetDlgItemText(mainboxwindow, IDC_0202, newfilename, 256);
 	returnbool = GetOpenFileName(&filebox);
 	if (returnbool != FALSE)
-	{
-		SetDlgItemText(mainboxwindow, IDC_0202, newfilename);
-	} // ENDIF- User actually selected a name? Save it.
+		SetDlgItemText(mainboxwindow, IDC_0202, newfilename); // ENDIF- User actually selected a name? Save it.
 	return;
 } // END MainBoxBrowseEvent()
 
@@ -212,7 +191,6 @@ void MainBoxDeviceEvent()
 void MainBoxConversionEvent()
 {
 	MainBoxUnfocus();
-
 	DialogBox(progmodule,
 	          MAKEINTRESOURCE(DLG_0400),
 	          mainboxwindow,
@@ -226,21 +204,13 @@ void MainBoxDisplay()
 	// We held off setting the name until now... so description would show.
 	SetDlgItemText(mainboxwindow, IDC_0202, conf.isoname);
 	if (conf.startconfigure == 0)
-	{
 		Button_SetCheck(GetDlgItem(mainboxwindow, IDC_0209), BST_UNCHECKED);
-	}
 	else
-	{
-		Button_SetCheck(GetDlgItem(mainboxwindow, IDC_0209), BST_CHECKED);
-	} // ENDIF- Do we need to uncheck this box?
+		Button_SetCheck(GetDlgItem(mainboxwindow, IDC_0209), BST_CHECKED); // ENDIF- Do we need to uncheck this box?
 	if (conf.restartconfigure == 0)
-	{
 		Button_SetCheck(GetDlgItem(mainboxwindow, IDC_0210), BST_UNCHECKED);
-	}
 	else
-	{
-		Button_SetCheck(GetDlgItem(mainboxwindow, IDC_0210), BST_CHECKED);
-	} // ENDIF- Do we need to uncheck this box?
+		Button_SetCheck(GetDlgItem(mainboxwindow, IDC_0210), BST_CHECKED); // ENDIF- Do we need to uncheck this box?
 	// First Time - Show the window
 	ShowWindow(mainboxwindow, SW_SHOWNORMAL);
 } // END MainBoxDisplay()
@@ -249,48 +219,45 @@ BOOL CALLBACK MainBoxCallback(HWND window,
                               WPARAM param,
                               LPARAM param2)
 {
-	switch (msg)
-	{
+	switch (msg) {
 		case WM_INITDIALOG:
 			mainboxwindow = window;
 			MainBoxDisplay(); // In this case, final touches to this window.
 			ProgressBoxDisplay(); // Create the Progress Box at this time.
-			return(FALSE); // And let Windows display this window.
+			return (FALSE); // And let Windows display this window.
 			break;
 		case WM_CLOSE: // The "X" in the upper right corner was hit.
 			MainBoxCancelEvent();
-			return(TRUE);
+			return (TRUE);
 			break;
 		case WM_COMMAND:
 			// Do we wish to capture 'ENTER/RETURN' and/or 'ESC' here?
-			switch (LOWORD(param))
-			{
+			switch (LOWORD(param)) {
 				case IDC_0202: // Filename Edit Box
 					MainBoxFileEvent(); // Describe the File's type...
-					return(FALSE); // Let Windows handle the actual 'edit' processing...
+					return (FALSE); // Let Windows handle the actual 'edit' processing...
 					break;
 				case IDC_0203: // "Browse" Button
 					MainBoxBrowseEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 				case IDC_0205: // "Ok" Button
 					MainBoxOKEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 				case IDC_0206: // "Get from Disc" Button
 					MainBoxDeviceEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
-
 				case IDC_0207: // "Convert" Button
 					MainBoxConversionEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 				case IDC_0208: // "Cancel" Button
 					MainBoxCancelEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 			} // ENDSWITCH param- Which object got the message?
 	} // ENDSWITCH msg- what message has been sent to this window?
-	return(FALSE); // Not a recognized message? Tell Windows to handle it.
+	return (FALSE); // Not a recognized message? Tell Windows to handle it.
 } // END MainBoxEventLoop()

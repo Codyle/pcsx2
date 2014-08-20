@@ -50,55 +50,64 @@ protected:
 	float			m_paddingPct_vert;
 
 protected:
-	explicit pxStaticText( wxWindow* parent=NULL );
+	explicit pxStaticText(wxWindow* parent = NULL);
 
 	// wxWindow overloads!
-	bool AcceptsFocus() const { return false; }
-	bool HasTransparentBackground() { return true; }
+	bool AcceptsFocus() const
+	{
+		return false;
+	}
+	bool HasTransparentBackground()
+	{
+		return true;
+	}
 	void DoSetSize(int x, int y, int w, int h, int sizeFlags = wxSIZE_AUTO);
 
 public:
-	pxStaticText( wxWindow* parent, const wxString& label, wxAlignment align=wxALIGN_CENTRE_HORIZONTAL );
-	pxStaticText( wxWindow* parent, int heightInLines, const wxString& label, wxAlignment align=wxALIGN_CENTRE_HORIZONTAL );
+	pxStaticText(wxWindow* parent, const wxString &label, wxAlignment align = wxALIGN_CENTRE_HORIZONTAL);
+	pxStaticText(wxWindow* parent, int heightInLines, const wxString &label, wxAlignment align = wxALIGN_CENTRE_HORIZONTAL);
 	virtual ~pxStaticText() throw() {}
 
 	wxFont GetFontOk() const;
-	bool Enable( bool enabled=true );
+	bool Enable(bool enabled = true);
 
-	virtual void SetLabel(const wxString& label);
-	virtual wxString GetLabel() const { return m_label; }
+	virtual void SetLabel(const wxString &label);
+	virtual wxString GetLabel() const
+	{
+		return m_label;
+	}
 
-	pxStaticText& SetMinWidth( int width );
-	pxStaticText& SetMinHeight( int height );
+	pxStaticText &SetMinWidth(int width);
+	pxStaticText &SetMinHeight(int height);
 
-	pxStaticText& SetHeight( int lines );
-	pxStaticText& Align( wxAlignment align );
-	pxStaticText& Bold();
-	pxStaticText& WrapAt( int width );
+	pxStaticText &SetHeight(int lines);
+	pxStaticText &Align(wxAlignment align);
+	pxStaticText &Bold();
+	pxStaticText &WrapAt(int width);
 
-	pxStaticText& Unwrapped();
+	pxStaticText &Unwrapped();
 
-	pxStaticText& PaddingPixH( int pixels );
-	pxStaticText& PaddingPixV( int pixels );
+	pxStaticText &PaddingPixH(int pixels);
+	pxStaticText &PaddingPixV(int pixels);
 
-	pxStaticText& PaddingPctH( float pct );
-	pxStaticText& PaddingPctV( float pct );
+	pxStaticText &PaddingPctH(float pct);
+	pxStaticText &PaddingPctV(float pct);
 	//pxStaticText& DoBestGuessHeight();
 
 protected:
 	void SetPaddingDefaults();
-	void Init( const wxString& label );
+	void Init(const wxString &label);
 
-	wxSize GetBestWrappedSize( const wxClientDC& dc ) const;
+	wxSize GetBestWrappedSize(const wxClientDC &dc) const;
 	wxSize DoGetBestSize() const;
 
-	int calcPaddingWidth( int newWidth ) const;
-	int calcPaddingHeight( int newHeight ) const;
+	int calcPaddingWidth(int newWidth) const;
+	int calcPaddingHeight(int newHeight) const;
 
-	void paintEvent(wxPaintEvent& evt);
+	void paintEvent(wxPaintEvent &evt);
 
-	void UpdateWrapping( bool textChanged );
-	bool _updateWrapping( bool textChanged );
+	void UpdateWrapping(bool textChanged);
+	bool _updateWrapping(bool textChanged);
 };
 
 
@@ -107,19 +116,19 @@ class pxStaticHeading : public pxStaticText
 	typedef pxStaticText _parent;
 
 public:
-	pxStaticHeading( wxWindow* parent=NULL, const wxString& label=wxEmptyString );
-	pxStaticHeading( wxWindow* parent, int heightInLines, const wxString& label=wxEmptyString );
+	pxStaticHeading(wxWindow* parent = NULL, const wxString &label = wxEmptyString);
+	pxStaticHeading(wxWindow* parent, int heightInLines, const wxString &label = wxEmptyString);
 	virtual ~pxStaticHeading() throw() {}
 
 protected:
 	void SetPaddingDefaults();
 };
 
-extern void operator+=( wxSizer& target, pxStaticText& src );
+extern void operator+=(wxSizer &target, pxStaticText &src);
 
 template<>
-inline void operator+=( wxSizer& target, const pxWindowAndFlags<pxStaticText>& src )
+inline void operator+=(wxSizer &target, const pxWindowAndFlags<pxStaticText> &src)
 {
-	target.Add( src.window, src.flags );
+	target.Add(src.window, src.flags);
 }
 

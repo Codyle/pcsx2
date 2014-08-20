@@ -92,156 +92,184 @@ using namespace std;
 #ifdef _MSC_VER
 
 #if _MSC_VER >= 1500
-	#include <memory>
+#include <memory>
 #if _MSC_VER < 1600
-	using namespace std::tr1;
+using namespace std::tr1;
 #else
-	using namespace std;
+using namespace std;
 #endif
 #endif
 #endif
 
 #ifdef __GNUC__
 
-	#include <memory>
+#include <memory>
 
 #endif
 
 #ifdef _WINDOWS
 
-	// Note use GL/glcorearb.h on the future
-	#include <GL/gl.h>
-	#include <GL/glext.h>
-	#include <GL/wglext.h>
-	#include "GLLoader.h"
+// Note use GL/glcorearb.h on the future
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include <GL/wglext.h>
+#include "GLLoader.h"
 
-	#include <hash_map>
-	#include <hash_set>
+#include <hash_map>
+#include <hash_set>
 
-	using namespace stdext;
+using namespace stdext;
 
-	// hashing algoritms at: http://www.cris.com/~Ttwang/tech/inthash.htm
-	// default hash_compare does ldiv and other crazy stuff to reduce speed
+// hashing algoritms at: http://www.cris.com/~Ttwang/tech/inthash.htm
+// default hash_compare does ldiv and other crazy stuff to reduce speed
 
-	template<> class hash_compare<uint32>
+template<> class hash_compare<uint32>
+{
+public:
+#if _MSC_VER >= 1500 && _MSC_VER < 1600
+	enum {bucket_size = 4, min_buckets = 8};
+#else
+	enum {bucket_size = 1};
+#endif
+
+	size_t operator()(uint32 key) const
 	{
-	public:
-		#if _MSC_VER >= 1500 && _MSC_VER < 1600
-		enum {bucket_size = 4, min_buckets = 8};
-		#else
-		enum {bucket_size = 1};
-		#endif
+		key += ~(key << 15);
+		key ^= (key >> 10);
+		key += (key << 3);
+		key ^= (key >> 6);
+		key += ~(key << 11);
+		key ^= (key >> 16);
+		return (size_t)key;
+	}
 
-		size_t operator()(uint32 key) const
-		{
-			key += ~(key << 15);
-			key ^= (key >> 10);
-			key += (key << 3);
-			key ^= (key >> 6);
-			key += ~(key << 11);
-			key ^= (key >> 16);
-
-			return (size_t)key;
-		}
-
-		bool operator()(uint32 a, uint32 b) const
-		{
-			return a < b;
-		}
-	};
-
-	template<> class hash_compare<uint64>
+	bool operator()(uint32 a, uint32 b) const
 	{
-	public:
-		#if _MSC_VER >= 1500 && _MSC_VER < 1600
-		enum {bucket_size = 4, min_buckets = 8};
-		#else
-		enum {bucket_size = 1};
-		#endif
+		return a < b;
+	}
+};
 
-		size_t operator()(uint64 key) const
-		{
-			key += ~(key << 32);
-			key ^= (key >> 22);
-			key += ~(key << 13);
-			key ^= (key >> 8);
-			key += (key << 3);
-			key ^= (key >> 15);
-			key += ~(key << 27);
-			key ^= (key >> 31);
+template<> class hash_compare<uint64>
+{
+public:
+#if _MSC_VER >= 1500 && _MSC_VER < 1600
+	enum {bucket_size = 4, min_buckets = 8};
+#else
+	enum {bucket_size = 1};
+#endif
 
-			return (size_t)key;
-		}
+	size_t operator()(uint64 key) const
+	{
+		key += ~(key << 32);
+		key ^= (key >> 22);
+		key += ~(key << 13);
+		key ^= (key >> 8);
+		key += (key << 3);
+		key ^= (key >> 15);
+		key += ~(key << 27);
+		key ^= (key >> 31);
+		return (size_t)key;
+	}
 
-		bool operator()(uint64 a, uint64 b) const
-		{
-			return a < b;
-		}
-	};
+	bool operator()(uint64 a, uint64 b) const
+	{
+		return a < b;
+	}
+};
 
-	#define vsnprintf _vsnprintf
-	#define snprintf _snprintf
+#define vsnprintf _vsnprintf
+#define snprintf _snprintf
 
-	#define DIRECTORY_SEPARATOR '\\'
+#define DIRECTORY_SEPARATOR '\\'
 
 #else
 
-	#define hash_map map
-	#define hash_set set
+#define hash_map map
+#define hash_set set
 
-	//#include <ext/hash_map>
-	//#include <ext/hash_set>
+//#include <ext/hash_map>
+//#include <ext/hash_set>
 
 #ifdef ENABLE_GLES
-	#include <GLES3/gl3.h>
-	#include <GLES3/gl3ext.h>
+#include <GLES3/gl3.h>
+#include <GLES3/gl3ext.h>
 #else
-	// Note use GL/glcorearb.h on the future
-	#include <GL/gl.h>
-	#include <GL/glext.h>
+// Note use GL/glcorearb.h on the future
+#include <GL/gl.h>
+#include <GL/glext.h>
 #endif
-	#include "GLLoader.h"
+#include "GLLoader.h"
 
-	//using namespace __gnu_cxx;
+//using namespace __gnu_cxx;
 
-	#define DIRECTORY_SEPARATOR '/'
+#define DIRECTORY_SEPARATOR '/'
 
 #endif
 
 #ifdef _MSC_VER
 
-    #define __aligned(t, n) __declspec(align(n)) t
+#define __aligned(t, n) __declspec(align(n)) t
 
-    #define EXPORT_C_(type) extern "C" __declspec(dllexport) type __stdcall
-    #define EXPORT_C EXPORT_C_(void)
+#define EXPORT_C_(type) extern "C" __declspec(dllexport) type __stdcall
+#define EXPORT_C EXPORT_C_(void)
 
 #else
 
-    #define __aligned(t, n) t __attribute__((aligned(n)))
-    #define __fastcall __attribute__((fastcall))
+#define __aligned(t, n) t __attribute__((aligned(n)))
+#define __fastcall __attribute__((fastcall))
 
-    #define EXPORT_C_(type) extern "C" __attribute__((stdcall,externally_visible,visibility("default"))) type
-    #define EXPORT_C EXPORT_C_(void)
+#define EXPORT_C_(type) extern "C" __attribute__((stdcall,externally_visible,visibility("default"))) type
+#define EXPORT_C EXPORT_C_(void)
 
-    #ifdef __GNUC__
+#ifdef __GNUC__
 
-        #include "assert.h"
-        #define __forceinline __inline__ __attribute__((always_inline,unused))
-        // #define __forceinline __inline__ __attribute__((__always_inline__,__gnu_inline__))
-        #define __assume(c) ((void)0)
+#include "assert.h"
+#define __forceinline __inline__ __attribute__((always_inline,unused))
+// #define __forceinline __inline__ __attribute__((__always_inline__,__gnu_inline__))
+#define __assume(c) ((void)0)
 
-    #endif
+#endif
 
 #endif
 
 extern string format(const char* fmt, ...);
 
-struct delete_object {template<class T> void operator()(T& p) {delete p;}};
-struct delete_first {template<class T> void operator()(T& p) {delete p.first;}};
-struct delete_second {template<class T> void operator()(T& p) {delete p.second;}};
-struct aligned_free_object {template<class T> void operator()(T& p) {_aligned_free(p);}};
-struct aligned_free_first {template<class T> void operator()(T& p) {_aligned_free(p.first);}};
-struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_free(p.second);}};
+struct delete_object {
+	template<class T> void operator()(T &p)
+	{
+		delete p;
+	}
+};
+struct delete_first {
+	template<class T> void operator()(T &p)
+	{
+		delete p.first;
+	}
+};
+struct delete_second {
+	template<class T> void operator()(T &p)
+	{
+		delete p.second;
+	}
+};
+struct aligned_free_object {
+	template<class T> void operator()(T &p)
+	{
+		_aligned_free(p);
+	}
+};
+struct aligned_free_first {
+	template<class T> void operator()(T &p)
+	{
+		_aligned_free(p.first);
+	}
+};
+struct aligned_free_second {
+	template<class T> void operator()(T &p)
+	{
+		_aligned_free(p.second);
+	}
+};
 
 #define countof(a) (sizeof(a) / sizeof(a[0]))
 
@@ -249,40 +277,40 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 
 #ifndef RESTRICT
 
-    #ifdef __INTEL_COMPILER
+#ifdef __INTEL_COMPILER
 
-        #define RESTRICT restrict
+#define RESTRICT restrict
 
-    #elif _MSC_VER >= 1400
+#elif _MSC_VER >= 1400
 
-        #define RESTRICT __restrict
+#define RESTRICT __restrict
 
-	#elif defined(__GNUC__)
+#elif defined(__GNUC__)
 
-        #define RESTRICT __restrict__
+#define RESTRICT __restrict__
 
-    #else
+#else
 
-        #define RESTRICT
+#define RESTRICT
 
-    #endif
+#endif
 
 #endif
 
 #if defined(_DEBUG) //&& defined(_MSC_VER)
 
-	#include <assert.h>
-	#define ASSERT assert
+#include <assert.h>
+#define ASSERT assert
 
 #else
 
-	#define ASSERT(exp) ((void)0)
+#define ASSERT(exp) ((void)0)
 
 #endif
 
 #ifdef __x86_64__
 
-	#define _M_AMD64
+#define _M_AMD64
 
 #endif
 
@@ -290,33 +318,51 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 
 #if !defined(_M_SSE) && (!defined(_WINDOWS) || defined(_M_AMD64) || defined(_M_IX86_FP) && _M_IX86_FP >= 2)
 
-	#define _M_SSE 0x200
+#define _M_SSE 0x200
 
 #endif
 
 #if _M_SSE >= 0x200
 
-	#include <xmmintrin.h>
-	#include <emmintrin.h>
+#include <xmmintrin.h>
+#include <emmintrin.h>
 
-	#ifndef _MM_DENORMALS_ARE_ZERO
-	#define _MM_DENORMALS_ARE_ZERO 0x0040
-	#endif
+#ifndef _MM_DENORMALS_ARE_ZERO
+#define _MM_DENORMALS_ARE_ZERO 0x0040
+#endif
 
-	#define MXCSR (_MM_DENORMALS_ARE_ZERO | _MM_MASK_MASK | _MM_ROUND_NEAREST | _MM_FLUSH_ZERO_ON)
+#define MXCSR (_MM_DENORMALS_ARE_ZERO | _MM_MASK_MASK | _MM_ROUND_NEAREST | _MM_FLUSH_ZERO_ON)
 
-	#if defined(_MSC_VER) && _MSC_VER < 1500
+#if defined(_MSC_VER) && _MSC_VER < 1500
 
-	__forceinline __m128i _mm_castps_si128(__m128 a) {return *(__m128i*)&a;}
-	__forceinline __m128 _mm_castsi128_ps(__m128i a) {return *(__m128*)&a;}
-	__forceinline __m128i _mm_castpd_si128(__m128d a) {return *(__m128i*)&a;}
-	__forceinline __m128d _mm_castsi128_pd(__m128i a) {return *(__m128d*)&a;}
-	__forceinline __m128d _mm_castps_pd(__m128 a) {return *(__m128d*)&a;}
-	__forceinline __m128 _mm_castpd_ps(__m128d a) {return *(__m128*)&a;}
+__forceinline __m128i _mm_castps_si128(__m128 a)
+{
+	return *(__m128i*)&a;
+}
+__forceinline __m128 _mm_castsi128_ps(__m128i a)
+{
+	return *(__m128*)&a;
+}
+__forceinline __m128i _mm_castpd_si128(__m128d a)
+{
+	return *(__m128i*)&a;
+}
+__forceinline __m128d _mm_castsi128_pd(__m128i a)
+{
+	return *(__m128d*)&a;
+}
+__forceinline __m128d _mm_castps_pd(__m128 a)
+{
+	return *(__m128d*)&a;
+}
+__forceinline __m128 _mm_castpd_ps(__m128d a)
+{
+	return *(__m128*)&a;
+}
 
-	#endif
+#endif
 
-	#define _MM_TRANSPOSE4_SI128(row0, row1, row2, row3) \
+#define _MM_TRANSPOSE4_SI128(row0, row1, row2, row3) \
 	{ \
 		__m128 tmp0 = _mm_shuffle_ps(_mm_castsi128_ps(row0), _mm_castsi128_ps(row1), 0x44); \
 		__m128 tmp2 = _mm_shuffle_ps(_mm_castsi128_ps(row0), _mm_castsi128_ps(row1), 0xEE); \
@@ -336,19 +382,19 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 
 #if _M_SSE >= 0x301
 
-	#include <tmmintrin.h>
+#include <tmmintrin.h>
 
 #endif
 
 #if _M_SSE >= 0x401
 
-	#include <smmintrin.h>
+#include <smmintrin.h>
 
 #endif
 
 #if _M_SSE >= 0x500
 
-	#include <immintrin.h>
+#include <immintrin.h>
 
 #endif
 
@@ -358,122 +404,112 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 
 #if !defined(_MSC_VER)
 
-	#if defined(__USE_ISOC11) && !defined(ASAN_WORKAROUND) // not supported yet on gcc 4.9
+#if defined(__USE_ISOC11) && !defined(ASAN_WORKAROUND) // not supported yet on gcc 4.9
 
-	#define _aligned_malloc(size, a) aligned_alloc(a, size)
-	static inline void _aligned_free(void* p) { free(p); }
+#define _aligned_malloc(size, a) aligned_alloc(a, size)
+static inline void _aligned_free(void* p)
+{
+	free(p);
+}
 
-	#elif !defined(HAVE_ALIGNED_MALLOC)
+#elif !defined(HAVE_ALIGNED_MALLOC)
 
-	extern void* _aligned_malloc(size_t size, size_t alignment);
-	extern void _aligned_free(void* p);
+extern void* _aligned_malloc(size_t size, size_t alignment);
+extern void _aligned_free(void* p);
 
-	#endif
+#endif
 
-	// http://svn.reactos.org/svn/reactos/trunk/reactos/include/crt/mingw32/intrin_x86.h?view=markup
-	// - the other intrin_x86.h of pcsx2 is not up to date, its _interlockedbittestandreset simply does not work.
+// http://svn.reactos.org/svn/reactos/trunk/reactos/include/crt/mingw32/intrin_x86.h?view=markup
+// - the other intrin_x86.h of pcsx2 is not up to date, its _interlockedbittestandreset simply does not work.
 
-	__forceinline unsigned char _BitScanForward(unsigned long* const Index, const unsigned long Mask)
-	{
-		__asm__("bsfl %[Mask], %[Index]" : [Index] "=r" (*Index) : [Mask] "mr" (Mask));
-		
-		return Mask ? 1 : 0;
-	}
+__forceinline unsigned char _BitScanForward(unsigned long* const Index, const unsigned long Mask)
+{
+	__asm__("bsfl %[Mask], %[Index]" : [Index] "=r"(*Index) : [Mask] "mr"(Mask));
+	return Mask ? 1 : 0;
+}
 
-	__forceinline unsigned char _interlockedbittestandreset(volatile long* a, const long b)
-	{
-		unsigned char retval;
-		
-		__asm__("lock; btrl %[b], %[a]; setb %b[retval]" : [retval] "=q" (retval), [a] "+m" (*a) : [b] "Ir" (b) : "memory");
-		
-		return retval;
-	}
+__forceinline unsigned char _interlockedbittestandreset(volatile long* a, const long b)
+{
+	unsigned char retval;
+	__asm__("lock; btrl %[b], %[a]; setb %b[retval]" : [retval] "=q"(retval), [a] "+m"(*a) : [b] "Ir"(b) : "memory");
+	return retval;
+}
 
-	__forceinline unsigned char _interlockedbittestandset(volatile long* a, const long b)
-	{
-		unsigned char retval;
-		
-		__asm__("lock; btsl %[b], %[a]; setc %b[retval]" : [retval] "=q" (retval), [a] "+m" (*a) : [b] "Ir" (b) : "memory");
-		
-		return retval;
-	}
+__forceinline unsigned char _interlockedbittestandset(volatile long* a, const long b)
+{
+	unsigned char retval;
+	__asm__("lock; btsl %[b], %[a]; setc %b[retval]" : [retval] "=q"(retval), [a] "+m"(*a) : [b] "Ir"(b) : "memory");
+	return retval;
+}
 
-	__forceinline long _InterlockedCompareExchange(volatile long* const Destination, const long Exchange, const long Comperand)
-	{
-		long retval = Comperand;
-		
-		__asm__("lock; cmpxchgl %k[Exchange], %[Destination]" : [retval] "+a" (retval) : [Destination] "m" (*Destination), [Exchange] "q" (Exchange): "memory");
-		
-		return retval;
-	}
+__forceinline long _InterlockedCompareExchange(volatile long* const Destination, const long Exchange, const long Comperand)
+{
+	long retval = Comperand;
+	__asm__("lock; cmpxchgl %k[Exchange], %[Destination]" : [retval] "+a"(retval) : [Destination] "m"(*Destination), [Exchange] "q"(Exchange): "memory");
+	return retval;
+}
 
-	__forceinline long _InterlockedExchange(volatile long* const Target, const long Value)
-	{
-		long retval = Value;
-		
-		__asm__("xchgl %[retval], %[Target]" : [retval] "+r" (retval) : [Target] "m" (*Target) : "memory");
+__forceinline long _InterlockedExchange(volatile long* const Target, const long Value)
+{
+	long retval = Value;
+	__asm__("xchgl %[retval], %[Target]" : [retval] "+r"(retval) : [Target] "m"(*Target) : "memory");
+	return retval;
+}
 
-		return retval;
-	}
+__forceinline long _InterlockedExchangeAdd(volatile long* const Addend, const long Value)
+{
+	long retval = Value;
+	__asm__("lock; xaddl %[retval], %[Addend]" : [retval] "+r"(retval) : [Addend] "m"(*Addend) : "memory");
+	return retval;
+}
 
-	__forceinline long _InterlockedExchangeAdd(volatile long* const Addend, const long Value)
-	{
-		long retval = Value;
-		
-		__asm__("lock; xaddl %[retval], %[Addend]" : [retval] "+r" (retval) : [Addend] "m" (*Addend) : "memory");
-		
-		return retval;
-	}
-	
-	__forceinline short _InterlockedExchangeAdd16(volatile short* const Addend, const short Value)
-	{
-		short retval = Value;
-		
-		__asm__("lock; xaddw %[retval], %[Addend]" : [retval] "+r" (retval) : [Addend] "m" (*Addend) : "memory");
-		
-		return retval;
-	}
+__forceinline short _InterlockedExchangeAdd16(volatile short* const Addend, const short Value)
+{
+	short retval = Value;
+	__asm__("lock; xaddw %[retval], %[Addend]" : [retval] "+r"(retval) : [Addend] "m"(*Addend) : "memory");
+	return retval;
+}
 
-	__forceinline long _InterlockedDecrement(volatile long* const lpAddend)
-	{
-		return _InterlockedExchangeAdd(lpAddend, -1) - 1;
-	}
-	
-	__forceinline long _InterlockedIncrement(volatile long* const lpAddend)
-	{
-		return _InterlockedExchangeAdd(lpAddend, 1) + 1;
-	}
-	
-	__forceinline short _InterlockedDecrement16(volatile short* const lpAddend)
-	{
-		return _InterlockedExchangeAdd16(lpAddend, -1) - 1;
-	}
-	
-	__forceinline short _InterlockedIncrement16(volatile short* const lpAddend)
-	{
-		return _InterlockedExchangeAdd16(lpAddend, 1) + 1;
-	}
+__forceinline long _InterlockedDecrement(volatile long* const lpAddend)
+{
+	return _InterlockedExchangeAdd(lpAddend, -1) - 1;
+}
 
-	#ifdef __GNUC__
+__forceinline long _InterlockedIncrement(volatile long* const lpAddend)
+{
+	return _InterlockedExchangeAdd(lpAddend, 1) + 1;
+}
 
-	// gcc 4.8 define __rdtsc but unfortunately the compiler crash...
-	// The redefine allow to skip the gcc __rdtsc version -- Gregory
-	#define __rdtsc _lnx_rdtsc
-	//__forceinline unsigned long long __rdtsc()
-	__forceinline unsigned long long _lnx_rdtsc()
-	{
-		#if defined(__amd64__) || defined(__x86_64__)
-		unsigned long long low, high;
-		__asm__ __volatile__("rdtsc" : "=a"(low), "=d"(high));
-		return low | (high << 32);
-		#else
-		unsigned long long retval;
-		__asm__ __volatile__("rdtsc" : "=A"(retval));
-		return retval;
-		#endif
-	}
+__forceinline short _InterlockedDecrement16(volatile short* const lpAddend)
+{
+	return _InterlockedExchangeAdd16(lpAddend, -1) - 1;
+}
 
-	#endif
+__forceinline short _InterlockedIncrement16(volatile short* const lpAddend)
+{
+	return _InterlockedExchangeAdd16(lpAddend, 1) + 1;
+}
+
+#ifdef __GNUC__
+
+// gcc 4.8 define __rdtsc but unfortunately the compiler crash...
+// The redefine allow to skip the gcc __rdtsc version -- Gregory
+#define __rdtsc _lnx_rdtsc
+//__forceinline unsigned long long __rdtsc()
+__forceinline unsigned long long _lnx_rdtsc()
+{
+#if defined(__amd64__) || defined(__x86_64__)
+	unsigned long long low, high;
+	__asm__ __volatile__("rdtsc" : "=a"(low), "=d"(high));
+	return low | (high << 32);
+#else
+	unsigned long long retval;
+	__asm__ __volatile__("rdtsc" : "=A"(retval));
+	return retval;
+#endif
+}
+
+#endif
 
 #endif
 
@@ -482,12 +518,12 @@ extern void vmfree(void* ptr, size_t size);
 
 #ifdef _WINDOWS
 
-	#ifdef ENABLE_VTUNE
+#ifdef ENABLE_VTUNE
 
-	#include <JITProfiling.h>
+#include <JITProfiling.h>
 
-	#pragma comment(lib, "jitprofiling.lib")
+#pragma comment(lib, "jitprofiling.lib")
 
-	#endif
+#endif
 
 #endif

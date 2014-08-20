@@ -39,12 +39,10 @@ struct IPUStatus {
 #define IPU1_TAG_ADDR 2
 #define IPU1_TAG_NONE 3
 
-union tIPU_DMA
-{
-	struct
-	{
+union tIPU_DMA {
+	struct {
 		bool GIFSTALL  : 1;
-		bool TIE0 :1;
+		bool TIE0 : 1;
 		bool TIE1 : 1;
 		bool ACTV1 : 1;
 		bool DOTIE1  : 1;
@@ -55,17 +53,25 @@ union tIPU_DMA
 	};
 	u32 _u32;
 
-	tIPU_DMA( u32 val ){ _u32 = val; }
+	tIPU_DMA(u32 val) {
+		_u32 = val;
+	}
 	tIPU_DMA() { }
 
-	bool test(u32 flags) const { return !!(_u32 & flags); }
-	void set_flags(u32 flags) { _u32 |= flags; }
-	void clear_flags(u32 flags) { _u32 &= ~flags; }
-	void reset() { _u32 = 0; }
-	wxString desc() const
-	{
+	bool test(u32 flags) const {
+		return !!(_u32 & flags);
+	}
+	void set_flags(u32 flags) {
+		_u32 |= flags;
+	}
+	void clear_flags(u32 flags) {
+		_u32 &= ~flags;
+	}
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() const {
 		wxString temp(L"g_nDMATransfer[");
-
 		if (GIFSTALL) temp += L" GIFSTALL ";
 		if (TIE0) temp += L" TIE0 ";
 		if (TIE1) temp += L" TIE1 ";
@@ -75,7 +81,6 @@ union tIPU_DMA
 		if (FIREINT1) temp += L" FIREINT1 ";
 		if (VIFSTALL) temp += L" VIFSTALL ";
 		if (SIFSTALL) temp += L" SIFSTALL ";
-
 		temp += L"]";
 		return temp;
 	}

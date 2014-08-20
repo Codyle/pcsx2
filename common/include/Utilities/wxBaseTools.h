@@ -26,11 +26,11 @@
 // which require wxCore, see wxGuiTools.h
 // --------------------------------------------------------------------------------------
 
-extern void pxExplore( const wxString& path );
-extern void pxExplore( const char *path );
+extern void pxExplore(const wxString &path);
+extern void pxExplore(const char *path);
 
-extern void pxLaunch( const wxString& path );
-extern void pxLaunch( const char *path );
+extern void pxLaunch(const wxString &path);
+extern void pxLaunch(const char *path);
 
 // --------------------------------------------------------------------------------------
 //  wxDoNotLogInThisScope
@@ -52,21 +52,21 @@ protected:
 public:
 	wxDoNotLogInThisScope()
 	{
-		m_prev = wxLog::EnableLogging( false );
+		m_prev = wxLog::EnableLogging(false);
 	}
 
 	virtual ~wxDoNotLogInThisScope() throw()
 	{
-		wxLog::EnableLogging( m_prev );
+		wxLog::EnableLogging(m_prev);
 	}
 };
 
 
-extern wxString pxReadLine( wxInputStream& input );
-extern void pxReadLine( wxInputStream& input, wxString& dest );
-extern void pxReadLine( wxInputStream& input, wxString& dest, std::string& intermed );
-extern bool pxReadLine( wxInputStream& input, std::string& dest );
-extern void pxWriteLine( wxOutputStream& output );
-extern void pxWriteLine( wxOutputStream& output, const wxString& text );
-extern void pxWriteMultiline( wxOutputStream& output, const wxString& src );
+extern wxString pxReadLine(wxInputStream &input);
+extern void pxReadLine(wxInputStream &input, wxString &dest);
+extern void pxReadLine(wxInputStream &input, wxString &dest, std::string &intermed);
+extern bool pxReadLine(wxInputStream &input, std::string &dest);
+extern void pxWriteLine(wxOutputStream &output);
+extern void pxWriteLine(wxOutputStream &output, const wxString &text);
+extern void pxWriteMultiline(wxOutputStream &output, const wxString &src);
 

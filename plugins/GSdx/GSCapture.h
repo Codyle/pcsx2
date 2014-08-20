@@ -33,12 +33,12 @@ class GSCapture : protected GSCritSec
 	bool m_capturing;
 	GSVector2i m_size;
 
-	#ifdef _WINDOWS
+#ifdef _WINDOWS
 
 	CComPtr<IGraphBuilder> m_graph;
 	CComPtr<IBaseFilter> m_src;
 
-	#endif
+#endif
 
 public:
 	GSCapture();
@@ -48,6 +48,12 @@ public:
 	bool DeliverFrame(const void* bits, int pitch, bool rgba);
 	bool EndCapture();
 
-	bool IsCapturing() {return m_capturing;}
-	GSVector2i GetSize() {return m_size;}
+	bool IsCapturing()
+	{
+		return m_capturing;
+	}
+	GSVector2i GetSize()
+	{
+		return m_size;
+	}
 };

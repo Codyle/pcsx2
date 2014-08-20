@@ -94,11 +94,11 @@ void psxDma0(u32 madr, u32 bcr, u32 chcr);
 void psxDma1(u32 madr, u32 bcr, u32 chcr);
 int  mdecFreeze(gzFile f, int Mode);
 
-u16* rl2blk(int *blk,u16 *mdec_rl);
-void iqtab_init(int *iqtab,unsigned char *iq_y);
+u16* rl2blk(int *blk, u16 *mdec_rl);
+void iqtab_init(int *iqtab, unsigned char *iq_y);
 void round_init(void);
-void yuv2rgb24(int *blk,unsigned char *image);
-void yuv2rgb15(int *blk,u16 *image);
+void yuv2rgb24(int *blk, unsigned char *image);
+void yuv2rgb15(int *blk, u16 *image);
 
 struct {
 	u32 command;

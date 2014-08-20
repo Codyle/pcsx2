@@ -93,8 +93,7 @@ enum gifstate_t {
 	GIF_STATE_EMPTY = 0x10
 };
 
-union tGIF_CTRL
-{
+union tGIF_CTRL {
 	struct {
 		u32 RST : 1;
 		u32 reserved1 : 2;
@@ -103,18 +102,31 @@ union tGIF_CTRL
 	};
 	u32 _u32;
 
-	tGIF_CTRL(u32 val) { _u32 = val; }
+	tGIF_CTRL(u32 val) {
+		_u32 = val;
+	}
 
-	void write(u32 val) { _u32 = val; }
-	bool test(u32 flags) { return !!(_u32 & flags); }
-	void set_flags(u32 flags) { _u32 |= flags; }
-	void clear_flags(u32 flags) { _u32 &= ~flags; }
-	void reset() { _u32 = 0; }
-	wxString desc() { return wxsFormat(L"Ctrl: 0x%x", _u32); }
+	void write(u32 val) {
+		_u32 = val;
+	}
+	bool test(u32 flags) {
+		return !!(_u32 & flags);
+	}
+	void set_flags(u32 flags) {
+		_u32 |= flags;
+	}
+	void clear_flags(u32 flags) {
+		_u32 &= ~flags;
+	}
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() {
+		return wxsFormat(L"Ctrl: 0x%x", _u32);
+	}
 };
 
-union tGIF_MODE
-{
+union tGIF_MODE {
 	struct {
 		u32 M3R : 1;
 		u32 reserved1 : 1;
@@ -123,18 +135,31 @@ union tGIF_MODE
 	};
 	u32 _u32;
 
-	tGIF_MODE(u32 val) { _u32 = val; }
+	tGIF_MODE(u32 val) {
+		_u32 = val;
+	}
 
-	void write(u32 val) { _u32 = val; }
-	bool test(u32 flags) { return !!(_u32 & flags); }
-	void set_flags(u32 flags) { _u32 |= flags; }
-	void clear_flags(u32 flags) { _u32 &= ~flags; }
-	void reset() { _u32 = 0; }
-	wxString desc() { return wxsFormat(L"Mode: 0x%x", _u32); }
+	void write(u32 val) {
+		_u32 = val;
+	}
+	bool test(u32 flags) {
+		return !!(_u32 & flags);
+	}
+	void set_flags(u32 flags) {
+		_u32 |= flags;
+	}
+	void clear_flags(u32 flags) {
+		_u32 &= ~flags;
+	}
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() {
+		return wxsFormat(L"Mode: 0x%x", _u32);
+	}
 };
 
-union tGIF_STAT
-{
+union tGIF_STAT {
 	struct {
 		u32 M3R : 1;		// GIF_MODE Mask
 		u32 M3P : 1;		// VIF PATH3 Mask
@@ -154,18 +179,31 @@ union tGIF_STAT
 	};
 	u32 _u32;
 
-	tGIF_STAT(u32 val) { _u32 = val; }
+	tGIF_STAT(u32 val) {
+		_u32 = val;
+	}
 
-	void write(u32 val) { _u32 = val; }
-	bool test(u32 flags) { return !!(_u32 & flags); }
-	void set_flags(u32 flags) { _u32 |= flags; }
-	void clear_flags(u32 flags) { _u32 &= ~flags; }
-	void reset() { _u32 = 0; }
-	wxString desc() { return wxsFormat(L"Stat: 0x%x", _u32); }
+	void write(u32 val) {
+		_u32 = val;
+	}
+	bool test(u32 flags) {
+		return !!(_u32 & flags);
+	}
+	void set_flags(u32 flags) {
+		_u32 |= flags;
+	}
+	void clear_flags(u32 flags) {
+		_u32 &= ~flags;
+	}
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() {
+		return wxsFormat(L"Stat: 0x%x", _u32);
+	}
 };
 
-union tGIF_TAG0
-{
+union tGIF_TAG0 {
 	struct {
 		u32 NLOOP : 15;
 		u32 EOP : 1;
@@ -173,17 +211,28 @@ union tGIF_TAG0
 	};
 	u32 _u32;
 
-	tGIF_TAG0(u32 val) { _u32 = val; }
+	tGIF_TAG0(u32 val) {
+		_u32 = val;
+	}
 
-	bool test(u32 flags) { return !!(_u32 & flags); }
-	void set_flags(u32 flags) { _u32 |= flags; }
-	void clear_flags(u32 flags) { _u32 &= ~flags; }
-	void reset() { _u32 = 0; }
-	wxString desc() { return wxsFormat(L"Tag0: 0x%x", _u32); }
+	bool test(u32 flags) {
+		return !!(_u32 & flags);
+	}
+	void set_flags(u32 flags) {
+		_u32 |= flags;
+	}
+	void clear_flags(u32 flags) {
+		_u32 &= ~flags;
+	}
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() {
+		return wxsFormat(L"Tag0: 0x%x", _u32);
+	}
 };
 
-union tGIF_TAG1
-{
+union tGIF_TAG1 {
 	struct {
 		u32 TAG : 14;
 		u32 PRE : 1;
@@ -193,17 +242,28 @@ union tGIF_TAG1
 	};
 	u32 _u32;
 
-	tGIF_TAG1(u32 val) { _u32 = val; }
+	tGIF_TAG1(u32 val) {
+		_u32 = val;
+	}
 
-	bool test(u32 flags) { return !!(_u32 & flags); }
-	void set_flags(u32 flags) { _u32 |= flags; }
-	void clear_flags(u32 flags) { _u32 &= ~flags; }
-	void reset() { _u32 = 0; }
-	wxString desc() { return wxsFormat(L"Tag1: 0x%x", _u32); }
+	bool test(u32 flags) {
+		return !!(_u32 & flags);
+	}
+	void set_flags(u32 flags) {
+		_u32 |= flags;
+	}
+	void clear_flags(u32 flags) {
+		_u32 &= ~flags;
+	}
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() {
+		return wxsFormat(L"Tag1: 0x%x", _u32);
+	}
 };
 
-union tGIF_CNT
-{
+union tGIF_CNT {
 	struct {
 		u32 LOOPCNT : 15;
 		u32 reserved1 : 1;
@@ -214,31 +274,47 @@ union tGIF_CNT
 	};
 	u32 _u32;
 
-	tGIF_CNT(u32 val) { _u32 = val; }
+	tGIF_CNT(u32 val) {
+		_u32 = val;
+	}
 
-	bool test(u32 flags) { return !!(_u32 & flags); }
-	void set_flags(u32 flags) { _u32 |= flags; }
-	void clear_flags(u32 flags) { _u32 &= ~flags; }
-	void reset() { _u32 = 0; }
-	wxString desc() { return wxsFormat(L"CNT: 0x%x", _u32); }
+	bool test(u32 flags) {
+		return !!(_u32 & flags);
+	}
+	void set_flags(u32 flags) {
+		_u32 |= flags;
+	}
+	void clear_flags(u32 flags) {
+		_u32 &= ~flags;
+	}
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() {
+		return wxsFormat(L"CNT: 0x%x", _u32);
+	}
 };
 
-union tGIF_P3CNT
-{
+union tGIF_P3CNT {
 	struct {
 		u32 P3CNT : 15;
 		u32 reserved1 : 17;
 	};
 	u32 _u32;
 
-	tGIF_P3CNT(u32 val) { _u32 = val; }
+	tGIF_P3CNT(u32 val) {
+		_u32 = val;
+	}
 
-	void reset() { _u32 = 0; }
-	wxString desc() { return wxsFormat(L"P3CNT: 0x%x", _u32); }
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() {
+		return wxsFormat(L"P3CNT: 0x%x", _u32);
+	}
 };
 
-union tGIF_P3TAG
-{
+union tGIF_P3TAG {
 	struct {
 		u32 LOOPCNT : 15;
 		u32 EOP : 1;
@@ -246,17 +322,28 @@ union tGIF_P3TAG
 	};
 	u32 _u32;
 
-	tGIF_P3TAG(u32 val) { _u32 = val; }
+	tGIF_P3TAG(u32 val) {
+		_u32 = val;
+	}
 
-	bool test(u32 flags) { return !!(_u32 & flags); }
-	void set_flags(u32 flags) { _u32 |= flags; }
-	void clear_flags(u32 flags) { _u32 &= ~flags; }
-	void reset() { _u32 = 0; }
-	wxString desc() { return wxsFormat(L"P3Tag: 0x%x", _u32); }
+	bool test(u32 flags) {
+		return !!(_u32 & flags);
+	}
+	void set_flags(u32 flags) {
+		_u32 |= flags;
+	}
+	void clear_flags(u32 flags) {
+		_u32 &= ~flags;
+	}
+	void reset() {
+		_u32 = 0;
+	}
+	wxString desc() {
+		return wxsFormat(L"P3Tag: 0x%x", _u32);
+	}
 };
 
-struct GIFregisters
-{
+struct GIFregisters {
 	tGIF_CTRL 	ctrl;
 	u32 padding[3];
 	tGIF_MODE 	mode;
@@ -281,7 +368,7 @@ struct GIFregisters
 	u32 padding9[3];
 };
 
-static GIFregisters& gifRegs = (GIFregisters&)eeHw[0x3000];
+static GIFregisters &gifRegs = (GIFregisters &)eeHw[0x3000];
 
 extern void gifInterrupt();
 extern int _GIFchain();

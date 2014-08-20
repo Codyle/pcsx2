@@ -59,158 +59,128 @@
 #define MZFbytes (_bytes)
 
 // This is an implementation of the memzero_ptr fast memset routine (for zero-clears only).
-template< size_t _bytes >
-static __fi void memzero_ptr( void *dest )
+template<size_t _bytes>
+static __fi void memzero_ptr(void *dest)
 {
-	if( MZFbytes == 0 ) return;
-
+	if (MZFbytes == 0) return;
 	// This function only works on 32-bit alignments.  For anything else we just fall back
 	// on the compiler-provided implementation of memset...
-
-	if( (MZFbytes & 0x3) != 0 )
-	{
-		memset( dest, 0, MZFbytes );
+	if ((MZFbytes & 0x3) != 0) {
+		memset(dest, 0, MZFbytes);
 		return;
 	}
-
 #if 0
 	// SSE-based memory clear.  Currently disabled so to avoid unnecessary dependence on
 	// SSE cpu instruction sets.  (memzero typically isn't used in any performance critical
 	// situations anyway)
-	enum
-	{
+	enum {
 		remainder = MZFbytes & 127,
 		bytes128 = MZFbytes / 128
 	};
-
 	// Initial check -- if the length is not a multiple of 16 then fall back on
 	// using rep movsd methods.  Handling these unaligned clears in a more efficient
 	// manner isn't necessary in pcsx2 (meaning they aren't used in speed-critical
 	// scenarios).
-
-	if( (MZFbytes & 0xf) == 0 )
-	{
-		if( ((uptr)dest & 0xf) != 0 )
-		{
+	if ((MZFbytes & 0xf) == 0) {
+		if (((uptr)dest & 0xf) != 0) {
 			// UNALIGNED COPY MODE.
 			// For unaligned copies we have a threshold of at least 128 vectors.  Anything
 			// less and it's probably better off just falling back on the rep movsd.
-			if( bytes128 > 128 )
-			{
-				__asm
-				{
-					mov ecx,dest
-					pxor xmm0,xmm0
-					mov eax,bytes128
+			if (bytes128 > 128) {
+				__asm {
+					mov ecx, dest
+					pxor xmm0, xmm0
+					mov eax, bytes128
 
-				_loop_6:
-					movups [ecx],xmm0
-					movups [ecx+0x10],xmm0
-					movups [ecx+0x20],xmm0
-					movups [ecx+0x30],xmm0
-					movups [ecx+0x40],xmm0
-					movups [ecx+0x50],xmm0
-					movups [ecx+0x60],xmm0
-					movups [ecx+0x70],xmm0
-					sub ecx,-128
-					sub eax,1
+					_loop_6:
+					movups [ecx], xmm0
+					movups [ecx+0x10], xmm0
+					movups [ecx+0x20], xmm0
+					movups [ecx+0x30], xmm0
+					movups [ecx+0x40], xmm0
+					movups [ecx+0x50], xmm0
+					movups [ecx+0x60], xmm0
+					movups [ecx+0x70], xmm0
+					sub ecx, -128
+					sub eax, 1
 					jnz _loop_6;
 				}
-				if( remainder != 0 )
-				{
+				if (remainder != 0) {
 					// Copy the remainder in reverse (using the decrementing eax as our indexer)
-					__asm
-					{
+					__asm {
 						mov eax, remainder
 
-					_loop_5:
-						movups [ecx+eax],xmm0;
-						sub eax,16;
+						_loop_5:
+						movups [ecx+eax], xmm0;
+						sub eax, 16;
 						jnz _loop_5;
 					}
 				}
 				return;
 			}
-		}
-		else if( bytes128 > 48 )
-		{
+		} else if (bytes128 > 48) {
 			// ALIGNED COPY MODE
 			// Data is aligned and the size of data is large enough to merit a nice
 			// fancy chunk of unrolled goodness:
+			__asm {
+				mov ecx, dest
+				pxor xmm0, xmm0
+				mov eax, bytes128
 
-			__asm
-			{
-				mov ecx,dest
-				pxor xmm0,xmm0
-				mov eax,bytes128
-
-			_loop_8:
-				movaps [ecx],xmm0
-				movaps [ecx+0x10],xmm0
-				movaps [ecx+0x20],xmm0
-				movaps [ecx+0x30],xmm0
-				movaps [ecx+0x40],xmm0
-				movaps [ecx+0x50],xmm0
-				movaps [ecx+0x60],xmm0
-				movaps [ecx+0x70],xmm0
-				sub ecx,-128
-				sub eax,1
+				_loop_8:
+				movaps [ecx], xmm0
+				movaps [ecx+0x10], xmm0
+				movaps [ecx+0x20], xmm0
+				movaps [ecx+0x30], xmm0
+				movaps [ecx+0x40], xmm0
+				movaps [ecx+0x50], xmm0
+				movaps [ecx+0x60], xmm0
+				movaps [ecx+0x70], xmm0
+				sub ecx, -128
+				sub eax, 1
 				jnz _loop_8;
 			}
-			if( remainder != 0 )
-			{
+			if (remainder != 0) {
 				// Copy the remainder in reverse (using the decrementing eax as our indexer)
-				__asm
-				{
+				__asm {
 					mov eax, remainder
 
-				_loop_10:
-					movaps [ecx+eax],xmm0
-					sub eax,16;
+					_loop_10:
+					movaps [ecx+eax], xmm0
+					sub eax, 16;
 					jnz _loop_10;
 				}
 			}
 			return;
 		}
 	}
-	#endif
-
+#endif
 	// This function only works on 32-bit alignments.
-	pxAssume( (MZFbytes & 0x3) == 0 );
-	pxAssume( ((uptr)dest & 0x3) == 0 );
-
-	enum
-	{
+	pxAssume((MZFbytes & 0x3) == 0);
+	pxAssume(((uptr)dest & 0x3) == 0);
+	enum {
 		remdat = MZFbytes >> 2
 	};
-
 	// This case statement handles 5 special-case sizes (small blocks)
 	// in addition to the generic large block that uses rep stosd.
-
-	switch( remdat )
-	{
+	switch (remdat) {
 		case 1:
-			*(u32*)dest = 0;
-		return;
-
+				*(u32*)dest = 0;
+			return;
 		case 2:
-			*(u64*)dest = 0;
-		return;
-
+				*(u64*)dest = 0;
+			return;
 		case 3:
-			__asm
-			{
+				__asm {
 				mov edi, dest
 				xor eax, eax
 				stosd
 				stosd
 				stosd
 			}
-		return;
-
+			return;
 		case 4:
-			__asm
-			{
+				__asm {
 				mov edi, dest
 				xor eax, eax
 				stosd
@@ -218,11 +188,9 @@ static __fi void memzero_ptr( void *dest )
 				stosd
 				stosd
 			}
-		return;
-
+			return;
 		case 5:
-			__asm
-			{
+				__asm {
 				mov edi, dest
 				xor eax, eax
 				stosd
@@ -231,35 +199,29 @@ static __fi void memzero_ptr( void *dest )
 				stosd
 				stosd
 			}
-		return;
-
+			return;
 		default:
-			__asm
-			{
+				__asm {
 				mov ecx, remdat
 				mov edi, dest
 				xor eax, eax
 				rep stosd
 			}
-		return;
+			return;
 	}
 }
 
 // An optimized memset for 8 bit destination data.
-template< u8 data, size_t _bytes >
-static __fi void memset_8( void *dest )
+template<u8 data, size_t _bytes>
+static __fi void memset_8(void *dest)
 {
-	if( MZFbytes == 0 ) return;
-
-	if( (MZFbytes & 0x3) != 0 )
-	{
+	if (MZFbytes == 0) return;
+	if ((MZFbytes & 0x3) != 0) {
 		// unaligned data length.  No point in doing an optimized inline version (too complicated!)
 		// So fall back on the compiler implementation:
-
-		memset( dest, data, MZFbytes );
+		memset(dest, data, MZFbytes);
 		return;
 	}
-
 	/*static const size_t remainder = MZFbytes & 127;
 	static const size_t bytes128 = MZFbytes / 128;
 	if( bytes128 > 32 )
@@ -303,42 +265,32 @@ static __fi void memset_8( void *dest )
 			}
 		}
 	}*/
-
 	// This function only works on 32-bit alignments of data copied.
-	pxAssume( (MZFbytes & 0x3) == 0 );
-
-	enum
-	{
+	pxAssume((MZFbytes & 0x3) == 0);
+	enum {
 		remdat = MZFbytes >> 2,
-		data32 = data + (data<<8) + (data<<16) + (data<<24)
+		data32 = data + (data << 8) + (data << 16) + (data << 24)
 	};
-
 	// macro to execute the x86/32 "stosd" copies.
-	switch( remdat )
-	{
+	switch (remdat) {
 		case 1:
-			*(u32*)dest = data32;
-		return;
-
+				*(u32*)dest = data32;
+			return;
 		case 2:
-			((u32*)dest)[0] = data32;
+				((u32*)dest)[0] = data32;
 			((u32*)dest)[1] = data32;
-		return;
-
+			return;
 		case 3:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		case 4:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
@@ -346,11 +298,9 @@ static __fi void memset_8( void *dest )
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		case 5:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
@@ -359,74 +309,57 @@ static __fi void memset_8( void *dest )
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		default:
-			__asm
-			{
+				__asm {
 				mov ecx, remdat;
 				mov edi, dest;
 				mov eax, data32;
 				rep stosd;
 			}
-		return;
+			return;
 	}
 }
 
-template< u16 data, size_t _bytes >
-static __fi void memset_16( void *dest )
+template<u16 data, size_t _bytes>
+static __fi void memset_16(void *dest)
 {
-	if( MZFbytes == 0 ) return;
-
+	if (MZFbytes == 0) return;
 	// Assertion: data length must be a multiple of 16 or 32 bits
-	pxAssume( (MZFbytes & 0x1) == 0 );
-
-	if( (MZFbytes & 0x3) != 0 )
-	{
+	pxAssume((MZFbytes & 0x1) == 0);
+	if ((MZFbytes & 0x3) != 0) {
 		// Unaligned data length.  No point in doing an optimized inline version (too complicated with
 		// remainders and such).
-
-		_memset16_unaligned( dest, data, MZFbytes );
+		_memset16_unaligned(dest, data, MZFbytes);
 		return;
 	}
-
 	//u64 _xmm_backup[2];
-
 	// This function only works on 32-bit alignments of data copied.
-	pxAssume( (MZFbytes & 0x3) == 0 );
-
-	enum
-	{
+	pxAssume((MZFbytes & 0x3) == 0);
+	enum {
 		remdat = MZFbytes >> 2,
-		data32 = data + (data<<16)
+		data32 = data + (data << 16)
 	};
-
 	// macro to execute the x86/32 "stosd" copies.
-	switch( remdat )
-	{
+	switch (remdat) {
 		case 1:
-			*(u32*)dest = data32;
-		return;
-
+				*(u32*)dest = data32;
+			return;
 		case 2:
-			((u32*)dest)[0] = data32;
+				((u32*)dest)[0] = data32;
 			((u32*)dest)[1] = data32;
-		return;
-
+			return;
 		case 3:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		case 4:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
@@ -434,11 +367,9 @@ static __fi void memset_16( void *dest )
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		case 5:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
@@ -447,68 +378,53 @@ static __fi void memset_16( void *dest )
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		default:
-			__asm
-			{
+				__asm {
 				mov ecx, remdat;
 				mov edi, dest;
 				mov eax, data32;
 				rep stosd;
 			}
-		return
+			return
 	}
 }
 
-template< u32 data, size_t MZFbytes >
-static __fi void memset_32( void *dest )
+template<u32 data, size_t MZFbytes>
+static __fi void memset_32(void *dest)
 {
-	if( MZFbytes == 0 ) return;
-
+	if (MZFbytes == 0) return;
 	// Assertion: data length must be a multiple of 32 bits
-	pxAssume( (MZFbytes & 0x3) == 0 );
-
+	pxAssume((MZFbytes & 0x3) == 0);
 	//u64 _xmm_backup[2];
-
 	// This function only works on 32-bit alignments of data copied.
 	// If the data length is not a factor of 32 bits, the C++ optimizing compiler will
 	// probably just generate mysteriously broken code in Release builds. ;)
-
-	pxAssume( (MZFbytes & 0x3) == 0 );
-
-	enum
-	{
-		remdat = MZFbytes>>2,
+	pxAssume((MZFbytes & 0x3) == 0);
+	enum {
+		remdat = MZFbytes >> 2,
 		data32 = data
 	};
-
 	// macro to execute the x86/32 "stosd" copies.
-	switch( remdat )
-	{
+	switch (remdat) {
 		case 1:
-			*(u32*)dest = data32;
-		return;
-
+				*(u32*)dest = data32;
+			return;
 		case 2:
-			((u32*)dest)[0] = data32;
+				((u32*)dest)[0] = data32;
 			((u32*)dest)[1] = data32;
-		return;
-
+			return;
 		case 3:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		case 4:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
@@ -516,11 +432,9 @@ static __fi void memset_32( void *dest )
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		case 5:
-			__asm
-			{
+				__asm {
 				mov edi, dest;
 				mov eax, data32;
 				stosd;
@@ -529,48 +443,46 @@ static __fi void memset_32( void *dest )
 				stosd;
 				stosd;
 			}
-		return;
-
+			return;
 		default:
-			__asm
-			{
+				__asm {
 				mov ecx, remdat;
 				mov edi, dest;
 				mov eax, data32;
 				rep stosd;
 			}
-		return
+			return
 	}
 }
 
 // This method can clear any object-like entity -- which is anything that is not a pointer.
 // Structures, static arrays, etc.  No need to include sizeof() crap, this does it automatically
 // for you!
-template< typename T >
-static __fi void memzero( T& object )
+template<typename T>
+static __fi void memzero(T &object)
 {
-	memzero_ptr<sizeof(T)>( &object );
+	memzero_ptr<sizeof(T)>(&object);
 }
 
 // This method clears an object with the given 8 bit value.
-template< u8 data, typename T >
-static __fi void memset8( T& object )
+template<u8 data, typename T>
+static __fi void memset8(T &object)
 {
-	memset_8<data, sizeof(T)>( &object );
+	memset_8<data, sizeof(T)>(&object);
 }
 
 // This method clears an object with the given 16 bit value.
-template< u16 data, typename T >
-static __fi void memset16( T& object )
+template<u16 data, typename T>
+static __fi void memset16(T &object)
 {
-	memset_16<data, sizeof(T)>( &object );
+	memset_16<data, sizeof(T)>(&object);
 }
 
 // This method clears an object with the given 32 bit value.
-template< u32 data, typename T >
-static __fi void memset32( T& object )
+template<u32 data, typename T>
+static __fi void memset32(T &object)
 {
-	memset_32<data, sizeof(T)>( &object );
+	memset_32<data, sizeof(T)>(&object);
 }
 
 #undef MZFbytes

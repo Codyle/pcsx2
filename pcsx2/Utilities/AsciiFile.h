@@ -30,14 +30,14 @@ class AsciiFile : public wxFFile
 public:
 	using wxFFile::Write;
 
-	AsciiFile( const wxString& src, const wxChar* mode ) :
-		wxFFile( src, mode ) {}
+	AsciiFile(const wxString &src, const wxChar* mode) :
+		wxFFile(src, mode) {}
 
-	void Printf( const char* fmt, ... );
+	void Printf(const char* fmt, ...);
 
-	void Write( const char* fmt )
+	void Write(const char* fmt)
 	{
-		Write( fmt, strlen( fmt ) );
+		Write(fmt, strlen(fmt));
 	}
 };
 

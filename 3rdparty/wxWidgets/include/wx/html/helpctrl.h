@@ -42,90 +42,114 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlHelpDialog;
 
 class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
+	DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
 
 public:
-    wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = NULL);
-    virtual ~wxHtmlHelpController();
+	wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = NULL);
+	virtual ~wxHtmlHelpController();
 
-    void SetTitleFormat(const wxString& format);
-    void SetTempDir(const wxString& path) { m_helpData.SetTempDir(path); }
-    bool AddBook(const wxString& book_url, bool show_wait_msg = false);
-    bool AddBook(const wxFileName& book_file, bool show_wait_msg = false);
+	void SetTitleFormat(const wxString &format);
+	void SetTempDir(const wxString &path)
+	{
+		m_helpData.SetTempDir(path);
+	}
+	bool AddBook(const wxString &book_url, bool show_wait_msg = false);
+	bool AddBook(const wxFileName &book_file, bool show_wait_msg = false);
 
-    bool Display(const wxString& x);
-    bool Display(int id);
-    bool DisplayContents();
-    bool DisplayIndex();
-    bool KeywordSearch(const wxString& keyword,
-                       wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
+	bool Display(const wxString &x);
+	bool Display(int id);
+	bool DisplayContents();
+	bool DisplayIndex();
+	bool KeywordSearch(const wxString &keyword,
+	                   wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
 
-    wxHtmlHelpWindow* GetHelpWindow() { return m_helpWindow; }
-    void SetHelpWindow(wxHtmlHelpWindow* helpWindow);
+	wxHtmlHelpWindow* GetHelpWindow()
+	{
+		return m_helpWindow;
+	}
+	void SetHelpWindow(wxHtmlHelpWindow* helpWindow);
 
-    wxHtmlHelpFrame* GetFrame() { return m_helpFrame; }
-    wxHtmlHelpDialog* GetDialog() { return m_helpDialog; }
+	wxHtmlHelpFrame* GetFrame()
+	{
+		return m_helpFrame;
+	}
+	wxHtmlHelpDialog* GetDialog()
+	{
+		return m_helpDialog;
+	}
 
-    void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
+	void UseConfig(wxConfigBase *config, const wxString &rootpath = wxEmptyString);
 
-    // Assigns config object to the Ctrl. This config is then
-    // used in subsequent calls to Read/WriteCustomization of both help
-    // Ctrl and it's wxHtmlWindow
-    virtual void ReadCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
-    virtual void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
+	// Assigns config object to the Ctrl. This config is then
+	// used in subsequent calls to Read/WriteCustomization of both help
+	// Ctrl and it's wxHtmlWindow
+	virtual void ReadCustomization(wxConfigBase *cfg, const wxString &path = wxEmptyString);
+	virtual void WriteCustomization(wxConfigBase *cfg, const wxString &path = wxEmptyString);
 
-    //// Backward compatibility with wxHelpController API
+	//// Backward compatibility with wxHelpController API
 
-    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) { return Initialize(file); }
-    virtual bool Initialize(const wxString& file);
-    virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
-    virtual bool LoadFile(const wxString& file = wxT(""));
-    virtual bool DisplaySection(int sectionNo);
-    virtual bool DisplaySection(const wxString& section) { return Display(section); }
-    virtual bool DisplayBlock(long blockNo) { return DisplaySection(blockNo); }
-    virtual bool DisplayTextPopup(const wxString& text, const wxPoint& pos);
+	virtual bool Initialize(const wxString &file, int WXUNUSED(server))
+	{
+		return Initialize(file);
+	}
+	virtual bool Initialize(const wxString &file);
+	virtual void SetViewer(const wxString &WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
+	virtual bool LoadFile(const wxString &file = wxT(""));
+	virtual bool DisplaySection(int sectionNo);
+	virtual bool DisplaySection(const wxString &section)
+	{
+		return Display(section);
+	}
+	virtual bool DisplayBlock(long blockNo)
+	{
+		return DisplaySection(blockNo);
+	}
+	virtual bool DisplayTextPopup(const wxString &text, const wxPoint &pos);
 
-    virtual void SetFrameParameters(const wxString& title,
-                               const wxSize& size,
-                               const wxPoint& pos = wxDefaultPosition,
-                               bool newFrameEachTime = false);
-    /// Obtains the latest settings used by the help frame and the help
-    /// frame.
-    virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
-                               wxPoint *pos = NULL,
-                               bool *newFrameEachTime = NULL);
+	virtual void SetFrameParameters(const wxString &title,
+	                                const wxSize &size,
+	                                const wxPoint &pos = wxDefaultPosition,
+	                                bool newFrameEachTime = false);
+	/// Obtains the latest settings used by the help frame and the help
+	/// frame.
+	virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
+	                                    wxPoint *pos = NULL,
+	                                    bool *newFrameEachTime = NULL);
 
-    // Get direct access to help data:
-    wxHtmlHelpData *GetHelpData() { return &m_helpData; }
+	// Get direct access to help data:
+	wxHtmlHelpData *GetHelpData()
+	{
+		return &m_helpData;
+	}
 
-    virtual bool Quit() ;
-    virtual void OnQuit() {}
+	virtual bool Quit() ;
+	virtual void OnQuit() {}
 
-    void OnCloseFrame(wxCloseEvent& evt);
+	void OnCloseFrame(wxCloseEvent &evt);
 
-    // Make the help controller's frame 'modal' if
-    // needed
-    void MakeModalIfNeeded();
+	// Make the help controller's frame 'modal' if
+	// needed
+	void MakeModalIfNeeded();
 
-    // Find the top-most parent window
-    wxWindow* FindTopLevelWindow();
+	// Find the top-most parent window
+	wxWindow* FindTopLevelWindow();
 
 protected:
-    virtual wxWindow* CreateHelpWindow();
-    virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData *data);
-    virtual wxHtmlHelpDialog* CreateHelpDialog(wxHtmlHelpData *data);
-    virtual void DestroyHelpWindow();
+	virtual wxWindow* CreateHelpWindow();
+	virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData *data);
+	virtual wxHtmlHelpDialog* CreateHelpDialog(wxHtmlHelpData *data);
+	virtual void DestroyHelpWindow();
 
-    wxHtmlHelpData      m_helpData;
-    wxHtmlHelpWindow*   m_helpWindow;
-    wxConfigBase *      m_Config;
-    wxString            m_ConfigRoot;
-    wxString            m_titleFormat;
-    int                 m_FrameStyle;
-    wxHtmlHelpFrame*    m_helpFrame;
-    wxHtmlHelpDialog*   m_helpDialog;
+	wxHtmlHelpData      m_helpData;
+	wxHtmlHelpWindow*   m_helpWindow;
+	wxConfigBase *      m_Config;
+	wxString            m_ConfigRoot;
+	wxString            m_titleFormat;
+	int                 m_FrameStyle;
+	wxHtmlHelpFrame*    m_helpFrame;
+	wxHtmlHelpDialog*   m_helpDialog;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlHelpController)
+	DECLARE_NO_COPY_CLASS(wxHtmlHelpController)
 };
 
 /*
@@ -144,8 +168,8 @@ protected:
 class WXDLLIMPEXP_HTML wxHtmlModalHelp
 {
 public:
-    wxHtmlModalHelp(wxWindow* parent, const wxString& helpFile, const wxString& topic = wxEmptyString,
-        int style = wxHF_DEFAULT_STYLE | wxHF_DIALOG | wxHF_MODAL);
+	wxHtmlModalHelp(wxWindow* parent, const wxString &helpFile, const wxString &topic = wxEmptyString,
+	                int style = wxHF_DEFAULT_STYLE | wxHF_DIALOG | wxHF_MODAL);
 };
 
 #endif // wxUSE_WXHTML_HELP

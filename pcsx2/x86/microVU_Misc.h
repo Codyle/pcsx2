@@ -161,7 +161,7 @@ static const char branchSTR[16][8] = {
 #define mF int recPass
 #define mX mVU, recPass
 
-typedef void __fastcall Fntype_mVUrecInst(microVU& mVU, int recPass);
+typedef void __fastcall Fntype_mVUrecInst(microVU &mVU, int recPass);
 typedef Fntype_mVUrecInst* Fnptr_mVUrecInst;
 
 // Function/Template Stuff
@@ -186,7 +186,7 @@ typedef Fntype_mVUrecInst* Fnptr_mVUrecInst;
 //------------------------------------------------------------------
 #ifndef __LINUX__
 extern __pagealigned u8 mVUsearchXMM[__pagesize];
-typedef u32 (__fastcall *mVUCall)(void*, void*);
+typedef u32(__fastcall *mVUCall)(void*, void*);
 #define mVUquickSearch(dest, src, size) ((((mVUCall)((void*)mVUsearchXMM))(dest, src)) == 0xf)
 #define mVUemitSearch() { mVUcustomSearch(); }
 #else
@@ -237,17 +237,17 @@ typedef u32 (__fastcall *mVUCall)(void*, void*);
 #define varPrint(x)  DevCon.WriteLn(#x " = %d", (int)x)
 
 #define blockCreate(addr) {												\
-	if  (!mVUblocks[addr]) mVUblocks[addr] = new microBlockManager();	\
-}
+		if  (!mVUblocks[addr]) mVUblocks[addr] = new microBlockManager();	\
+	}
 
 #define branchAddr (																	\
-	pxAssertDev((iPC & 1) == 0, "microVU: Expected Lower Op for valid branch addr."),	\
-	((((iPC + 2)  + (_Imm11_ * 2)) & mVU.progMemMask) * 4)								\
-)
+                pxAssertDev((iPC & 1) == 0, "microVU: Expected Lower Op for valid branch addr."),	\
+                ((((iPC + 2)  + (_Imm11_ * 2)) & mVU.progMemMask) * 4)								\
+                   )
 #define branchAddrN (																	\
-	pxAssertDev((iPC & 1) == 0, "microVU: Expected Lower Op for valid branch addr."),	\
-	((((iPC + 4)  + (_Imm11_ * 2)) & mVU.progMemMask) * 4)								\
-)
+                pxAssertDev((iPC & 1) == 0, "microVU: Expected Lower Op for valid branch addr."),	\
+                ((((iPC + 4)  + (_Imm11_ * 2)) & mVU.progMemMask) * 4)								\
+                    )
 
 // Fetches the PC and instruction opcode relative to the current PC.  Used to rewind and
 // fast-forward the IR state while calculating VU pipeline conditions (branches, writebacks, etc)
@@ -382,6 +382,6 @@ static const bool doDBitHandling = 0;
 
 //------------------------------------------------------------------
 
-extern void mVUmergeRegs(const xmm& dest, const xmm& src,  int xyzw, bool modXYZW=false);
-extern void mVUsaveReg(const xmm& reg, xAddressVoid ptr, int xyzw, bool modXYZW);
-extern void mVUloadReg(const xmm& reg, xAddressVoid ptr, int xyzw);
+extern void mVUmergeRegs(const xmm &dest, const xmm &src,  int xyzw, bool modXYZW = false);
+extern void mVUsaveReg(const xmm &reg, xAddressVoid ptr, int xyzw, bool modXYZW);
+extern void mVUloadReg(const xmm &reg, xAddressVoid ptr, int xyzw);

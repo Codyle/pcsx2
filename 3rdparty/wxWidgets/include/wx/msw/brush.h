@@ -25,36 +25,45 @@ class WXDLLIMPEXP_FWD_CORE wxBrush;
 class WXDLLEXPORT wxBrush : public wxBrushBase
 {
 public:
-    wxBrush();
-    wxBrush(const wxColour& col, int style = wxSOLID);
-    wxBrush(const wxBitmap& stipple);
-    virtual ~wxBrush();
+	wxBrush();
+	wxBrush(const wxColour &col, int style = wxSOLID);
+	wxBrush(const wxBitmap &stipple);
+	virtual ~wxBrush();
 
-    virtual void SetColour(const wxColour& col);
-    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b);
-    virtual void SetStyle(int style);
-    virtual void SetStipple(const wxBitmap& stipple);
+	virtual void SetColour(const wxColour &col);
+	virtual void SetColour(unsigned char r, unsigned char g, unsigned char b);
+	virtual void SetStyle(int style);
+	virtual void SetStipple(const wxBitmap &stipple);
 
-    bool operator==(const wxBrush& brush) const;
-    bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
+	bool operator==(const wxBrush &brush) const;
+	bool operator!=(const wxBrush &brush) const
+	{
+		return !(*this == brush);
+	}
 
-    wxColour GetColour() const;
-    virtual int GetStyle() const;
-    wxBitmap *GetStipple() const;
+	wxColour GetColour() const;
+	virtual int GetStyle() const;
+	wxBitmap *GetStipple() const;
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_refData != NULL; }
+	bool Ok() const
+	{
+		return IsOk();
+	}
+	bool IsOk() const
+	{
+		return m_refData != NULL;
+	}
 
-    // return the HBRUSH for this brush
-    virtual WXHANDLE GetResourceHandle() const;
+	// return the HBRUSH for this brush
+	virtual WXHANDLE GetResourceHandle() const;
 
 protected:
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+	virtual wxObjectRefData *CreateRefData() const;
+	virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxBrush)
+	DECLARE_DYNAMIC_CLASS(wxBrush)
 };
 
 #endif
-    // _WX_BRUSH_H_
+// _WX_BRUSH_H_

@@ -26,7 +26,7 @@
 
 void FillPPFCache(void);
 void FreePPFCache(void);
-void CheckPPFCache(long addr,unsigned char * pB);
-void AddToPPF(long ladr,long pos,long anz,char * ppfmem);
+void CheckPPFCache(long addr, unsigned char * pB);
+void AddToPPF(long ladr, long pos, long anz, char * ppfmem);
 void BuildPPFCache(void);
 

@@ -21,26 +21,26 @@ class WXDLLIMPEXP_ADV wxTaskBarIconArea;
 class WXDLLIMPEXP_ADV wxTaskBarIcon: public wxTaskBarIconBase
 {
 public:
-    wxTaskBarIcon();
-    virtual ~wxTaskBarIcon();
+	wxTaskBarIcon();
+	virtual ~wxTaskBarIcon();
 
-    // Accessors:
-    bool IsOk() const;
-    bool IsIconInstalled() const;
+	// Accessors:
+	bool IsOk() const;
+	bool IsIconInstalled() const;
 
-    // Operations:
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
-    bool RemoveIcon();
-    bool PopupMenu(wxMenu *menu);
+	// Operations:
+	bool SetIcon(const wxIcon &icon, const wxString &tooltip = wxEmptyString);
+	bool RemoveIcon();
+	bool PopupMenu(wxMenu *menu);
 
 protected:
-    wxTaskBarIconArea *m_iconWnd;
+	wxTaskBarIconArea *m_iconWnd;
 
 private:
-    void OnDestroy(wxWindowDestroyEvent&);
+	void OnDestroy(wxWindowDestroyEvent &);
 
-    DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
+	DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 };
 
 #endif
-    // _TASKBAR_H_
+// _TASKBAR_H_

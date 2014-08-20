@@ -28,65 +28,65 @@ static const u32 g_SaveVersion = (0x9A0A << 16) | 0x0000;
 
 // this function is meant to be used in the place of GSfreeze, and provides a safe layer
 // between the GS saving function and the MTGS's needs. :)
-extern s32 CALLBACK gsSafeFreeze( int mode, freezeData *data );
+extern s32 CALLBACK gsSafeFreeze(int mode, freezeData *data);
 
 
 namespace Exception
 {
-	// ---------------------------------------------------------------------------------------
-	// Savestate Exceptions:
-	//   UnsupportedStateVersion / StateCrcMismatch
-	// ---------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------
+// Savestate Exceptions:
+//   UnsupportedStateVersion / StateCrcMismatch
+// ---------------------------------------------------------------------------------------
 
-	// thrown when the savestate being loaded isn't supported.
-	//
-	class UnsupportedStateVersion : public SaveStateLoadError
+// thrown when the savestate being loaded isn't supported.
+//
+class UnsupportedStateVersion : public SaveStateLoadError
+{
+	DEFINE_EXCEPTION_COPYTORS(UnsupportedStateVersion, SaveStateLoadError)
+	DEFINE_EXCEPTION_MESSAGES(UnsupportedStateVersion)
+
+public:
+	u32 Version;		// version number of the unsupported state.
+
+protected:
+	UnsupportedStateVersion() {}
+
+public:
+	explicit UnsupportedStateVersion(int version)
 	{
-		DEFINE_EXCEPTION_COPYTORS( UnsupportedStateVersion, SaveStateLoadError )
-		DEFINE_EXCEPTION_MESSAGES( UnsupportedStateVersion )
+		Version = version;
+	}
 
-	public:
-		u32 Version;		// version number of the unsupported state.
+	virtual wxString FormatDiagnosticMessage() const;
+	virtual wxString FormatDisplayMessage() const;
+};
 
-	protected:
-		UnsupportedStateVersion() {}
+// A recoverable exception thrown when the CRC of the savestate does not match the
+// CRC returned by the Cdvd driver.
+// [feature not implemented yet]
+//
+class StateCrcMismatch : public SaveStateLoadError
+{
+	DEFINE_EXCEPTION_COPYTORS(StateCrcMismatch, SaveStateLoadError)
+	DEFINE_EXCEPTION_MESSAGES(StateCrcMismatch)
 
-	public:
-		explicit UnsupportedStateVersion( int version )
-		{
-			Version = version;
-		}
+public:
+	u32 Crc_Savestate;
+	u32 Crc_Cdvd;
 
-		virtual wxString FormatDiagnosticMessage() const;
-		virtual wxString FormatDisplayMessage() const;
-	};
+protected:
+	StateCrcMismatch() {}
 
-	// A recoverable exception thrown when the CRC of the savestate does not match the
-	// CRC returned by the Cdvd driver.
-	// [feature not implemented yet]
-	//
-	class StateCrcMismatch : public SaveStateLoadError
+public:
+	StateCrcMismatch(u32 crc_save, u32 crc_cdvd)
 	{
-		DEFINE_EXCEPTION_COPYTORS( StateCrcMismatch, SaveStateLoadError )
-		DEFINE_EXCEPTION_MESSAGES( StateCrcMismatch )
+		Crc_Savestate	= crc_save;
+		Crc_Cdvd		= crc_cdvd;
+	}
 
-	public:
-		u32 Crc_Savestate;
-		u32 Crc_Cdvd;
-
-	protected:
-		StateCrcMismatch() {}
-
-	public:
-		StateCrcMismatch( u32 crc_save, u32 crc_cdvd )
-		{
-			Crc_Savestate	= crc_save;
-			Crc_Cdvd		= crc_cdvd;
-		}
-
-		virtual wxString FormatDiagnosticMessage() const;
-		virtual wxString FormatDisplayMessage() const;
-	};
+	virtual wxString FormatDiagnosticMessage() const;
+	virtual wxString FormatDisplayMessage() const;
+};
 }
 
 // --------------------------------------------------------------------------------------
@@ -108,11 +108,11 @@ protected:
 	bool m_DidBios;
 
 public:
-	SaveStateBase( VmStateBuffer& memblock );
-	SaveStateBase( VmStateBuffer* memblock );
+	SaveStateBase(VmStateBuffer &memblock);
+	SaveStateBase(VmStateBuffer* memblock);
 	virtual ~SaveStateBase() { }
 
-	static wxString GetFilename( int slot );
+	static wxString GetFilename(int slot);
 
 	// Gets the version of savestate that this object is acting on.
 	// The version refers to the low 16 bits only (high 16 bits classifies Pcsx2 build types)
@@ -124,30 +124,30 @@ public:
 	// Loads or saves the entire emulation state.
 	// Note: The Cpu state must be reset, and plugins *open*, prior to Defrosting
 	// (loading) a state!
-	virtual SaveStateBase& FreezeAll();
+	virtual SaveStateBase &FreezeAll();
 
-	virtual SaveStateBase& FreezeMainMemory();
-	virtual SaveStateBase& FreezeBios();
-	virtual SaveStateBase& FreezeInternals();
-	virtual SaveStateBase& FreezePlugins();
+	virtual SaveStateBase &FreezeMainMemory();
+	virtual SaveStateBase &FreezeBios();
+	virtual SaveStateBase &FreezeInternals();
+	virtual SaveStateBase &FreezePlugins();
 
 	// Loads or saves an arbitrary data type.  Usable on atomic types, structs, and arrays.
 	// For dynamically allocated pointers use FreezeMem instead.
 	template<typename T>
-	void Freeze( T& data )
+	void Freeze(T &data)
 	{
-		FreezeMem( const_cast<void*>((void*)&data), sizeof( T ) );
+		FreezeMem(const_cast<void*>((void*)&data), sizeof(T));
 	}
 
 	// FreezeLegacy can be used to load structures short of their full size, which is
 	// useful for loading structures that have had new stuff added since a previous version.
 	template<typename T>
-	void FreezeLegacy( T& data, int sizeOfNewStuff )
+	void FreezeLegacy(T &data, int sizeOfNewStuff)
 	{
-		FreezeMem( &data, sizeof( T ) - sizeOfNewStuff );
+		FreezeMem(&data, sizeof(T) - sizeOfNewStuff);
 	}
 
-	void PrepBlock( int size );
+	void PrepBlock(int size);
 
 	uint GetCurrentPos() const
 	{
@@ -158,13 +158,13 @@ public:
 	{
 		return m_memory->GetPtr(m_idx);
 	}
-	
+
 	u8* GetPtrEnd() const
 	{
 		return m_memory->GetPtrEnd();
 	}
 
-	void CommitBlock( int size )
+	void CommitBlock(int size)
 	{
 		m_idx += size;
 	}
@@ -173,23 +173,26 @@ public:
 	// Identifiers can be used to determine where in a savestate that data has become
 	// skewed (if the value does not match then the error occurs somewhere prior to that
 	// position).
-	void FreezeTag( const char* src );
+	void FreezeTag(const char* src);
 
 	// Returns true if this object is a StateLoading type object.
-	bool IsLoading() const { return !IsSaving(); }
+	bool IsLoading() const
+	{
+		return !IsSaving();
+	}
 
 	// Loads or saves a memory block.
-	virtual void FreezeMem( void* data, int size )=0;
+	virtual void FreezeMem(void* data, int size) = 0;
 
 	// Returns true if this object is a StateSaving type object.
-	virtual bool IsSaving() const=0;
+	virtual bool IsSaving() const = 0;
 
 public:
 	// note: gsFreeze() needs to be public because of the GSState recorder.
 	void gsFreeze();
 
 protected:
-	void Init( VmStateBuffer* memblock );
+	void Init(VmStateBuffer* memblock);
 
 	// Load/Save functions for the various components of our glorious emulator!
 
@@ -233,15 +236,18 @@ protected:
 
 public:
 	virtual ~memSavingState() throw() { }
-	memSavingState( VmStateBuffer& save_to );
-	memSavingState( VmStateBuffer* save_to );
+	memSavingState(VmStateBuffer &save_to);
+	memSavingState(VmStateBuffer* save_to);
 
 	void MakeRoomForData();
 
-	void FreezeMem( void* data, int size );
-	memSavingState& FreezeAll();
+	void FreezeMem(void* data, int size);
+	memSavingState &FreezeAll();
 
-	bool IsSaving() const { return true; }
+	bool IsSaving() const
+	{
+		return true;
+	}
 };
 
 class memLoadingState : public SaveStateBase
@@ -249,12 +255,18 @@ class memLoadingState : public SaveStateBase
 public:
 	virtual ~memLoadingState() throw();
 
-	memLoadingState( const VmStateBuffer& load_from );
-	memLoadingState( const VmStateBuffer* load_from );
+	memLoadingState(const VmStateBuffer &load_from);
+	memLoadingState(const VmStateBuffer* load_from);
 
-	void FreezeMem( void* data, int size );
+	void FreezeMem(void* data, int size);
 
-	bool IsSaving() const { return false; }
-	bool IsFinished() const { return m_idx >= m_memory->GetSizeInBytes(); }
+	bool IsSaving() const
+	{
+		return false;
+	}
+	bool IsFinished() const
+	{
+		return m_idx >= m_memory->GetSizeInBytes();
+	}
 };
 

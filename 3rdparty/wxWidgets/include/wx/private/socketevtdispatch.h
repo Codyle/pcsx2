@@ -22,44 +22,43 @@
 class wxSocketEventDispatcherEntry;
 class GSocket;
 
-enum wxSocketEventDispatcherType
-{
-    wxSocketEventDispatcherInput,
-    wxSocketEventDispatcherOutput
+enum wxSocketEventDispatcherType {
+	wxSocketEventDispatcherInput,
+	wxSocketEventDispatcherOutput
 };
 
 class WXDLLIMPEXP_CORE wxSocketEventDispatcher : public wxHashTable
 {
 protected:
-    wxSocketEventDispatcher() : wxHashTable(wxKEY_INTEGER) {}
+	wxSocketEventDispatcher() : wxHashTable(wxKEY_INTEGER) {}
 
 public:
-    // returns instance of the table
-    static wxSocketEventDispatcher& Get();
+	// returns instance of the table
+	static wxSocketEventDispatcher &Get();
 
-    virtual ~wxSocketEventDispatcher()
-    {
-        WX_CLEAR_HASH_TABLE(*this)
-    }
+	virtual ~wxSocketEventDispatcher()
+	{
+		WX_CLEAR_HASH_TABLE(*this)
+	}
 
-    void RegisterCallback(int fd, wxSocketEventDispatcherType socketType,
-                          GSocket* socket);
+	void RegisterCallback(int fd, wxSocketEventDispatcherType socketType,
+	                      GSocket* socket);
 
-    void UnregisterCallback(int fd, wxSocketEventDispatcherType socketType);
+	void UnregisterCallback(int fd, wxSocketEventDispatcherType socketType);
 
-    void RunLoop(int timeout = 0);
-
-private:
-    void AddEvents(fd_set* readset, fd_set* writeset);
-
-    int FillSets(fd_set* readset, fd_set* writeset);
-
-    wxSocketEventDispatcherEntry* FindEntry(int fd);
+	void RunLoop(int timeout = 0);
 
 private:
-    static wxSocketEventDispatcher *ms_instance;
+	void AddEvents(fd_set* readset, fd_set* writeset);
 
-    friend class wxSocketEventDispatcherModule;
+	int FillSets(fd_set* readset, fd_set* writeset);
+
+	wxSocketEventDispatcherEntry* FindEntry(int fd);
+
+private:
+	static wxSocketEventDispatcher *ms_instance;
+
+	friend class wxSocketEventDispatcherModule;
 };
 
 #endif // wxUSE_SOCKETS

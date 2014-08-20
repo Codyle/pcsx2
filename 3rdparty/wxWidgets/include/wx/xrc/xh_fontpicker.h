@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxFontPickerCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxFontPickerCtrlXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxFontPickerCtrlXmlHandler)
 
 public:
-    wxFontPickerCtrlXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxFontPickerCtrlXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_FONTPICKERCTRL

@@ -32,8 +32,7 @@ typedef unsigned __int16 u16;
 typedef unsigned __int32 u32;
 typedef unsigned __int64 u64;
 
-typedef struct
-{
+typedef struct {
 	u32 keys[2][21];
 } Config;
 

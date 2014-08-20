@@ -34,8 +34,7 @@
 
 // Based (mostly) off of florin's CDVDbin detection code, twice removed
 //  with some additions from the <linux/cdrom.h> header.
-struct ImageTypes imagedata[] =
-{
+struct ImageTypes imagedata[] = {
 	{ "ISO 2048",             2048,        0,  0,  0 },
 	{ "YellowBook 2064",      2064,        0, 16,  1 },
 	{ "RAW 2064",             2064,        0,  0,  2 },
@@ -48,11 +47,11 @@ struct ImageTypes imagedata[] =
 	{ "YellowBook 2352",      2352,        0, 16,  9 },
 	{ "RedBook 2352",         2352,        0,  0, 10 },
 	{ "RAWQ 2448",            2448,        0,  0, 11 },
-	{ "NERO ISO 2048",        2048, 150*2048,  0,  0 },
-	{ "NERO GreenBook 2352",  2352, 150*2352, 24,  8 },
-	{ "NERO YellowBook 2352", 2352, 150*2352, 16,  9 },
-	{ "NERO RedBook 2352",    2352, 150*2352,  0, 10 },
-	{ "NERO RAWQ 2448",       2448, 150*2448,  0, 11 },
+	{ "NERO ISO 2048",        2048, 150 * 2048,  0,  0 },
+	{ "NERO GreenBook 2352",  2352, 150 * 2352, 24,  8 },
+	{ "NERO YellowBook 2352", 2352, 150 * 2352, 16,  9 },
+	{ "NERO RedBook 2352",    2352, 150 * 2352,  0, 10 },
+	{ "NERO RAWQ 2448",       2448, 150 * 2448,  0, 11 },
 	{ "Alt ISO 2048",         2048,        8,  0,  0 },
 	{ "Alt RAW 2336",         2336,        8,  0,  7 },
 	{ "Alt GreenBook 2352",   2352,        8, 24,  8 },
@@ -68,17 +67,14 @@ void GetImageType(struct IsoFile *isofile, int imagetype)
 {
 	int temptype;
 	int i;
-
 	temptype = imagetype;
 	if ((temptype < 0) || (temptype > 22))  temptype = REDBOOK2352;
 	i = 0;
-	while ((i < 40) && (*(imagedata[temptype].name + i) != 0))
-	{
+	while ((i < 40) && (*(imagedata[temptype].name + i) != 0)) {
 		isofile->imagename[i] = *(imagedata[temptype].name + i);
 		i++;
 	} // ENDWHILE- filling in the image name
 	isofile->imagename[i] = 0; // And 0-terminate.
-
 	isofile->blocksize = imagedata[temptype].blocksize;
 	isofile->imageheader = imagedata[temptype].fileoffset;
 	isofile->blockoffset = imagedata[temptype].dataoffset;
@@ -86,7 +82,7 @@ void GetImageType(struct IsoFile *isofile, int imagetype)
 
 int GetImageTypeConvertTo(int imagetype)
 {
-	return(imagedata[imagetype].conversiontype);
+	return (imagedata[imagetype].conversiontype);
 } // END GetImageTypeConvertTo()
 
 int DetectImageType(struct IsoFile *isofile)
@@ -98,50 +94,39 @@ int DetectImageType(struct IsoFile *isofile)
 	int dataoffset;
 	int i;
 	int retval;
-
 	newtype = 0;
-	if (isofile->compress > 0)
-	{
+	if (isofile->compress > 0) {
 		IsoFileSeek(isofile, 16);
 		IsoFileRead(isofile, teststr);
-		while (imagedata[newtype].name != NULL)
-		{
+		while (imagedata[newtype].name != NULL) {
 			if ((isofile->blocksize == imagedata[newtype].blocksize) &&
-			        (isofile->imageheader == imagedata[newtype].fileoffset))
-			{
+			    (isofile->imageheader == imagedata[newtype].fileoffset)) {
 				dataoffset = imagedata[newtype].dataoffset + 1;
 				i = 0;
 				while ((i < 5) && (teststr[dataoffset + i] == comparestr[i])) i++;
-				if (i == 5)
-				{
+				if (i == 5) {
 					GetImageType(isofile, newtype);
-					return(newtype);
+					return (newtype);
 				} // ENDIF- Did we find a match?
 			} // ENDIF- Do these pieces match the compression storage pieces?
 			newtype++;
 		} // ENDWHILE- looking for the image type that fits the stats
-	}
-	else
-	{
-		while (imagedata[newtype].name != NULL)
-		{
+	} else {
+		while (imagedata[newtype].name != NULL) {
 			targetpos = (16 * imagedata[newtype].blocksize)
 			            + imagedata[newtype].fileoffset
 			            + imagedata[newtype].dataoffset
 			            + 1; // Moves to start of string
 			retval = ActualFileSeek(isofile->handle, targetpos);
-			if (retval == 0)
-			{
+			if (retval == 0) {
 				retval = ActualFileRead(isofile->handle, 5, teststr);
-				if (retval == 5)
-				{
+				if (retval == 5) {
 					i = 0;
 					while ((i < 5) && (teststr[i] == comparestr[i]))  i++;
-					if (i == 5)
-					{
+					if (i == 5) {
 						ActualFileSeek(isofile->handle, isofile->imageheader);
 						GetImageType(isofile, newtype);
-						return(newtype);
+						return (newtype);
 					} // ENDIF- Did we find a match?
 				} // ENDIF- Could we read in the test string? Cool! Test it.
 			} // ENDIF- Could actually get to this point?
@@ -150,5 +135,5 @@ int DetectImageType(struct IsoFile *isofile)
 		ActualFileSeek(isofile->handle, isofile->imageheader);
 	} // ENDIF- Do we match type to compression stats? (Or search against raw data?)
 	GetImageType(isofile, REDBOOK2352);
-	return(REDBOOK2352); // Couldn't find it? Guess it's RAW 2352, then. (Audio CD?)
+	return (REDBOOK2352); // Couldn't find it? Guess it's RAW 2352, then. (Audio CD?)
 } // END ImageDetect()

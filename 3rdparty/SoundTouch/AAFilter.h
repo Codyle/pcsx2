@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///
-/// Sampled sound tempo changer/time stretch algorithm. Changes the sound tempo 
-/// while maintaining the original pitch by using a time domain WSOLA-like method 
+/// Sampled sound tempo changer/time stretch algorithm. Changes the sound tempo
+/// while maintaining the original pitch by using a time domain WSOLA-like method
 /// with several performance-increasing tweaks.
 ///
-/// Anti-alias filter is used to prevent folding of high frequencies when 
+/// Anti-alias filter is used to prevent folding of high frequencies when
 /// transposing the sample rate with interpolation.
 ///
 /// Author        : Copyright (c) Olli Parviainen
@@ -52,38 +52,38 @@ namespace soundtouch
 class AAFilter
 {
 protected:
-    class FIRFilter *pFIR;
+	class FIRFilter *pFIR;
 
-    /// Low-pass filter cut-off frequency, negative = invalid
-    double cutoffFreq;
+	/// Low-pass filter cut-off frequency, negative = invalid
+	double cutoffFreq;
 
-    /// num of filter taps
-    uint length;
+	/// num of filter taps
+	uint length;
 
-    /// Calculate the FIR coefficients realizing the given cutoff-frequency
-    void calculateCoeffs();
+	/// Calculate the FIR coefficients realizing the given cutoff-frequency
+	void calculateCoeffs();
 public:
-    AAFilter(uint length);
+	AAFilter(uint length);
 
-    ~AAFilter();
+	~AAFilter();
 
-    /// Sets new anti-alias filter cut-off edge frequency, scaled to sampling 
-    /// frequency (nyquist frequency = 0.5). The filter will cut off the 
-    /// frequencies than that.
-    void setCutoffFreq(double newCutoffFreq);
+	/// Sets new anti-alias filter cut-off edge frequency, scaled to sampling
+	/// frequency (nyquist frequency = 0.5). The filter will cut off the
+	/// frequencies than that.
+	void setCutoffFreq(double newCutoffFreq);
 
-    /// Sets number of FIR filter taps, i.e. ~filter complexity
-    void setLength(uint newLength);
+	/// Sets number of FIR filter taps, i.e. ~filter complexity
+	void setLength(uint newLength);
 
-    uint getLength() const;
+	uint getLength() const;
 
-    /// Applies the filter to the given sequence of samples. 
-    /// Note : The amount of outputted samples is by value of 'filter length' 
-    /// smaller than the amount of input samples.
-    uint evaluate(SAMPLETYPE *dest, 
-                  const SAMPLETYPE *src, 
-                  uint numSamples, 
-                  uint numChannels) const;
+	/// Applies the filter to the given sequence of samples.
+	/// Note : The amount of outputted samples is by value of 'filter length'
+	/// smaller than the amount of input samples.
+	uint evaluate(SAMPLETYPE *dest,
+	              const SAMPLETYPE *src,
+	              uint numSamples,
+	              uint numChannels) const;
 };
 
 }

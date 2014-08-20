@@ -23,49 +23,51 @@ class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxGenericFindReplaceDialog : public wxFindReplaceDialogBase
 {
 public:
-    wxGenericFindReplaceDialog() { Init(); }
+	wxGenericFindReplaceDialog()
+	{
+		Init();
+	}
 
-    wxGenericFindReplaceDialog(wxWindow *parent,
-                               wxFindReplaceData *data,
-                               const wxString& title,
-                               int style = 0)
-    {
-        Init();
+	wxGenericFindReplaceDialog(wxWindow *parent,
+	                           wxFindReplaceData *data,
+	                           const wxString &title,
+	                           int style = 0)
+	{
+		Init();
+		(void)Create(parent, data, title, style);
+	}
 
-        (void)Create(parent, data, title, style);
-    }
-
-    bool Create(wxWindow *parent,
-                wxFindReplaceData *data,
-                const wxString& title,
-                int style = 0);
+	bool Create(wxWindow *parent,
+	            wxFindReplaceData *data,
+	            const wxString &title,
+	            int style = 0);
 
 protected:
-    void Init();
+	void Init();
 
-    void SendEvent(const wxEventType& evtType);
+	void SendEvent(const wxEventType &evtType);
 
-    void OnFind(wxCommandEvent& event);
-    void OnReplace(wxCommandEvent& event);
-    void OnReplaceAll(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
+	void OnFind(wxCommandEvent &event);
+	void OnReplace(wxCommandEvent &event);
+	void OnReplaceAll(wxCommandEvent &event);
+	void OnCancel(wxCommandEvent &event);
 
-    void OnUpdateFindUI(wxUpdateUIEvent& event);
+	void OnUpdateFindUI(wxUpdateUIEvent &event);
 
-    void OnCloseWindow(wxCloseEvent& event);
+	void OnCloseWindow(wxCloseEvent &event);
 
-    wxCheckBox *m_chkCase,
-               *m_chkWord;
+	wxCheckBox *m_chkCase,
+	           *m_chkWord;
 
-    wxRadioBox *m_radioDir;
+	wxRadioBox *m_radioDir;
 
-    wxTextCtrl *m_textFind,
-               *m_textRepl;
+	wxTextCtrl *m_textFind,
+	           *m_textRepl;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGenericFindReplaceDialog)
+	DECLARE_DYNAMIC_CLASS(wxGenericFindReplaceDialog)
 
-    DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_GENERIC_FDREPDLG_H_

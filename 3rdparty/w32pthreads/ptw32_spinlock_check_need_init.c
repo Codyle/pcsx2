@@ -38,43 +38,36 @@
 
 
 INLINE int
-ptw32_spinlock_check_need_init (pthread_spinlock_t * lock)
+ptw32_spinlock_check_need_init(pthread_spinlock_t * lock)
 {
-  int result = 0;
-
-  /*
-   * The following guarded test is specifically for statically
-   * initialised spinlocks (via PTHREAD_SPINLOCK_INITIALIZER).
-   *
-   * Note that by not providing this synchronisation we risk
-   * introducing race conditions into applications which are
-   * correctly written.
-   */
-  EnterCriticalSection (&ptw32_spinlock_test_init_lock);
-
-  /*
-   * We got here possibly under race
-   * conditions. Check again inside the critical section
-   * and only initialise if the spinlock is valid (not been destroyed).
-   * If a static spinlock has been destroyed, the application can
-   * re-initialise it only by calling pthread_spin_init()
-   * explicitly.
-   */
-  if (*lock == PTHREAD_SPINLOCK_INITIALIZER)
-    {
-      result = pthread_spin_init (lock, PTHREAD_PROCESS_PRIVATE);
-    }
-  else if (*lock == NULL)
-    {
-      /*
-       * The spinlock has been destroyed while we were waiting to
-       * initialise it, so the operation that caused the
-       * auto-initialisation should fail.
-       */
-      result = EINVAL;
-    }
-
-  LeaveCriticalSection (&ptw32_spinlock_test_init_lock);
-
-  return (result);
+	int result = 0;
+	/*
+	 * The following guarded test is specifically for statically
+	 * initialised spinlocks (via PTHREAD_SPINLOCK_INITIALIZER).
+	 *
+	 * Note that by not providing this synchronisation we risk
+	 * introducing race conditions into applications which are
+	 * correctly written.
+	 */
+	EnterCriticalSection(&ptw32_spinlock_test_init_lock);
+	/*
+	 * We got here possibly under race
+	 * conditions. Check again inside the critical section
+	 * and only initialise if the spinlock is valid (not been destroyed).
+	 * If a static spinlock has been destroyed, the application can
+	 * re-initialise it only by calling pthread_spin_init()
+	 * explicitly.
+	 */
+	if (*lock == PTHREAD_SPINLOCK_INITIALIZER)
+		result = pthread_spin_init(lock, PTHREAD_PROCESS_PRIVATE);
+	else if (*lock == NULL) {
+		/*
+		 * The spinlock has been destroyed while we were waiting to
+		 * initialise it, so the operation that caused the
+		 * auto-initialisation should fail.
+		 */
+		result = EINVAL;
+	}
+	LeaveCriticalSection(&ptw32_spinlock_test_init_lock);
+	return (result);
 }

@@ -15,26 +15,26 @@
 
 #pragma once
 
-namespace x86Emitter {
+namespace x86Emitter
+{
 
 // --------------------------------------------------------------------------------------
 //  _SimdShiftHelper
 // --------------------------------------------------------------------------------------
-struct _SimdShiftHelper
-{
+struct _SimdShiftHelper {
 	u8		Prefix;
 	u16		Opcode;
 	u16		OpcodeImm;
 	u8		Modcode;
 
-	void operator()( const xRegisterSSE& to, const xRegisterSSE& from ) const;
-	void operator()( const xRegisterSSE& to, const xIndirectVoid& from ) const;
+	void operator()(const xRegisterSSE &to, const xRegisterSSE &from) const;
+	void operator()(const xRegisterSSE &to, const xIndirectVoid &from) const;
 
-	void operator()( const xRegisterMMX& to, const xRegisterMMX& from ) const;
-	void operator()( const xRegisterMMX& to, const xIndirectVoid& from ) const;
+	void operator()(const xRegisterMMX &to, const xRegisterMMX &from) const;
+	void operator()(const xRegisterMMX &to, const xIndirectVoid &from) const;
 
-	void operator()( const xRegisterSSE& to, u8 imm8 ) const;
-	void operator()( const xRegisterMMX& to, u8 imm8 ) const;
+	void operator()(const xRegisterSSE &to, u8 imm8) const;
+	void operator()(const xRegisterMMX &to, u8 imm8) const;
 };
 
 // --------------------------------------------------------------------------------------
@@ -43,27 +43,24 @@ struct _SimdShiftHelper
 
 // Used for PSRA, which lacks the Q form.
 //
-struct xImplSimd_ShiftWithoutQ
-{
+struct xImplSimd_ShiftWithoutQ {
 	const _SimdShiftHelper W;
 	const _SimdShiftHelper D;
 };
 
 // Implements PSRL and PSLL
 //
-struct xImplSimd_Shift
-{
+struct xImplSimd_Shift {
 	const _SimdShiftHelper W;
 	const _SimdShiftHelper D;
 	const _SimdShiftHelper Q;
 
-	void DQ( const xRegisterSSE& to, u8 imm8 ) const;
+	void DQ(const xRegisterSSE &to, u8 imm8) const;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-struct xImplSimd_AddSub
-{
+struct xImplSimd_AddSub {
 	const xImplSimd_DestRegEither B;
 	const xImplSimd_DestRegEither W;
 	const xImplSimd_DestRegEither D;
@@ -84,8 +81,7 @@ struct xImplSimd_AddSub
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-struct xImplSimd_PMul
-{
+struct xImplSimd_PMul {
 	const xImplSimd_DestRegEither LW;
 	const xImplSimd_DestRegEither HW;
 	const xImplSimd_DestRegEither HUW;
@@ -114,8 +110,7 @@ struct xImplSimd_PMul
 //////////////////////////////////////////////////////////////////////////////////////////
 // For instructions that have PS/SS form only (most commonly reciprocal Sqrt functions)
 //
-struct xImplSimd_rSqrt
-{
+struct xImplSimd_rSqrt {
 	const xImplSimd_DestRegSSE PS;
 	const xImplSimd_DestRegSSE SS;
 };
@@ -123,8 +118,7 @@ struct xImplSimd_rSqrt
 //////////////////////////////////////////////////////////////////////////////////////////
 // SQRT has PS/SS/SD forms, but not the PD form.
 //
-struct xImplSimd_Sqrt
-{
+struct xImplSimd_Sqrt {
 	const xImplSimd_DestRegSSE PS;
 	const xImplSimd_DestRegSSE SS;
 	const xImplSimd_DestRegSSE SD;
@@ -132,8 +126,7 @@ struct xImplSimd_Sqrt
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-struct xImplSimd_AndNot
-{
+struct xImplSimd_AndNot {
 	const xImplSimd_DestRegSSE PS;
 	const xImplSimd_DestRegSSE PD;
 };
@@ -141,8 +134,7 @@ struct xImplSimd_AndNot
 //////////////////////////////////////////////////////////////////////////////////////////
 // Packed absolute value. [sSSE3 only]
 //
-struct xImplSimd_PAbsolute
-{
+struct xImplSimd_PAbsolute {
 	// [sSSE-3] Computes the absolute value of bytes in the src, and stores the result
 	// in dest, as UNSIGNED.
 	const xImplSimd_DestRegEither B;
@@ -160,8 +152,7 @@ struct xImplSimd_PAbsolute
 // Packed Sign [sSSE3 only] - Negate/zero/preserve packed integers in dest depending on the
 // corresponding sign in src.
 //
-struct xImplSimd_PSign
-{
+struct xImplSimd_PSign {
 	// [sSSE-3] negates each byte element of dest if the signed integer value of the
 	// corresponding data element in src is less than zero. If the signed integer value
 	// of a data element in src is positive, the corresponding data element in dest is
@@ -188,8 +179,7 @@ struct xImplSimd_PSign
 //////////////////////////////////////////////////////////////////////////////////////////
 // Packed Multiply and Add!!
 //
-struct xImplSimd_PMultAdd
-{
+struct xImplSimd_PMultAdd {
 	// Multiplies the individual signed words of dest by the corresponding signed words
 	// of src, producing temporary signed, doubleword results. The adjacent doubleword
 	// results are then summed and stored in the destination operand.
@@ -220,8 +210,7 @@ struct xImplSimd_PMultAdd
 //////////////////////////////////////////////////////////////////////////////////////////
 // Packed Horizontal Add [SSE3 only]
 //
-struct xImplSimd_HorizAdd
-{
+struct xImplSimd_HorizAdd {
 	// [SSE-3] Horizontal Add of Packed Data.  A three step process:
 	// * Adds the single-precision floating-point values in the first and second dwords of
 	//   dest and stores the result in the first dword of dest.
@@ -242,8 +231,7 @@ struct xImplSimd_HorizAdd
 //////////////////////////////////////////////////////////////////////////////////////////
 // DotProduct calculation (SSE4.1 only!)
 //
-struct xImplSimd_DotProduct
-{
+struct xImplSimd_DotProduct {
 	// [SSE-4.1] Conditionally multiplies the packed single precision floating-point
 	// values in dest with the packed single-precision floats in src depending on a
 	// mask extracted from the high 4 bits of the immediate byte. If a condition mask
@@ -266,8 +254,7 @@ struct xImplSimd_DotProduct
 //////////////////////////////////////////////////////////////////////////////////////////
 // Rounds floating point values (packed or single scalar) by an arbitrary rounding mode.
 // (SSE4.1 only!)
-struct xImplSimd_Round
-{
+struct xImplSimd_Round {
 	// [SSE-4.1] Rounds the 4 packed single-precision src values and stores them in dest.
 	//
 	// Imm8 specifies control fields for the rounding operation:

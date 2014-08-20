@@ -21,22 +21,29 @@
 #include "Utilities/wxGuiTools.h"
 #include "Utilities/CheckedStaticBox.h"
 
-namespace Dialogs {
+namespace Dialogs
+{
 
 class LogOptionsDialog : public BaseConfigurationDialog
 {
 public:
-	LogOptionsDialog( wxWindow* parent=NULL );
+	LogOptionsDialog(wxWindow* parent = NULL);
 	virtual ~LogOptionsDialog() throw() { }
 
-	static wxString GetNameStatic() { return L"TraceLogSettings"; }
-	wxString GetDialogName() const { return GetNameStatic(); }
+	static wxString GetNameStatic()
+	{
+		return L"TraceLogSettings";
+	}
+	wxString GetDialogName() const
+	{
+		return GetNameStatic();
+	}
 
 protected:
-	void OnOk_Click( wxCommandEvent& evt );
-	void OnApply_Click( wxCommandEvent& evt );
-	
-	wxString& GetConfSettingsTabName() const
+	void OnOk_Click(wxCommandEvent &evt);
+	void OnApply_Click(wxCommandEvent &evt);
+
+	wxString &GetConfSettingsTabName() const
 	{
 		static wxString bleh = L"TraceLogs";
 		pxFailDev("No tabs yet!");

@@ -27,7 +27,7 @@ class FileStream
 	FILE* handle;
 	s64 fileSize;
 
-	FileStream(FileStream&);
+	FileStream(FileStream &);
 public:
 
 	FileStream(const char* fileName);
@@ -47,12 +47,11 @@ public:
 	template<class T>
 	T read()
 	{
-		if(sizeof(T)==1)
+		if (sizeof(T) == 1)
 			return (T)read();
-		else
-		{
+		else {
 			T t;
-			read((byte*)&t,sizeof(t));
+			read((byte*)&t, sizeof(t));
 			return t;
 		}
 	}

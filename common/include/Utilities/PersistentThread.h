@@ -25,38 +25,44 @@ namespace Threading
 // --------------------------------------------------------------------------------------
 //  ThreadDeleteEvent
 // --------------------------------------------------------------------------------------
-	class EventListener_Thread : public IEventDispatcher<int>
+class EventListener_Thread : public IEventDispatcher<int>
+{
+public:
+	typedef int EvtParams;
+
+protected:
+	pxThread* m_thread;
+
+public:
+	EventListener_Thread()
 	{
-	public:
-		typedef int EvtParams;
+		m_thread = NULL;
+	}
 
-	protected:
-		pxThread* m_thread;
+	virtual ~EventListener_Thread() throw() {}
 
-	public:
-		EventListener_Thread()
-		{
-			m_thread = NULL;
-		}
+	void SetThread(pxThread &thr)
+	{
+		m_thread = &thr;
+	}
+	void SetThread(pxThread* thr)
+	{
+		m_thread = thr;
+	}
 
-		virtual ~EventListener_Thread() throw() {}
+	void DispatchEvent(const int &params)
+	{
+		OnThreadCleanup();
+	}
 
-		void SetThread( pxThread& thr ) { m_thread = &thr; }
-		void SetThread( pxThread* thr ) { m_thread = thr; }
-
-		void DispatchEvent( const int& params )
-		{
-			OnThreadCleanup();
-		}
-
-	protected:
-		// Invoked by the pxThread when the thread execution is ending.  This is
-		// typically more useful than a delete listener since the extended thread information
-		// provided by virtualized functions/methods will be available.
-		// Important!  This event is executed *by the thread*, so care must be taken to ensure
-		// thread sync when necessary (posting messages to the main thread, etc).
-		virtual void OnThreadCleanup()=0;
-	};
+protected:
+	// Invoked by the pxThread when the thread execution is ending.  This is
+	// typically more useful than a delete listener since the extended thread information
+	// provided by virtualized functions/methods will be available.
+	// Important!  This event is executed *by the thread*, so care must be taken to ensure
+	// thread sync when necessary (posting messages to the main thread, etc).
+	virtual void OnThreadCleanup() = 0;
+};
 
 // --------------------------------------------------------------------------------------
 // pxThread - Helper class for the basics of starting/managing persistent threads.
@@ -85,122 +91,128 @@ namespace Threading
 //    no dependency options for ensuring correct static var initializations).  Use heap
 //    allocation to create thread objects instead.
 //
-	class pxThread
+class pxThread
+{
+	DeclareNoncopyableObject(pxThread);
+
+	friend void pxYield(int ms);
+
+protected:
+	wxString	m_name;				// diagnostic name for our thread.
+	pthread_t	m_thread;
+	uptr		m_native_id;		// typically an id, but implementing platforms can do whatever.
+	uptr		m_native_handle;	// typically a pointer/handle, but implementing platforms can do whatever.
+
+	Semaphore	m_sem_event;		// general wait event that's needed by most threads
+	Semaphore	m_sem_startup;		// startup sync tool
+	Mutex		m_mtx_InThread;		// used for canceling and closing threads in a deadlock-safe manner
+	MutexRecursive	m_mtx_start;	// used to lock the Start() code from starting simultaneous threads accidentally.
+	Mutex		m_mtx_ThreadName;
+
+	volatile long m_detached;		// a boolean value which indicates if the m_thread handle is valid
+	volatile long m_running;		// set true by Start(), and set false by Cancel(), Block(), etc.
+
+	// exception handle, set non-NULL if the thread terminated with an exception
+	// Use RethrowException() to re-throw the exception using its original exception type.
+	ScopedPtrMT<BaseException> m_except;
+
+	EventSource<EventListener_Thread> m_evtsrc_OnDelete;
+
+
+public:
+	virtual ~pxThread() throw();
+	pxThread(const wxString &name = L"pxThread");
+
+	pthread_t GetId() const
 	{
-		DeclareNoncopyableObject(pxThread);
+		return m_thread;
+	}
+	u64 GetCpuTime() const;
 
-		friend void pxYield( int ms );
+	virtual void Start();
+	virtual void Cancel(bool isBlocking = true);
+	virtual bool Cancel(const wxTimeSpan &timeout);
+	virtual bool Detach();
+	virtual void Block();
+	virtual bool Block(const wxTimeSpan &timeout);
+	virtual void RethrowException() const;
 
-	protected:
-		wxString	m_name;				// diagnostic name for our thread.
-		pthread_t	m_thread;
-		uptr		m_native_id;		// typically an id, but implementing platforms can do whatever.
-		uptr		m_native_handle;	// typically a pointer/handle, but implementing platforms can do whatever.
+	void AddListener(EventListener_Thread &evt);
+	void AddListener(EventListener_Thread* evt)
+	{
+		if (evt == NULL) return;
+		AddListener(*evt);
+	}
 
-		Semaphore	m_sem_event;		// general wait event that's needed by most threads
-		Semaphore	m_sem_startup;		// startup sync tool
-		Mutex		m_mtx_InThread;		// used for canceling and closing threads in a deadlock-safe manner
-		MutexRecursive	m_mtx_start;	// used to lock the Start() code from starting simultaneous threads accidentally.
-		Mutex		m_mtx_ThreadName;
+	void WaitOnSelf(Semaphore &mutex) const;
+	void WaitOnSelf(Mutex &mutex) const;
+	bool WaitOnSelf(Semaphore &mutex, const wxTimeSpan &timeout) const;
+	bool WaitOnSelf(Mutex &mutex, const wxTimeSpan &timeout) const;
 
-		volatile long m_detached;		// a boolean value which indicates if the m_thread handle is valid
-		volatile long m_running;		// set true by Start(), and set false by Cancel(), Block(), etc.
+	bool IsRunning() const;
+	bool IsSelf() const;
+	bool HasPendingException() const
+	{
+		return !!m_except;
+	}
 
-		// exception handle, set non-NULL if the thread terminated with an exception
-		// Use RethrowException() to re-throw the exception using its original exception type.
-		ScopedPtrMT<BaseException> m_except;
+	wxString GetName() const;
+	void SetName(const wxString &newname);
 
-		EventSource<EventListener_Thread> m_evtsrc_OnDelete;
+protected:
+	// Extending classes should always implement your own OnStart(), which is called by
+	// Start() once necessary locks have been obtained.  Do not override Start() directly
+	// unless you're really sure that's what you need to do. ;)
+	virtual void OnStart();
 
+	virtual void OnStartInThread();
 
-	public:
-		virtual ~pxThread() throw();
-		pxThread( const wxString& name=L"pxThread" );
+	// This is called when the thread has been canceled or exits normally.  The pxThread
+	// automatically binds it to the pthread cleanup routines as soon as the thread starts.
+	virtual void OnCleanupInThread();
 
-		pthread_t GetId() const { return m_thread; }
-		u64 GetCpuTime() const;
+	// Implemented by derived class to perform actual threaded task!
+	virtual void ExecuteTaskInThread() = 0;
 
-		virtual void Start();
-		virtual void Cancel( bool isBlocking = true );
-		virtual bool Cancel( const wxTimeSpan& timeout );
-		virtual bool Detach();
-		virtual void Block();
-		virtual bool Block( const wxTimeSpan& timeout );
-		virtual void RethrowException() const;
+	void TestCancel() const;
 
-		void AddListener( EventListener_Thread& evt );
-		void AddListener( EventListener_Thread* evt )
-		{
-			if( evt == NULL ) return;
-			AddListener( *evt );
-		}
+	// Yields this thread to other threads and checks for cancellation.  A sleeping thread should
+	// always test for cancellation, however if you really don't want to, you can use Threading::Sleep()
+	// or better yet, disable cancellation of the thread completely with DisableCancellation().
+	//
+	// Parameters:
+	//   ms - 'minimum' yield time in milliseconds (rough -- typically yields are longer by 1-5ms
+	//         depending on operating system/platform).  If ms is 0 or unspecified, then a single
+	//         timeslice is yielded to other contending threads.  If no threads are contending for
+	//         time when ms==0, then no yield is done, but cancellation is still tested.
+	void Yield(int ms = 0)
+	{
+		pxAssert(IsSelf());
+		Threading::Sleep(ms);
+		TestCancel();
+	}
 
-		void WaitOnSelf( Semaphore& mutex ) const;
-		void WaitOnSelf( Mutex& mutex ) const;
-		bool WaitOnSelf( Semaphore& mutex, const wxTimeSpan& timeout ) const;
-		bool WaitOnSelf( Mutex& mutex, const wxTimeSpan& timeout ) const;
+	void FrankenMutex(Mutex &mutex);
 
-		bool IsRunning() const;
-		bool IsSelf() const;
-		bool HasPendingException() const { return !!m_except; }
+	bool AffinityAssert_AllowFromSelf(const DiagnosticOrigin &origin) const;
+	bool AffinityAssert_DisallowFromSelf(const DiagnosticOrigin &origin) const;
 
-		wxString GetName() const;
-		void SetName( const wxString& newname );
+	// ----------------------------------------------------------------------------
+	// Section of methods for internal use only.
 
-	protected:
-		// Extending classes should always implement your own OnStart(), which is called by
-		// Start() once necessary locks have been obtained.  Do not override Start() directly
-		// unless you're really sure that's what you need to do. ;)
-		virtual void OnStart();
+	void _platform_specific_OnStartInThread();
+	void _platform_specific_OnCleanupInThread();
+	bool _basecancel();
+	void _selfRunningTest(const wxChar* name) const;
+	void _DoSetThreadName(const wxString &name);
+	void _DoSetThreadName(const char* name);
+	void _internal_execute();
+	void _try_virtual_invoke(void (pxThread::*method)());
+	void _ThreadCleanup();
 
-		virtual void OnStartInThread();
-
-		// This is called when the thread has been canceled or exits normally.  The pxThread
-		// automatically binds it to the pthread cleanup routines as soon as the thread starts.
-		virtual void OnCleanupInThread();
-
-		// Implemented by derived class to perform actual threaded task!
-		virtual void ExecuteTaskInThread()=0;
-
-		void TestCancel() const;
-
-		// Yields this thread to other threads and checks for cancellation.  A sleeping thread should
-		// always test for cancellation, however if you really don't want to, you can use Threading::Sleep()
-		// or better yet, disable cancellation of the thread completely with DisableCancellation().
-		//
-		// Parameters:
-		//   ms - 'minimum' yield time in milliseconds (rough -- typically yields are longer by 1-5ms
-		//         depending on operating system/platform).  If ms is 0 or unspecified, then a single
-		//         timeslice is yielded to other contending threads.  If no threads are contending for
-		//         time when ms==0, then no yield is done, but cancellation is still tested.
-		void Yield( int ms = 0 )
-		{
-			pxAssert( IsSelf() );
-			Threading::Sleep( ms );
-			TestCancel();
-		}
-
-		void FrankenMutex( Mutex& mutex );
-
-		bool AffinityAssert_AllowFromSelf( const DiagnosticOrigin& origin ) const;
-		bool AffinityAssert_DisallowFromSelf( const DiagnosticOrigin& origin ) const;
-
-		// ----------------------------------------------------------------------------
-		// Section of methods for internal use only.
-
-		void _platform_specific_OnStartInThread();
-		void _platform_specific_OnCleanupInThread();
-		bool _basecancel();
-		void _selfRunningTest( const wxChar* name ) const;
-		void _DoSetThreadName( const wxString& name );
-		void _DoSetThreadName( const char* name );
-		void _internal_execute();
-		void _try_virtual_invoke( void (pxThread::*method)() );
-		void _ThreadCleanup();
-
-		static void* _internal_callback( void* func );
-		static void _pt_callback_cleanup( void* handle );
-	};
+	static void* _internal_callback(void* func);
+	static void _pt_callback_cleanup(void* handle);
+};
 
 
 // --------------------------------------------------------------------------------------
@@ -240,32 +252,32 @@ namespace Threading
 //    into smaller sections.  For example, if you have 20,000 items to process, the task
 //    can be divided into two threads of 10,000 items each.
 //
-	class BaseTaskThread : public pxThread
-	{
-	protected:
-		volatile bool m_Done;
-		volatile bool m_TaskPending;
-		Semaphore m_post_TaskComplete;
-		Mutex m_lock_TaskComplete;
+class BaseTaskThread : public pxThread
+{
+protected:
+	volatile bool m_Done;
+	volatile bool m_TaskPending;
+	Semaphore m_post_TaskComplete;
+	Mutex m_lock_TaskComplete;
 
-	public:
-		virtual ~BaseTaskThread() throw() {}
-		BaseTaskThread() :
-			m_Done( false )
-		,	m_TaskPending( false )
+public:
+	virtual ~BaseTaskThread() throw() {}
+	BaseTaskThread() :
+		m_Done(false)
+		,	m_TaskPending(false)
 		,	m_post_TaskComplete()
-		{
-		}
+	{
+	}
 
-		void Block();
-		void PostTask();
-		void WaitForResult();
+	void Block();
+	void PostTask();
+	void WaitForResult();
 
-	protected:
-		// Abstract method run when a task has been posted.  Implementing classes should do
-		// all your necessary processing work here.
-		virtual void Task()=0;
+protected:
+	// Abstract method run when a task has been posted.  Implementing classes should do
+	// all your necessary processing work here.
+	virtual void Task() = 0;
 
-		virtual void ExecuteTaskInThread();
-	};
+	virtual void ExecuteTaskInThread();
+};
 }

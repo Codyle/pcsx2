@@ -23,13 +23,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -51,7 +51,7 @@ extern "C"
 
  It is recommended to call PaUtil_InitializeX86PlainConverters prior to calling Pa_Initialize
 */
-void PaUtil_InitializeX86PlainConverters( void );
+void PaUtil_InitializeX86PlainConverters(void);
 
 
 #ifdef __cplusplus

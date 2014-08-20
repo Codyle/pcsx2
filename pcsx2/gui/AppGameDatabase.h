@@ -47,22 +47,31 @@ protected:
 
 public:
 	AppGameDatabase() {}
-	virtual ~AppGameDatabase() throw() {
-		Console.WriteLn( "(GameDB) Unloading..." );
+	virtual ~AppGameDatabase() throw()
+	{
+		Console.WriteLn("(GameDB) Unloading...");
 	}
 
-	AppGameDatabase& LoadFromFile(const wxString& file = Path::Combine( PathDefs::GetProgramDataDir(), wxFileName(L"GameIndex.dbf") ), const wxString& key = L"Serial" );
-	void SaveToFile(const wxString& file = Path::Combine( PathDefs::GetProgramDataDir(), wxFileName(L"GameIndex.dbf")) );
+	AppGameDatabase &LoadFromFile(const wxString &file = Path::Combine(PathDefs::GetProgramDataDir(), wxFileName(L"GameIndex.dbf")), const wxString &key = L"Serial");
+	void SaveToFile(const wxString &file = Path::Combine(PathDefs::GetProgramDataDir(), wxFileName(L"GameIndex.dbf")));
 };
 
-static wxString compatToStringWX(int compat) {
+static wxString compatToStringWX(int compat)
+{
 	switch (compat) {
-		case 6:  return L"Perfect";
-		case 5:  return L"Playable";
-		case 4:  return L"In-Game";
-		case 3:  return L"Menu";
-		case 2:  return L"Intro";
-		case 1:  return L"Nothing";
-		default: return L"Unknown";
+		case 6:
+			return L"Perfect";
+		case 5:
+			return L"Playable";
+		case 4:
+			return L"In-Game";
+		case 3:
+			return L"Menu";
+		case 2:
+			return L"Intro";
+		case 1:
+			return L"Nothing";
+		default:
+			return L"Unknown";
 	}
 }

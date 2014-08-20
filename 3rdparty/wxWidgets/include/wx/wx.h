@@ -97,7 +97,7 @@
 #include "wx/validate.h"
 
 #if wxUSE_VALIDATORS
-    #include "wx/valtext.h"
+#include "wx/valtext.h"
 #endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_GUI

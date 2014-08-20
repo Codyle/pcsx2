@@ -23,8 +23,7 @@
 off64_t ConvertEndianOffset(off64_t number)
 {
 #ifndef CONVERTLITTLEENDIAN
-	union
-	{
+	union {
 		off64_t n;
 		char c[sizeof(off64_t)];
 	} oldnumber, newnumber;
@@ -32,35 +31,32 @@ off64_t ConvertEndianOffset(off64_t number)
 	oldnumber.n = number;
 	for (i = 0; i < sizeof(off64_t); i++)
 		newnumber.c[i] = oldnumber.c[sizeof(off64_t) - 1 - i];
-	return(newnumber.n);
+	return (newnumber.n);
 #else
-	return(number);
+	return (number);
 #endif /* CONVERTLITTLEENDIAN */
 } // END ConvertEndianOffset()
 
 unsigned int ConvertEndianUInt(unsigned int number)
 {
 #ifndef CONVERTLITTLEENDIAN
-	union
-	{
+	union {
 		unsigned int n;
 		char c[sizeof(unsigned int)];
 	} oldnumber, newnumber;
 	int i;
-
 	oldnumber.n = number;
 	for (i = 0; i < sizeof(unsigned int); i++)
 		newnumber.c[i] = oldnumber.c[sizeof(unsigned int) - 1 - i];
-	return(newnumber.n);
+	return (newnumber.n);
 #else
-	return(number);
+	return (number);
 #endif /* CONVERTLITTLEENDIAN */
 } // END ConvertEndianUInt()
 unsigned short ConvertEndianUShort(unsigned short number)
 {
 #ifndef CONVERTLITTLEENDIAN
-	union
-	{
+	union {
 		unsigned short n;
 		char c[sizeof(unsigned short)];
 	} oldnumber, newnumber;
@@ -68,9 +64,9 @@ unsigned short ConvertEndianUShort(unsigned short number)
 	oldnumber.n = number;
 	for (i = 0; i < sizeof(unsigned short); i++)
 		newnumber.c[i] = oldnumber.c[sizeof(unsigned short) - 1 - i];
-	return(newnumber.n);
+	return (newnumber.n);
 #else
-	return(number);
+	return (number);
 #endif /* CONVERTLITTLEENDIAN */
 } // END ConvertEndianUShort()
 
@@ -78,14 +74,11 @@ unsigned short ConvertEndianUShort(unsigned short number)
 void LBAtoMSF(unsigned long lsn, char *buffer)
 {
 	unsigned long templsn;
-
-	if (lsn >= 0xFFFFFFFF - 150)
-	{
+	if (lsn >= 0xFFFFFFFF - 150) {
 		*(buffer + 2) = 75 - 1;
 		*(buffer + 1) = 60 - 1;
 		*(buffer) = 100 - 1;
 	} // ENDIF- Out of range?
-
 	templsn = lsn;
 	templsn += 150; // 2 second offset (75 Frames * 2 Seconds)
 	*(buffer + 2) = templsn % 75; // Remainder in frames
@@ -99,13 +92,13 @@ void LBAtoMSF(unsigned long lsn, char *buffer)
 unsigned long MSFtoLBA(char *buffer)
 {
 	unsigned long templsn;
-	if (buffer == NULL)  return(0xFFFFFFFF);
+	if (buffer == NULL)  return (0xFFFFFFFF);
 	templsn = *(buffer); // Minutes
 	templsn *= 60;
 	templsn += *(buffer + 1); // Seconds
 	templsn *= 75;
 	templsn += *(buffer + 2); // Frames
-	if (templsn < 150)  return(0xFFFFFFFF);
+	if (templsn < 150)  return (0xFFFFFFFF);
 	templsn -= 150; // Offset
-	return(templsn);
+	return (templsn);
 } // END MSFtoLBA()

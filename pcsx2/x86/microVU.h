@@ -41,28 +41,37 @@ struct microBlockLink {
 	microBlockLink*	next;
 };
 
-class microBlockManager {
+class microBlockManager
+{
 private:
 	microBlockLink* qBlockList, *qBlockEnd; // Quick Search
 	microBlockLink* fBlockList, *fBlockEnd; // Full  Search
 	int qListI, fListI;
 
 public:
-	inline int getFullListCount() const { return fListI; }
-	microBlockManager() {
+	inline int getFullListCount() const
+	{
+		return fListI;
+	}
+	microBlockManager()
+	{
 		qListI = fListI = 0;
 		qBlockEnd = qBlockList = NULL;
 		fBlockEnd = fBlockList = NULL;
 	}
-	~microBlockManager() { reset(); }
-	void reset() {
-		for(microBlockLink* linkI = qBlockList; linkI != NULL; ) {
+	~microBlockManager()
+	{
+		reset();
+	}
+	void reset()
+	{
+		for (microBlockLink* linkI = qBlockList; linkI != NULL;) {
 			microBlockLink* freeI = linkI;
 			safe_delete_array(linkI->block.jumpCache);
 			linkI = linkI->next;
 			_aligned_free(freeI);
 		}
-		for(microBlockLink* linkI = fBlockList; linkI != NULL; ) {
+		for (microBlockLink* linkI = fBlockList; linkI != NULL;) {
 			microBlockLink* freeI = linkI;
 			safe_delete_array(linkI->block.jumpCache);
 			linkI = linkI->next;
@@ -72,42 +81,39 @@ public:
 		qBlockEnd = qBlockList = NULL;
 		fBlockEnd = fBlockList = NULL;
 	};
-	microBlock* add(microBlock* pBlock) {
+	microBlock* add(microBlock* pBlock)
+	{
 		microBlock* thisBlock = search(&pBlock->pState);
 		if (!thisBlock) {
-			u8  doFF    = doFullFlagOpt && (pBlock->pState.flagInfo&1);
+			u8  doFF    = doFullFlagOpt && (pBlock->pState.flagInfo & 1);
 			u8  fullCmp = pBlock->pState.needExactMatch || doFF;
-			if (fullCmp) fListI++; else qListI++;
-
-			microBlockLink*& blockList = fullCmp ? fBlockList : qBlockList;
-			microBlockLink*& blockEnd  = fullCmp ? fBlockEnd  : qBlockEnd;
+			if (fullCmp) fListI++;
+			else qListI++;
+			microBlockLink* &blockList = fullCmp ? fBlockList : qBlockList;
+			microBlockLink* &blockEnd  = fullCmp ? fBlockEnd  : qBlockEnd;
 			microBlockLink*  newBlock  = (microBlockLink*)_aligned_malloc(sizeof(microBlockLink), 16);
 			newBlock->block.jumpCache  = NULL;
 			newBlock->next = NULL;
-
 			if (blockEnd) {
 				blockEnd->next	= newBlock;
 				blockEnd		= newBlock;
-			}
-			else {
+			} else
 				blockEnd = blockList = newBlock;
-			}
-
 			memcpy_const(&newBlock->block, pBlock, sizeof(microBlock));
 			thisBlock =  &newBlock->block;
 		}
 		return thisBlock;
 	}
-	__ri microBlock* search(microRegInfo* pState) {
-		u8  doFF = doFullFlagOpt && (pState->flagInfo&1);
+	__ri microBlock* search(microRegInfo* pState)
+	{
+		u8  doFF = doFullFlagOpt && (pState->flagInfo & 1);
 		if (pState->needExactMatch || doFF) { // Needs Detailed Search (Exact Match of Pipeline State)
-			for(microBlockLink* linkI = fBlockList; linkI != NULL; linkI = linkI->next) {
+			for (microBlockLink* linkI = fBlockList; linkI != NULL; linkI = linkI->next) {
 				if (mVUquickSearch((void*)pState, (void*)&linkI->block.pState, sizeof(microRegInfo)))
 					return &linkI->block;
 			}
-		}
-		else { // Can do Simple Search (Only Matches the Important Pipeline Stuff)
-			for(microBlockLink* linkI = qBlockList; linkI != NULL; linkI = linkI->next) {
+		} else { // Can do Simple Search (Only Matches the Important Pipeline Stuff)
+			for (microBlockLink* linkI = qBlockList; linkI != NULL; linkI = linkI->next) {
 				if (linkI->block.pState.quick32[0] != pState->quick32[0]) continue;
 				if (linkI->block.pState.quick32[1] != pState->quick32[1]) continue;
 				if (doConstProp && (linkI->block.pState.vi15  != pState->vi15))  continue;
@@ -117,20 +123,21 @@ public:
 		}
 		return NULL;
 	}
-	void printInfo(int pc, bool printQuick) {
+	void printInfo(int pc, bool printQuick)
+	{
 		int listI = printQuick ? qListI : fListI;
 		if (listI < 7) return;
 		microBlockLink* linkI = printQuick ? qBlockList : fBlockList;
 		for (int i = 0; i <= listI; i++) {
-			u32 viCRC = 0, vfCRC = 0, crc = 0, z = sizeof(microRegInfo)/4;
+			u32 viCRC = 0, vfCRC = 0, crc = 0, z = sizeof(microRegInfo) / 4;
 			for (u32 j = 0; j < 4;  j++) viCRC -= ((u32*)linkI->block.pState.VI)[j];
 			for (u32 j = 0; j < 32; j++) vfCRC -= linkI->block.pState.VF[j].reg;
 			for (u32 j = 0; j < z;  j++) crc   -= ((u32*)&linkI->block.pState)[j];
 			DevCon.WriteLn(Color_Green, "[%04x][Block #%d][crc=%08x][q=%02d][p=%02d][xgkick=%d][vi15=%04x][vi15v=%d][viBackup=%02d]"
-			"[flags=%02x][exactMatch=%x][blockType=%d][viCRC=%08x][vfCRC=%08x]", pc, i, crc, linkI->block.pState.q, 
-			linkI->block.pState.p, linkI->block.pState.xgkick, linkI->block.pState.vi15, linkI->block.pState.vi15v,
-			linkI->block.pState.viBackUp, linkI->block.pState.flagInfo, linkI->block.pState.needExactMatch,
-			linkI->block.pState.blockType, viCRC, vfCRC);
+			               "[flags=%02x][exactMatch=%x][blockType=%d][viCRC=%08x][vfCRC=%08x]", pc, i, crc, linkI->block.pState.q,
+			               linkI->block.pState.p, linkI->block.pState.xgkick, linkI->block.pState.vi15, linkI->block.pState.vi15v,
+			               linkI->block.pState.viBackUp, linkI->block.pState.flagInfo, linkI->block.pState.needExactMatch,
+			               linkI->block.pState.blockType, viCRC, vfCRC);
 			linkI = linkI->next;
 		}
 	}
@@ -144,7 +151,7 @@ struct microRange {
 #define mProgSize (0x4000/4)
 struct microProgram {
 	u32				   data [mProgSize];   // Holds a copy of the VU microProgram
-	microBlockManager* block[mProgSize/2]; // Array of Block Managers
+	microBlockManager* block[mProgSize / 2]; // Array of Block Managers
 	deque<microRange>* ranges;			   // The ranges of the microProgram that have already been recompiled
 	u32 startPC; // Start PC of this program
 	int idx;	 // Program index
@@ -159,8 +166,8 @@ struct microProgramQuick {
 
 struct microProgManager {
 	microIR<mProgSize>	IRinfo;				// IR information
-	microProgramList*	prog [mProgSize/2];	// List of microPrograms indexed by startPC values
-	microProgramQuick	quick[mProgSize/2];	// Quick reference to valid microPrograms for current execution
+	microProgramList*	prog [mProgSize / 2];	// List of microPrograms indexed by startPC values
+	microProgramQuick	quick[mProgSize / 2];	// Quick reference to valid microPrograms for current execution
 	microProgram*		cur;				// Pointer to currently running MicroProgram
 	int					total;				// Total Number of valid MicroPrograms
 	int					isSame;				// Current cached microProgram is Exact Same program as mVU.regs().Micro (-1 = unknown, 0 = No, 1 = Yes)
@@ -218,11 +225,21 @@ struct microVU {
 	u32		totalCycles;  // Total Cycles that mVU is expected to run for
 	u32		cycles;		  // Cycles Counter
 
-	VURegs& regs() const { return ::vuRegs[index]; }
+	VURegs &regs() const
+	{
+		return ::vuRegs[index];
+	}
 
-	__fi REG_VI& getVI(uint reg) const	{ return regs().VI[reg]; }
-	__fi VECTOR& getVF(uint reg) const	{ return regs().VF[reg]; }
-	__fi VIFregisters& getVifRegs()	const {
+	__fi REG_VI &getVI(uint reg) const
+	{
+		return regs().VI[reg];
+	}
+	__fi VECTOR &getVF(uint reg) const
+	{
+		return regs().VF[reg];
+	}
+	__fi VIFregisters &getVifRegs()	const
+	{
 		return (index && THREAD_VU1) ? vu1Thread.vifRegs : regs().GetVifRegs();
 	}
 };
@@ -236,8 +253,8 @@ int mVUdebugNow = 0;
 
 // Main Functions
 extern void  mVUclear(mV, u32, u32);
-extern void  mVUreset(microVU& mVU, bool resetReserve);
-extern void* mVUblockFetch(microVU& mVU, u32 startPC, uptr pState);
+extern void  mVUreset(microVU &mVU, bool resetReserve);
+extern void* mVUblockFetch(microVU &mVU, u32 startPC, uptr pState);
 _mVUt extern void* __fastcall mVUcompileJIT(u32 startPC, uptr ptr);
 
 // Prototypes for Linux
@@ -247,8 +264,8 @@ mVUop(mVUopU);
 mVUop(mVUopL);
 
 // Private Functions
-extern void  mVUcacheProg (microVU& mVU, microProgram&  prog);
-extern void  mVUdeleteProg(microVU& mVU, microProgram*& prog);
+extern void  mVUcacheProg(microVU &mVU, microProgram  &prog);
+extern void  mVUdeleteProg(microVU &mVU, microProgram* &prog);
 _mVUt extern void* mVUsearchProg(u32 startPC, uptr pState);
 extern void* __fastcall mVUexecuteVU0(u32 startPC, u32 cycles);
 extern void* __fastcall mVUexecuteVU1(u32 startPC, u32 cycles);
@@ -258,12 +275,14 @@ typedef void (__fastcall *mVUrecCall)(u32, u32);
 typedef void (*mVUrecCallXG)(void);
 
 template<typename T>
-void makeUnique(T& v) { // Removes Duplicates
+void makeUnique(T &v)   // Removes Duplicates
+{
 	v.erase(unique(v.begin(), v.end()), v.end());
 }
 
 template<typename T>
-void sortVector(T& v) {
+void sortVector(T &v)
+{
 	sort(v.begin(), v.end());
 }
 

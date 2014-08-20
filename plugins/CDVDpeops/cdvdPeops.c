@@ -34,7 +34,7 @@
 
 /////////////////////////////////////////////////////////
 
-HINSTANCE hInst=0;
+HINSTANCE hInst = 0;
 
 /////////////////////////////////////////////////////////
 // get selected interface mode from registry: needed,
@@ -43,17 +43,18 @@ HINSTANCE hInst=0;
 
 int iGetUserInterfaceMode(void)
 {
- HKEY myKey;DWORD temp;DWORD type;DWORD size;
- int iRet=0;
-
- if(RegOpenKeyEx(HKEY_CURRENT_USER,"Software\\PS2Eplugin\\CDVD\\CDVDPeops",0,KEY_ALL_ACCESS,&myKey)==ERROR_SUCCESS)
-  {
-   size = 4;
-   if(RegQueryValueEx(myKey,"InterfaceMode",0,&type,(LPBYTE)&temp,&size)==ERROR_SUCCESS)
-    iRet=(int)temp;
-   RegCloseKey(myKey);
-  }
- return iRet;
+	HKEY myKey;
+	DWORD temp;
+	DWORD type;
+	DWORD size;
+	int iRet = 0;
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\PS2Eplugin\\CDVD\\CDVDPeops", 0, KEY_ALL_ACCESS, &myKey) == ERROR_SUCCESS) {
+		size = 4;
+		if (RegQueryValueEx(myKey, "InterfaceMode", 0, &type, (LPBYTE)&temp, &size) == ERROR_SUCCESS)
+			iRet = (int)temp;
+		RegCloseKey(myKey);
+	}
+	return iRet;
 }
 
 /////////////////////////////////////////////////////////
@@ -63,27 +64,26 @@ BOOL APIENTRY DllMain(HANDLE hModule,
                       DWORD  ul_reason_for_call,
                       LPVOID lpReserved)
 {
- hInst=(HINSTANCE)hModule;
-
- switch (ul_reason_for_call)
-  {//--------------------------------------------------//
-   case DLL_PROCESS_ATTACH:
-    iInterfaceMode=iGetUserInterfaceMode();            // get interface on startup
-    OpenGenInterface();                                // open interface (can be changed in the config window)
-    break;
-   //--------------------------------------------------//
-   case DLL_PROCESS_DETACH:
-    CloseGenInterface();                               // close interface
-    break;
-   //--------------------------------------------------//
-   case DLL_THREAD_ATTACH:
-    break;
-   //--------------------------------------------------//
-   case DLL_THREAD_DETACH:
-    break;
-   //--------------------------------------------------//
-  }
- return TRUE;
+	hInst = (HINSTANCE)hModule;
+	switch (ul_reason_for_call) {
+		//--------------------------------------------------//
+		case DLL_PROCESS_ATTACH:
+			iInterfaceMode = iGetUserInterfaceMode();          // get interface on startup
+			OpenGenInterface();                                // open interface (can be changed in the config window)
+			break;
+		//--------------------------------------------------//
+		case DLL_PROCESS_DETACH:
+			CloseGenInterface();                               // close interface
+			break;
+		//--------------------------------------------------//
+		case DLL_THREAD_ATTACH:
+			break;
+		//--------------------------------------------------//
+		case DLL_THREAD_DETACH:
+			break;
+			//--------------------------------------------------//
+	}
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////

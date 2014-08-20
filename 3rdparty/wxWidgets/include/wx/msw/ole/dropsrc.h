@@ -40,38 +40,38 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLEXPORT wxDropSource : public wxDropSourceBase
 {
 public:
-    // ctors: if you use default ctor you must call SetData() later!
-    //
-    // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
-    //     compatibility, as well as both icon parameters
-    wxDropSource(wxWindow *win = NULL,
-                 const wxCursor &cursorCopy = wxNullCursor,
-                 const wxCursor &cursorMove = wxNullCursor,
-                 const wxCursor &cursorStop = wxNullCursor);
-    wxDropSource(wxDataObject& data,
-                 wxWindow *win = NULL,
-                 const wxCursor &cursorCopy = wxNullCursor,
-                 const wxCursor &cursorMove = wxNullCursor,
-                 const wxCursor &cursorStop = wxNullCursor);
+	// ctors: if you use default ctor you must call SetData() later!
+	//
+	// NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
+	//     compatibility, as well as both icon parameters
+	wxDropSource(wxWindow *win = NULL,
+	             const wxCursor &cursorCopy = wxNullCursor,
+	             const wxCursor &cursorMove = wxNullCursor,
+	             const wxCursor &cursorStop = wxNullCursor);
+	wxDropSource(wxDataObject &data,
+	             wxWindow *win = NULL,
+	             const wxCursor &cursorCopy = wxNullCursor,
+	             const wxCursor &cursorMove = wxNullCursor,
+	             const wxCursor &cursorStop = wxNullCursor);
 
-    virtual ~wxDropSource();
+	virtual ~wxDropSource();
 
-    // do it (call this in response to a mouse button press, for example)
-    // params: if bAllowMove is false, data can be only copied
-    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
+	// do it (call this in response to a mouse button press, for example)
+	// params: if bAllowMove is false, data can be only copied
+	virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
-    // overridable: you may give some custom UI feedback during d&d operation
-    // in this function (it's called on each mouse move, so it shouldn't be
-    // too slow). Just return false if you want default feedback.
-    virtual bool GiveFeedback(wxDragResult effect);
+	// overridable: you may give some custom UI feedback during d&d operation
+	// in this function (it's called on each mouse move, so it shouldn't be
+	// too slow). Just return false if you want default feedback.
+	virtual bool GiveFeedback(wxDragResult effect);
 
 protected:
-    void Init();
+	void Init();
 
 private:
-    wxIDropSource *m_pIDropSource;  // the pointer to COM interface
+	wxIDropSource *m_pIDropSource;  // the pointer to COM interface
 
-    DECLARE_NO_COPY_CLASS(wxDropSource)
+	DECLARE_NO_COPY_CLASS(wxDropSource)
 };
 
 #endif  //wxUSE_DRAG_AND_DROP

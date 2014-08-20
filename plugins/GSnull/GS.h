@@ -49,14 +49,12 @@ extern const unsigned char version;
 extern const unsigned char revision;
 extern const unsigned char build;
 
-typedef struct
-{
+typedef struct {
 	int Log;
 	bool path3;
 } Config;
 
-typedef struct
-{
+typedef struct {
 	u32 CSRw;
 	pathInfo path[4];
 	bool Path3transfer;
@@ -64,7 +62,7 @@ typedef struct
 	u32 imageTransfer;
 	int MultiThreaded;
 	int nPath3Hack;
-	
+
 	GIFReg regs;
 	GIFCTXTReg ctxt_regs[2];
 } GSVars;
@@ -79,12 +77,12 @@ extern void (*GSirq)();
 
 namespace GSLog
 {
-	extern bool Open();
-	extern void Close();
-	extern void Log(char *fmt, ...);
-	extern void Message(char *fmt, ...);
-	extern void Print(const char *fmt, ...);
-	extern void WriteLn(const char *fmt, ...);
+extern bool Open();
+extern void Close();
+extern void Log(char *fmt, ...);
+extern void Message(char *fmt, ...);
+extern void Print(const char *fmt, ...);
+extern void WriteLn(const char *fmt, ...);
 };
 
 extern void SaveConfig();

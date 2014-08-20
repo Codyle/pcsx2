@@ -35,8 +35,8 @@ public:
 	GSTextureSW(int type, int width, int height);
 	virtual ~GSTextureSW();
 
-	bool Update(const GSVector4i& r, const void* data, int pitch);
-	bool Map(GSMap& m, const GSVector4i* r);
+	bool Update(const GSVector4i &r, const void* data, int pitch);
+	bool Map(GSMap &m, const GSVector4i* r);
 	void Unmap();
-	bool Save(const string& fn, bool dds = false);
+	bool Save(const string &fn, bool dds = false);
 };

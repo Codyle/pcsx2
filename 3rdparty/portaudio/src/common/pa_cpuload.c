@@ -27,13 +27,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -57,49 +57,43 @@
 #include "pa_util.h"   /* for PaUtil_GetTime() */
 
 
-void PaUtil_InitializeCpuLoadMeasurer( PaUtilCpuLoadMeasurer* measurer, double sampleRate )
+void PaUtil_InitializeCpuLoadMeasurer(PaUtilCpuLoadMeasurer* measurer, double sampleRate)
 {
-    assert( sampleRate > 0 );
-
-    measurer->samplingPeriod = 1. / sampleRate;
-    measurer->averageLoad = 0.;
+	assert(sampleRate > 0);
+	measurer->samplingPeriod = 1. / sampleRate;
+	measurer->averageLoad = 0.;
 }
 
-void PaUtil_ResetCpuLoadMeasurer( PaUtilCpuLoadMeasurer* measurer )
+void PaUtil_ResetCpuLoadMeasurer(PaUtilCpuLoadMeasurer* measurer)
 {
-    measurer->averageLoad = 0.;
+	measurer->averageLoad = 0.;
 }
 
-void PaUtil_BeginCpuLoadMeasurement( PaUtilCpuLoadMeasurer* measurer )
+void PaUtil_BeginCpuLoadMeasurement(PaUtilCpuLoadMeasurer* measurer)
 {
-    measurer->measurementStartTime = PaUtil_GetTime();
+	measurer->measurementStartTime = PaUtil_GetTime();
 }
 
 
-void PaUtil_EndCpuLoadMeasurement( PaUtilCpuLoadMeasurer* measurer, unsigned long framesProcessed )
+void PaUtil_EndCpuLoadMeasurement(PaUtilCpuLoadMeasurer* measurer, unsigned long framesProcessed)
 {
-    double measurementEndTime, secondsFor100Percent, measuredLoad;
-
-    if( framesProcessed > 0 ){
-        measurementEndTime = PaUtil_GetTime();
-
-        assert( framesProcessed > 0 );
-        secondsFor100Percent = framesProcessed * measurer->samplingPeriod;
-
-        measuredLoad = (measurementEndTime - measurer->measurementStartTime) / secondsFor100Percent;
-
-        /* Low pass filter the calculated CPU load to reduce jitter using a simple IIR low pass filter. */
-        /** FIXME @todo these coefficients shouldn't be hardwired see: http://www.portaudio.com/trac/ticket/113 */
+	double measurementEndTime, secondsFor100Percent, measuredLoad;
+	if (framesProcessed > 0) {
+		measurementEndTime = PaUtil_GetTime();
+		assert(framesProcessed > 0);
+		secondsFor100Percent = framesProcessed * measurer->samplingPeriod;
+		measuredLoad = (measurementEndTime - measurer->measurementStartTime) / secondsFor100Percent;
+		/* Low pass filter the calculated CPU load to reduce jitter using a simple IIR low pass filter. */
+		/** FIXME @todo these coefficients shouldn't be hardwired see: http://www.portaudio.com/trac/ticket/113 */
 #define LOWPASS_COEFFICIENT_0   (0.9)
 #define LOWPASS_COEFFICIENT_1   (0.99999 - LOWPASS_COEFFICIENT_0)
-
-        measurer->averageLoad = (LOWPASS_COEFFICIENT_0 * measurer->averageLoad) +
-                               (LOWPASS_COEFFICIENT_1 * measuredLoad);
-    }
+		measurer->averageLoad = (LOWPASS_COEFFICIENT_0 * measurer->averageLoad) +
+		                        (LOWPASS_COEFFICIENT_1 * measuredLoad);
+	}
 }
 
 
-double PaUtil_GetCpuLoad( PaUtilCpuLoadMeasurer* measurer )
+double PaUtil_GetCpuLoad(PaUtilCpuLoadMeasurer* measurer)
 {
-    return measurer->averageLoad;
+	return measurer->averageLoad;
 }

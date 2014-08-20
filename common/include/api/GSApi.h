@@ -73,7 +73,7 @@ EXPORT_C_(bool)  GSsetupRecording(bool start);
 
 EXPORT_C_(void)  GSreset();
 EXPORT_C_(void)  GSwriteCSR(u32 value);
-EXPORT_C_(void ) GSgetDriverInfo(GSdriverInfo *info);
+EXPORT_C_(void) GSgetDriverInfo(GSdriverInfo *info);
 #ifdef _WIN32
 EXPORT_C_(s32)  CALLBACK GSsetWindowInfo(winInfo *info);
 #endif

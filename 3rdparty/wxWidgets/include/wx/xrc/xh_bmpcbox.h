@@ -19,16 +19,16 @@ class WXDLLIMPEXP_FWD_ADV wxBitmapComboBox;
 
 class WXDLLIMPEXP_XRC wxBitmapComboBoxXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxBitmapComboBoxXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxBitmapComboBoxXmlHandler)
 
 public:
-    wxBitmapComboBoxXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxBitmapComboBoxXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    wxBitmapComboBox*    m_combobox;
-    bool                m_isInside;
+	wxBitmapComboBox*    m_combobox;
+	bool                m_isInside;
 };
 
 #endif // wxUSE_XRC && wxUSE_BITMAPCOMBOBOX

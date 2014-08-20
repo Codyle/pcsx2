@@ -72,21 +72,21 @@
 
 struct BufferList {
 
-  u16 upsort; // Don't alter this variable
+	u16 upsort; // Don't alter this variable
 
-  u16 uppos; // Don't alter this variable
+	u16 uppos; // Don't alter this variable
 
 
 
-  u32 lsn;
+	u32 lsn;
 
-  int mode; // -1 means error
+	int mode; // -1 means error
 
-  u8 buffer[2368];
+	u8 buffer[2368];
 
-  u8 offset;
+	u8 offset;
 
-  cdvdSubQ subq;
+	cdvdSubQ subq;
 
 };
 

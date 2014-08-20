@@ -36,9 +36,9 @@ extern const char	_ctype_[];
 unsigned char look_ctype_table(int pos);
 void* memset(void *s, int c, size_t n);
 void  bzero(void *s, size_t n);
-int   strcmp (const char *, const char *);
-char* index  (const char *s, int c);
-int   strlen (const char *);
+int   strcmp(const char *, const char *);
+char* index(const char *s, int c);
+int   strlen(const char *);
 char* strncpy(char *dest, const char *src, size_t n);
 long int strtol(const char *nptr, char **endptr, int base);
 //int   prnt(void (*func)(void*, int), int *v, const char *format, ...);	//18(17)

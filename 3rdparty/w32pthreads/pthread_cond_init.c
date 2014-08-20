@@ -39,131 +39,95 @@
 
 
 int
-pthread_cond_init (pthread_cond_t * cond, const pthread_condattr_t * attr)
-     /*
-      * ------------------------------------------------------
-      * DOCPUBLIC
-      *      This function initializes a condition variable.
-      *
-      * PARAMETERS
-      *      cond
-      *              pointer to an instance of pthread_cond_t
-      *
-      *      attr
-      *              specifies optional creation attributes.
-      *
-      *
-      * DESCRIPTION
-      *      This function initializes a condition variable.
-      *
-      * RESULTS
-      *              0               successfully created condition variable,
-      *              EINVAL          'attr' is invalid,
-      *              EAGAIN          insufficient resources (other than
-      *                              memory,
-      *              ENOMEM          insufficient memory,
-      *              EBUSY           'cond' is already initialized,
-      *
-      * ------------------------------------------------------
-      */
+pthread_cond_init(pthread_cond_t * cond, const pthread_condattr_t * attr)
+/*
+ * ------------------------------------------------------
+ * DOCPUBLIC
+ *      This function initializes a condition variable.
+ *
+ * PARAMETERS
+ *      cond
+ *              pointer to an instance of pthread_cond_t
+ *
+ *      attr
+ *              specifies optional creation attributes.
+ *
+ *
+ * DESCRIPTION
+ *      This function initializes a condition variable.
+ *
+ * RESULTS
+ *              0               successfully created condition variable,
+ *              EINVAL          'attr' is invalid,
+ *              EAGAIN          insufficient resources (other than
+ *                              memory,
+ *              ENOMEM          insufficient memory,
+ *              EBUSY           'cond' is already initialized,
+ *
+ * ------------------------------------------------------
+ */
 {
-  int result;
-  pthread_cond_t cv = NULL;
-
-  if (cond == NULL)
-    {
-      return EINVAL;
-    }
-
+	int result;
+	pthread_cond_t cv = NULL;
+	if (cond == NULL)
+		return EINVAL;
 #ifdef PTW32_STATIC_LIB
-  // This allos for C++ static initializers to function without crashes. (air)
-  pthread_win32_process_attach_np();
+	// This allos for C++ static initializers to function without crashes. (air)
+	pthread_win32_process_attach_np();
 #endif
-
-  if ((attr != NULL && *attr != NULL) &&
-      ((*attr)->pshared == PTHREAD_PROCESS_SHARED))
-    {
-      /*
-       * Creating condition variable that can be shared between
-       * processes.
-       */
-      result = ENOSYS;
-      goto DONE;
-    }
-
-  cv = (pthread_cond_t) calloc (1, sizeof (*cv));
-
-  if (cv == NULL)
-    {
-      result = ENOMEM;
-      goto DONE;
-    }
-
-  cv->nWaitersBlocked = 0;
-  cv->nWaitersToUnblock = 0;
-  cv->nWaitersGone = 0;
-
-  if (sem_init (&(cv->semBlockLock), 0, 1) != 0)
-    {
-      result = errno;
-      goto FAIL0;
-    }
-
-  if (sem_init (&(cv->semBlockQueue), 0, 0) != 0)
-    {
-      result = errno;
-      goto FAIL1;
-    }
-
-  if ((result = pthread_mutex_init (&(cv->mtxUnblockLock), 0)) != 0)
-    {
-      goto FAIL2;
-    }
-
-  result = 0;
-
-  goto DONE;
-
-  /*
-   * -------------
-   * Failed...
-   * -------------
-   */
+	if ((attr != NULL && *attr != NULL) &&
+	    ((*attr)->pshared == PTHREAD_PROCESS_SHARED)) {
+		/*
+		 * Creating condition variable that can be shared between
+		 * processes.
+		 */
+		result = ENOSYS;
+		goto DONE;
+	}
+	cv = (pthread_cond_t) calloc(1, sizeof(*cv));
+	if (cv == NULL) {
+		result = ENOMEM;
+		goto DONE;
+	}
+	cv->nWaitersBlocked = 0;
+	cv->nWaitersToUnblock = 0;
+	cv->nWaitersGone = 0;
+	if (sem_init(&(cv->semBlockLock), 0, 1) != 0) {
+		result = errno;
+		goto FAIL0;
+	}
+	if (sem_init(&(cv->semBlockQueue), 0, 0) != 0) {
+		result = errno;
+		goto FAIL1;
+	}
+	if ((result = pthread_mutex_init(&(cv->mtxUnblockLock), 0)) != 0)
+		goto FAIL2;
+	result = 0;
+	goto DONE;
+	/*
+	 * -------------
+	 * Failed...
+	 * -------------
+	 */
 FAIL2:
-  (void) sem_destroy (&(cv->semBlockQueue));
-
+	(void) sem_destroy(&(cv->semBlockQueue));
 FAIL1:
-  (void) sem_destroy (&(cv->semBlockLock));
-
+	(void) sem_destroy(&(cv->semBlockLock));
 FAIL0:
-  (void) free (cv);
-  cv = NULL;
-
+	(void) free(cv);
+	cv = NULL;
 DONE:
-  if (0 == result)
-    {
-      EnterCriticalSection (&ptw32_cond_list_lock);
-
-      cv->next = NULL;
-      cv->prev = ptw32_cond_list_tail;
-
-      if (ptw32_cond_list_tail != NULL)
-	{
-	  ptw32_cond_list_tail->next = cv;
+	if (0 == result) {
+		EnterCriticalSection(&ptw32_cond_list_lock);
+		cv->next = NULL;
+		cv->prev = ptw32_cond_list_tail;
+		if (ptw32_cond_list_tail != NULL)
+			ptw32_cond_list_tail->next = cv;
+		ptw32_cond_list_tail = cv;
+		if (ptw32_cond_list_head == NULL)
+			ptw32_cond_list_head = cv;
+		LeaveCriticalSection(&ptw32_cond_list_lock);
 	}
-
-      ptw32_cond_list_tail = cv;
-
-      if (ptw32_cond_list_head == NULL)
-	{
-	  ptw32_cond_list_head = cv;
-	}
-
-      LeaveCriticalSection (&ptw32_cond_list_lock);
-    }
-
-  *cond = cv;
-
-  return result;
-
+	*cond = cv;
+	return result;
 }				/* pthread_cond_init */

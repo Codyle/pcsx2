@@ -27,8 +27,7 @@
 
 class GSCaptureDlg : public GSDialog
 {
-	struct Codec
-	{
+	struct Codec {
 		CComPtr<IMoniker> moniker;
 		CComPtr<IBaseFilter> filter;
 		wstring FriendlyName;
@@ -37,7 +36,7 @@ class GSCaptureDlg : public GSDialog
 
 	list<Codec> m_codecs;
 
-	int GetSelCodec(Codec& c);
+	int GetSelCodec(Codec &c);
 
 protected:
 	void OnInit();

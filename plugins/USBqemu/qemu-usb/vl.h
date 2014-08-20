@@ -1,8 +1,8 @@
 /*
  * QEMU System Emulator header
- * 
+ *
  * Copyright (c) 2003 Fabrice Bellard
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -66,8 +66,8 @@ extern int qemu_ftruncate64(int, int64_t);
 
 static inline char *realpath(const char *path, char *resolved_path)
 {
-    _fullpath(resolved_path, path, _MAX_PATH);
-    return resolved_path;
+	_fullpath(resolved_path, path, _MAX_PATH);
+	return resolved_path;
 }
 
 #define PRId64 "I64d"
@@ -97,12 +97,12 @@ uint64_t muldiv64(uint64_t a, uint32_t b, uint32_t c);
 void cpu_physical_memory_rw(uint32_t addr, uint8_t *buf, int len, int is_write);
 static inline void cpu_physical_memory_read(uint32_t addr, uint8_t *buf, int len)
 {
-    cpu_physical_memory_rw(addr, buf, len, 0);
+	cpu_physical_memory_rw(addr, buf, len, 0);
 }
 
 static inline void cpu_physical_memory_write(uint32_t addr, const uint8_t *buf, int len)
 {
-    cpu_physical_memory_rw(addr, (uint8_t *)buf, len, 1);
+	cpu_physical_memory_rw(addr, (uint8_t *)buf, len, 1);
 }
 
 void *qemu_mallocz(uint32_t size);

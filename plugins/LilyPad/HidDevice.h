@@ -22,26 +22,26 @@ int InitHid();
 
 typedef USHORT USAGE;
 struct HIDP_CAPS {
-    USAGE    Usage;
-    USAGE    UsagePage;
-    USHORT   InputReportByteLength;
-    USHORT   OutputReportByteLength;
-    USHORT   FeatureReportByteLength;
-    USHORT   Reserved[17];
+	USAGE    Usage;
+	USAGE    UsagePage;
+	USHORT   InputReportByteLength;
+	USHORT   OutputReportByteLength;
+	USHORT   FeatureReportByteLength;
+	USHORT   Reserved[17];
 
-    USHORT   NumberLinkCollectionNodes;
+	USHORT   NumberLinkCollectionNodes;
 
-    USHORT   NumberInputButtonCaps;
-    USHORT   NumberInputValueCaps;
-    USHORT   NumberInputDataIndices;
+	USHORT   NumberInputButtonCaps;
+	USHORT   NumberInputValueCaps;
+	USHORT   NumberInputDataIndices;
 
-    USHORT   NumberOutputButtonCaps;
-    USHORT   NumberOutputValueCaps;
-    USHORT   NumberOutputDataIndices;
+	USHORT   NumberOutputButtonCaps;
+	USHORT   NumberOutputValueCaps;
+	USHORT   NumberOutputDataIndices;
 
-    USHORT   NumberFeatureButtonCaps;
-    USHORT   NumberFeatureValueCaps;
-    USHORT   NumberFeatureDataIndices;
+	USHORT   NumberFeatureButtonCaps;
+	USHORT   NumberFeatureValueCaps;
+	USHORT   NumberFeatureDataIndices;
 };
 
 struct HidDeviceInfo {

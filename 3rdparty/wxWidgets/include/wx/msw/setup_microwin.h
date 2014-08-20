@@ -21,7 +21,7 @@
 // define this to 0 when building wxBase library - this can also be done from
 // makefile/project file overriding the value here
 #ifndef wxUSE_GUI
-    #define wxUSE_GUI            1
+#define wxUSE_GUI            1
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -121,9 +121,9 @@
 //
 // Recommended setting: 1 if your compiler supports it.
 #ifdef _MSC_VER
-    #define wxUSE_ON_FATAL_EXCEPTION 1
+#define wxUSE_ON_FATAL_EXCEPTION 1
 #else
-    #define wxUSE_ON_FATAL_EXCEPTION 0
+#define wxUSE_ON_FATAL_EXCEPTION 0
 #endif
 
 // ----------------------------------------------------------------------------
@@ -770,39 +770,39 @@
 #define wxUSE_DRAGIMAGE 0
 
 #define wxUSE_IPC         0
-                                // 0 for no interprocess comms
+// 0 for no interprocess comms
 #define wxUSE_HELP        0
-                                // 0 for no help facility
+// 0 for no help facility
 #define wxUSE_MS_HTML_HELP 0
-                                // 0 for no MS HTML Help
+// 0 for no MS HTML Help
 
 // Use wxHTML-based help controller?
 #define wxUSE_WXHTML_HELP 0
 
 #define wxUSE_RESOURCES   0
-                                // 0 for no wxGetResource/wxWriteResource
+// 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
-                                // 0 for no window layout constraint system
+// 0 for no window layout constraint system
 
 #define wxUSE_SPLINES     1
-                                // 0 for no splines
+// 0 for no splines
 
 #define wxUSE_XPM_IN_MSW   1
-                                // 0 for no XPM support in wxBitmap.
-                                // Default is 1, as XPM is now fully
-                                // supported this makes easier the issue
-                                // of portable icons and bitmaps.
+// 0 for no XPM support in wxBitmap.
+// Default is 1, as XPM is now fully
+// supported this makes easier the issue
+// of portable icons and bitmaps.
 
 #define wxUSE_IMAGE_LOADING_IN_MSW        0
-                                // Use dynamic DIB loading/saving code in utils/dib under MSW.
+// Use dynamic DIB loading/saving code in utils/dib under MSW.
 #define wxUSE_RESOURCE_LOADING_IN_MSW     0
-                                // Use dynamic icon/cursor loading/saving code
-                                // under MSW.
+// Use dynamic icon/cursor loading/saving code
+// under MSW.
 #define wxUSE_WX_RESOURCES        0
-                                // Use .wxr resource mechanism (requires PrologIO library)
+// Use .wxr resource mechanism (requires PrologIO library)
 
 #define wxUSE_MOUSEWHEEL        0
-                                // Include mouse wheel support
+// Include mouse wheel support
 
 // ----------------------------------------------------------------------------
 // postscript support settings
@@ -1158,22 +1158,22 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_DATETIME && !wxUSE_LONGLONG
-    #error wxDateTime requires wxLongLong
+#error wxDateTime requires wxLongLong
 #endif
 
 #if wxUSE_TEXTFILE && !wxUSE_FILE
-    #error You cannot compile wxTextFile without wxFile
+#error You cannot compile wxTextFile without wxFile
 #endif
 
 #if wxUSE_FILESYSTEM && !wxUSE_STREAMS
-    #error You cannot compile virtual file systems without wxUSE_STREAMS
+#error You cannot compile virtual file systems without wxUSE_STREAMS
 #endif
 
 #if wxUSE_HTML && !wxUSE_FILESYSTEM
-    #error You cannot compile wxHTML without virtual file systems
+#error You cannot compile wxHTML without virtual file systems
 #endif
 
 // add more tests here...
 
 #endif
-    // _WX_SETUP_H_
+// _WX_SETUP_H_

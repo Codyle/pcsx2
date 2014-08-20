@@ -86,9 +86,9 @@ extern int SynchMode;
 
 namespace SoundtouchCfg
 {
-	void ReadSettings();
-	void WriteSettings();
-	void DisplayDialog();
+void ReadSettings();
+void WriteSettings();
+void DisplayDialog();
 };
 
 void ReadSettings();

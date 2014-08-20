@@ -21,56 +21,58 @@
 class WXDLLEXPORT wxRadioButton : public wxCheckBox
 {
 public:
-    // constructors
-    wxRadioButton() { Init(); }
+	// constructors
+	wxRadioButton()
+	{
+		Init();
+	}
 
-    wxRadioButton(wxWindow *parent,
-                  wxWindowID id,
-                  const wxString& label,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxDefaultSize,
-                  long style = 0,
-                  const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = wxRadioButtonNameStr)
-    {
-        Init();
+	wxRadioButton(wxWindow *parent,
+	              wxWindowID id,
+	              const wxString &label,
+	              const wxPoint &pos = wxDefaultPosition,
+	              const wxSize &size = wxDefaultSize,
+	              long style = 0,
+	              const wxValidator &validator = wxDefaultValidator,
+	              const wxString &name = wxRadioButtonNameStr)
+	{
+		Init();
+		Create(parent, id, label, pos, size, style, validator, name);
+	}
 
-        Create(parent, id, label, pos, size, style, validator, name);
-    }
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            const wxString &label,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = 0,
+	            const wxValidator &validator = wxDefaultValidator,
+	            const wxString &name = wxRadioButtonNameStr);
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxString& label,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRadioButtonNameStr);
-
-    // override some base class methods
-    virtual void ChangeValue(bool value);
+	// override some base class methods
+	virtual void ChangeValue(bool value);
 
 protected:
-    // implement our own drawing
-    virtual void DoDraw(wxControlRenderer *renderer);
+	// implement our own drawing
+	virtual void DoDraw(wxControlRenderer *renderer);
 
-    // we use the radio button bitmaps for size calculation
-    virtual wxSize GetBitmapSize() const;
+	// we use the radio button bitmaps for size calculation
+	virtual wxSize GetBitmapSize() const;
 
-    // the radio button can only be cleared using this method, not
-    // ChangeValue() above - and it is protected as it can only be called by
-    // another radiobutton
-    void ClearValue();
+	// the radio button can only be cleared using this method, not
+	// ChangeValue() above - and it is protected as it can only be called by
+	// another radiobutton
+	void ClearValue();
 
-    // called when the radio button becomes checked: we clear all the buttons
-    // in the same group with us here
-    virtual void OnCheck();
+	// called when the radio button becomes checked: we clear all the buttons
+	// in the same group with us here
+	virtual void OnCheck();
 
-    // send event about radio button selection
-    virtual void SendEvent();
+	// send event about radio button selection
+	virtual void SendEvent();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxRadioButton)
+	DECLARE_DYNAMIC_CLASS(wxRadioButton)
 };
 
 #endif // _WX_UNIV_RADIOBUT_H_

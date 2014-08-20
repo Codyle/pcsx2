@@ -77,11 +77,11 @@ extern "C" unsigned __int64 __xgetbv(int);
 //  restaints must be enforced).
 //
 #ifndef C_ASSERT
-	#ifdef __LINUX__
-	#	define C_ASSERT(e) static_assert(e, "this is a nice message to explain the failure ;)")
-	#else
-	#	define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
-	#endif
+#ifdef __LINUX__
+#	define C_ASSERT(e) static_assert(e, "this is a nice message to explain the failure ;)")
+#else
+#	define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
+#endif
 #endif
 
 // --------------------------------------------------------------------------------------
@@ -94,29 +94,29 @@ extern "C" unsigned __int64 __xgetbv(int);
 //
 #ifdef __cplusplus
 #	ifdef PCSX2_DEVBUILD
-		static const bool IsDevBuild = true;
+static const bool IsDevBuild = true;
 #	else
-		static const bool IsDevBuild = false;
+static const bool IsDevBuild = false;
 #	endif
 
 #	ifdef PCSX2_DEBUG
-		static const bool IsDebugBuild = true;
+static const bool IsDebugBuild = true;
 #	else
-		static const bool IsDebugBuild = false;
+static const bool IsDebugBuild = false;
 #	endif
 
 #else
 
 #	ifdef PCSX2_DEVBUILD
-		static const u8 IsDevBuild = 1;
+static const u8 IsDevBuild = 1;
 #	else
-		static const u8 IsDevBuild = 0;
+static const u8 IsDevBuild = 0;
 #	endif
 
 #	ifdef PCSX2_DEBUG
-		static const u8 IsDebugBuild = 1;
+static const u8 IsDebugBuild = 1;
 #	else
-		static const u8 IsDebugBuild = 0;
+static const u8 IsDebugBuild = 0;
 #	endif
 #endif
 
@@ -201,7 +201,7 @@ static const int __pagesize	= PCSX2_PAGESIZE;
 #	define __aligned32		__declspec(align(32))
 #	define __pagealigned	__declspec(align(PCSX2_PAGESIZE))
 
-	// Deprecated; use __align instead.
+// Deprecated; use __align instead.
 #	define PCSX2_ALIGNED(alig,x)		__declspec(align(alig)) x
 #	define PCSX2_ALIGNED_EXTERN(alig,x)	extern __declspec(align(alig)) x
 #	define PCSX2_ALIGNED16(x)			__declspec(align(16)) x
@@ -231,7 +231,7 @@ static const int __pagesize	= PCSX2_PAGESIZE;
 #	define __aligned16		__attribute__((aligned(16)))
 #	define __aligned32		__attribute__((aligned(32)))
 #	define __pagealigned	__attribute__((aligned(PCSX2_PAGESIZE)))
-	// Deprecated; use __align instead.
+// Deprecated; use __align instead.
 #	define PCSX2_ALIGNED(alig,x) x __attribute((aligned(alig)))
 #	define PCSX2_ALIGNED16(x) x __attribute((aligned(16)))
 #	define PCSX2_ALIGNED_EXTERN(alig,x) extern x __attribute((aligned(alig)))
@@ -267,8 +267,8 @@ static const int __pagesize	= PCSX2_PAGESIZE;
 
 // GCC 4.4.0 is a bit nutty, as compilers go. it gets a define to itself.
 #	define GCC_VERSION (	__GNUC__ * 10000 \
-						+	__GNUC_MINOR__ * 100 \
-						+	__GNUC_PATCHLEVEL__)
+                                +	__GNUC_MINOR__ * 100 \
+                                +	__GNUC_PATCHLEVEL__)
 
 // Test for GCC > 4.4.0; Should be adjusted when new versions come out
 #	if GCC_VERSION >= 40400

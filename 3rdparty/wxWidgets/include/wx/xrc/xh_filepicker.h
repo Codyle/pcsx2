@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxFilePickerCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxFilePickerCtrlXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxFilePickerCtrlXmlHandler)
 
 public:
-    wxFilePickerCtrlXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxFilePickerCtrlXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_FILEPICKERCTRL

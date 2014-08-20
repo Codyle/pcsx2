@@ -15,8 +15,8 @@ extern CdRMode cdReadMode;
 void CDVDFS_init();
 int CDVDFS_open(char *name, int mode);
 int CDVDFS_lseek(int fd, int offset, int whence);
-int CDVDFS_read( int fd, char * buffer, int size );
-int CDVDFS_write( int fd, char * buffer, int size );
-int CDVDFS_close( int fd);
+int CDVDFS_read(int fd, char * buffer, int size);
+int CDVDFS_write(int fd, char * buffer, int size);
+int CDVDFS_close(int fd);
 
 #endif//__CDVDISODRV_H__

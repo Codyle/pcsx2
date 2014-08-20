@@ -43,7 +43,7 @@
 #endif
 
 // FIX compilation issue with Mesa 10
-// Note it might be possible to do better with the right include 
+// Note it might be possible to do better with the right include
 // in the rigth order but I don't have time
 #ifndef APIENTRY
 #define APIENTRY
@@ -64,86 +64,85 @@ extern void OnFKey(int key, int shift);
 
 class GLWindow
 {
-	private:
+private:
 #if defined(GL_X11_WINDOW)
-		void GetWindowSize();
-		void PrintProtocolVersion();
+	void GetWindowSize();
+	void PrintProtocolVersion();
 #endif
-		bool CreateContextGL(int, int);
-		bool CreateContextGL();
+	bool CreateContextGL(int, int);
+	bool CreateContextGL();
 
 #ifdef GLX_API
-		Display *NativeDisplay;
-		Window NativeWindow;
+	Display *NativeDisplay;
+	Window NativeWindow;
 
-		GLXContext glxContext;
+	GLXContext glxContext;
 
-		_PFNSWAPINTERVAL swapinterval;
+	_PFNSWAPINTERVAL swapinterval;
 #endif
 
 #ifdef EGL_API
-		EGLNativeWindowType NativeWindow;
-		EGLNativeDisplayType NativeDisplay;
+	EGLNativeWindowType NativeWindow;
+	EGLNativeDisplayType NativeDisplay;
 
-		EGLDisplay eglDisplay;
-		EGLSurface eglSurface;
-		EGLContext eglContext;
+	EGLDisplay eglDisplay;
+	EGLSurface eglSurface;
+	EGLContext eglContext;
 
 
-		EGLBoolean OpenEGLDisplay();
-		void CloseEGLDisplay();
+	EGLBoolean OpenEGLDisplay();
+	void CloseEGLDisplay();
 #endif
 
 #ifdef WGL_API
-		HWND	NativeWindow;
-		HDC		NativeDisplay; // hDC // Private GDI Device Context
-		HGLRC	wglContext; // hRC // Permanent Rendering Context
+	HWND	NativeWindow;
+	HDC		NativeDisplay; // hDC // Private GDI Device Context
+	HGLRC	wglContext; // hRC // Permanent Rendering Context
 
-		bool OpenWGLDisplay();
-		void CloseWGLDisplay();
+	bool OpenWGLDisplay();
+	void CloseWGLDisplay();
 #endif
 
-		bool vsync_supported;
+	bool vsync_supported;
 
 
-	public:
-		char title[256];
-		Size backbuffer;
-		
-		void SwapGLBuffers();
-		bool ReleaseContext();
+public:
+	char title[256];
+	Size backbuffer;
 
-		bool CreateWindow(void *pDisplay);
-		void CloseWindow();
-		bool DisplayWindow(int _width, int _height);
-		void SetTitle(char *strtitle);
-		void ProcessEvents();
+	void SwapGLBuffers();
+	bool ReleaseContext();
 
-		void* GetProcAddress(const char* function);
+	bool CreateWindow(void *pDisplay);
+	void CloseWindow();
+	bool DisplayWindow(int _width, int _height);
+	void SetTitle(char *strtitle);
+	void ProcessEvents();
 
-		void SetVsync(bool enable);
-		void InitVsync(bool extension); // dummy in EGL
-	
-		void UpdateWindowSize(int nNewWidth, int nNewHeight)
-		{
-			FUNCLOG
-			backbuffer.w = std::max(nNewWidth, 16);
-			backbuffer.h = std::max(nNewHeight, 16);
+	void* GetProcAddress(const char* function);
 
-			if (!(conf.fullscreen()))
-			{
-				conf.width = nNewWidth;
-				conf.height = nNewHeight;
-			}
+	void SetVsync(bool enable);
+	void InitVsync(bool extension); // dummy in EGL
+
+	void UpdateWindowSize(int nNewWidth, int nNewHeight)
+	{
+		FUNCLOG
+		backbuffer.w = std::max(nNewWidth, 16);
+		backbuffer.h = std::max(nNewHeight, 16);
+		if (!(conf.fullscreen())) {
+			conf.width = nNewWidth;
+			conf.height = nNewHeight;
 		}
-		
-		GLWindow() {
+	}
+
+	GLWindow()
+	{
 #ifdef WGL_API
-			NativeWindow = NULL;
-			NativeDisplay = NULL;
-			wglContext = NULL;
+		NativeWindow = NULL;
+		NativeDisplay = NULL;
+		wglContext = NULL;
 #endif
-		}
+	}
 };
 
 extern GLWindow GLWin;

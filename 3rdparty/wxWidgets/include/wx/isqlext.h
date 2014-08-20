@@ -102,32 +102,29 @@
 /*
  *  SQL portable types for C - DATE, TIME, TIMESTAMP
  */
-typedef struct _DATE_STRUCT
-  {
-    SWORD year;
-    UWORD month;
-    UWORD day;
-  }
+typedef struct _DATE_STRUCT {
+	SWORD year;
+	UWORD month;
+	UWORD day;
+}
 DATE_STRUCT;
 
-typedef struct _TIME_STRUCT
-  {
-    UWORD hour;
-    UWORD minute;
-    UWORD second;
-  }
+typedef struct _TIME_STRUCT {
+	UWORD hour;
+	UWORD minute;
+	UWORD second;
+}
 TIME_STRUCT;
 
-typedef struct _TIMESTAMP_STRUCT
-  {
-    SWORD year;
-    UWORD month;
-    UWORD day;
-    UWORD hour;
-    UWORD minute;
-    UWORD second;
-    UDWORD fraction;
-  }
+typedef struct _TIMESTAMP_STRUCT {
+	SWORD year;
+	UWORD month;
+	UWORD day;
+	UWORD hour;
+	UWORD minute;
+	UWORD second;
+	UDWORD fraction;
+}
 TIMESTAMP_STRUCT;
 
 typedef unsigned long int BOOKMARK;
@@ -916,52 +913,52 @@ typedef unsigned long int BOOKMARK;
  *  SQLSetPos
  */
 #define SQL_POSITION_TO(hstmt,irow) \
-    SQLSetPos(hstmt,irow,SQL_POSITION,SQL_LOCK_NO_CHANGE)
+	SQLSetPos(hstmt,irow,SQL_POSITION,SQL_LOCK_NO_CHANGE)
 #define SQL_LOCK_RECORD(hstmt,irow,fLock) \
-    SQLSetPos(hstmt,irow,SQL_POSITION,fLock)
+	SQLSetPos(hstmt,irow,SQL_POSITION,fLock)
 #define SQL_REFRESH_RECORD(hstmt,irow,fLock) \
-    SQLSetPos(hstmt,irow,SQL_REFRESH,fLock)
+	SQLSetPos(hstmt,irow,SQL_REFRESH,fLock)
 #define SQL_UPDATE_RECORD(hstmt,irow) \
-    SQLSetPos(hstmt,irow,SQL_UPDATE,SQL_LOCK_NO_CHANGE)
+	SQLSetPos(hstmt,irow,SQL_UPDATE,SQL_LOCK_NO_CHANGE)
 #define SQL_DELETE_RECORD(hstmt,irow) \
-    SQLSetPos(hstmt,irow,SQL_DELETE,SQL_LOCK_NO_CHANGE)
+	SQLSetPos(hstmt,irow,SQL_DELETE,SQL_LOCK_NO_CHANGE)
 #define SQL_ADD_RECORD(hstmt,irow) \
-    SQLSetPos(hstmt,irow,SQL_ADD,SQL_LOCK_NO_CHANGE)
+	SQLSetPos(hstmt,irow,SQL_ADD,SQL_LOCK_NO_CHANGE)
 
 /*
  *  All the ODBC keywords
  */
 #define SQL_ODBC_KEYWORDS \
-"ABSOLUTE,ACTION,ADA,ADD,ALL,ALLOCATE,ALTER,AND,ANY,ARE,AS,"\
-"ASC,ASSERTION,AT,AUTHORIZATION,AVG,"\
-"BEGIN,BETWEEN,BIT,BIT_LENGTH,BOTH,BY,CASCADE,CASCADED,CASE,CAST,CATALOG,"\
-"CHAR,CHAR_LENGTH,CHARACTER,CHARACTER_LENGTH,CHECK,CLOSE,COALESCE,"\
-"COBOL,COLLATE,COLLATION,COLUMN,COMMIT,CONNECT,CONNECTION,CONSTRAINT,"\
-"CONSTRAINTS,CONTINUE,CONVERT,CORRESPONDING,COUNT,CREATE,CROSS,CURRENT,"\
-"CURRENT_DATE,CURRENT_TIME,CURRENT_TIMESTAMP,CURRENT_USER,CURSOR,"\
-"DATE,DAY,DEALLOCATE,DEC,DECIMAL,DECLARE,DEFAULT,DEFERRABLE,"\
-"DEFERRED,DELETE,DESC,DESCRIBE,DESCRIPTOR,DIAGNOSTICS,DISCONNECT,"\
-"DISTINCT,DOMAIN,DOUBLE,DROP,"\
-"ELSE,END,END-EXEC,ESCAPE,EXCEPT,EXCEPTION,EXEC,EXECUTE,"\
-"EXISTS,EXTERNAL,EXTRACT,"\
-"FALSE,FETCH,FIRST,FLOAT,FOR,FOREIGN,FORTRAN,FOUND,FROM,FULL,"\
-"GET,GLOBAL,GO,GOTO,GRANT,GROUP,HAVING,HOUR,"\
-"IDENTITY,IMMEDIATE,IN,INCLUDE,INDEX,INDICATOR,INITIALLY,INNER,"\
-"INPUT,INSENSITIVE,INSERT,INTEGER,INTERSECT,INTERVAL,INTO,IS,ISOLATION,"\
-"JOIN,KEY,LANGUAGE,LAST,LEADING,LEFT,LEVEL,LIKE,LOCAL,LOWER,"\
-"MATCH,MAX,MIN,MINUTE,MODULE,MONTH,MUMPS,"\
-"NAMES,NATIONAL,NATURAL,NCHAR,NEXT,NO,NONE,NOT,NULL,NULLIF,NUMERIC,"\
-"OCTET_LENGTH,OF,ON,ONLY,OPEN,OPTION,OR,ORDER,OUTER,OUTPUT,OVERLAPS,"\
-"PAD,PARTIAL,PASCAL,PLI,POSITION,PRECISION,PREPARE,PRESERVE,"\
-"PRIMARY,PRIOR,PRIVILEGES,PROCEDURE,PUBLIC,"\
-"REFERENCES,RELATIVE,RESTRICT,REVOKE,RIGHT,ROLLBACK,ROWS,"\
-"SCHEMA,SCROLL,SECOND,SECTION,SELECT,SEQUENCE,SESSION,SESSION_USER,SET,SIZE,"\
-"SMALLINT,SOME,SPACE,SQL,SQLCA,SQLCODE,SQLERROR,SQLSTATE,SQLWARNING,"\
-"SUBSTRING,SUM,SYSTEM_USER,"\
-"TABLE,TEMPORARY,THEN,TIME,TIMESTAMP,TIMEZONE_HOUR,TIMEZONE_MINUTE,"\
-"TO,TRAILING,TRANSACTION,TRANSLATE,TRANSLATION,TRIM,TRUE,"\
-"UNION,UNIQUE,UNKNOWN,UPDATE,UPPER,USAGE,USER,USING,"\
-"VALUE,,VARCHAR,VARYING,VIEW,WHEN,WHENEVER,WHERE,WITH,WORK,YEAR"
+	"ABSOLUTE,ACTION,ADA,ADD,ALL,ALLOCATE,ALTER,AND,ANY,ARE,AS,"\
+	"ASC,ASSERTION,AT,AUTHORIZATION,AVG,"\
+	"BEGIN,BETWEEN,BIT,BIT_LENGTH,BOTH,BY,CASCADE,CASCADED,CASE,CAST,CATALOG,"\
+	"CHAR,CHAR_LENGTH,CHARACTER,CHARACTER_LENGTH,CHECK,CLOSE,COALESCE,"\
+	"COBOL,COLLATE,COLLATION,COLUMN,COMMIT,CONNECT,CONNECTION,CONSTRAINT,"\
+	"CONSTRAINTS,CONTINUE,CONVERT,CORRESPONDING,COUNT,CREATE,CROSS,CURRENT,"\
+	"CURRENT_DATE,CURRENT_TIME,CURRENT_TIMESTAMP,CURRENT_USER,CURSOR,"\
+	"DATE,DAY,DEALLOCATE,DEC,DECIMAL,DECLARE,DEFAULT,DEFERRABLE,"\
+	"DEFERRED,DELETE,DESC,DESCRIBE,DESCRIPTOR,DIAGNOSTICS,DISCONNECT,"\
+	"DISTINCT,DOMAIN,DOUBLE,DROP,"\
+	"ELSE,END,END-EXEC,ESCAPE,EXCEPT,EXCEPTION,EXEC,EXECUTE,"\
+	"EXISTS,EXTERNAL,EXTRACT,"\
+	"FALSE,FETCH,FIRST,FLOAT,FOR,FOREIGN,FORTRAN,FOUND,FROM,FULL,"\
+	"GET,GLOBAL,GO,GOTO,GRANT,GROUP,HAVING,HOUR,"\
+	"IDENTITY,IMMEDIATE,IN,INCLUDE,INDEX,INDICATOR,INITIALLY,INNER,"\
+	"INPUT,INSENSITIVE,INSERT,INTEGER,INTERSECT,INTERVAL,INTO,IS,ISOLATION,"\
+	"JOIN,KEY,LANGUAGE,LAST,LEADING,LEFT,LEVEL,LIKE,LOCAL,LOWER,"\
+	"MATCH,MAX,MIN,MINUTE,MODULE,MONTH,MUMPS,"\
+	"NAMES,NATIONAL,NATURAL,NCHAR,NEXT,NO,NONE,NOT,NULL,NULLIF,NUMERIC,"\
+	"OCTET_LENGTH,OF,ON,ONLY,OPEN,OPTION,OR,ORDER,OUTER,OUTPUT,OVERLAPS,"\
+	"PAD,PARTIAL,PASCAL,PLI,POSITION,PRECISION,PREPARE,PRESERVE,"\
+	"PRIMARY,PRIOR,PRIVILEGES,PROCEDURE,PUBLIC,"\
+	"REFERENCES,RELATIVE,RESTRICT,REVOKE,RIGHT,ROLLBACK,ROWS,"\
+	"SCHEMA,SCROLL,SECOND,SECTION,SELECT,SEQUENCE,SESSION,SESSION_USER,SET,SIZE,"\
+	"SMALLINT,SOME,SPACE,SQL,SQLCA,SQLCODE,SQLERROR,SQLSTATE,SQLWARNING,"\
+	"SUBSTRING,SUM,SYSTEM_USER,"\
+	"TABLE,TEMPORARY,THEN,TIME,TIMESTAMP,TIMEZONE_HOUR,TIMEZONE_MINUTE,"\
+	"TO,TRAILING,TRANSACTION,TRANSLATE,TRANSLATION,TRIM,TRUE,"\
+	"UNION,UNIQUE,UNKNOWN,UPDATE,UPPER,USAGE,USER,USING,"\
+	"VALUE,,VARCHAR,VARYING,VIEW,WHEN,WHENEVER,WHERE,WITH,WORK,YEAR"
 
 /*
  * ----------------------------------------------------------------------
@@ -1075,101 +1072,101 @@ extern "C" {
 /*
  *  Level 1 function prototypes
  */
-RETCODE SQL_API SQLColumns (HSTMT hstmt, UCHAR FAR * szTableQualifier,
-    SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
-    UCHAR FAR * szTableName, SWORD cbTableName, UCHAR FAR * szColumnName,
-    SWORD cbColumnName);
+RETCODE SQL_API SQLColumns(HSTMT hstmt, UCHAR FAR * szTableQualifier,
+                           SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
+                           UCHAR FAR * szTableName, SWORD cbTableName, UCHAR FAR * szColumnName,
+                           SWORD cbColumnName);
 /* glt - Changed HWND to SQLHWND to match MSW header typing */
-RETCODE SQL_API SQLDriverConnect (HDBC hdbc, SQLHWND hwnd,
-    UCHAR FAR * szConnStrIn, SWORD cbConnStrIn, UCHAR FAR * szConnStrOut,
-    SWORD cbConnStrOutMax, SWORD FAR * pcbConnStrOut, UWORD fDriverCompletion);
-RETCODE SQL_API SQLGetConnectOption (HDBC hdbc, UWORD fOption, PTR pvParam);
-RETCODE SQL_API SQLGetData (HSTMT hstmt, UWORD icol, SWORD fCType,
-    PTR rgbValue, SDWORD cbValueMax, SDWORD FAR * pcbValue);
-RETCODE SQL_API SQLGetFunctions (HDBC hdbc, UWORD fFunction,
-    UWORD FAR * pfExists);
-RETCODE SQL_API SQLGetInfo (HDBC hdbc, UWORD fInfoType, PTR rgbInfoValue,
-    SWORD cbInfoValueMax, SWORD FAR * pcbInfoValue);
-RETCODE SQL_API SQLGetStmtOption (HSTMT hstmt, UWORD fOption, PTR pvParam);
-RETCODE SQL_API SQLGetTypeInfo (HSTMT hstmt, SWORD fSqlType);
-RETCODE SQL_API SQLParamData (HSTMT hstmt, PTR FAR * prgbValue);
-RETCODE SQL_API SQLPutData (HSTMT hstmt, PTR rgbValue, SDWORD cbValue);
-RETCODE SQL_API SQLSetConnectOption (HDBC hdbc, UWORD fOption, UDWORD vParam);
-RETCODE SQL_API SQLSetStmtOption (HSTMT hstmt, UWORD fOption, UDWORD vParam);
-RETCODE SQL_API SQLSpecialColumns (HSTMT hstmt, UWORD fColType,
-    UCHAR FAR * szTableQualifier, SWORD cbTableQualifier,
-    UCHAR FAR * szTableOwner, SWORD cbTableOwner, UCHAR FAR * szTableName,
-    SWORD cbTableName, UWORD fScope, UWORD fNullable);
-RETCODE SQL_API SQLStatistics (HSTMT hstmt, UCHAR FAR * szTableQualifier,
-    SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
-    UCHAR FAR * szTableName, SWORD cbTableName, UWORD fUnique, UWORD fAccuracy);
-RETCODE SQL_API SQLTables (HSTMT hstmt, UCHAR FAR * szTableQualifier,
-    SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
-    UCHAR FAR * szTableName, SWORD cbTableName, UCHAR FAR * szTableType,
-    SWORD cbTableType);
+RETCODE SQL_API SQLDriverConnect(HDBC hdbc, SQLHWND hwnd,
+                                 UCHAR FAR * szConnStrIn, SWORD cbConnStrIn, UCHAR FAR * szConnStrOut,
+                                 SWORD cbConnStrOutMax, SWORD FAR * pcbConnStrOut, UWORD fDriverCompletion);
+RETCODE SQL_API SQLGetConnectOption(HDBC hdbc, UWORD fOption, PTR pvParam);
+RETCODE SQL_API SQLGetData(HSTMT hstmt, UWORD icol, SWORD fCType,
+                           PTR rgbValue, SDWORD cbValueMax, SDWORD FAR * pcbValue);
+RETCODE SQL_API SQLGetFunctions(HDBC hdbc, UWORD fFunction,
+                                UWORD FAR * pfExists);
+RETCODE SQL_API SQLGetInfo(HDBC hdbc, UWORD fInfoType, PTR rgbInfoValue,
+                           SWORD cbInfoValueMax, SWORD FAR * pcbInfoValue);
+RETCODE SQL_API SQLGetStmtOption(HSTMT hstmt, UWORD fOption, PTR pvParam);
+RETCODE SQL_API SQLGetTypeInfo(HSTMT hstmt, SWORD fSqlType);
+RETCODE SQL_API SQLParamData(HSTMT hstmt, PTR FAR * prgbValue);
+RETCODE SQL_API SQLPutData(HSTMT hstmt, PTR rgbValue, SDWORD cbValue);
+RETCODE SQL_API SQLSetConnectOption(HDBC hdbc, UWORD fOption, UDWORD vParam);
+RETCODE SQL_API SQLSetStmtOption(HSTMT hstmt, UWORD fOption, UDWORD vParam);
+RETCODE SQL_API SQLSpecialColumns(HSTMT hstmt, UWORD fColType,
+                                  UCHAR FAR * szTableQualifier, SWORD cbTableQualifier,
+                                  UCHAR FAR * szTableOwner, SWORD cbTableOwner, UCHAR FAR * szTableName,
+                                  SWORD cbTableName, UWORD fScope, UWORD fNullable);
+RETCODE SQL_API SQLStatistics(HSTMT hstmt, UCHAR FAR * szTableQualifier,
+                              SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
+                              UCHAR FAR * szTableName, SWORD cbTableName, UWORD fUnique, UWORD fAccuracy);
+RETCODE SQL_API SQLTables(HSTMT hstmt, UCHAR FAR * szTableQualifier,
+                          SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
+                          UCHAR FAR * szTableName, SWORD cbTableName, UCHAR FAR * szTableType,
+                          SWORD cbTableType);
 
 /*
  *  Level 2 function prototypes
  */
-RETCODE SQL_API SQLBrowseConnect (HDBC hdbc,
-    UCHAR FAR * szConnStrIn, SWORD cbConnStrIn, UCHAR FAR * szConnStrOut,
-    SWORD cbConnStrOutMax, SWORD FAR * pcbConnStrOut);
-RETCODE SQL_API SQLColumnPrivileges (HSTMT hstmt,
-    UCHAR FAR * szTableQualifier, SWORD cbTableQualifier,
-    UCHAR FAR * szTableOwner, SWORD cbTableOwner, UCHAR FAR * szTableName,
-    SWORD cbTableName, UCHAR FAR * szColumnName, SWORD cbColumnName);
-RETCODE SQL_API SQLDataSources (HENV henv, UWORD fDirection,
-    UCHAR FAR * szDSN, SWORD cbDSNMax, SWORD FAR * pcbDSN,
-    UCHAR FAR * szDescription, SWORD cbDescriptionMax,
-    SWORD FAR * pcbDescription);
-RETCODE SQL_API SQLDescribeParam (HSTMT hstmt, UWORD ipar,
-    SWORD FAR * pfSqlType, UDWORD FAR * pcbColDef, SWORD FAR * pibScale,
-    SWORD FAR * pfNullable);
-RETCODE SQL_API SQLExtendedFetch (HSTMT hstmt, UWORD fFetchType, SDWORD irow,
-    UDWORD FAR * pcrow, UWORD FAR * rgfRowStatus);
-RETCODE SQL_API SQLForeignKeys (HSTMT hstmt, UCHAR FAR * szPkTableQualifier,
-    SWORD cbPkTableQualifier, UCHAR FAR * szPkTableOwner, SWORD cbPkTableOwner,
-    UCHAR FAR * szPkTableName, SWORD cbPkTableName,
-    UCHAR FAR * szFkTableQualifier, SWORD cbFkTableQualifier,
-    UCHAR FAR * szFkTableOwner, SWORD cbFkTableOwner, UCHAR FAR * szFkTableName,
-    SWORD cbFkTableName);
-RETCODE SQL_API SQLMoreResults (HSTMT hstmt);
-RETCODE SQL_API SQLNativeSql (HDBC hdbc, UCHAR FAR * szSqlStrIn,
-    SDWORD cbSqlStrIn, UCHAR FAR * szSqlStr, SDWORD cbSqlStrMax,
-    SDWORD FAR * pcbSqlStr);
-RETCODE SQL_API SQLNumParams (HSTMT hstmt, SWORD FAR * pcpar);
-RETCODE SQL_API SQLParamOptions (HSTMT hstmt, UDWORD crow, UDWORD FAR * pirow);
-RETCODE SQL_API SQLPrimaryKeys (HSTMT hstmt, UCHAR FAR * szTableQualifier,
-    SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
-    UCHAR FAR * szTableName, SWORD cbTableName);
-RETCODE SQL_API SQLProcedureColumns (HSTMT hstmt, UCHAR FAR * szProcQualifier,
-    SWORD cbProcQualifier, UCHAR FAR * szProcOwner, SWORD cbProcOwner,
-    UCHAR FAR * szProcName, SWORD cbProcName, UCHAR FAR * szColumnName,
-    SWORD cbColumnName);
-RETCODE SQL_API SQLProcedures (HSTMT hstmt, UCHAR FAR * szProcQualifier,
-    SWORD cbProcQualifier, UCHAR FAR * szProcOwner, SWORD cbProcOwner,
-    UCHAR FAR * szProcName, SWORD cbProcName);
-RETCODE SQL_API SQLSetPos (HSTMT hstmt, UWORD irow, UWORD fOption, UWORD fLock);
-RETCODE SQL_API SQLTablePrivileges (HSTMT hstmt, UCHAR FAR * szTableQualifier,
-    SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
-    UCHAR FAR * szTableName, SWORD cbTableName);
+RETCODE SQL_API SQLBrowseConnect(HDBC hdbc,
+                                 UCHAR FAR * szConnStrIn, SWORD cbConnStrIn, UCHAR FAR * szConnStrOut,
+                                 SWORD cbConnStrOutMax, SWORD FAR * pcbConnStrOut);
+RETCODE SQL_API SQLColumnPrivileges(HSTMT hstmt,
+                                    UCHAR FAR * szTableQualifier, SWORD cbTableQualifier,
+                                    UCHAR FAR * szTableOwner, SWORD cbTableOwner, UCHAR FAR * szTableName,
+                                    SWORD cbTableName, UCHAR FAR * szColumnName, SWORD cbColumnName);
+RETCODE SQL_API SQLDataSources(HENV henv, UWORD fDirection,
+                               UCHAR FAR * szDSN, SWORD cbDSNMax, SWORD FAR * pcbDSN,
+                               UCHAR FAR * szDescription, SWORD cbDescriptionMax,
+                               SWORD FAR * pcbDescription);
+RETCODE SQL_API SQLDescribeParam(HSTMT hstmt, UWORD ipar,
+                                 SWORD FAR * pfSqlType, UDWORD FAR * pcbColDef, SWORD FAR * pibScale,
+                                 SWORD FAR * pfNullable);
+RETCODE SQL_API SQLExtendedFetch(HSTMT hstmt, UWORD fFetchType, SDWORD irow,
+                                 UDWORD FAR * pcrow, UWORD FAR * rgfRowStatus);
+RETCODE SQL_API SQLForeignKeys(HSTMT hstmt, UCHAR FAR * szPkTableQualifier,
+                               SWORD cbPkTableQualifier, UCHAR FAR * szPkTableOwner, SWORD cbPkTableOwner,
+                               UCHAR FAR * szPkTableName, SWORD cbPkTableName,
+                               UCHAR FAR * szFkTableQualifier, SWORD cbFkTableQualifier,
+                               UCHAR FAR * szFkTableOwner, SWORD cbFkTableOwner, UCHAR FAR * szFkTableName,
+                               SWORD cbFkTableName);
+RETCODE SQL_API SQLMoreResults(HSTMT hstmt);
+RETCODE SQL_API SQLNativeSql(HDBC hdbc, UCHAR FAR * szSqlStrIn,
+                             SDWORD cbSqlStrIn, UCHAR FAR * szSqlStr, SDWORD cbSqlStrMax,
+                             SDWORD FAR * pcbSqlStr);
+RETCODE SQL_API SQLNumParams(HSTMT hstmt, SWORD FAR * pcpar);
+RETCODE SQL_API SQLParamOptions(HSTMT hstmt, UDWORD crow, UDWORD FAR * pirow);
+RETCODE SQL_API SQLPrimaryKeys(HSTMT hstmt, UCHAR FAR * szTableQualifier,
+                               SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
+                               UCHAR FAR * szTableName, SWORD cbTableName);
+RETCODE SQL_API SQLProcedureColumns(HSTMT hstmt, UCHAR FAR * szProcQualifier,
+                                    SWORD cbProcQualifier, UCHAR FAR * szProcOwner, SWORD cbProcOwner,
+                                    UCHAR FAR * szProcName, SWORD cbProcName, UCHAR FAR * szColumnName,
+                                    SWORD cbColumnName);
+RETCODE SQL_API SQLProcedures(HSTMT hstmt, UCHAR FAR * szProcQualifier,
+                              SWORD cbProcQualifier, UCHAR FAR * szProcOwner, SWORD cbProcOwner,
+                              UCHAR FAR * szProcName, SWORD cbProcName);
+RETCODE SQL_API SQLSetPos(HSTMT hstmt, UWORD irow, UWORD fOption, UWORD fLock);
+RETCODE SQL_API SQLTablePrivileges(HSTMT hstmt, UCHAR FAR * szTableQualifier,
+                                   SWORD cbTableQualifier, UCHAR FAR * szTableOwner, SWORD cbTableOwner,
+                                   UCHAR FAR * szTableName, SWORD cbTableName);
 
 /*
  *  SDK 2.0 Additional function prototypes
  */
-RETCODE SQL_API SQLDrivers (HENV henv, UWORD fDirection,
-    UCHAR FAR * szDriverDesc, SWORD cbDriverDescMax, SWORD FAR * pcbDriverDesc,
-    UCHAR FAR * szDriverAttributes, SWORD cbDrvrAttrMax,
-    SWORD FAR * pcbDrvrAttr);
-RETCODE SQL_API SQLBindParameter (HSTMT hstmt, UWORD ipar, SWORD fParamType,
-    SWORD fCType, SWORD fSqlType, UDWORD cbColDef, SWORD ibScale, PTR rgbValue,
-    SDWORD cbValueMax, SDWORD FAR * pcbValue);
+RETCODE SQL_API SQLDrivers(HENV henv, UWORD fDirection,
+                           UCHAR FAR * szDriverDesc, SWORD cbDriverDescMax, SWORD FAR * pcbDriverDesc,
+                           UCHAR FAR * szDriverAttributes, SWORD cbDrvrAttrMax,
+                           SWORD FAR * pcbDrvrAttr);
+RETCODE SQL_API SQLBindParameter(HSTMT hstmt, UWORD ipar, SWORD fParamType,
+                                 SWORD fCType, SWORD fSqlType, UDWORD cbColDef, SWORD ibScale, PTR rgbValue,
+                                 SDWORD cbValueMax, SDWORD FAR * pcbValue);
 
 /*
  *  Deprecated - use SQLSetStmtOptions
  */
-RETCODE SQL_API SQLSetScrollOptions (HSTMT hstmt, UWORD fConcurrency,
-    SDWORD crowKeyset, UWORD crowRowset);
+RETCODE SQL_API SQLSetScrollOptions(HSTMT hstmt, UWORD fConcurrency,
+                                    SDWORD crowKeyset, UWORD crowRowset);
 
 #ifdef __cplusplus
 }

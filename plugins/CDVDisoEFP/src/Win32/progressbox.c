@@ -40,8 +40,7 @@ char progressboxmaxchar[16];
 
 void ProgressBoxDestroy()
 {
-	if (progressboxwindow != NULL)
-	{
+	if (progressboxwindow != NULL) {
 		DestroyWindow(progressboxwindow);
 		progressboxwindow = NULL;
 		progressboxbar = NULL;
@@ -52,7 +51,6 @@ void ProgressBoxDestroy()
 void ProgressBoxStart(char *description, off64_t maximum)
 {
 	SetDlgItemText(progressboxwindow, IDC_0501, description);
-
 	progressboxmax = maximum;
 	sprintf(progressboxmaxchar, "%llu", maximum);
 	progressboxlastpct = 100;
@@ -72,27 +70,19 @@ void ProgressBoxTick(off64_t current)
 	strcat(progressboxline, progressboxmaxchar);
 	SetDlgItemText(progressboxwindow, IDC_0503, progressboxline);
 	if (progressboxmax >= 30000)
-	{
 		SendMessage(progressboxbar, PBM_SETPOS, current / (progressboxmax / 30000), 0);
-	}
 	else
-	{
-		SendMessage(progressboxbar, PBM_SETPOS, (current * 30000) / progressboxmax, 0);
-	} // ENDIF- Our maximum # over 30000? (Avoiding divide-by-zero error)
-	if (progressboxmax >= 100)
-	{
+		SendMessage(progressboxbar, PBM_SETPOS, (current * 30000) / progressboxmax, 0); // ENDIF- Our maximum # over 30000? (Avoiding divide-by-zero error)
+	if (progressboxmax >= 100) {
 		thispct = current / (progressboxmax / 100);
-		if (thispct != progressboxlastpct)
-		{
+		if (thispct != progressboxlastpct) {
 			sprintf(progressboxline, "%llu%% CDVDisoEFP Progress", thispct);
 			SetWindowText(progressboxwindow, progressboxline);
 			progressboxlastpct = thispct;
 		} // ENDIF- Change in percentage? (Avoiding title flicker)
 	} // ENDIF- Our maximum # over 100? (Avoiding divide-by-zero error)
-
 	returnbool = PeekMessage(&msg, progressboxwindow, 0, 0, PM_REMOVE);
-	while (returnbool != FALSE)
-	{
+	while (returnbool != FALSE) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 		returnbool = PeekMessage(&msg, progressboxwindow, 0, 0, PM_REMOVE);
@@ -110,7 +100,6 @@ void ProgressBoxStop()
 void ProgressBoxCancelEvent()
 {
 	progressboxstop = 1;
-
 	return;
 } // END ProgressBoxCancelEvent()
 
@@ -119,28 +108,24 @@ BOOL CALLBACK ProgressBoxCallback(HWND window,
                                   WPARAM param,
                                   LPARAM param2)
 {
-	switch (msg)
-	{
+	switch (msg) {
 		case WM_INITDIALOG:
-			return(TRUE);
+			return (TRUE);
 			break;
 		case WM_CLOSE: // The "X" in the upper right corner is hit.
 			ProgressBoxCancelEvent();
-			return(TRUE);
+			return (TRUE);
 			break;
-
 		case WM_COMMAND:
-			switch (LOWORD(param))
-			{
+			switch (LOWORD(param)) {
 				case IDC_0504:
 					ProgressBoxCancelEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 			} // ENDSWITCH param- Which item got the message?
-
 			// Hmm. Custom control? (for WM_GETFONT and WM_SETFONT msgs?)
 	} // ENDSWITCH msg- what message has been sent to this window?
-	return(FALSE); // Not a recognized message? Tell Windows to handle it.
+	return (FALSE); // Not a recognized message? Tell Windows to handle it.
 } // ENDIF ProgressBoxCallback()
 
 void ProgressBoxDisplay()
@@ -151,7 +136,6 @@ void ProgressBoxDisplay()
 	// progressload.
 	// progressload. = ICC_PROGRESS_CLASS
 	// InitCommonControlsEx(&progressload);
-
 	progressboxwindow = CreateDialog(progmodule,
 	                                 MAKEINTRESOURCE(DLG_0500),
 	                                 mainboxwindow,

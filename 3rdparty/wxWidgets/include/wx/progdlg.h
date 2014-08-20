@@ -28,9 +28,9 @@
 
 
 #ifdef __WXPALMOS__
-    #include "wx/palmos/progdlg.h"
+#include "wx/palmos/progdlg.h"
 #else
-    #include "wx/generic/progdlgg.h"
+#include "wx/generic/progdlgg.h"
 #endif
 
 #endif // _WX_PROGDLG_H_BASE_

@@ -80,21 +80,21 @@ typedef signed long long int64;
 #define ALIGN_STACK(n) __declspec(align(n)) int __dummy;
 
 #ifndef RESTRICT
-	#ifdef __INTEL_COMPILER
-		#define RESTRICT restrict
-	#elif _MSC_VER >= 1400 // TODO: gcc
-		#define RESTRICT __restrict
-	#else
-		#define RESTRICT
-	#endif
+#ifdef __INTEL_COMPILER
+#define RESTRICT restrict
+#elif _MSC_VER >= 1400 // TODO: gcc
+#define RESTRICT __restrict
+#else
+#define RESTRICT
+#endif
 #endif
 
 #if defined(_DEBUG) && defined(_MSC_VER)
-	#define ASSERT assert
+#define ASSERT assert
 #else
-	#define ASSERT(exp) ((void)0)
+#define ASSERT(exp) ((void)0)
 #endif
 
 #ifdef _M_SSE
-	#error No SSE please!
+#error No SSE please!
 #endif

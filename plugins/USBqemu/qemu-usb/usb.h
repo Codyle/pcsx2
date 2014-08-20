@@ -95,16 +95,16 @@
 #define DeviceRequest ((USB_DIR_IN|USB_TYPE_STANDARD|USB_RECIP_DEVICE)<<8)
 #define DeviceOutRequest ((USB_DIR_OUT|USB_TYPE_STANDARD|USB_RECIP_DEVICE)<<8)
 #define InterfaceRequest \
-        ((USB_DIR_IN|USB_TYPE_STANDARD|USB_RECIP_INTERFACE)<<8)
+	((USB_DIR_IN|USB_TYPE_STANDARD|USB_RECIP_INTERFACE)<<8)
 #define InterfaceOutRequest \
-        ((USB_DIR_OUT|USB_TYPE_STANDARD|USB_RECIP_INTERFACE)<<8)
+	((USB_DIR_OUT|USB_TYPE_STANDARD|USB_RECIP_INTERFACE)<<8)
 #define EndpointRequest ((USB_DIR_IN|USB_TYPE_STANDARD|USB_RECIP_ENDPOINT)<<8)
 #define EndpointOutRequest \
-        ((USB_DIR_OUT|USB_TYPE_STANDARD|USB_RECIP_ENDPOINT)<<8)
+	((USB_DIR_OUT|USB_TYPE_STANDARD|USB_RECIP_ENDPOINT)<<8)
 #define ClassInterfaceRequest \
-        ((USB_DIR_IN|USB_TYPE_CLASS|USB_RECIP_INTERFACE)<<8)
+	((USB_DIR_IN|USB_TYPE_CLASS|USB_RECIP_INTERFACE)<<8)
 #define ClassInterfaceOutRequest \
-        ((USB_DIR_OUT|USB_TYPE_CLASS|USB_RECIP_INTERFACE)<<8)
+	((USB_DIR_OUT|USB_TYPE_CLASS|USB_RECIP_INTERFACE)<<8)
 
 #define USB_REQ_GET_STATUS		0x00
 #define USB_REQ_CLEAR_FEATURE		0x01
@@ -154,139 +154,139 @@ typedef struct USBDescOther USBDescOther;
 typedef struct USBDescString USBDescString;
 
 struct USBDescString {
-    uint8_t index;
-    char *str;
-    QLIST_ENTRY(USBDescString) next;
+	uint8_t index;
+	char *str;
+	QLIST_ENTRY(USBDescString) next;
 };
 
 /* definition of a USB device */
 struct USBDevice {
-    //DeviceState qdev;
-    USBDeviceInfo *info;
-    USBPort *port;
-    char *port_path;
-    void *opaque;
+	//DeviceState qdev;
+	USBDeviceInfo *info;
+	USBPort *port;
+	char *port_path;
+	void *opaque;
 
-    /* Actual connected speed */
-    int speed;
-    /* Supported speeds, not in info because it may be variable (hostdevs) */
-    int speedmask;
-    uint8_t addr;
-    char product_desc[32];
-    int auto_attach;
-    int attached;
+	/* Actual connected speed */
+	int speed;
+	/* Supported speeds, not in info because it may be variable (hostdevs) */
+	int speedmask;
+	uint8_t addr;
+	char product_desc[32];
+	int auto_attach;
+	int attached;
 
-    int32_t state;
-    uint8_t setup_buf[8];
-    uint8_t data_buf[4096];
-    int32_t remote_wakeup;
-    int32_t setup_state;
-    int32_t setup_len;
-    int32_t setup_index;
+	int32_t state;
+	uint8_t setup_buf[8];
+	uint8_t data_buf[4096];
+	int32_t remote_wakeup;
+	int32_t setup_state;
+	int32_t setup_len;
+	int32_t setup_index;
 
-    QLIST_HEAD(, USBDescString) strings;
-    const USBDescDevice *device;
-    const USBDescConfig *config;
+	QLIST_HEAD(, USBDescString) strings;
+	const USBDescDevice *device;
+	const USBDescConfig *config;
 };
 
 struct USBDeviceInfo {
-    //DeviceInfo qdev;
-    int (*init)(USBDevice *dev);
+	//DeviceInfo qdev;
+	int (*init)(USBDevice *dev);
 
-    /*
-     * Process USB packet.
-     * Called by the HC (Host Controller).
-     *
-     * Returns length of the transaction
-     * or one of the USB_RET_XXX codes.
-     */
-    int (*handle_packet)(USBDevice *dev, USBPacket *p);
+	/*
+	 * Process USB packet.
+	 * Called by the HC (Host Controller).
+	 *
+	 * Returns length of the transaction
+	 * or one of the USB_RET_XXX codes.
+	 */
+	int (*handle_packet)(USBDevice *dev, USBPacket *p);
 
-    /*
-     * Called when a packet is canceled.
-     */
-    void (*cancel_packet)(USBDevice *dev, USBPacket *p);
+	/*
+	 * Called when a packet is canceled.
+	 */
+	void (*cancel_packet)(USBDevice *dev, USBPacket *p);
 
-    /*
-     * Called when device is destroyed.
-     */
-    void (*handle_destroy)(USBDevice *dev);
+	/*
+	 * Called when device is destroyed.
+	 */
+	void (*handle_destroy)(USBDevice *dev);
 
-    /*
-     * Attach the device
-     */
-    void (*handle_attach)(USBDevice *dev);
+	/*
+	 * Attach the device
+	 */
+	void (*handle_attach)(USBDevice *dev);
 
-    /*
-     * Reset the device
-     */
-    void (*handle_reset)(USBDevice *dev);
+	/*
+	 * Reset the device
+	 */
+	void (*handle_reset)(USBDevice *dev);
 
-    /*
-     * Process control request.
-     * Called from handle_packet().
-     *
-     * Returns length or one of the USB_RET_ codes.
-     */
-    int (*handle_control)(USBDevice *dev, USBPacket *p, int request, int value,
-                          int index, int length, uint8_t *data);
+	/*
+	 * Process control request.
+	 * Called from handle_packet().
+	 *
+	 * Returns length or one of the USB_RET_ codes.
+	 */
+	int (*handle_control)(USBDevice *dev, USBPacket *p, int request, int value,
+	                      int index, int length, uint8_t *data);
 
-    /*
-     * Process data transfers (both BULK and ISOC).
-     * Called from handle_packet().
-     *
-     * Returns length or one of the USB_RET_ codes.
-     */
-    int (*handle_data)(USBDevice *dev, USBPacket *p);
+	/*
+	 * Process data transfers (both BULK and ISOC).
+	 * Called from handle_packet().
+	 *
+	 * Returns length or one of the USB_RET_ codes.
+	 */
+	int (*handle_data)(USBDevice *dev, USBPacket *p);
 
-    const char *product_desc;
-    const USBDesc *usb_desc;
+	const char *product_desc;
+	const USBDesc *usb_desc;
 
-    /* handle legacy -usbdevice command line options */
-    const char *usbdevice_name;
-    USBDevice *(*usbdevice_init)(const char *params);
+	/* handle legacy -usbdevice command line options */
+	const char *usbdevice_name;
+	USBDevice *(*usbdevice_init)(const char *params);
 };
 
 typedef struct USBPortOps {
-    void (*attach)(USBPort *port);
-    void (*detach)(USBPort *port);
-    /*
-     * This gets called when a device downstream from the device attached to
-     * the port (iow attached through a hub) gets detached.
-     */
-    void (*child_detach)(USBPort *port, USBDevice *child);
-    void (*wakeup)(USBPort *port);
-    /*
-     * Note that port->dev will be different then the device from which
-     * the packet originated when a hub is involved, if you want the orginating
-     * device use p->owner
-     */
-    void (*complete)(USBPort *port, USBPacket *p);
+	void (*attach)(USBPort *port);
+	void (*detach)(USBPort *port);
+	/*
+	 * This gets called when a device downstream from the device attached to
+	 * the port (iow attached through a hub) gets detached.
+	 */
+	void (*child_detach)(USBPort *port, USBDevice *child);
+	void (*wakeup)(USBPort *port);
+	/*
+	 * Note that port->dev will be different then the device from which
+	 * the packet originated when a hub is involved, if you want the orginating
+	 * device use p->owner
+	 */
+	void (*complete)(USBPort *port, USBPacket *p);
 } USBPortOps;
 
 /* USB port on which a device can be connected */
 struct USBPort {
-    USBDevice *dev;
-    int speedmask;
-    char path[16];
-    USBPortOps *ops;
-    void *opaque;
-    int index; /* internal port index, may be used with the opaque */
-    QTAILQ_ENTRY(USBPort) next;
+	USBDevice *dev;
+	int speedmask;
+	char path[16];
+	USBPortOps *ops;
+	void *opaque;
+	int index; /* internal port index, may be used with the opaque */
+	QTAILQ_ENTRY(USBPort) next;
 };
 
 typedef void USBCallback(USBPacket * packet, void *opaque);
 
 /* Structure used to hold information about an active USB packet.  */
 struct USBPacket {
-    /* Data fields for use by the driver.  */
-    int pid;
-    uint8_t devaddr;
-    uint8_t devep;
-    uint8_t *data;
-    int len;
-    /* Internal use by the USB layer.  */
-    USBDevice *owner;
+	/* Data fields for use by the driver.  */
+	int pid;
+	uint8_t devaddr;
+	uint8_t devep;
+	uint8_t *data;
+	int len;
+	/* Internal use by the USB layer.  */
+	USBDevice *owner;
 };
 
 int usb_handle_packet(USBDevice *dev, USBPacket *p);
@@ -317,19 +317,19 @@ void usb_hid_datain_cb(USBDevice *dev, void *opaque, void (*datain)(void *));
 
 /* usb-musb.c */
 enum musb_irq_source_e {
-    musb_irq_suspend = 0,
-    musb_irq_resume,
-    musb_irq_rst_babble,
-    musb_irq_sof,
-    musb_irq_connect,
-    musb_irq_disconnect,
-    musb_irq_vbus_request,
-    musb_irq_vbus_error,
-    musb_irq_rx,
-    musb_irq_tx,
-    musb_set_vbus,
-    musb_set_session,
-    __musb_irq_max,
+	musb_irq_suspend = 0,
+	musb_irq_resume,
+	musb_irq_rst_babble,
+	musb_irq_sof,
+	musb_irq_connect,
+	musb_irq_disconnect,
+	musb_irq_vbus_request,
+	musb_irq_vbus_error,
+	musb_irq_rx,
+	musb_irq_tx,
+	musb_set_vbus,
+	musb_set_session,
+	__musb_irq_max,
 };
 
 typedef struct MUSBState MUSBState;
@@ -341,19 +341,19 @@ void musb_set_size(MUSBState *s, int epnum, int size, int is_tx);
 /* usb-bus.c */
 
 struct USBBus {
-    //BusState qbus;
-    USBBusOps *ops;
-    int busnr;
-    int nfree;
-    int nused;
-    QTAILQ_HEAD(, USBPort) free;
-    QTAILQ_HEAD(, USBPort) used;
-    QTAILQ_ENTRY(USBBus) next;
+	//BusState qbus;
+	USBBusOps *ops;
+	int busnr;
+	int nfree;
+	int nused;
+	QTAILQ_HEAD(, USBPort) free;
+	QTAILQ_HEAD(, USBPort) used;
+	QTAILQ_ENTRY(USBBus) next;
 };
 
 struct USBBusOps {
-    int (*register_companion)(USBBus *bus, USBPort *ports[],
-                              uint32_t portcount, uint32_t firstport);
+	int (*register_companion)(USBBus *bus, USBPort *ports[],
+	                          uint32_t portcount, uint32_t firstport);
 };
 
 //void usb_bus_new(USBBus *bus, USBBusOps *ops, DeviceState *host);

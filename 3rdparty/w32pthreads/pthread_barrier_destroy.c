@@ -38,29 +38,21 @@
 
 
 int
-pthread_barrier_destroy (pthread_barrier_t * barrier)
+pthread_barrier_destroy(pthread_barrier_t * barrier)
 {
-  int result = 0;
-  pthread_barrier_t b;
-
-  if (barrier == NULL || *barrier == (pthread_barrier_t) PTW32_OBJECT_INVALID)
-    {
-      return EINVAL;
-    }
-
-  b = *barrier;
-  *barrier = NULL;
-
-  if (0 == (result = sem_destroy (&(b->semBarrierBreeched[0]))))
-    {
-      if (0 == (result = sem_destroy (&(b->semBarrierBreeched[1]))))
-	{
-	  (void) free (b);
-	  return 0;
+	int result = 0;
+	pthread_barrier_t b;
+	if (barrier == NULL || *barrier == (pthread_barrier_t) PTW32_OBJECT_INVALID)
+		return EINVAL;
+	b = *barrier;
+	*barrier = NULL;
+	if (0 == (result = sem_destroy(&(b->semBarrierBreeched[0])))) {
+		if (0 == (result = sem_destroy(&(b->semBarrierBreeched[1])))) {
+			(void) free(b);
+			return 0;
+		}
+		(void) sem_init(&(b->semBarrierBreeched[0]), b->pshared, 0);
 	}
-      (void) sem_init (&(b->semBarrierBreeched[0]), b->pshared, 0);
-    }
-
-  *barrier = b;
-  return (result);
+	*barrier = b;
+	return (result);
 }

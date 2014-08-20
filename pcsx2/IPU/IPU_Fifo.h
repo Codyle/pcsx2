@@ -20,8 +20,7 @@
 // They are saved into the savestate as-is, and keeping them as struct ensures that the
 // layout of their contents is reliable.
 
-struct IPU_Fifo_Input
-{
+struct IPU_Fifo_Input {
 	__aligned16 u32 data[32];
 	int readpos, writepos;
 
@@ -31,8 +30,7 @@ struct IPU_Fifo_Input
 	wxString desc() const;
 };
 
-struct IPU_Fifo_Output
-{
+struct IPU_Fifo_Output {
 	__aligned16 u32 data[32];
 	int readpos, writepos;
 
@@ -43,8 +41,7 @@ struct IPU_Fifo_Output
 	wxString desc() const;
 };
 
-struct IPU_Fifo
-{
+struct IPU_Fifo {
 	__aligned16 IPU_Fifo_Input in;
 	__aligned16 IPU_Fifo_Output out;
 

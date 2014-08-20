@@ -2,8 +2,8 @@
 #include "eedebug.h"
 
 typedef struct {
-    u8	e_ident[16];    //0x7f,"ELF"  (ELF file identifier)
-    u16	e_type;         //ELF type: 0=NONE, 1=REL, 2=EXEC, 3=SHARED, 4=CORE
+	u8	e_ident[16];    //0x7f,"ELF"  (ELF file identifier)
+	u16	e_type;         //ELF type: 0=NONE, 1=REL, 2=EXEC, 3=SHARED, 4=CORE
 	u16	e_machine;      //Processor: 8=MIPS R3000
 	u32	e_version;      //Version: 1=current
 	u32	e_entry;        //Entry point address
@@ -43,7 +43,7 @@ notes1
 
 typedef struct {
 	u32	sh_name;        //No. to the index of the Section header stringtable index
-    u32	sh_type;        //See notes2
+	u32	sh_type;        //See notes2
 	u32	sh_flags;       //see notes3
 	u32	sh_addr;        //Section start address
 	u32	sh_offset;      //Offset from start of file to section
@@ -107,251 +107,217 @@ u8 *elfdata;
 int elfsize;
 
 
-static void __memcpy(void *dest, const void *src, int n) {
+static void __memcpy(void *dest, const void *src, int n)
+{
 	const u8 *s = (u8*)src;
 	u8 *d = (u8*)dest;
-
 	while (n) {
-		*d++ = *s++; n--;
+		*d++ = *s++;
+		n--;
 	}
 }
 
 
-int loadHeaders() {
+int loadHeaders()
+{
 	elfHeader = (ELF_HEADER*)elfdata;
-
-	if ((elfHeader->e_shentsize != sizeof(ELF_SHR)) && (elfHeader->e_shnum > 0)) {
+	if ((elfHeader->e_shentsize != sizeof(ELF_SHR)) && (elfHeader->e_shnum > 0))
 		return -1;
-	}
-
 #ifdef ELF_LOG
-    ELF_LOG( "type:      " );
+	ELF_LOG("type:      ");
 #endif
-	switch( elfHeader->e_type )
-   {
+	switch (elfHeader->e_type) {
 		default:
 #ifdef ELF_LOG
-		   ELF_LOG( "unknown %x", elfHeader->e_type );
+			ELF_LOG("unknown %x", elfHeader->e_type);
 #endif
 			break;
-
 		case 0x0:
 #ifdef ELF_LOG
-			ELF_LOG( "no file type" );
+			ELF_LOG("no file type");
 #endif
 			break;
-
 		case 0x1:
 #ifdef ELF_LOG
-		   ELF_LOG( "relocatable" );
+			ELF_LOG("relocatable");
 #endif
 			break;
-
 		case 0x2:
 #ifdef ELF_LOG
-		   ELF_LOG( "executable" );
+			ELF_LOG("executable");
 #endif
 			break;
 	}
 #ifdef ELF_LOG
-	ELF_LOG( "\n" );
-	ELF_LOG( "machine:   " );
+	ELF_LOG("\n");
+	ELF_LOG("machine:   ");
 #endif
-	switch ( elfHeader->e_machine )
-   {
+	switch (elfHeader->e_machine) {
 		default:
 #ifdef ELF_LOG
-			ELF_LOG( "unknown" );
+			ELF_LOG("unknown");
 #endif
 			break;
-
 		case 0x8:
 #ifdef ELF_LOG
-			ELF_LOG( "mips_rs3000" );
+			ELF_LOG("mips_rs3000");
 #endif
 			break;
 	}
 #ifdef ELF_LOG
 	ELF_LOG("\n");
-	ELF_LOG("version:   %d\n",elfHeader->e_version);
-	ELF_LOG("entry:     %08x\n",elfHeader->e_entry);
-	ELF_LOG("flags:     %08x\n",elfHeader->e_flags);
-	ELF_LOG("eh size:   %08x\n",elfHeader->e_ehsize);
-	ELF_LOG("ph off:    %08x\n",elfHeader->e_phoff);
-	ELF_LOG("ph entsiz: %08x\n",elfHeader->e_phentsize);
-	ELF_LOG("ph num:    %08x\n",elfHeader->e_phnum);
-	ELF_LOG("sh off:    %08x\n",elfHeader->e_shoff);
-	ELF_LOG("sh entsiz: %08x\n",elfHeader->e_shentsize);
-	ELF_LOG("sh num:    %08x\n",elfHeader->e_shnum);
-	ELF_LOG("sh strndx: %08x\n",elfHeader->e_shstrndx);
-
+	ELF_LOG("version:   %d\n", elfHeader->e_version);
+	ELF_LOG("entry:     %08x\n", elfHeader->e_entry);
+	ELF_LOG("flags:     %08x\n", elfHeader->e_flags);
+	ELF_LOG("eh size:   %08x\n", elfHeader->e_ehsize);
+	ELF_LOG("ph off:    %08x\n", elfHeader->e_phoff);
+	ELF_LOG("ph entsiz: %08x\n", elfHeader->e_phentsize);
+	ELF_LOG("ph num:    %08x\n", elfHeader->e_phnum);
+	ELF_LOG("sh off:    %08x\n", elfHeader->e_shoff);
+	ELF_LOG("sh entsiz: %08x\n", elfHeader->e_shentsize);
+	ELF_LOG("sh num:    %08x\n", elfHeader->e_shnum);
+	ELF_LOG("sh strndx: %08x\n", elfHeader->e_shstrndx);
 	ELF_LOG("\n");
 #endif
-
 	return 0;
 }
 
 
-int loadProgramHeaders() {
+int loadProgramHeaders()
+{
 	int i;
-
-	if (elfHeader->e_phnum == 0) {
+	if (elfHeader->e_phnum == 0)
 		return 0;
-	}
-
-	if (elfHeader->e_phentsize != sizeof(ELF_PHR)) {
+	if (elfHeader->e_phentsize != sizeof(ELF_PHR))
 		return -1;
-	}
-
 	elfProgH = (ELF_PHR*)&elfdata[elfHeader->e_phoff];
-
-	for ( i = 0 ; i < elfHeader->e_phnum ; i++ )
-   {
+	for (i = 0 ; i < elfHeader->e_phnum ; i++) {
 #ifdef ELF_LOG
-      ELF_LOG( "Elf32 Program Header\n" );
-		ELF_LOG( "type:      " );
+		ELF_LOG("Elf32 Program Header\n");
+		ELF_LOG("type:      ");
 #endif
-		switch ( elfProgH[ i ].p_type )
-      {
+		switch (elfProgH[ i ].p_type) {
 			default:
 #ifdef ELF_LOG
-	         ELF_LOG( "unknown %x", (int)elfProgH[ i ].p_type );
+				ELF_LOG("unknown %x", (int)elfProgH[ i ].p_type);
 #endif
 				break;
-
 			case 0x1:
 #ifdef ELF_LOG
-	         ELF_LOG("load");
+				ELF_LOG("load");
 #endif
-/*				if ( elfHeader->e_shnum == 0 ) {*/
-					if (elfProgH[ i ].p_offset < elfsize) {
-						int size;
-
-						if ((elfProgH[ i ].p_filesz + elfProgH[ i ].p_offset) > elfsize) {
-							size = elfsize - elfProgH[ i ].p_offset;
-						} else {
-							size = elfProgH[ i ].p_filesz;
-						}
-//						__printf("loading program to %x\n", elfProgH[ i ].p_paddr + elfbase);
-						__memcpy(elfProgH[ i ].p_paddr,
-								 &elfdata[elfProgH[ i ].p_offset],
-								 size);
-					}
+				/*				if ( elfHeader->e_shnum == 0 ) {*/
+				if (elfProgH[ i ].p_offset < elfsize) {
+					int size;
+					if ((elfProgH[ i ].p_filesz + elfProgH[ i ].p_offset) > elfsize)
+						size = elfsize - elfProgH[ i ].p_offset;
+					else
+						size = elfProgH[ i ].p_filesz;
+					//						__printf("loading program to %x\n", elfProgH[ i ].p_paddr + elfbase);
+					__memcpy(elfProgH[ i ].p_paddr,
+					         &elfdata[elfProgH[ i ].p_offset],
+					         size);
+				}
 #ifdef ELF_LOG
-					ELF_LOG("\t*LOADED*");
+				ELF_LOG("\t*LOADED*");
 #endif
-//				}
+				//				}
 				break;
 		}
 #ifdef ELF_LOG
-      ELF_LOG("\n");
-		ELF_LOG("offset:    %08x\n",(int)elfProgH[i].p_offset);
-		ELF_LOG("vaddr:     %08x\n",(int)elfProgH[i].p_vaddr);
-		ELF_LOG("paddr:     %08x\n",elfProgH[i].p_paddr);
-		ELF_LOG("file size: %08x\n",elfProgH[i].p_filesz);
-		ELF_LOG("mem size:  %08x\n",elfProgH[i].p_memsz);
-		ELF_LOG("flags:     %08x\n",elfProgH[i].p_flags);
-		ELF_LOG("palign:    %08x\n",elfProgH[i].p_align);
+		ELF_LOG("\n");
+		ELF_LOG("offset:    %08x\n", (int)elfProgH[i].p_offset);
+		ELF_LOG("vaddr:     %08x\n", (int)elfProgH[i].p_vaddr);
+		ELF_LOG("paddr:     %08x\n", elfProgH[i].p_paddr);
+		ELF_LOG("file size: %08x\n", elfProgH[i].p_filesz);
+		ELF_LOG("mem size:  %08x\n", elfProgH[i].p_memsz);
+		ELF_LOG("flags:     %08x\n", elfProgH[i].p_flags);
+		ELF_LOG("palign:    %08x\n", elfProgH[i].p_align);
 		ELF_LOG("\n");
 #endif
 	}
-
 	return 0;
 }
 
-int loadSectionHeaders() {
+int loadSectionHeaders()
+{
 	int i;
 	int i_st = -1;
 	int i_dt = -1;
-
-	if (elfHeader->e_shnum == 0) {
+	if (elfHeader->e_shnum == 0)
 		return -1;
-	}
-
 	elfSectH = (ELF_SHR*)&elfdata[elfHeader->e_shoff];
-
-	if ( elfHeader->e_shstrndx < elfHeader->e_shnum ) {
+	if (elfHeader->e_shstrndx < elfHeader->e_shnum)
 		sections_names = (char *)&elfdata[elfSectH[ elfHeader->e_shstrndx ].sh_offset];
-	}
-
-	for ( i = 0 ; i < elfHeader->e_shnum ; i++ )
-   {
+	for (i = 0 ; i < elfHeader->e_shnum ; i++) {
 #ifdef ELF_LOG
-      ELF_LOG( "Elf32 Section Header [%x] %s", i, &sections_names[ elfSectH[ i ].sh_name ] );
+		ELF_LOG("Elf32 Section Header [%x] %s", i, &sections_names[ elfSectH[ i ].sh_name ]);
 #endif
-/*		if ( elfSectH[i].sh_flags & 0x2 ) {
-			if (elfSectH[i].sh_offset < elfsize) {
-				int size;
+		/*		if ( elfSectH[i].sh_flags & 0x2 ) {
+					if (elfSectH[i].sh_offset < elfsize) {
+						int size;
 
-				if ((elfSectH[i].sh_size + elfSectH[i].sh_offset) > elfsize) {
-					size = elfsize - elfSectH[i].sh_offset;
-				} else {
-					size = elfSectH[i].sh_size;
-				}
-				memcpy(&psM[ elfSectH[ i ].sh_addr &0x1ffffff ],
-					   &elfdata[elfSectH[i].sh_offset],
-					   size);
-			}
+						if ((elfSectH[i].sh_size + elfSectH[i].sh_offset) > elfsize) {
+							size = elfsize - elfSectH[i].sh_offset;
+						} else {
+							size = elfSectH[i].sh_size;
+						}
+						memcpy(&psM[ elfSectH[ i ].sh_addr &0x1ffffff ],
+							   &elfdata[elfSectH[i].sh_offset],
+							   size);
+					}
+		#ifdef ELF_LOG
+		         ELF_LOG( "\t*LOADED*" );
+		#endif
+				}*/
 #ifdef ELF_LOG
-         ELF_LOG( "\t*LOADED*" );
-#endif
-		}*/
-#ifdef ELF_LOG
-      ELF_LOG("\n");
+		ELF_LOG("\n");
 		ELF_LOG("type:      ");
 #endif
-		switch ( elfSectH[ i ].sh_type )
-      {
+		switch (elfSectH[ i ].sh_type) {
 			default:
 #ifdef ELF_LOG
-	         ELF_LOG("unknown %08x",elfSectH[i].sh_type);
+				ELF_LOG("unknown %08x", elfSectH[i].sh_type);
 #endif
 				break;
-
 			case 0x0:
 #ifdef ELF_LOG
-	         ELF_LOG("null");
+				ELF_LOG("null");
 #endif
 				break;
-
 			case 0x1:
 #ifdef ELF_LOG
-	         ELF_LOG("progbits");
+				ELF_LOG("progbits");
 #endif
 				break;
-
 			case 0x2:
 #ifdef ELF_LOG
-	         ELF_LOG("symtab");
+				ELF_LOG("symtab");
 #endif
 				break;
-
 			case 0x3:
 #ifdef ELF_LOG
-	         ELF_LOG("strtab");
+				ELF_LOG("strtab");
 #endif
 				break;
-
-         case 0x4:
+			case 0x4:
 #ifdef ELF_LOG
-	         ELF_LOG("rela");
+				ELF_LOG("rela");
 #endif
 				break;
-
 			case 0x8:
 #ifdef ELF_LOG
-	         ELF_LOG("no bits");
+				ELF_LOG("no bits");
 #endif
 				break;
-
-         case 0x9:
+			case 0x9:
 #ifdef ELF_LOG
-	         ELF_LOG("rel");
+				ELF_LOG("rel");
 #endif
 				break;
 		}
 #ifdef ELF_LOG
-      ELF_LOG("\n");
+		ELF_LOG("\n");
 		ELF_LOG("flags:     %08x\n", elfSectH[i].sh_flags);
 		ELF_LOG("addr:      %08x\n", elfSectH[i].sh_addr);
 		ELF_LOG("offset:    %08x\n", elfSectH[i].sh_offset);
@@ -362,62 +328,58 @@ int loadSectionHeaders() {
 		ELF_LOG("entsize:   %08x\n", elfSectH[i].sh_entsize);
 #endif
 		// dump symbol table
-
 		if (elfSectH[i].sh_type == 0x02) {
-			i_st = i; i_dt = elfSectH[i].sh_link;
+			i_st = i;
+			i_dt = elfSectH[i].sh_link;
 		}
-/*
-		if (elfSectH[i].sh_type == 0x01) {
-			int size = elfSectH[i].sh_size / 4;
-			u32 *ptr = (u32*)&psxM[(elfSectH[i].sh_addr + irx_addr) & 0x1fffff];
+		/*
+				if (elfSectH[i].sh_type == 0x01) {
+					int size = elfSectH[i].sh_size / 4;
+					u32 *ptr = (u32*)&psxM[(elfSectH[i].sh_addr + irx_addr) & 0x1fffff];
 
-			while (size) {
+					while (size) {
 
-				if (*ptr == 0x41e00000) { // import func
-					int ret = iopSetImportFunc(ptr+1);
-					size-= ret; ptr+= ret;
+						if (*ptr == 0x41e00000) { // import func
+							int ret = iopSetImportFunc(ptr+1);
+							size-= ret; ptr+= ret;
+						}
+
+						if (*ptr == 0x41c00000) { // export func
+							int ret = iopSetExportFunc(ptr+1);
+							size-= ret; ptr+= ret;
+						}
+
+						size--; ptr++;
+					}
 				}
+		*/
+		/*		if (!strcmp(".data", &sections_names[elfSectH[i].sh_name])) {
+					// seems so..
 
-				if (*ptr == 0x41c00000) { // export func
-					int ret = iopSetExportFunc(ptr+1);
-					size-= ret; ptr+= ret;
-				}
-
-				size--; ptr++;
-			}
-		}
-*/
-/*		if (!strcmp(".data", &sections_names[elfSectH[i].sh_name])) {
-			// seems so..
-
-			psxRegs.GPR.n.gp = 0x8000 + irx_addr + elfSectH[i].sh_addr;
-		}*/
+					psxRegs.GPR.n.gp = 0x8000 + irx_addr + elfSectH[i].sh_addr;
+				}*/
 	}
-
 	return 0;
 }
 
 
-u32 loadElfFile(char *filename, struct elfinfo *info) {
+u32 loadElfFile(char *filename, struct elfinfo *info)
+{
 	struct rominfo ri;
 	char str[256];
 	char str2[256];
 	int i;
-
 	__printf("loadElfFile: %s\n", filename);
-
 	if (romdirGetFile(filename, &ri) == NULL) {
 		__printf("file %s not found!!\n", filename);
 		return -1;
 	}
 	elfdata = (u8*)(0xbfc00000 + ri.fileOffset);
 	elfsize = ri.fileSize;
-
 	loadHeaders();
 	loadProgramHeaders();
 	loadSectionHeaders();
-
-//	__printf("loadElfFile: e_entry=%x\n", elfHeader->e_entry);
+	//	__printf("loadElfFile: e_entry=%x\n", elfHeader->e_entry);
 	return elfHeader->e_entry;
 }
 

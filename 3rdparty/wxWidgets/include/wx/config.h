@@ -28,4 +28,4 @@
 #endif
 
 #endif
-    // _WX_CONFIG_H_BASE_
+// _WX_CONFIG_H_BASE_

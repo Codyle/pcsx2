@@ -32,8 +32,7 @@
 
 extern int g_SkipFlushFrame;
 
-struct GSFrameInfo
-{
+struct GSFrameInfo {
 	u32  FBP;
 	u32  FPSM;
 	u32  FBMSK;
@@ -43,42 +42,42 @@ struct GSFrameInfo
 	bool TME;
 };
 
-typedef void (*GetSkipCount)(const GSFrameInfo& fi, int& skip);
+typedef void (*GetSkipCount)(const GSFrameInfo &fi, int &skip);
 
 extern GetSkipCount GetSkipCount_Handler;
 
-void GSC_Okami(const GSFrameInfo& fi, int& skip);
-void GSC_MetalGearSolid3(const GSFrameInfo& fi, int& skip);
-void GSC_DBZBT2(const GSFrameInfo& fi, int& skip);
-void GSC_DBZBT3(const GSFrameInfo& fi, int& skip);
-void GSC_SFEX3(const GSFrameInfo& fi, int& skip);
-void GSC_Bully(const GSFrameInfo& fi, int& skip);
-void GSC_BullyCC(const GSFrameInfo& fi, int& skip);
-void GSC_SoTC(const GSFrameInfo& fi, int& skip);
-void GSC_OnePieceGrandAdventure(const GSFrameInfo& fi, int& skip);
-void GSC_OnePieceGrandBattle(const GSFrameInfo& fi, int& skip);
-void GSC_ICO(const GSFrameInfo& fi, int& skip);
-void GSC_GT4(const GSFrameInfo& fi, int& skip);
-void GSC_WildArms4(const GSFrameInfo& fi, int& skip);
-void GSC_WildArms5(const GSFrameInfo& fi, int& skip);
-void GSC_Manhunt2(const GSFrameInfo& fi, int& skip);
-void GSC_CrashBandicootWoC(const GSFrameInfo& fi, int& skip);
-void GSC_ResidentEvil4(const GSFrameInfo& fi, int& skip);
-void GSC_Spartan(const GSFrameInfo& fi, int& skip);
-void GSC_AceCombat4(const GSFrameInfo& fi, int& skip);
-void GSC_Drakengard2(const GSFrameInfo& fi, int& skip);
-void GSC_Tekken5(const GSFrameInfo& fi, int& skip);
-void GSC_IkkiTousen(const GSFrameInfo& fi, int& skip);
-void GSC_GodOfWar(const GSFrameInfo& fi, int& skip);
-void GSC_GodOfWar2(const GSFrameInfo& fi, int& skip);
-void GSC_GiTS(const GSFrameInfo& fi, int& skip);
-void GSC_Onimusha3(const GSFrameInfo& fi, int& skip);
-void GSC_TalesOfAbyss(const GSFrameInfo& fi, int& skip);
-void GSC_SonicUnleashed(const GSFrameInfo& fi, int& skip);
-void GSC_Genji(const GSFrameInfo& fi, int& skip);
-void GSC_StarOcean3(const GSFrameInfo& fi, int& skip);
-void GSC_ValkyrieProfile2(const GSFrameInfo& fi, int& skip);
-void GSC_RadiataStories(const GSFrameInfo& fi, int& skip);
+void GSC_Okami(const GSFrameInfo &fi, int &skip);
+void GSC_MetalGearSolid3(const GSFrameInfo &fi, int &skip);
+void GSC_DBZBT2(const GSFrameInfo &fi, int &skip);
+void GSC_DBZBT3(const GSFrameInfo &fi, int &skip);
+void GSC_SFEX3(const GSFrameInfo &fi, int &skip);
+void GSC_Bully(const GSFrameInfo &fi, int &skip);
+void GSC_BullyCC(const GSFrameInfo &fi, int &skip);
+void GSC_SoTC(const GSFrameInfo &fi, int &skip);
+void GSC_OnePieceGrandAdventure(const GSFrameInfo &fi, int &skip);
+void GSC_OnePieceGrandBattle(const GSFrameInfo &fi, int &skip);
+void GSC_ICO(const GSFrameInfo &fi, int &skip);
+void GSC_GT4(const GSFrameInfo &fi, int &skip);
+void GSC_WildArms4(const GSFrameInfo &fi, int &skip);
+void GSC_WildArms5(const GSFrameInfo &fi, int &skip);
+void GSC_Manhunt2(const GSFrameInfo &fi, int &skip);
+void GSC_CrashBandicootWoC(const GSFrameInfo &fi, int &skip);
+void GSC_ResidentEvil4(const GSFrameInfo &fi, int &skip);
+void GSC_Spartan(const GSFrameInfo &fi, int &skip);
+void GSC_AceCombat4(const GSFrameInfo &fi, int &skip);
+void GSC_Drakengard2(const GSFrameInfo &fi, int &skip);
+void GSC_Tekken5(const GSFrameInfo &fi, int &skip);
+void GSC_IkkiTousen(const GSFrameInfo &fi, int &skip);
+void GSC_GodOfWar(const GSFrameInfo &fi, int &skip);
+void GSC_GodOfWar2(const GSFrameInfo &fi, int &skip);
+void GSC_GiTS(const GSFrameInfo &fi, int &skip);
+void GSC_Onimusha3(const GSFrameInfo &fi, int &skip);
+void GSC_TalesOfAbyss(const GSFrameInfo &fi, int &skip);
+void GSC_SonicUnleashed(const GSFrameInfo &fi, int &skip);
+void GSC_Genji(const GSFrameInfo &fi, int &skip);
+void GSC_StarOcean3(const GSFrameInfo &fi, int &skip);
+void GSC_ValkyrieProfile2(const GSFrameInfo &fi, int &skip);
+void GSC_RadiataStories(const GSFrameInfo &fi, int &skip);
 
-extern bool IsBadFrame(VB& curvb);
+extern bool IsBadFrame(VB &curvb);
 #endif

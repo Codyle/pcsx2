@@ -29,14 +29,14 @@ public:
 	//wxString	xlatedName;
 
 public:
-	LangPackEnumeration( wxLanguage langId );
+	LangPackEnumeration(wxLanguage langId);
 	LangPackEnumeration();
 };
 
 typedef std::vector<LangPackEnumeration> LangPackList;
 
-extern bool i18n_SetLanguage( wxLanguage wxLangId, const wxString& langCode=wxEmptyString );
-extern void i18n_EnumeratePackages( LangPackList& langs );
-extern bool i18n_IsLegacyLanguageId( wxLanguage lang );
+extern bool i18n_SetLanguage(wxLanguage wxLangId, const wxString &langCode = wxEmptyString);
+extern void i18n_EnumeratePackages(LangPackList &langs);
+extern bool i18n_IsLegacyLanguageId(wxLanguage lang);
 extern void i18n_SetLanguagePath();
 

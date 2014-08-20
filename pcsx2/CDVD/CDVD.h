@@ -26,9 +26,8 @@
 static __fi s32 msf_to_lsn(u8 *Time)
 {
 	u32 lsn;
-
 	lsn = Time[2];
-	lsn +=(Time[1] - 2) * 75;
+	lsn += (Time[1] - 2) * 75;
 	lsn += Time[0] * 75 * 60;
 	return lsn;
 }
@@ -45,7 +44,6 @@ static __fi s32 msf_to_lba(u8 m, u8 s, u8 f)
 static __fi void lsn_to_msf(u8* Time, s32 lsn)
 {
 	u8 m, s, f;
-
 	lsn += 150;
 	m = lsn / 4500; 		// minuten
 	lsn = lsn - m * 4500;	// minuten rest

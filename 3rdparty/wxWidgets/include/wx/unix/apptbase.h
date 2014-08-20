@@ -22,32 +22,32 @@ class wxPipe;
 class WXDLLEXPORT wxAppTraits : public wxAppTraitsBase
 {
 public:
-    // wxExecute() support methods
-    // ---------------------------
+	// wxExecute() support methods
+	// ---------------------------
 
-    // called before starting the child process and creates the pipe used for
-    // detecting the process termination asynchronously in GUI, does nothing in
-    // wxBase
-    //
-    // if it returns false, we should return from wxExecute() with an error
-    virtual bool CreateEndProcessPipe(wxExecuteData& execData) = 0;
+	// called before starting the child process and creates the pipe used for
+	// detecting the process termination asynchronously in GUI, does nothing in
+	// wxBase
+	//
+	// if it returns false, we should return from wxExecute() with an error
+	virtual bool CreateEndProcessPipe(wxExecuteData &execData) = 0;
 
-    // test if the given descriptor is the end of the pipe create by the
-    // function above
-    virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd) = 0;
+	// test if the given descriptor is the end of the pipe create by the
+	// function above
+	virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData &execData, int fd) = 0;
 
-    // ensure that the write end of the pipe is not closed by wxPipe dtor
-    virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData) = 0;
+	// ensure that the write end of the pipe is not closed by wxPipe dtor
+	virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData &execData) = 0;
 
-    // wait for the process termination, return whatever wxExecute() must
-    // return
-    virtual int WaitForChild(wxExecuteData& execData) = 0;
+	// wait for the process termination, return whatever wxExecute() must
+	// return
+	virtual int WaitForChild(wxExecuteData &execData) = 0;
 
 
-    // wxThread helpers
-    // ----------------
+	// wxThread helpers
+	// ----------------
 
-    // TODO
+	// TODO
 };
 
 #endif // _WX_UNIX_APPTBASE_H_

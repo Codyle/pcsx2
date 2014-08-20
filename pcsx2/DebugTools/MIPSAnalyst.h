@@ -28,45 +28,45 @@ class DebugInterface;
 
 namespace MIPSAnalyst
 {
-	struct AnalyzedFunction {
-		u32 start;
-		u32 end;
-		u64 hash;
-		u32 size;
-		bool isStraightLeaf;
-		bool hasHash;
-		bool usesVFPU;
-		char name[64];
-	};
+struct AnalyzedFunction {
+	u32 start;
+	u32 end;
+	u64 hash;
+	u32 size;
+	bool isStraightLeaf;
+	bool hasHash;
+	bool usesVFPU;
+	char name[64];
+};
 
-	void ScanForFunctions(u32 startAddr, u32 endAddr, bool insertSymbols);
+void ScanForFunctions(u32 startAddr, u32 endAddr, bool insertSymbols);
 
-	typedef struct {
-		DebugInterface* cpu;
-		u32 opcodeAddress;
-		u32 encodedOpcode;
-		
-		// shared between branches and conditional moves
-		bool isConditional;
-		bool conditionMet;
+typedef struct {
+	DebugInterface* cpu;
+	u32 opcodeAddress;
+	u32 encodedOpcode;
 
-		// branches
-		u32 branchTarget;
-		bool isSyscall;
-		bool isBranch;
-		bool isLinkedBranch;
-		bool isLikelyBranch;
-		bool isBranchToRegister;
-		int branchRegisterNum;
+	// shared between branches and conditional moves
+	bool isConditional;
+	bool conditionMet;
 
-		// data access
-		bool isDataAccess;
-		int dataSize;
-		u32 dataAddress;
+	// branches
+	u32 branchTarget;
+	bool isSyscall;
+	bool isBranch;
+	bool isLinkedBranch;
+	bool isLikelyBranch;
+	bool isBranchToRegister;
+	int branchRegisterNum;
 
-		bool hasRelevantAddress;
-		u32 releventAddress;
-	} MipsOpcodeInfo;
-	
-	MipsOpcodeInfo GetOpcodeInfo(DebugInterface* cpu, u32 address);
+	// data access
+	bool isDataAccess;
+	int dataSize;
+	u32 dataAddress;
+
+	bool hasRelevantAddress;
+	u32 releventAddress;
+} MipsOpcodeInfo;
+
+MipsOpcodeInfo GetOpcodeInfo(DebugInterface* cpu, u32 address);
 };

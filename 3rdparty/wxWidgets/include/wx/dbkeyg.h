@@ -20,22 +20,34 @@
 class GenericKey
 {
 public:
-    GenericKey(void *blk, size_t sz)    { clone(blk,sz); }
-    GenericKey(const GenericKey &ref)   { clone(ref.m_data,ref.m_sz); }
-    ~GenericKey()                       { free(m_data); }
+	GenericKey(void *blk, size_t sz)
+	{
+		clone(blk, sz);
+	}
+	GenericKey(const GenericKey &ref)
+	{
+		clone(ref.m_data, ref.m_sz);
+	}
+	~GenericKey()
+	{
+		free(m_data);
+	}
 
-    void *GetBlk(void) const { return m_data; }
+	void *GetBlk(void) const
+	{
+		return m_data;
+	}
 
 private:
-    void clone(void *blk, size_t sz)
-    {
-        m_data = malloc(sz);
-        memcpy(m_data,blk,sz);
-        m_sz = sz;
-    }
+	void clone(void *blk, size_t sz)
+	{
+		m_data = malloc(sz);
+		memcpy(m_data, blk, sz);
+		m_sz = sz;
+	}
 
-    void   *m_data;
-    size_t  m_sz;
+	void   *m_data;
+	size_t  m_sz;
 };
 
 #endif // _WX_DBGKEY_H_

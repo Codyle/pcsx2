@@ -78,7 +78,7 @@
 
 typedef struct {
 
-  u8 devicename[256];
+	u8 devicename[256];
 
 } CDVDconf;
 

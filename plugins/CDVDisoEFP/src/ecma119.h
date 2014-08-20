@@ -42,8 +42,7 @@
 #ifdef _WIN32
 #pragma pack(1)
 #endif /* _WIN32 */
-struct ECMA119ASCIITime
-{
+struct ECMA119ASCIITime {
 	char year[4];
 	char month[2];
 	char day[2];
@@ -58,8 +57,7 @@ struct ECMA119ASCIITime
 } __attribute__((packed));
 #endif /* _WIN32 */
 
-struct ECMA119DateTime
-{
+struct ECMA119DateTime {
 	unsigned char year; // 1900+year, that is.
 	unsigned char month;
 	unsigned char day;
@@ -73,8 +71,7 @@ struct ECMA119DateTime
 } __attribute__((packed));
 #endif /* _WIN32 */
 
-struct ECMA119DirectoryRecord
-{
+struct ECMA119DirectoryRecord {
 	unsigned char reclen; // Length of this record
 	unsigned char attlen; // Extended Attribute Record Length
 
@@ -95,8 +92,7 @@ struct ECMA119DirectoryRecord
 } __attribute__((packed));
 #endif /* _WIN32 */
 
-struct ECMA119RootDirectoryRecord
-{
+struct ECMA119RootDirectoryRecord {
 	unsigned char reclen; // Length of this record
 	unsigned char attlen; // Extended Attribute Record Length
 
@@ -115,8 +111,7 @@ struct ECMA119RootDirectoryRecord
 #else
 } __attribute__((packed));
 #endif /* _WIN32 */
-struct ECMA119VolumeID
-{
+struct ECMA119VolumeID {
 	unsigned char voltype;
 	// 0 = Boot Record
 	// 1 = Primary Volume Descriptor (PrimaryVolume below)
@@ -133,8 +128,7 @@ struct ECMA119VolumeID
 #else
 } __attribute__((packed));
 #endif /* _WIN32 */
-struct ECMA119PrimaryVolume
-{
+struct ECMA119PrimaryVolume {
 	struct ECMA119VolumeID id;
 	// id.voltype should be 1 (for this type of volume)
 	// id.version should be 1 (standard)

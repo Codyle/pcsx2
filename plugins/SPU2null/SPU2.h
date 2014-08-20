@@ -51,8 +51,7 @@ extern const u8 build;
 extern const u32 minor;
 extern char *libraryName;
 
-typedef struct
-{
+typedef struct {
 	s32 Log;
 } Config;
 
@@ -144,10 +143,10 @@ void SysMessage(char *fmt, ...);
 
 #define SPU2_GET32BIT(lo,hi) (((u32)(spu2Ru16(hi)&0x3f)<<16)|(u32)spu2Ru16(lo))
 #define SPU2_SET32BIT(value, lo, hi) { \
-    spu2Ru16(hi) = ((value)>>16)&0x3f; \
-    spu2Ru16(lo) = (value)&0xffff; \
-    } \
-
+		spu2Ru16(hi) = ((value)>>16)&0x3f; \
+		spu2Ru16(lo) = (value)&0xffff; \
+	} \
+	 
 #define C0_IRQA SPU2_GET32BIT(REG_C0_IRQA_LO, REG_C0_IRQA_HI)
 #define C1_IRQA SPU2_GET32BIT(REG_C1_IRQA_LO, REG_C1_IRQA_HI)
 
@@ -159,8 +158,7 @@ void SysMessage(char *fmt, ...);
 
 #define SPU_NUMBER_VOICES       48
 
-struct SPU_CONTROL_
-{
+struct SPU_CONTROL_ {
 	u16 spuon : 1;
 	u16 spuUnmute : 1;
 	u16 noiseFreq : 6;
@@ -174,25 +172,23 @@ struct SPU_CONTROL_
 };
 
 // the layout of each voice in wSpuRegs
-struct _SPU_VOICE
-{
-    union
-    {
-        struct {
-		u16 Vol : 14;
-		u16 Inverted : 1;
-		u16 Sweep0 : 1;
-        } vol;
-	struct {
-		u16 Vol : 7;
-		u16 res1 : 5;
-		u16 Inverted : 1;
-		u16 Decrease : 1;  // if 0, increase
-		u16 ExpSlope : 1;  // if 0, linear slope
-		u16 Sweep1 : 1;    // always one
-	} sweep;
-	u16 word;
-} left, right;
+struct _SPU_VOICE {
+	union {
+		struct {
+			u16 Vol : 14;
+			u16 Inverted : 1;
+			u16 Sweep0 : 1;
+		} vol;
+		struct {
+			u16 Vol : 7;
+			u16 res1 : 5;
+			u16 Inverted : 1;
+			u16 Decrease : 1;  // if 0, increase
+			u16 ExpSlope : 1;  // if 0, linear slope
+			u16 Sweep1 : 1;    // always one
+		} sweep;
+		u16 word;
+	} left, right;
 
 	u16 pitch : 14;        // 1000 - no pitch, 2000 - pitch + 1, etc
 	u16 res0 : 2;
@@ -215,8 +211,7 @@ struct _SPU_VOICE
 };
 
 // ADSR INFOS PER   CHANNEL
-struct ADSRInfoEx
-{
+struct ADSRInfoEx {
 	s32            State;
 	s32            AttackModeExp;
 	s32            AttackRate;
@@ -236,8 +231,7 @@ struct ADSRInfoEx
 #define NSPACKETS 4
 #define SPU_VOICE_STATE_SIZE (sizeof(VOICE_PROCESSED)-4*sizeof(void*))
 
-struct VOICE_PROCESSED
-{
+struct VOICE_PROCESSED {
 	VOICE_PROCESSED()
 	{
 		memset(this, 0, sizeof(VOICE_PROCESSED));
@@ -280,8 +274,7 @@ struct VOICE_PROCESSED
 	_SPU_VOICE* pvoice;
 };
 
-struct ADMA
-{
+struct ADMA {
 	u16 * MemAddr;
 	s32	  IntPointer;
 	s32 Index;

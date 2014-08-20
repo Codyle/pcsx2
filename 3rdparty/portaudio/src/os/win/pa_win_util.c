@@ -27,13 +27,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -42,7 +42,7 @@
 
  @brief Win32 implementation of platform-specific PaUtil support functions.
 */
- 
+
 #include <windows.h>
 #include <mmsystem.h> /* for timeGetTime() */
 
@@ -62,92 +62,80 @@ static int numAllocations_ = 0;
 #endif
 
 
-void *PaUtil_AllocateMemory( long size )
+void *PaUtil_AllocateMemory(long size)
 {
-    void *result = GlobalAlloc( GPTR, size );
-
+	void *result = GlobalAlloc(GPTR, size);
 #if PA_TRACK_MEMORY
-    if( result != NULL ) numAllocations_ += 1;
+	if (result != NULL) numAllocations_ += 1;
 #endif
-    return result;
+	return result;
 }
 
 
-void PaUtil_FreeMemory( void *block )
+void PaUtil_FreeMemory(void *block)
 {
-    if( block != NULL )
-    {
-        GlobalFree( block );
+	if (block != NULL) {
+		GlobalFree(block);
 #if PA_TRACK_MEMORY
-        numAllocations_ -= 1;
+		numAllocations_ -= 1;
 #endif
-
-    }
+	}
 }
 
 
-int PaUtil_CountCurrentlyAllocatedBlocks( void )
+int PaUtil_CountCurrentlyAllocatedBlocks(void)
 {
 #if PA_TRACK_MEMORY
-    return numAllocations_;
+	return numAllocations_;
 #else
-    return 0;
+	return 0;
 #endif
 }
 
 
-void Pa_Sleep( long msec )
+void Pa_Sleep(long msec)
 {
-    Sleep( msec );
+	Sleep(msec);
 }
 
 static int usePerformanceCounter_;
 static double secondsPerTick_;
 
-void PaUtil_InitializeClock( void )
+void PaUtil_InitializeClock(void)
 {
-    LARGE_INTEGER ticksPerSecond;
-
-    if( QueryPerformanceFrequency( &ticksPerSecond ) != 0 )
-    {
-        usePerformanceCounter_ = 1;
-        secondsPerTick_ = 1.0 / (double)ticksPerSecond.QuadPart;
-    }
-    else
-    {
-        usePerformanceCounter_ = 0;
-    }
+	LARGE_INTEGER ticksPerSecond;
+	if (QueryPerformanceFrequency(&ticksPerSecond) != 0) {
+		usePerformanceCounter_ = 1;
+		secondsPerTick_ = 1.0 / (double)ticksPerSecond.QuadPart;
+	} else
+		usePerformanceCounter_ = 0;
 }
 
 
-double PaUtil_GetTime( void )
+double PaUtil_GetTime(void)
 {
-    LARGE_INTEGER time;
+	LARGE_INTEGER time;
+	if (usePerformanceCounter_) {
+		/*
+		    Note: QueryPerformanceCounter has a known issue where it can skip forward
+		    by a few seconds (!) due to a hardware bug on some PCI-ISA bridge hardware.
+		    This is documented here:
+		    http://support.microsoft.com/default.aspx?scid=KB;EN-US;Q274323&
 
-    if( usePerformanceCounter_ )
-    {
-        /*
-            Note: QueryPerformanceCounter has a known issue where it can skip forward
-            by a few seconds (!) due to a hardware bug on some PCI-ISA bridge hardware.
-            This is documented here:
-            http://support.microsoft.com/default.aspx?scid=KB;EN-US;Q274323&
+		    The work-arounds are not very paletable and involve querying GetTickCount
+		    at every time step.
 
-            The work-arounds are not very paletable and involve querying GetTickCount 
-            at every time step.
+		    Using rdtsc is not a good option on multi-core systems.
 
-            Using rdtsc is not a good option on multi-core systems.
-
-            For now we just use QueryPerformanceCounter(). It's good, most of the time.
-        */
-        QueryPerformanceCounter( &time );
-        return time.QuadPart * secondsPerTick_;
-    }
-    else
-    {
-#ifndef UNDER_CE    	
-        return timeGetTime() * .001;
+		    For now we just use QueryPerformanceCounter(). It's good, most of the time.
+		*/
+		QueryPerformanceCounter(&time);
+		return time.QuadPart * secondsPerTick_;
+	} else {
+#ifndef UNDER_CE
+		return timeGetTime() * .001;
 #else
-        return GetTickCount() * .001;
-#endif                
-    }
+		return GetTickCount() * .001;
+#endif
+	}
 }

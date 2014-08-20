@@ -37,70 +37,58 @@
 #include "ptw32pch.h"
 
 INLINE void
-pthread_testcancel (void)
-     /*
-      * ------------------------------------------------------
-      * DOCPUBLIC
-      *      This function creates a deferred cancellation point
-      *      in the calling thread. The call has no effect if the
-      *      current cancelability state is
-      *              PTHREAD_CANCEL_DISABLE
-      *
-      * PARAMETERS
-      *      N/A
-      *
-      *
-      * DESCRIPTION
-      *      This function creates a deferred cancellation point
-      *      in the calling thread. The call has no effect if the
-      *      current cancelability state is
-      *              PTHREAD_CANCEL_DISABLE
-      *
-      *      NOTES:
-      *      1)      Cancellation is asynchronous. Use pthread_join
-      *              to wait for termination of thread if necessary
-      *
-      * RESULTS
-      *              N/A
-      *
-      * ------------------------------------------------------
-      */
+pthread_testcancel(void)
+/*
+ * ------------------------------------------------------
+ * DOCPUBLIC
+ *      This function creates a deferred cancellation point
+ *      in the calling thread. The call has no effect if the
+ *      current cancelability state is
+ *              PTHREAD_CANCEL_DISABLE
+ *
+ * PARAMETERS
+ *      N/A
+ *
+ *
+ * DESCRIPTION
+ *      This function creates a deferred cancellation point
+ *      in the calling thread. The call has no effect if the
+ *      current cancelability state is
+ *              PTHREAD_CANCEL_DISABLE
+ *
+ *      NOTES:
+ *      1)      Cancellation is asynchronous. Use pthread_join
+ *              to wait for termination of thread if necessary
+ *
+ * RESULTS
+ *              N/A
+ *
+ * ------------------------------------------------------
+ */
 {
-  ptw32_thread_t * sp;
-  if( ptw32_testcancel_enable == 0 ) return;
-
-  // Don't use pthread_self here, to avoid unnecessary object query or creation.
-  // If ptw32_selfThread is NULL, then it's a sure bet no one's tried to cancel
-  // this thread, since that would have spawned a selfThread object! -- air
-
-	sp = (ptw32_thread_t *) pthread_getspecific (ptw32_selfThreadKey);
-
-  if (sp == NULL)
-    {
-      return;
-    }
-
-  /*
-   * Pthread_cancel() will have set sp->state to PThreadStateCancelPending
-   * and set an event, so no need to enter kernel space if
-   * sp->state != PThreadStateCancelPending - that only slows us down.
-   */
-  if (sp->state != PThreadStateCancelPending)
-    {
-      return;
-    }
-
-  (void) pthread_mutex_lock (&sp->cancelLock);
-
-  if (sp->cancelState != PTHREAD_CANCEL_DISABLE)
-    {
-      ResetEvent(sp->cancelEvent);
-      sp->state = PThreadStateCanceling;
-      (void) pthread_mutex_unlock (&sp->cancelLock);
-      sp->cancelState = PTHREAD_CANCEL_DISABLE;
-      (void) pthread_mutex_unlock (&sp->cancelLock);
-      ptw32_throw (PTW32_EPS_CANCEL);
-    }
-
-  (void) pthread_mutex_unlock (&sp->cancelLock);
+	ptw32_thread_t * sp;
+	if (ptw32_testcancel_enable == 0) return;
+	// Don't use pthread_self here, to avoid unnecessary object query or creation.
+	// If ptw32_selfThread is NULL, then it's a sure bet no one's tried to cancel
+	// this thread, since that would have spawned a selfThread object! -- air
+	sp = (ptw32_thread_t *) pthread_getspecific(ptw32_selfThreadKey);
+	if (sp == NULL)
+		return;
+	/*
+	 * Pthread_cancel() will have set sp->state to PThreadStateCancelPending
+	 * and set an event, so no need to enter kernel space if
+	 * sp->state != PThreadStateCancelPending - that only slows us down.
+	 */
+	if (sp->state != PThreadStateCancelPending)
+		return;
+	(void) pthread_mutex_lock(&sp->cancelLock);
+	if (sp->cancelState != PTHREAD_CANCEL_DISABLE) {
+		ResetEvent(sp->cancelEvent);
+		sp->state = PThreadStateCanceling;
+		(void) pthread_mutex_unlock(&sp->cancelLock);
+		sp->cancelState = PTHREAD_CANCEL_DISABLE;
+		(void) pthread_mutex_unlock(&sp->cancelLock);
+		ptw32_throw(PTW32_EPS_CANCEL);
+	}
+	(void) pthread_mutex_unlock(&sp->cancelLock);
 }				/* pthread_testcancel */

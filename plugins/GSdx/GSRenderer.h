@@ -61,15 +61,24 @@ public:
 	GSRenderer();
 	virtual ~GSRenderer();
 
-	virtual bool CreateWnd(const string& title, int w, int h);
+	virtual bool CreateWnd(const string &title, int w, int h);
 	virtual bool CreateDevice(GSDevice* dev);
 	virtual void ResetDevice();
 	virtual void VSync(int field);
-	virtual bool MakeSnapshot(const string& path);
+	virtual bool MakeSnapshot(const string &path);
 	virtual void KeyEvent(GSKeyEventData* e);
-	virtual bool CanUpscale() {return false;}
-	virtual int GetUpscaleMultiplier() {return 1;}
-	void SetAspectRatio(int aspect) {m_aspectratio = aspect;}
+	virtual bool CanUpscale()
+	{
+		return false;
+	}
+	virtual int GetUpscaleMultiplier()
+	{
+		return 1;
+	}
+	void SetAspectRatio(int aspect)
+	{
+		m_aspectratio = aspect;
+	}
 	void SetVSync(bool enabled);
 	void SetFrameLimit(bool limit);
 	virtual void SetExclusive(bool isExcl) {}

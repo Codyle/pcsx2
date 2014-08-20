@@ -22,12 +22,12 @@
 //  EventSource< template EvtType >
 // --------------------------------------------------------------------------------------
 
-template< typename ListenerType >
+template<typename ListenerType>
 class EventSource
 {
 public:
 	typedef typename ListenerType::EvtParams		EvtParams;
-	typedef typename std::list< ListenerType* >		ListenerList;
+	typedef typename std::list<ListenerType*>		ListenerList;
 	typedef typename ListenerList::iterator			ListenerIterator;
 
 protected:
@@ -51,27 +51,27 @@ public:
 
 	virtual ~EventSource() throw() {}
 
-	virtual ListenerIterator Add( ListenerType& listener );
-	virtual void Remove( ListenerType& listener );
-	virtual void Remove( const ListenerIterator& listenerHandle );
+	virtual ListenerIterator Add(ListenerType &listener);
+	virtual void Remove(ListenerType &listener);
+	virtual void Remove(const ListenerIterator &listenerHandle);
 
-	void Add( ListenerType* listener )
+	void Add(ListenerType* listener)
 	{
-		if( listener == NULL ) return;
-		Add( *listener );
+		if (listener == NULL) return;
+		Add(*listener);
 	}
 
-	void Remove( ListenerType* listener )
+	void Remove(ListenerType* listener)
 	{
-		if( listener == NULL ) return;
-		Remove( *listener );
+		if (listener == NULL) return;
+		Remove(*listener);
 	}
 
-	void Dispatch( const EvtParams& params );
+	void Dispatch(const EvtParams &params);
 
 protected:
-	virtual ListenerIterator _AddFast_without_lock( ListenerType& listener );
-	virtual void _DispatchRaw( ListenerIterator iter, const ListenerIterator& iend, const EvtParams& params );
+	virtual ListenerIterator _AddFast_without_lock(ListenerType &listener);
+	virtual void _DispatchRaw(ListenerIterator iter, const ListenerIterator &iend, const EvtParams &params);
 };
 
 // --------------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ protected:
 // This class is used as a base interface for EventListeners.  It allows the listeners to do
 // customized dispatching of several event types into "user friendly" function overrides.
 //
-template< typename EvtParams >
+template<typename EvtParams>
 class IEventDispatcher
 {
 protected:
@@ -88,5 +88,5 @@ protected:
 
 public:
 	virtual ~IEventDispatcher() throw() {}
-	virtual void DispatchEvent( const EvtParams& params )=0;
+	virtual void DispatchEvent(const EvtParams &params) = 0;
 };

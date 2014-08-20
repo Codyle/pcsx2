@@ -16,22 +16,21 @@
 #pragma once
 #include "Vif.h"
 
-enum VURegFlags
-{
-    REG_STATUS_FLAG	= 16,
-    REG_MAC_FLAG	= 17,
-    REG_CLIP_FLAG	= 18,
-    REG_ACC_FLAG	= 19, // dummy flag that indicates that VFACC is written/read (nothing to do with VI[19])
-    REG_R			= 20,
-    REG_I			= 21,
-    REG_Q			= 22,
-    REG_P           = 23, // only exists in micromode
-    REG_VF0_FLAG	= 24, // dummy flag that indicates VF0 is read (nothing to do with VI[24])
-    REG_TPC			= 26,
-    REG_CMSAR0		= 27,
-    REG_FBRST		= 28,
-    REG_VPU_STAT	= 29,
-    REG_CMSAR1		= 31
+enum VURegFlags {
+	REG_STATUS_FLAG	= 16,
+	REG_MAC_FLAG	= 17,
+	REG_CLIP_FLAG	= 18,
+	REG_ACC_FLAG	= 19, // dummy flag that indicates that VFACC is written/read (nothing to do with VI[19])
+	REG_R			= 20,
+	REG_I			= 21,
+	REG_Q			= 22,
+	REG_P           = 23, // only exists in micromode
+	REG_VF0_FLAG	= 24, // dummy flag that indicates VF0 is read (nothing to do with VI[24])
+	REG_TPC			= 26,
+	REG_CMSAR0		= 27,
+	REG_FBRST		= 28,
+	REG_VPU_STAT	= 29,
+	REG_CMSAR1		= 31
 };
 
 //interpreter hacks, WIP
@@ -46,10 +45,10 @@ enum VUStatus {
 
 union VECTOR {
 	struct {
-		float x,y,z,w;
+		float x, y, z, w;
 	} f;
 	struct {
-		u32 x,y,z,w;
+		u32 x, y, z, w;
 	} i;
 
 	float F[4];
@@ -77,7 +76,7 @@ struct REG_VI {
 		u8    UC[4];
 	};
 	u32 padding[3]; // needs padding to make them 128bit; VU0 maps VU1's VI regs as 128bits to addr 0x4xx0 in
-					// VU0 mem, with only lower 16 bits valid, and the upper 112bits are hardwired to 0 (cottonvibes)
+	// VU0 mem, with only lower 16 bits valid, and the upper 112bits are hardwired to 0 (cottonvibes)
 };
 
 //#define VUFLAG_BREAKONMFLAG		0x00000001
@@ -172,33 +171,38 @@ struct __aligned16 VURegs {
 	bool IsVU1() const;
 	bool IsVU0() const;
 
-	VIFregisters& GetVifRegs() const
+	VIFregisters &GetVifRegs() const
 	{
 		return IsVU1() ? vif1Regs : vif0Regs;
 	}
 };
 
-enum VUPipeState
-{
-    VUPIPE_NONE = 0,
-    VUPIPE_FMAC,
-    VUPIPE_FDIV,
-    VUPIPE_EFU,
-    VUPIPE_IALU,
-    VUPIPE_BRANCH,
-    VUPIPE_XGKICK
+enum VUPipeState {
+	VUPIPE_NONE = 0,
+	VUPIPE_FMAC,
+	VUPIPE_FDIV,
+	VUPIPE_EFU,
+	VUPIPE_IALU,
+	VUPIPE_BRANCH,
+	VUPIPE_XGKICK
 };
 
 extern __aligned16 VURegs vuRegs[2];
 
 // Obsolete(?)  -- I think I'd rather use vu0Regs/vu1Regs or actually have these explicit to any
 // CPP file that needs them only. --air
-static VURegs& VU0 = vuRegs[0];
-static VURegs& VU1 = vuRegs[1];
+static VURegs &VU0 = vuRegs[0];
+static VURegs &VU1 = vuRegs[1];
 
 // Do not use __fi here because it fires 'multiple definition' error in GCC
-inline bool VURegs::IsVU1() const  { return this == &vuRegs[1]; }
-inline bool VURegs::IsVU0() const  { return this == &vuRegs[0]; }
+inline bool VURegs::IsVU1() const
+{
+	return this == &vuRegs[1];
+}
+inline bool VURegs::IsVU0() const
+{
+	return this == &vuRegs[0];
+}
 
 extern u32* GET_VU_MEM(VURegs* VU, u32 addr);
 

@@ -71,28 +71,28 @@
  * Macros for sceCdGetDiskType()	//comments translated from japanese;)
  */
 #define SCECdIllgalMedia 	0xff
-	/* ILIMEDIA (Illegal Media)
-             A non-PS / non-PS2 Disc. */
+/* ILIMEDIA (Illegal Media)
+     A non-PS / non-PS2 Disc. */
 #define SCECdDVDV		0xfe
-	/* DVDV (DVD Video)
-            A non-PS / non-PS2 Disc, but a DVD Video Disc */
+/* DVDV (DVD Video)
+    A non-PS / non-PS2 Disc, but a DVD Video Disc */
 #define SCECdCDDA		0xfd
-	/* CDDA (CD DA)
-            A non-PS / non-PS2 Disc that include a DA track */
+/* CDDA (CD DA)
+    A non-PS / non-PS2 Disc that include a DA track */
 #define SCECdPS2DVD		0x14
-	/* PS2DVD  PS2 consumer DVD. */
+/* PS2DVD  PS2 consumer DVD. */
 #define SCECdPS2CDDA		0x13
-	/* PS2CDDA PS2 consumer CD that includes a DA track */
+/* PS2CDDA PS2 consumer CD that includes a DA track */
 #define SCECdPS2CD		0x12
-	/* PS2CD   PS2 consumer CD that does not include a DA track */
+/* PS2CD   PS2 consumer CD that does not include a DA track */
 #define SCECdPSCDDA 		0x11
-	/* PSCDDA  PS CD that includes a DA track */
+/* PSCDDA  PS CD that includes a DA track */
 #define SCECdPSCD		0x10
-	/* PSCD    PS CD that does not include a DA track */
+/* PSCD    PS CD that does not include a DA track */
 #define SCECdDETCT		0x01
-	/* DETCT (Detecting) Disc distinction action */
+/* DETCT (Detecting) Disc distinction action */
 #define SCECdNODISC 		0x00
-	/* NODISC (No disc) No disc entered */
+/* NODISC (No disc) No disc entered */
 
 /*
  *      Media mode
@@ -116,11 +116,11 @@ typedef struct {
 	u32 size; 			// File size (in bytes)
 	char name[16]; 		// Filename
 	u8 date[8]; 		// 1th: Seconds
-						// 2th: Minutes
-						// 3th: Hours
-						// 4th: Date
-						// 5th: Month
-						// 6th 7th: Year (4 digits)
+	// 2th: Minutes
+	// 3th: Hours
+	// 4th: Date
+	// 5th: Month
+	// 6th 7th: Year (4 digits)
 } CdlFILE;
 
 typedef struct {
@@ -133,10 +133,10 @@ typedef struct {
 typedef struct {
 	u8 trycount; 		// Read try count (No. of error retries + 1) (0 - 255)
 	u8 spindlctrl; 		// SCECdSpinStm: Recommended stream rotation speed.
-						// SCECdSpinNom: Starts reading data at maximum rotational velocity and if a read error occurs, the rotational velocity is reduced.
+	// SCECdSpinNom: Starts reading data at maximum rotational velocity and if a read error occurs, the rotational velocity is reduced.
 	u8 datapattern; 	// SCECdSecS2048: Data size 2048 bytes
-						// SCECdSecS2328: 2328 bytes
-						// SCECdSecS2340: 2340 bytes
+	// SCECdSecS2328: 2328 bytes
+	// SCECdSecS2340: 2340 bytes
 	u8 pad; 			// Padding data produced by alignment.
 } CdRMode;
 
@@ -144,13 +144,12 @@ typedef struct {
 #pragma pack(1)
 #endif
 
-struct TocEntry
-{
+struct TocEntry {
 	u32	fileLBA;
 	u32 fileSize;
 	u8	fileProperties;
 	u8	padding1[3];
-	u8	filename[128+1];
+	u8	filename[128 + 1];
 	u8	date[7];
 #if defined(__WIN32__)
 };

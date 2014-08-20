@@ -15,27 +15,26 @@
 
 #pragma once
 
-namespace x86Emitter {
+namespace x86Emitter
+{
 
 // --------------------------------------------------------------------------------------
 //  xImplSimd_Shuffle
 // --------------------------------------------------------------------------------------
-struct xImplSimd_Shuffle
-{
-	inline void _selector_assertion_check( u8 selector ) const;
+struct xImplSimd_Shuffle {
+	inline void _selector_assertion_check(u8 selector) const;
 
-	void PS( const xRegisterSSE& to, const xRegisterSSE& from, u8 selector ) const;
-	void PS( const xRegisterSSE& to, const xIndirectVoid& from, u8 selector ) const;
+	void PS(const xRegisterSSE &to, const xRegisterSSE &from, u8 selector) const;
+	void PS(const xRegisterSSE &to, const xIndirectVoid &from, u8 selector) const;
 
-	void PD( const xRegisterSSE& to, const xRegisterSSE& from, u8 selector ) const;
-	void PD( const xRegisterSSE& to, const xIndirectVoid& from, u8 selector ) const;
+	void PD(const xRegisterSSE &to, const xRegisterSSE &from, u8 selector) const;
+	void PD(const xRegisterSSE &to, const xIndirectVoid &from, u8 selector) const;
 };
 
 // --------------------------------------------------------------------------------------
 //  xImplSimd_PShuffle
 // --------------------------------------------------------------------------------------
-struct xImplSimd_PShuffle
-{
+struct xImplSimd_PShuffle {
 	// Copies words from src and inserts them into dest at word locations selected with
 	// the order operand (8 bit immediate).
 	const xImplSimd_DestRegImmMMX	W;
@@ -67,28 +66,52 @@ struct xImplSimd_PShuffle
 	// below is my test bed for a new system, free of subclasses.  Was supposed to improve intellisense
 	// but it doesn't (makes it worse).  Will try again in MSVC 2010. --air
 
-	#if 0
+#if 0
 	// Copies words from src and inserts them into dest at word locations selected with
 	// the order operand (8 bit immediate).
-	void W( const xRegisterMMX& to, const xRegisterMMX& from, u8 imm ) const	{ xOpWrite0F( 0x70, to, from, imm ); }
-	void W( const xRegisterMMX& to, const xIndirectVoid& from, u8 imm ) const		{ xOpWrite0F( 0x70, to, from, imm ); }
+	void W(const xRegisterMMX &to, const xRegisterMMX &from, u8 imm) const
+	{
+		xOpWrite0F(0x70, to, from, imm);
+	}
+	void W(const xRegisterMMX &to, const xIndirectVoid &from, u8 imm) const
+	{
+		xOpWrite0F(0x70, to, from, imm);
+	}
 
 	// Copies doublewords from src and inserts them into dest at dword locations selected
 	// with the order operand (8 bit immediate).
-	void D( const xRegisterSSE& to, const xRegisterSSE& from, u8 imm ) const	{ xOpWrite0F( 0x66, 0x70, to, from, imm ); }
-	void D( const xRegisterSSE& to, const xIndirectVoid& from, u8 imm ) const		{ xOpWrite0F( 0x66, 0x70, to, from, imm ); }
+	void D(const xRegisterSSE &to, const xRegisterSSE &from, u8 imm) const
+	{
+		xOpWrite0F(0x66, 0x70, to, from, imm);
+	}
+	void D(const xRegisterSSE &to, const xIndirectVoid &from, u8 imm) const
+	{
+		xOpWrite0F(0x66, 0x70, to, from, imm);
+	}
 
 	// Copies words from the low quadword of src and inserts them into the low quadword
 	// of dest at word locations selected with the order operand (8 bit immediate).
 	// The high quadword of src is copied to the high quadword of dest.
-	void LW( const xRegisterSSE& to, const xRegisterSSE& from, u8 imm ) const	{ xOpWrite0F( 0xf2, 0x70, to, from, imm ); }
-	void LW( const xRegisterSSE& to, const xIndirectVoid& from, u8 imm ) const		{ xOpWrite0F( 0xf2, 0x70, to, from, imm ); }
+	void LW(const xRegisterSSE &to, const xRegisterSSE &from, u8 imm) const
+	{
+		xOpWrite0F(0xf2, 0x70, to, from, imm);
+	}
+	void LW(const xRegisterSSE &to, const xIndirectVoid &from, u8 imm) const
+	{
+		xOpWrite0F(0xf2, 0x70, to, from, imm);
+	}
 
 	// Copies words from the high quadword of src and inserts them into the high quadword
 	// of dest at word locations selected with the order operand (8 bit immediate).
 	// The low quadword of src is copied to the low quadword of dest.
-	void HW( const xRegisterSSE& to, const xRegisterSSE& from, u8 imm ) const	{ xOpWrite0F( 0xf3, 0x70, to, from, imm ); }
-	void HW( const xRegisterSSE& to, const xIndirectVoid& from, u8 imm ) const		{ xOpWrite0F( 0xf3, 0x70, to, from, imm ); }
+	void HW(const xRegisterSSE &to, const xRegisterSSE &from, u8 imm) const
+	{
+		xOpWrite0F(0xf3, 0x70, to, from, imm);
+	}
+	void HW(const xRegisterSSE &to, const xIndirectVoid &from, u8 imm) const
+	{
+		xOpWrite0F(0xf3, 0x70, to, from, imm);
+	}
 
 	// [sSSE-3] Performs in-place shuffles of bytes in dest according to the shuffle
 	// control mask in src.  If the most significant bit (bit[7]) of each byte of the
@@ -98,18 +121,29 @@ struct xImplSimd_PShuffle
 	// operation) or 3 bits (64-bit operation) of the shuffle control byte.
 	//
 	// Operands can be MMX or XMM registers.
-	void B( const xRegisterSSE& to, const xRegisterSSE& from ) const	{ OpWriteSSE( 0x66, 0x0038 ); }
-	void B( const xRegisterSSE& to, const xIndirectVoid& from ) const		{ OpWriteSSE( 0x66, 0x0038 ); }
-	void B( const xRegisterMMX& to, const xRegisterMMX& from ) const	{ OpWriteSSE( 0x00, 0x0038 ); }
-	void B( const xRegisterMMX& to, const xIndirectVoid& from ) const		{ OpWriteSSE( 0x00, 0x0038 ); }
-	#endif
+	void B(const xRegisterSSE &to, const xRegisterSSE &from) const
+	{
+		OpWriteSSE(0x66, 0x0038);
+	}
+	void B(const xRegisterSSE &to, const xIndirectVoid &from) const
+	{
+		OpWriteSSE(0x66, 0x0038);
+	}
+	void B(const xRegisterMMX &to, const xRegisterMMX &from) const
+	{
+		OpWriteSSE(0x00, 0x0038);
+	}
+	void B(const xRegisterMMX &to, const xIndirectVoid &from) const
+	{
+		OpWriteSSE(0x00, 0x0038);
+	}
+#endif
 };
 
 // --------------------------------------------------------------------------------------
 //  SimdImpl_PUnpack
 // --------------------------------------------------------------------------------------
-struct SimdImpl_PUnpack
-{
+struct SimdImpl_PUnpack {
 	// Unpack and interleave low-order bytes from src and dest into dest.
 	const xImplSimd_DestRegEither	LBW;
 	// Unpack and interleave low-order words from src and dest into dest.
@@ -134,8 +168,7 @@ struct SimdImpl_PUnpack
 // --------------------------------------------------------------------------------------
 // Pack with Signed or Unsigned Saturation
 //
-struct SimdImpl_Pack
-{
+struct SimdImpl_Pack {
 	// Converts packed signed word integers from src and dest into packed signed
 	// byte integers in dest, using signed saturation.
 	const xImplSimd_DestRegEither	SSWB;
@@ -156,8 +189,7 @@ struct SimdImpl_Pack
 // --------------------------------------------------------------------------------------
 //  SimdImpl_Unpack
 // --------------------------------------------------------------------------------------
-struct xImplSimd_Unpack
-{
+struct xImplSimd_Unpack {
 	// Unpacks the high doubleword [single-precision] values from src and dest into
 	// dest, such that the result of dest looks like this:
 	//    dest[0] <- dest[2]
@@ -193,15 +225,14 @@ struct xImplSimd_Unpack
 };
 
 
-struct xImplSimd_InsertExtractHelper
-{
+struct xImplSimd_InsertExtractHelper {
 	u16		Opcode;
 
 	// [SSE-4.1] Allowed with SSE registers only (MMX regs are invalid)
-	void operator()( const xRegisterSSE& to, const xRegister32& from, u8 imm8 ) const;
+	void operator()(const xRegisterSSE &to, const xRegister32 &from, u8 imm8) const;
 
 	// [SSE-4.1] Allowed with SSE registers only (MMX regs are invalid)
-	void operator()( const xRegisterSSE& to, const xIndirectVoid& from, u8 imm8 ) const;
+	void operator()(const xRegisterSSE &to, const xIndirectVoid &from, u8 imm8) const;
 };
 
 // --------------------------------------------------------------------------------------
@@ -209,13 +240,12 @@ struct xImplSimd_InsertExtractHelper
 // --------------------------------------------------------------------------------------
 // PINSRW/B/D [all but Word form are SSE4.1 only!]
 //
-struct xImplSimd_PInsert
-{
-	void W( const xRegisterSSE& to, const xRegister32& from, u8 imm8 ) const;
-	void W( const xRegisterSSE& to, const xIndirectVoid& from, u8 imm8 ) const;
+struct xImplSimd_PInsert {
+	void W(const xRegisterSSE &to, const xRegister32 &from, u8 imm8) const;
+	void W(const xRegisterSSE &to, const xIndirectVoid &from, u8 imm8) const;
 
-	void W( const xRegisterMMX& to, const xRegister32& from, u8 imm8 ) const;
-	void W( const xRegisterMMX& to, const xIndirectVoid& from, u8 imm8 ) const;
+	void W(const xRegisterMMX &to, const xRegister32 &from, u8 imm8) const;
+	void W(const xRegisterMMX &to, const xIndirectVoid &from, u8 imm8) const;
 
 	// [SSE-4.1] Allowed with SSE registers only (MMX regs are invalid)
 	xImplSimd_InsertExtractHelper	B;
@@ -230,17 +260,16 @@ struct xImplSimd_PInsert
 //
 // Note: Word form's indirect memory form is only available in SSE4.1.
 //
-struct SimdImpl_PExtract
-{
+struct SimdImpl_PExtract {
 	// Copies the word element specified by imm8 from src to dest.  The upper bits
 	// of dest are zero-extended (cleared).  This can be used to extract any single packed
 	// word value from src into an x86 32 bit register.
 	//
 	// [SSE-4.1] Note: Indirect memory forms of this instruction are an SSE-4.1 extension!
 	//
-	void W( const xRegister32& to, const xRegisterSSE& from, u8 imm8 ) const;
-	void W( const xRegister32& to, const xRegisterMMX& from, u8 imm8 ) const;
-	void W( const xIndirectVoid& dest, const xRegisterSSE& from, u8 imm8 ) const;
+	void W(const xRegister32 &to, const xRegisterSSE &from, u8 imm8) const;
+	void W(const xRegister32 &to, const xRegisterMMX &from, u8 imm8) const;
+	void W(const xIndirectVoid &dest, const xRegisterSSE &from, u8 imm8) const;
 
 	// [SSE-4.1] Copies the byte element specified by imm8 from src to dest.  The upper bits
 	// of dest are zero-extended (cleared).  This can be used to extract any single packed

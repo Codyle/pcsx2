@@ -35,13 +35,14 @@
 
 
 const char *cfgname[] = { \
-  "./cfg/cfgCDVDlinuz", \
-  "../cfg/cfgCDVDlinuz", \
-  "./plugins/cfgCDVDlinuz", \
-  "../plugins/cfgCDVDlinuz", \
-  "./cfgCDVDlinuz", \
-  "../cfgCDVDlinuz", \
-  NULL };
+                          "./cfg/cfgCDVDlinuz", \
+                          "../cfg/cfgCDVDlinuz", \
+                          "./plugins/cfgCDVDlinuz", \
+                          "../plugins/cfgCDVDlinuz", \
+                          "./cfgCDVDlinuz", \
+                          "../cfgCDVDlinuz", \
+                          NULL
+                        };
 
 const char *confnames[] = { "Device", NULL };
 const u8 defaultdevice[] = DEFAULT_DEVICE;
@@ -55,130 +56,115 @@ char conffilename[256];
 CDVDconf conf;
 
 
-void ExecCfg(char *arg) {
-  int nameptr;
-  struct stat filestat;
-  char templine[256];
-
+void ExecCfg(char *arg)
+{
+	int nameptr;
+	struct stat filestat;
+	char templine[256];
 #ifdef VERBOSE_FUNCTION_CONF
-  PrintLog("CDVDiso interface: ExecCfg(%s)", arg);
+	PrintLog("CDVDiso interface: ExecCfg(%s)", arg);
 #endif /* VERBOSE FUNCTION_CONF */
-  errno = 0;
-  nameptr = 0;
-  while((cfgname[nameptr] != NULL) &&
-        (stat(cfgname[nameptr], &filestat) == -1))  nameptr++;
-  errno = 0;
-
-  if(cfgname[nameptr] == NULL) {
+	errno = 0;
+	nameptr = 0;
+	while ((cfgname[nameptr] != NULL) &&
+	       (stat(cfgname[nameptr], &filestat) == -1))  nameptr++;
+	errno = 0;
+	if (cfgname[nameptr] == NULL) {
 #ifdef VERBOSE_FUNCTION_CONF
-      PrintLog("CDVDiso interface:   Couldn't find configuration program!");
+		PrintLog("CDVDiso interface:   Couldn't find configuration program!");
 #endif /* VERBOSE_FUNCTION_CONF */
-    return;
-  } // ENDIF- Did not find the executable?
-
-  sprintf(templine, "%s %s", cfgname[nameptr], arg);
-  system(templine);
+		return;
+	} // ENDIF- Did not find the executable?
+	sprintf(templine, "%s %s", cfgname[nameptr], arg);
+	system(templine);
 } // END ExecCfg()
 
 
-void InitConf() {
-  int i;
-  int pos;
-  char *envptr;
-
+void InitConf()
+{
+	int i;
+	int pos;
+	char *envptr;
 #ifdef VERBOSE_FUNCTION_CONF
-  PrintLog("CDVD config: InitConf()");
+	PrintLog("CDVD config: InitConf()");
 #endif /* VERBOSE_FUNCTION_CONF */
-
-  i = 0;
-  while((i < 255) && defaultdevice[i] != 0) {
-    conf.devicename[i] = defaultdevice[i];
-    i++;
-  } // ENDWHILE- copying the default CD/DVD name in
-  conf.devicename[i] = 0; // 0-terminate the device name
-
-  // Locating directory and file positions
-  pos = 0;
-  envptr = getenv("HOME");
-  if(envptr == NULL) {
-    // = <Default Home>
-    i = 0;
-    while((pos < 253) && (defaulthome[i] != 0)) {
-      confdirname[pos] = defaulthome[i];
-      conffilename[pos] = defaulthome[i];
-      pos++;
-      i++;
-    } // NEXT- putting a default place to store configuration data
-
-  } else {
-    // = <Env Home>/<Default Directory>
-    i = 0;
-    while((pos < 253) && (*(envptr + i) != 0)) {
-      confdirname[pos] = *(envptr + i);
-      conffilename[pos] = *(envptr + i);
-      pos++;
-      i++;
-    } // ENDWHILE- copying home directory info in
-
-    if(confdirname[pos-1] != '/') {
-      confdirname[pos] = '/';
-      conffilename[pos] = '/';
-      pos++;
-    } // ENDIF- No directory separator here? Add one.
-
-    i = 0;
-    while((pos < 253) && (defaultdirectory[i] != 0)) {
-      confdirname[pos] = defaultdirectory[i];
-      conffilename[pos] = defaultdirectory[i];
-      pos++;
-      i++;
-    } // NEXT- putting a default place to store configuration data
-  } // ENDIF- No Home directory?
-
-  confdirname[pos] = 0; // Directory reference finished
-
-  // += /<Config File Name>
-  if(conffilename[pos-1] != '/') {
-    conffilename[pos] = '/';
-    pos++;
-  } // ENDIF- No directory separator here? Add one.
-
-  i = 0;
-  while((pos < 253) && (defaultfile[i] != 0)) {
-    conffilename[pos] = defaultfile[i];
-    pos++;
-    i++;
-  } // NEXT- putting a default place to store configuration data
-
-  conffilename[pos] = 0; // File reference finished
-
+	i = 0;
+	while ((i < 255) && defaultdevice[i] != 0) {
+		conf.devicename[i] = defaultdevice[i];
+		i++;
+	} // ENDWHILE- copying the default CD/DVD name in
+	conf.devicename[i] = 0; // 0-terminate the device name
+	// Locating directory and file positions
+	pos = 0;
+	envptr = getenv("HOME");
+	if (envptr == NULL) {
+		// = <Default Home>
+		i = 0;
+		while ((pos < 253) && (defaulthome[i] != 0)) {
+			confdirname[pos] = defaulthome[i];
+			conffilename[pos] = defaulthome[i];
+			pos++;
+			i++;
+		} // NEXT- putting a default place to store configuration data
+	} else {
+		// = <Env Home>/<Default Directory>
+		i = 0;
+		while ((pos < 253) && (*(envptr + i) != 0)) {
+			confdirname[pos] = *(envptr + i);
+			conffilename[pos] = *(envptr + i);
+			pos++;
+			i++;
+		} // ENDWHILE- copying home directory info in
+		if (confdirname[pos - 1] != '/') {
+			confdirname[pos] = '/';
+			conffilename[pos] = '/';
+			pos++;
+		} // ENDIF- No directory separator here? Add one.
+		i = 0;
+		while ((pos < 253) && (defaultdirectory[i] != 0)) {
+			confdirname[pos] = defaultdirectory[i];
+			conffilename[pos] = defaultdirectory[i];
+			pos++;
+			i++;
+		} // NEXT- putting a default place to store configuration data
+	} // ENDIF- No Home directory?
+	confdirname[pos] = 0; // Directory reference finished
+	// += /<Config File Name>
+	if (conffilename[pos - 1] != '/') {
+		conffilename[pos] = '/';
+		pos++;
+	} // ENDIF- No directory separator here? Add one.
+	i = 0;
+	while ((pos < 253) && (defaultfile[i] != 0)) {
+		conffilename[pos] = defaultfile[i];
+		pos++;
+		i++;
+	} // NEXT- putting a default place to store configuration data
+	conffilename[pos] = 0; // File reference finished
 #ifdef VERBOSE_FUNCTION_CONF
-  PrintLog("CDVD config:   Directory: %s\n", confdirname);
-  PrintLog("CDVD config:   File: %s\n", conffilename);
+	PrintLog("CDVD config:   Directory: %s\n", confdirname);
+	PrintLog("CDVD config:   File: %s\n", conffilename);
 #endif /* VERBOSE_FUNCTION_CONF */
 } // END InitConf()
 
 
-void LoadConf() {
-  int retval;
-
+void LoadConf()
+{
+	int retval;
 #ifdef VERBOSE_FUNCTION_CONF
-  PrintLog("CDVD config: LoadConf()\n");
+	PrintLog("CDVD config: LoadConf()\n");
 #endif /* VERBOSE_FUNCTION_CONF */
-
-  retval = INILoadString(conffilename, "Settings", "Device", conf.devicename);
-  if(retval < 0) {
-    sprintf(conf.devicename, "/dev/dvd");
-  } // ENDIF- Couldn't find keyword? Fill in a default
+	retval = INILoadString(conffilename, "Settings", "Device", conf.devicename);
+	if (retval < 0)
+		sprintf(conf.devicename, "/dev/dvd"); // ENDIF- Couldn't find keyword? Fill in a default
 } // END LoadConf()
 
 
-void SaveConf() {
+void SaveConf()
+{
 #ifdef VERBOSE_FUNCTION_CONF
-  PrintLog("CDVD config: SaveConf()\n");
+	PrintLog("CDVD config: SaveConf()\n");
 #endif /* VERBOSE_FUNCTION_CONF */
-
-  mkdir(confdirname, 0755);
-
-  INISaveString(conffilename, "Settings", "Device", conf.devicename);
+	mkdir(confdirname, 0755);
+	INISaveString(conffilename, "Settings", "Device", conf.devicename);
 } // END SaveConf()

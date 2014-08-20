@@ -32,7 +32,7 @@
 #include "Pcsx2Api.h"
 
 typedef void (*USBcallback)(int cycles);
-typedef int  (*USBhandler)(void);
+typedef int (*USBhandler)(void);
 
 // Basic functions.
 EXPORT_C_(s32) USBinit();

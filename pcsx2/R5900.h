@@ -29,20 +29,21 @@ extern bool g_GameStarted;
 
 namespace Exception
 {
-	// Implementation Note: this exception has no meaningful type information and we don't
-	// care to have it be caught by any BaseException handlers lying about, so let's not
-	// derive from BaseException :D
-	class ExitCpuExecute
-	{
-	public:
-		explicit ExitCpuExecute() { }
-	};
+// Implementation Note: this exception has no meaningful type information and we don't
+// care to have it be caught by any BaseException handlers lying about, so let's not
+// derive from BaseException :D
+class ExitCpuExecute
+{
+public:
+	explicit ExitCpuExecute() { }
+};
 }
 
 // --------------------------------------------------------------------------------------
 //  EE Bios function name tables.
 // --------------------------------------------------------------------------------------
-namespace R5900 {
+namespace R5900
+{
 extern const char* const bios[256];
 }
 
@@ -65,37 +66,34 @@ union GPR_reg {   // Declare union type GPR register
 union GPRregs {
 	struct {
 		GPR_reg r0, at, v0, v1, a0, a1, a2, a3,
-				t0, t1, t2, t3, t4, t5, t6, t7,
-				s0, s1, s2, s3, s4, s5, s6, s7,
-				t8, t9, k0, k1, gp, sp, s8, ra;
+		        t0, t1, t2, t3, t4, t5, t6, t7,
+		        s0, s1, s2, s3, s4, s5, s6, s7,
+		        t8, t9, k0, k1, gp, sp, s8, ra;
 	} n;
 	GPR_reg r[32];
 };
 
 union PERFregs {
-	struct
-	{
-		union
-		{
-			struct
-			{
-				u32 pad0:1;			// LSB should always be zero (or undefined)
-				u32 EXL0:1;			// enable PCR0 during Level 1 exception handling
-				u32 K0:1;			// enable PCR0 during Kernel Mode execution
-				u32 S0:1;			// enable PCR0 during Supervisor mode execution
-				u32 U0:1;			// enable PCR0 during User-mode execution
-				u32 Event0:5;		// PCR0 event counter (all values except 1 ignored at this time)
+	struct {
+		union {
+			struct {
+				u32 pad0: 1;			// LSB should always be zero (or undefined)
+				u32 EXL0: 1;			// enable PCR0 during Level 1 exception handling
+				u32 K0: 1;			// enable PCR0 during Kernel Mode execution
+				u32 S0: 1;			// enable PCR0 during Supervisor mode execution
+				u32 U0: 1;			// enable PCR0 during User-mode execution
+				u32 Event0: 5;		// PCR0 event counter (all values except 1 ignored at this time)
 
-				u32 pad1:1;			// more zero/undefined padding [bit 10]
+				u32 pad1: 1;			// more zero/undefined padding [bit 10]
 
-				u32 EXL1:1;			// enable PCR1 during Level 1 exception handling
-				u32 K1:1;			// enable PCR1 during Kernel Mode execution
-				u32 S1:1;			// enable PCR1 during Supervisor mode execution
-				u32 U1:1;			// enable PCR1 during User-mode execution
-				u32 Event1:5;		// PCR1 event counter (all values except 1 ignored at this time)
+				u32 EXL1: 1;			// enable PCR1 during Level 1 exception handling
+				u32 K1: 1;			// enable PCR1 during Kernel Mode execution
+				u32 S1: 1;			// enable PCR1 during Supervisor mode execution
+				u32 U1: 1;			// enable PCR1 during User-mode execution
+				u32 Event1: 5;		// PCR1 event counter (all values except 1 ignored at this time)
 
-				u32 Reserved:11;
-				u32 CTE:1;			// Counter enable bit, no counting if set to zero.
+				u32 Reserved: 11;
+				u32 CTE: 1;			// Counter enable bit, no counting if set to zero.
 			} b;
 
 			u32 val;
@@ -109,34 +107,34 @@ union PERFregs {
 union CP0regs {
 	struct {
 		u32	Index,    Random,    EntryLo0,  EntryLo1,
-			Context,  PageMask,  Wired,     Reserved0,
-			BadVAddr, Count,     EntryHi,   Compare;
+		        Context,  PageMask,  Wired,     Reserved0,
+		        BadVAddr, Count,     EntryHi,   Compare;
 		union {
 			struct {
-				u32 IE:1;		// Bit 0: Interrupt Enable flag.
-				u32 EXL:1;		// Bit 1: Exception Level, set on any exception not covered by ERL.
-				u32 ERL:1;		// Bit 2: Error level, set on Resetm NMI, perf/debug exceptions.
-				u32 KSU:2;		// Bits 3-4: Kernel [clear] / Supervisor [set] mode
-				u32 unused0:3;
-				u32 IM:8;		// Bits 10-15: Interrupt mask (bits 12,13,14 are unused)
-				u32 EIE:1;		// Bit 16: IE bit enabler.  When cleared, ints are disabled regardless of IE status.
-				u32 _EDI:1;		// Bit 17: Interrupt Enable (set enables ints in all modes, clear enables ints in kernel mode only)
-				u32 CH:1;		// Bit 18: Status of most recent cache instruction (set for hit, clear for miss)
-				u32 unused1:3;
-				u32 BEV:1;		// Bit 22: if set, use bootstrap for TLB/general exceptions
-				u32 DEV:1;		// Bit 23: if set, use bootstrap for perf/debug exceptions
-				u32 unused2:2;
-				u32 FR:1;		// (?)
-				u32 unused3:1;
-				u32 CU:4;		// Bits 28-31: Co-processor Usable flag
+				u32 IE: 1;		// Bit 0: Interrupt Enable flag.
+				u32 EXL: 1;		// Bit 1: Exception Level, set on any exception not covered by ERL.
+				u32 ERL: 1;		// Bit 2: Error level, set on Resetm NMI, perf/debug exceptions.
+				u32 KSU: 2;		// Bits 3-4: Kernel [clear] / Supervisor [set] mode
+				u32 unused0: 3;
+				u32 IM: 8;		// Bits 10-15: Interrupt mask (bits 12,13,14 are unused)
+				u32 EIE: 1;		// Bit 16: IE bit enabler.  When cleared, ints are disabled regardless of IE status.
+				u32 _EDI: 1;		// Bit 17: Interrupt Enable (set enables ints in all modes, clear enables ints in kernel mode only)
+				u32 CH: 1;		// Bit 18: Status of most recent cache instruction (set for hit, clear for miss)
+				u32 unused1: 3;
+				u32 BEV: 1;		// Bit 22: if set, use bootstrap for TLB/general exceptions
+				u32 DEV: 1;		// Bit 23: if set, use bootstrap for perf/debug exceptions
+				u32 unused2: 2;
+				u32 FR: 1;		// (?)
+				u32 unused3: 1;
+				u32 CU: 4;		// Bits 28-31: Co-processor Usable flag
 			} b;
 			u32 val;
 		} Status;
 		u32   Cause,    EPC,       PRid,
-			Config,   LLAddr,    WatchLO,   WatchHI,
-			XContext, Reserved1, Reserved2, Debug,
-			DEPC,     PerfCnt,   ErrCtl,    CacheErr,
-			TagLo,    TagHi,     ErrorEPC,  DESAVE;
+		      Config,   LLAddr,    WatchLO,   WatchHI,
+		      XContext, Reserved1, Reserved2, Debug,
+		      DEPC,     PerfCnt,   ErrCtl,    CacheErr,
+		      TagLo,    TagHi,     ErrorEPC,  DESAVE;
 	} n;
 	u32 r[32];
 };
@@ -186,10 +184,9 @@ struct fpuRegisters {
 	u32 ACCflag;        // an internal accumulator overflow flag
 };
 
-struct tlbs
-{
-	u32 PageMask,EntryHi;
-	u32 EntryLo0,EntryLo1;
+struct tlbs {
+	u32 PageMask, EntryHi;
+	u32 EntryLo0, EntryLo1;
 	u32 Mask, nMask;
 	u32 G;
 	u32 ASID;
@@ -270,13 +267,12 @@ extern void __fastcall eeloadReplaceOSDSYS();
 // [TODO] : This is on the list to get converted to a proper C++ class.  I'm putting it
 // off until I get my new IOPint and IOPrec re-merged. --air
 //
-struct R5900cpu
-{
+struct R5900cpu {
 	// Memory allocation function, for allocating virtual memory spaces needed by
 	// the virtual cpu provider.  Allocating additional heap memory from this method is
 	// NOT recommended.  Heap allocations should be performed by Reset only.  This
 	// maximizes the likeliness of reservations claiming addresses they prefer.
-	// 
+	//
 	// Thread Affinity:
 	//   Called from the main/UI thread only.  Cpu execution status is guaranteed to
 	//   be inactive.  No locking is necessary.
@@ -326,7 +322,7 @@ struct R5900cpu
 	// call to return at the nearest state check (typically handled internally using
 	// either C++ exceptions or setjmp/longjmp).
 	//
-	// Exception Throws: 
+	// Exception Throws:
 	//   Throws BaseR5900Exception and all derivatives.
 	//   Throws FileNotFound or other Streaming errors (typically related to BIOS MEC/NVM)
 	//
@@ -352,15 +348,15 @@ struct R5900cpu
 	// Safely throws host exceptions from executing code (either recompiled or interpreted).
 	// If this function is called outside the context of the CPU's code execution, then the
 	// given exception will be re-thrown automatically.
-	// 
+	//
 	// Exception Throws:
 	//   (SEH) Rethrows the given exception immediately.
 	//   (setjmp) Re-throws immediately if called from outside the context of dynamically
 	//      generated code (either non-executing contexts or interpreters).  Does not throw
 	//      otherwise.
 	//
-	void (*ThrowException)( const BaseException& ex );
-	void (*ThrowCpuException)( const BaseR5900Exception& ex );
+	void (*ThrowException)(const BaseException &ex);
+	void (*ThrowCpuException)(const BaseR5900Exception &ex);
 
 	// Manual recompiled code cache clear; typically useful to recompilers only.  Size is
 	// in MIPS words (32 bits).  Dev note: this callback is nearly obsolete, and might be
@@ -376,17 +372,16 @@ struct R5900cpu
 	//   doesn't matter if we're stripping it out soon. ;)
 	//
 	void (*Clear)(u32 Addr, u32 Size);
-	
-	uint (*GetCacheReserve)();
-	void (*SetCacheReserve)( uint reserveInMegs );
+
+	uint(*GetCacheReserve)();
+	void (*SetCacheReserve)(uint reserveInMegs);
 };
 
 extern R5900cpu *Cpu;
 extern R5900cpu intCpu;
 extern R5900cpu recCpu;
 
-enum EE_EventType
-{
+enum EE_EventType {
 	DMAC_VIF0	= 0,
 	DMAC_VIF1,
 	DMAC_GIF,
@@ -405,13 +400,13 @@ enum EE_EventType
 	DMAC_STALL_SIS		= 13, // SIS
 	DMAC_MFIFO_EMPTY	= 14, // MEIS
 	DMAC_BUS_ERROR	= 15,      // BEIS
-	
+
 	DMAC_GIF_UNIT,
 	VIF_VU0_FINISH,
 	VIF_VU1_FINISH
 };
 
-extern void CPU_INT( EE_EventType n, s32 ecycle );
+extern void CPU_INT(EE_EventType n, s32 ecycle);
 extern uint intcInterrupt();
 extern uint dmacInterrupt();
 
@@ -425,9 +420,9 @@ extern void cpuTestHwInts();
 extern void cpuClearInt(uint n);
 extern void __fastcall GoemonPreloadTlb();
 
-extern void cpuSetNextEvent( u32 startCycle, s32 delta );
-extern void cpuSetNextEventDelta( s32 delta );
-extern int  cpuTestCycle( u32 startCycle, s32 delta );
+extern void cpuSetNextEvent(u32 startCycle, s32 delta);
+extern void cpuSetNextEventDelta(s32 delta);
+extern int  cpuTestCycle(u32 startCycle, s32 delta);
 extern void cpuSetEvent();
 
 extern void _cpuEventTest_Shared();		// for internal use by the Dynarecs and Ints inside R5900:

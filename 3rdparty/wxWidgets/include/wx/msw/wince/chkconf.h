@@ -14,15 +14,15 @@
 
 // Standard SDK lacks a few things, forcefully disable them
 #ifdef WCE_PLATFORM_STANDARDSDK
-    // no shell functions support
-    #undef wxUSE_STDPATHS
-    #define wxUSE_STDPATHS 0
+// no shell functions support
+#undef wxUSE_STDPATHS
+#define wxUSE_STDPATHS 0
 #endif // WCE_PLATFORM_STANDARDSDK
 
 #if _WIN32_WCE < 400
-    // not enough API and lack of ddraw.h
-    #undef wxUSE_DISPLAY
-    #define wxUSE_DISPLAY 0
+// not enough API and lack of ddraw.h
+#undef wxUSE_DISPLAY
+#define wxUSE_DISPLAY 0
 #endif
 
 // DDE doesn't exist under WinCE and wxIPC is DDE-based under MSW
@@ -83,17 +83,17 @@
 // Disable features which don't make sense for MS Smartphones
 // (due to pointer device usage, limited controls or dialogs, file system)
 #if defined(__SMARTPHONE__)
-    #undef wxUSE_LISTBOOK
-    #define wxUSE_LISTBOOK 0
+#undef wxUSE_LISTBOOK
+#define wxUSE_LISTBOOK 0
 
-    #undef wxUSE_NOTEBOOK
-    #define wxUSE_NOTEBOOK 0
+#undef wxUSE_NOTEBOOK
+#define wxUSE_NOTEBOOK 0
 
-    #undef wxUSE_STATUSBAR
-    #define wxUSE_STATUSBAR 0
+#undef wxUSE_STATUSBAR
+#define wxUSE_STATUSBAR 0
 
-    #undef wxUSE_COLOURPICKERCTRL
-    #define wxUSE_COLOURPICKERCTRL 0
+#undef wxUSE_COLOURPICKERCTRL
+#define wxUSE_COLOURPICKERCTRL 0
 #endif // __SMARTPHONE__
 
 #endif // _WX_MSW_WINCE_CHKCONF_H_

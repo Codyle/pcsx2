@@ -50,15 +50,11 @@ s32 CDreadTrackPass(u32 lsn, int mode, u8 *buffer)
 	DWORD errcode;
 	LARGE_INTEGER targetpos;
 	int i;
-
-	if ((actualcdmode < -1) || (actualcdmode > 2))  return(-1);
-
+	if ((actualcdmode < -1) || (actualcdmode > 2))  return (-1);
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVD CD: CDreadTrack(%llu, %i)", lsn, actualcdmode);
 #endif /* VERBOSE_FUNCTION_DEVICE */
-
-	if (actualcdmode >= 0)
-	{
+	if (actualcdmode >= 0) {
 		rawinfo.DiskOffset.QuadPart = lsn * 2048; // Yes, 2048.
 		rawinfo.SectorCount = 1;
 		rawinfo.TrackMode = actualcdmode;
@@ -71,19 +67,14 @@ s32 CDreadTrackPass(u32 lsn, int mode, u8 *buffer)
 		                             &byteswritten,
 		                             &waitevent);
 		errcode = FinishCommand(boolresult);
-
-		if (errcode != 0)
-		{
+		if (errcode != 0) {
 #ifdef VERBOSE_WARNING_DEVICE
 			PrintLog("CDVDiso CD:   Couldn't read a sector raw!");
 			PrintError("CDVDiso CD", errcode);
 #endif /* VERBOSE_WARNING_DEVICE */
-			return(-1);
+			return (-1);
 		} // ENDIF- Couldn't read a raw sector? Maybe not a CD.
-
-	}
-	else
-	{
+	} else {
 		targetpos.QuadPart = lsn * 2048;
 		waitevent.Offset = targetpos.LowPart;
 		waitevent.OffsetHigh = targetpos.HighPart;
@@ -93,43 +84,35 @@ s32 CDreadTrackPass(u32 lsn, int mode, u8 *buffer)
 		                      &byteswritten,
 		                      &waitevent);
 		errcode = FinishCommand(boolresult);
-
-		if (errcode != 0)
-		{
+		if (errcode != 0) {
 #ifdef VERBOSE_WARNING_DEVICE
 			PrintLog("CDVDiso CD:   Couldn't read a cooked sector!");
 			PrintError("CDVDiso CD", errcode);
 #endif /* VERBOSE_WARNING_DEVICE */
-			return(-1);
+			return (-1);
 		} // ENDIF- Trouble with seek? Report it.
-
 		for (i = 0; i < 24; i++)  *(buffer + i) = 0;
 		for (i = 24 + 2048; i < 2352; i++) *(buffer + i) = 0;
 	} // ENDIF- Could we read a raw sector? Read another one!
-
-	if (boolresult == FALSE)
-	{
+	if (boolresult == FALSE) {
 		boolresult = GetOverlappedResult(devicehandle,
 		                                 &waitevent,
 		                                 &byteswritten,
 		                                 FALSE);
 	} // ENDIF- Did the initial call not complete? Get byteswritten for
 	//   the completed call.
-
-	if (byteswritten < 2048)
-	{
+	if (byteswritten < 2048) {
 #ifdef VERBOSE_WARNING_DEVICE
 		errcode = GetLastError();
 		PrintLog("CDVDiso CD:   Short block! only got %u out of %u bytes",
 		         byteswritten, cdblocksize);
 		PrintError("CDVDiso CD", errcode);
 #endif /* VERBOSE_WARNING_DEVICE */
-		return(-1);
+		return (-1);
 	} // ENDIF- Couldn't read a raw sector? Maybe not a CD.
-
 	cdmode = mode;
 	cdblocksize = byteswritten;
-	return(0);
+	return (0);
 } // END CDreadTrackPass()
 
 s32 CDreadTrack(u32 lsn, int mode, u8 *buffer)
@@ -138,18 +121,15 @@ s32 CDreadTrack(u32 lsn, int mode, u8 *buffer)
 	int lastmode;
 	int i;
 	retval = CDreadTrackPass(lsn, mode, buffer);
-	if (retval >= 0)  return(retval);
-
+	if (retval >= 0)  return (retval);
 #ifdef VERBOSE_WARNING_DEVICE
 	PrintLog("CDVDiso CD:   Same mode doesn't work. Scanning...");
 #endif /* VERBOSE_WARNING_DEVICE */
-
 	lastmode = actualcdmode;
 	actualcdmode = 2;
-	while (actualcdmode >= -1)
-	{
+	while (actualcdmode >= -1) {
 		retval = CDreadTrackPass(lsn, mode, buffer);
-		if (retval >= 0)  return(retval);
+		if (retval >= 0)  return (retval);
 		actualcdmode--;
 	} // ENDWHILE- Searching each mode for a way to read the sector
 	actualcdmode = lastmode; // None worked? Go back to first mode.
@@ -157,7 +137,7 @@ s32 CDreadTrack(u32 lsn, int mode, u8 *buffer)
 	PrintLog("CDVDiso CD:   No modes work. Failing sector!");
 #endif /* VERBOSE_WARNING_DEVICE */
 	for (i = 0; i < 2352; i++)  *(buffer + i) = 0;
-	return(-1);
+	return (-1);
 } // END CDreadTrack()
 
 s32 CDgetBufferOffset()
@@ -166,22 +146,21 @@ s32 CDgetBufferOffset()
 	PrintLog("CDVD CD: CDgetBufferOffset()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
 	// Send a whole CDDA record in?
-	if ((actualcdmode == CDDA) && (cdmode == CDVD_MODE_2352)) return(0);
-
+	if ((actualcdmode == CDDA) && (cdmode == CDVD_MODE_2352)) return (0);
 	// Otherwise, send the start of the data block in...
-	return(cdoffset);
+	return (cdoffset);
 } // END CDgetBufferOffset()
 
 s32 CDreadSubQ()
 {
-	return(-1);
+	return (-1);
 } // END CDreadSubQ()
 
 s32 CDgetTN(cdvdTN *cdvdtn)
 {
 	cdvdtn->strack = BCDTOHEX(tocbuffer[7]);
 	cdvdtn->etrack = BCDTOHEX(tocbuffer[17]);
-	return(0);
+	return (0);
 } // END CDgetTN()
 
 s32 CDgetTD(u8 newtrack, cdvdTD *cdvdtd)
@@ -189,23 +168,18 @@ s32 CDgetTD(u8 newtrack, cdvdTD *cdvdtd)
 	u8 actualtrack;
 	int pos;
 	char temptime[3];
-
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVDiso CD: CDgetTD()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-
 	actualtrack = newtrack;
 	if (actualtrack == 0xaa)  actualtrack = 0;
-	if (actualtrack == 0)
-	{
+	if (actualtrack == 0) {
 		cdvdtd->type = 0;
 		temptime[0] = BCDTOHEX(tocbuffer[27]);
 		temptime[1] = BCDTOHEX(tocbuffer[28]);
 		temptime[2] = BCDTOHEX(tocbuffer[29]);
 		cdvdtd->lsn = MSFtoLBA(temptime);
-	}
-	else
-	{
+	} else {
 		pos = actualtrack * 10;
 		pos += 30;
 		cdvdtd->type = tocbuffer[pos];
@@ -214,7 +188,7 @@ s32 CDgetTD(u8 newtrack, cdvdTD *cdvdtd)
 		temptime[2] = BCDTOHEX(tocbuffer[pos + 9]);
 		cdvdtd->lsn = MSFtoLBA(temptime);
 	} // ENDIF- Whole disc? (or single track?)
-	return(0);
+	return (0);
 } // END CDgetTD()
 
 s32 CDgetDiskType()
@@ -232,68 +206,52 @@ s32 CDgetDiskType()
 	int i;
 	int pos;
 	unsigned long volumesize;
-
 #ifdef VERBOSE_FUNCTION_DEVICE
 	PrintLog("CDVDiso CD: CDgetDiskType()");
 #endif /* VERBOSE_FUNCTION_DEVICE */
-
 	tempdisctype = CDVD_TYPE_UNKNOWN;
-
 	actualcdmode = 2;
 	retval = CDreadTrack(16, CDVD_MODE_2048, tempbuffer);
-	if (retval < 0)
-	{
+	if (retval < 0) {
 		disctype = tempdisctype;
-		return(-1);
+		return (-1);
 	} // ENDIF- Couldn't read the directory sector? Abort.
 	disctype = CDVD_TYPE_DETCTCD;
 	tempdisctype = CDVD_TYPE_CDDA;
-
 	cdoffset = 0;
 	i = 0;
-	while ((cdoffset <= 24) && (iso9660name[i] != 0))
-	{
+	while ((cdoffset <= 24) && (iso9660name[i] != 0)) {
 		i = 0;
 		while ((iso9660name[i] != 0) &&
-		        (iso9660name[i] == tempbuffer[cdoffset + 1 + i]))  i++;
+		       (iso9660name[i] == tempbuffer[cdoffset + 1 + i]))  i++;
 		if (iso9660name[i] != 0)  cdoffset += 8;
 	} // ENDWHILE- Trying to find a working offset for a ISO9660 record.
-	if (iso9660name[i] != 0)
-	{
+	if (iso9660name[i] != 0) {
 #ifdef VERBOSE_DISC_TYPE
 		PrintLog("Detected a CDDA (Music CD).");
 #endif /* VERBOSE_DISC_TYPE */
 		tempdisctype = CDVD_TYPE_CDDA;
 		tocbuffer[0] = 0x01;
-
-	}
-	else
-	{
+	} else {
 		tocbuffer[0] = 0x41;
 		i = 0;
 		while ((playstationname[i] != 0) &&
-		        (playstationname[i] == tempbuffer[cdoffset + 8 + i]))  i++;
-		if (playstationname[i] != 0)
-		{
+		       (playstationname[i] == tempbuffer[cdoffset + 8 + i]))  i++;
+		if (playstationname[i] != 0) {
 #ifdef VERBOSE_DISC_TYPE
 			PrintLog("Detected a non-Playstation CD.");
 #endif /* VERBOSE_DISC_TYPE */
 			tempdisctype = CDVD_TYPE_UNKNOWN;
-		}
-		else
-		{
+		} else {
 			i = 0;
 			while ((ps1name[i] != 0) &&
-			        (ps1name[i] == tempbuffer[cdoffset + 1024 + i]))  i++;
-			if (ps1name[i] != 0)
-			{
+			       (ps1name[i] == tempbuffer[cdoffset + 1024 + i]))  i++;
+			if (ps1name[i] != 0) {
 #ifdef VERBOSE_DISC_TYPE
 				PrintLog("Detected a Playstation 2 CD.");
 #endif /* VERBOSE_DISC_TYPE */
 				tempdisctype = CDVD_TYPE_PS2CD;
-			}
-			else
-			{
+			} else {
 #ifdef VERBOSE_DISC_TYPE
 				PrintLog("Detected a Playstation CD.");
 #endif /* VERBOSE_DISC_TYPE */
@@ -315,11 +273,8 @@ s32 CDgetDiskType()
 	volumesize += tempbuffer[87];
 #ifdef VERBOSE_DISC_INFO
 	if (tempdisctype != CDVD_TYPE_CDDA)
-	{
-		PrintLog("CDVDiso CD:   ISO9660 size %llu", volumesize);
-	} // ENDIF- Data CD? Print size in blocks.
+		PrintLog("CDVDiso CD:   ISO9660 size %llu", volumesize); // ENDIF- Data CD? Print size in blocks.
 #endif /* VERBOSE_DISC_INFO */
-
 	LBAtoMSF(volumesize, &tocbuffer[27]);
 	tocbuffer[27] = HEXTOBCD(tocbuffer[27]);
 	tocbuffer[28] = HEXTOBCD(tocbuffer[28]);
@@ -330,7 +285,6 @@ s32 CDgetDiskType()
 	tocbuffer[47] = HEXTOBCD(tocbuffer[47]);
 	tocbuffer[48] = HEXTOBCD(tocbuffer[48]);
 	tocbuffer[49] = HEXTOBCD(tocbuffer[49]);
-
 	// Can we get the REAL TOC?
 	boolresult = DeviceIoControl(devicehandle,
 	                             IOCTL_CDROM_READ_TOC,
@@ -340,18 +294,15 @@ s32 CDgetDiskType()
 	                             sizeof(CDROM_TOC),
 	                             &byteswritten,
 	                             NULL);
-
-	if (boolresult == FALSE)
-	{
+	if (boolresult == FALSE) {
 #ifdef VERBOSE_WARNING_DEVICE
 		errcode = GetLastError();
 		PrintLog("CDVDiso CD:   Can't get TOC!");
 		PrintError("CDVDiso CD", errcode);
 #endif /* VERBOSE_WARNING_DEVICE */
 		disctype = tempdisctype;
-		return(disctype);
+		return (disctype);
 	} // ENDIF- Can't read the TOC? Accept the fake TOC then.
-
 	// Fill in the pieces of the REAL TOC.
 #ifdef VERBOSE_DISC_INFO
 	PrintLog("CDVDiso CD:   TOC First Track: %u   Last Track: %u",
@@ -359,10 +310,8 @@ s32 CDgetDiskType()
 #endif /* VERBOSE_DISC_INFO */
 	tocbuffer[7] = HEXTOBCD(cdinfo.FirstTrack);
 	tocbuffer[17] = HEXTOBCD(cdinfo.LastTrack);
-
 	// for(i = cdinfo.FirstTrack; i <= cdinfo.LastTrack; i++) {
-	for (i = 0; i <= cdinfo.LastTrack - cdinfo.FirstTrack; i++)
-	{
+	for (i = 0; i <= cdinfo.LastTrack - cdinfo.FirstTrack; i++) {
 #ifdef VERBOSE_DISC_INFO
 		PrintLog("CDVDiso CD:   TOC Track %u   Disc Size: %u:%u.%u   Data Mode %u",
 		         cdinfo.TrackData[i].TrackNumber,
@@ -378,7 +327,6 @@ s32 CDgetDiskType()
 		tocbuffer[pos + 8] = HEXTOBCD(cdinfo.TrackData[i].Address[2]);
 		tocbuffer[pos + 9] = HEXTOBCD(cdinfo.TrackData[i].Address[3]);
 	} // NEXT i- Transferring Track data to the PS2 TOC
-
 #ifdef VERBOSE_DISC_INFO
 	PrintLog("CDVDiso CD:   TOC Disc Size: %u:%u.%u",
 	         cdinfo.TrackData[i].Address[1] * 1,
@@ -389,5 +337,5 @@ s32 CDgetDiskType()
 	tocbuffer[28] = HEXTOBCD(cdinfo.TrackData[i].Address[2]);
 	tocbuffer[29] = HEXTOBCD(cdinfo.TrackData[i].Address[3]);
 	disctype = tempdisctype;
-	return(disctype);
+	return (disctype);
 } // END CDgetDiskType()

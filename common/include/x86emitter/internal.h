@@ -19,57 +19,63 @@
 #include "instructions.h"
 
 
-namespace x86Emitter {
+namespace x86Emitter
+{
 
 #define OpWriteSSE( pre, op )		xOpWrite0F( pre, op, to, from )
 
-	extern void SimdPrefix( u8 prefix, u16 opcode );
-	extern void EmitSibMagic( uint regfield, const void* address );
-	extern void EmitSibMagic( uint regfield, const xIndirectVoid& info );
-	extern void EmitSibMagic( uint reg1, const xRegisterBase& reg2 );
-	extern void EmitSibMagic( const xRegisterBase& reg1, const xRegisterBase& reg2 );
-	extern void EmitSibMagic( const xRegisterBase& reg1, const void* src );
-	extern void EmitSibMagic( const xRegisterBase& reg1, const xIndirectVoid& sib );
+extern void SimdPrefix(u8 prefix, u16 opcode);
+extern void EmitSibMagic(uint regfield, const void* address);
+extern void EmitSibMagic(uint regfield, const xIndirectVoid &info);
+extern void EmitSibMagic(uint reg1, const xRegisterBase &reg2);
+extern void EmitSibMagic(const xRegisterBase &reg1, const xRegisterBase &reg2);
+extern void EmitSibMagic(const xRegisterBase &reg1, const void* src);
+extern void EmitSibMagic(const xRegisterBase &reg1, const xIndirectVoid &sib);
 
-	extern void _xMovRtoR( const xRegisterInt& to, const xRegisterInt& from );
+extern void _xMovRtoR(const xRegisterInt &to, const xRegisterInt &from);
 
-	template< typename T > inline
-		void xWrite( T val )
-	{
-		*(T*)x86Ptr = val;
-		x86Ptr += sizeof(T);
-	}
+template<typename T> inline
+void xWrite(T val)
+{
+	*(T*)x86Ptr = val;
+	x86Ptr += sizeof(T);
+}
 
-	template< typename T1, typename T2 > __emitinline
-		void xOpWrite( u8 prefix, u8 opcode, const T1& param1, const T2& param2 )
-	{
-		if( prefix != 0 )
-			xWrite16( (opcode<<8) | prefix );
-		else
-			xWrite8( opcode );
+template<typename T1, typename T2> __emitinline
+void xOpWrite(u8 prefix, u8 opcode, const T1 &param1, const T2 &param2)
+{
+	if (prefix != 0)
+		xWrite16((opcode << 8) | prefix);
+	else
+		xWrite8(opcode);
+	EmitSibMagic(param1, param2);
+}
 
-		EmitSibMagic( param1, param2 );
-	}
+template<typename T1, typename T2> __emitinline
+void xOpWrite0F(u8 prefix, u16 opcode, const T1 &param1, const T2 &param2)
+{
+	SimdPrefix(prefix, opcode);
+	EmitSibMagic(param1, param2);
+}
 
-	template< typename T1, typename T2 > __emitinline
-		void xOpWrite0F( u8 prefix, u16 opcode, const T1& param1, const T2& param2 )
-	{
-		SimdPrefix( prefix, opcode );
-		EmitSibMagic( param1, param2 );
-	}
+template<typename T1, typename T2> __emitinline
+void xOpWrite0F(u8 prefix, u16 opcode, const T1 &param1, const T2 &param2, u8 imm8)
+{
+	xOpWrite0F(prefix, opcode, param1, param2);
+	xWrite8(imm8);
+}
 
-	template< typename T1, typename T2 > __emitinline
-		void xOpWrite0F( u8 prefix, u16 opcode, const T1& param1, const T2& param2, u8 imm8 )
-	{
-		xOpWrite0F( prefix, opcode, param1, param2 );
-		xWrite8( imm8 );
-	}
+template<typename T1, typename T2> __emitinline
+void xOpWrite0F(u16 opcode, const T1 &param1, const T2 &param2)
+{
+	xOpWrite0F(0, opcode, param1, param2);
+}
 
-	template< typename T1, typename T2 > __emitinline
-		void xOpWrite0F( u16 opcode, const T1& param1, const T2& param2 )			{ xOpWrite0F( 0, opcode, param1, param2 ); }
-
-	template< typename T1, typename T2 > __emitinline
-		void xOpWrite0F( u16 opcode, const T1& param1, const T2& param2, u8 imm8 )	{ xOpWrite0F( 0, opcode, param1, param2, imm8 ); }
+template<typename T1, typename T2> __emitinline
+void xOpWrite0F(u16 opcode, const T1 &param1, const T2 &param2, u8 imm8)
+{
+	xOpWrite0F(0, opcode, param1, param2, imm8);
+}
 
 }
 

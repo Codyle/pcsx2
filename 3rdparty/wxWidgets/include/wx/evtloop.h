@@ -23,47 +23,53 @@ class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 class WXDLLEXPORT wxEventLoopBase
 {
 public:
-    // trivial, but needed (because of wxEventLoopBase) ctor
-    wxEventLoopBase() { }
+	// trivial, but needed (because of wxEventLoopBase) ctor
+	wxEventLoopBase() { }
 
-    // dtor
-    virtual ~wxEventLoopBase() { }
+	// dtor
+	virtual ~wxEventLoopBase() { }
 
-    // start the event loop, return the exit code when it is finished
-    virtual int Run() = 0;
+	// start the event loop, return the exit code when it is finished
+	virtual int Run() = 0;
 
-    // exit from the loop with the given exit code
-    virtual void Exit(int rc = 0) = 0;
+	// exit from the loop with the given exit code
+	virtual void Exit(int rc = 0) = 0;
 
-    // return true if any events are available
-    virtual bool Pending() const = 0;
+	// return true if any events are available
+	virtual bool Pending() const = 0;
 
-    // dispatch a single event, return false if we should exit from the loop
-    virtual bool Dispatch() = 0;
+	// dispatch a single event, return false if we should exit from the loop
+	virtual bool Dispatch() = 0;
 
-    // return currently active (running) event loop, may be NULL
-    static wxEventLoop *GetActive() { return ms_activeLoop; }
+	// return currently active (running) event loop, may be NULL
+	static wxEventLoop *GetActive()
+	{
+		return ms_activeLoop;
+	}
 
-    // set currently active (running) event loop
-    static void SetActive(wxEventLoop* loop) { ms_activeLoop = loop; }
+	// set currently active (running) event loop
+	static void SetActive(wxEventLoop* loop)
+	{
+		ms_activeLoop = loop;
+	}
 
-    // is this event loop running now?
-    //
-    // notice that even if this event loop hasn't terminated yet but has just
-    // spawned a nested (e.g. modal) event loop, this would return false
-    bool IsRunning() const;
+	// is this event loop running now?
+	//
+	// notice that even if this event loop hasn't terminated yet but has just
+	// spawned a nested (e.g. modal) event loop, this would return false
+	bool IsRunning() const;
 
 protected:
-    // this function should be called before the event loop terminates, whether
-    // this happens normally (because of Exit() call) or abnormally (because of
-    // an exception thrown from inside the loop)
-    virtual void OnExit() { }
+	// this function should be called before the event loop terminates, whether
+	// this happens normally (because of Exit() call) or abnormally (because of
+	// an exception thrown from inside the loop)
+	virtual void OnExit() { }
 
 
-    // the pointer to currently active loop
-    static wxEventLoop *ms_activeLoop;
+	// the pointer to currently active loop
+	static wxEventLoop *ms_activeLoop;
 
-    DECLARE_NO_COPY_CLASS(wxEventLoopBase)
+	DECLARE_NO_COPY_CLASS(wxEventLoopBase)
 };
 
 #if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__)
@@ -75,31 +81,31 @@ protected:
 class WXDLLEXPORT wxEventLoopManual : public wxEventLoopBase
 {
 public:
-    wxEventLoopManual();
+	wxEventLoopManual();
 
-    // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
-    // terminating when Exit() is called
-    virtual int Run();
+	// enters a loop calling OnNextIteration(), Pending() and Dispatch() and
+	// terminating when Exit() is called
+	virtual int Run();
 
-    // sets the "should exit" flag and wakes up the loop so that it terminates
-    // soon
-    virtual void Exit(int rc = 0);
+	// sets the "should exit" flag and wakes up the loop so that it terminates
+	// soon
+	virtual void Exit(int rc = 0);
 
 protected:
-    // implement this to wake up the loop: usually done by posting a dummy event
-    // to it (called from Exit())
-    virtual void WakeUp() = 0;
+	// implement this to wake up the loop: usually done by posting a dummy event
+	// to it (called from Exit())
+	virtual void WakeUp() = 0;
 
-    // may be overridden to perform some action at the start of each new event
-    // loop iteration
-    virtual void OnNextIteration() { }
+	// may be overridden to perform some action at the start of each new event
+	// loop iteration
+	virtual void OnNextIteration() { }
 
 
-    // the loop exit code
-    int m_exitcode;
+	// the loop exit code
+	int m_exitcode;
 
-    // should we exit the loop?
-    bool m_shouldExit;
+	// should we exit the loop?
+	bool m_shouldExit;
 };
 
 #endif // platforms using "manual" loop
@@ -110,13 +116,13 @@ protected:
 // integration with MFC) but currently this is done for MSW only, other ports
 // should follow a.s.a.p.
 #if defined(__WXPALMOS__)
-    #include "wx/palmos/evtloop.h"
+#include "wx/palmos/evtloop.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/evtloop.h"
+#include "wx/msw/evtloop.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/evtloop.h"
+#include "wx/mac/evtloop.h"
 #elif defined(__WXDFB__)
-    #include "wx/dfb/evtloop.h"
+#include "wx/dfb/evtloop.h"
 #else // other platform
 
 class WXDLLEXPORT wxEventLoopImpl;
@@ -124,24 +130,30 @@ class WXDLLEXPORT wxEventLoopImpl;
 class WXDLLEXPORT wxEventLoop : public wxEventLoopBase
 {
 public:
-    wxEventLoop() { m_impl = NULL; }
-    virtual ~wxEventLoop();
+	wxEventLoop()
+	{
+		m_impl = NULL;
+	}
+	virtual ~wxEventLoop();
 
-    virtual int Run();
-    virtual void Exit(int rc = 0);
-    virtual bool Pending() const;
-    virtual bool Dispatch();
+	virtual int Run();
+	virtual void Exit(int rc = 0);
+	virtual bool Pending() const;
+	virtual bool Dispatch();
 
 protected:
-    // the pointer to the port specific implementation class
-    wxEventLoopImpl *m_impl;
+	// the pointer to the port specific implementation class
+	wxEventLoopImpl *m_impl;
 
-    DECLARE_NO_COPY_CLASS(wxEventLoop)
+	DECLARE_NO_COPY_CLASS(wxEventLoop)
 };
 
 #endif // platforms
 
-inline bool wxEventLoopBase::IsRunning() const { return GetActive() == this; }
+inline bool wxEventLoopBase::IsRunning() const
+{
+	return GetActive() == this;
+}
 
 // ----------------------------------------------------------------------------
 // wxModalEventLoop
@@ -154,22 +166,21 @@ inline bool wxEventLoopBase::IsRunning() const { return GetActive() == this; }
 class WXDLLEXPORT wxModalEventLoop : public wxEventLoop
 {
 public:
-    wxModalEventLoop(wxWindow *winModal)
-    {
-        m_windowDisabler = new wxWindowDisabler(winModal);
-    }
+	wxModalEventLoop(wxWindow *winModal)
+	{
+		m_windowDisabler = new wxWindowDisabler(winModal);
+	}
 
 protected:
-    virtual void OnExit()
-    {
-        delete m_windowDisabler;
-        m_windowDisabler = NULL;
-
-        wxEventLoop::OnExit();
-    }
+	virtual void OnExit()
+	{
+		delete m_windowDisabler;
+		m_windowDisabler = NULL;
+		wxEventLoop::OnExit();
+	}
 
 private:
-    wxWindowDisabler *m_windowDisabler;
+	wxWindowDisabler *m_windowDisabler;
 };
 
 // ----------------------------------------------------------------------------
@@ -182,47 +193,45 @@ private:
 class wxEventLoopActivator
 {
 public:
-    wxEventLoopActivator(wxEventLoop *evtLoop)
-    {
-        m_evtLoopOld = wxEventLoop::GetActive();
-        wxEventLoop::SetActive(evtLoop);
-    }
+	wxEventLoopActivator(wxEventLoop *evtLoop)
+	{
+		m_evtLoopOld = wxEventLoop::GetActive();
+		wxEventLoop::SetActive(evtLoop);
+	}
 
-    ~wxEventLoopActivator()
-    {
-        // restore the previously active event loop
-        wxEventLoop::SetActive(m_evtLoopOld);
-    }
+	~wxEventLoopActivator()
+	{
+		// restore the previously active event loop
+		wxEventLoop::SetActive(m_evtLoopOld);
+	}
 
 private:
-    wxEventLoop *m_evtLoopOld;
+	wxEventLoop *m_evtLoopOld;
 };
 
 #if wxABI_VERSION >= 20808
 class wxEventLoopGuarantor
 {
 public:
-    wxEventLoopGuarantor()
-    {
-        m_evtLoopNew = NULL;
-        if (!wxEventLoop::GetActive())
-        {
-            m_evtLoopNew = new wxEventLoop;
-            wxEventLoop::SetActive(m_evtLoopNew);
-        }
-    }
+	wxEventLoopGuarantor()
+	{
+		m_evtLoopNew = NULL;
+		if (!wxEventLoop::GetActive()) {
+			m_evtLoopNew = new wxEventLoop;
+			wxEventLoop::SetActive(m_evtLoopNew);
+		}
+	}
 
-    ~wxEventLoopGuarantor()
-    {
-        if (m_evtLoopNew)
-        {
-            wxEventLoop::SetActive(NULL);
-            delete m_evtLoopNew;
-        }
-    }
+	~wxEventLoopGuarantor()
+	{
+		if (m_evtLoopNew) {
+			wxEventLoop::SetActive(NULL);
+			delete m_evtLoopNew;
+		}
+	}
 
 private:
-    wxEventLoop *m_evtLoopNew;
+	wxEventLoop *m_evtLoopNew;
 };
 #endif // wxABI_VERSION >= 20805
 

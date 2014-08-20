@@ -28,8 +28,7 @@
 // #define VERBOSE_FUNCTION_ISOFILE
 #define VERBOSE_DISC_INFO
 
-struct IsoFile
-{
+struct IsoFile {
 	// *** Primary Data area
 	char name[256];
 	int namepos; // Used for detection of components within name
@@ -90,9 +89,9 @@ extern int IsoFileRead(struct IsoFile *file, char *block);
 //  out a block at a time, though, to be read in later as random-access)
 // No plans are made to make writes random-access at this time.
 extern struct IsoFile *IsoFileOpenForWrite(const char *filename,
-				        int imagetype,
-				        int multi,
-				        int compress);
+                int imagetype,
+                int multi,
+                int compress);
 
 extern int IsoFileWrite(struct IsoFile *file, char *block);
 // Uncompressed buffers, please.

@@ -51,8 +51,7 @@ struct MainBoxData mainbox;
 
 void MainBoxDestroy()
 {
-	if (mainbox.window != NULL)
-	{
+	if (mainbox.window != NULL) {
 		gtk_widget_destroy(mainbox.window);
 		mainbox.window = NULL;
 		mainbox.file = NULL;
@@ -84,28 +83,22 @@ gint MainBoxFileEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	char templine[256];
 	struct IsoFile *tempfile;
 	returnval = IsIsoFile(gtk_entry_get_text(GTK_ENTRY(mainbox.file)));
-	if (returnval == -1)
-	{
+	if (returnval == -1) {
 		gtk_label_set_text(GTK_LABEL(mainbox.desc), "File Type: ---");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not a name of any sort?
-	if (returnval == -2)
-	{
+	if (returnval == -2) {
 		gtk_label_set_text(GTK_LABEL(mainbox.desc), "File Type: Not a file");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not a regular file?
-
-	if (returnval == -3)
-	{
+	if (returnval == -3) {
 		gtk_label_set_text(GTK_LABEL(mainbox.desc), "File Type: Not a valid image file");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Not an Image file?
-	if (returnval == -4)
-	{
+	if (returnval == -4) {
 		gtk_label_set_text(GTK_LABEL(mainbox.desc), "File Type: Missing Table File (will rebuild)");
-		return(TRUE);
+		return (TRUE);
 	} // ENDIF- Missing Compression seek table?
-
 	tempfile = IsoFileOpenForRead(gtk_entry_get_text(GTK_ENTRY(mainbox.file)));
 	sprintf(templine, "File Type: %s%s%s",
 	        multinames[tempfile->multi],
@@ -113,15 +106,13 @@ gint MainBoxFileEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	        compressdesc[tempfile->compress]);
 	gtk_label_set_text(GTK_LABEL(mainbox.desc), templine);
 	tempfile = IsoFileClose(tempfile);
-	return(TRUE);
+	return (TRUE);
 } // END MainBoxFileEvent()
 
 void MainBoxRefocus()
 {
 	GdkEvent event;
-
 	MainBoxFileEvent(NULL, event, NULL);
-
 	gtk_widget_set_sensitive(mainbox.file, TRUE);
 	gtk_widget_set_sensitive(mainbox.selectbutton, TRUE);
 	gtk_widget_set_sensitive(mainbox.startcheck, TRUE);
@@ -142,57 +133,43 @@ gint MainBoxCancelEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	ConversionBoxDestroy();
 	DeviceBoxDestroy();
 	MainBoxDestroy();
-
 	gtk_main_quit();
-	return(TRUE);
+	return (TRUE);
 } // END MainBoxCancelEvent()
 
 gint MainBoxOKEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 {
 	const char *tempisoname;
-
 	MainBoxUnfocus();
-
 	tempisoname = gtk_entry_get_text(GTK_ENTRY(mainbox.file));
-	if (*(tempisoname) != 0)
-	{
-		if (IsIsoFile(tempisoname) == -4)
-		{
+	if (*(tempisoname) != 0) {
+		if (IsIsoFile(tempisoname) == -4) {
 			IsoTableRebuild(tempisoname);
 			MainBoxRefocus();
-			return(TRUE);
+			return (TRUE);
 		} // ENDIF- Do we need to rebuild an image file's index before using it?
-
-		if (IsIsoFile(tempisoname) < 0)
-		{
+		if (IsIsoFile(tempisoname) < 0) {
 			tempisoname = NULL;
 			MainBoxRefocus();
 			MessageBoxShow("Not a Valid Image File.", 1);
-			return(TRUE);
+			return (TRUE);
 		} // ENDIF- Not an ISO file? Message and Stop here.
 	} // ENDIF- Is there an ISO file to check out?
-
 	strcpy(conf.isoname, tempisoname);
 	tempisoname = NULL;
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mainbox.startcheck)) == FALSE)
-	{
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mainbox.startcheck)) == FALSE) {
 		conf.startconfigure = 0; // FALSE
-	}
-	else
-	{
+	} else {
 		conf.startconfigure = 1; // TRUE
 	} // ENDIF- Was this check button turned off?
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mainbox.restartcheck)) == FALSE)
-	{
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mainbox.restartcheck)) == FALSE) {
 		conf.restartconfigure = 0; // FALSE
-	}
-	else
-	{
+	} else {
 		conf.restartconfigure = 1; // TRUE
 	} // ENDIF- Was this check button turned off?
 	SaveConf();
 	MainBoxCancelEvent(widget, event, data);
-	return(TRUE);
+	return (TRUE);
 } // END MainBoxOKEvent()
 
 gint MainBoxBrowseEvent(GtkWidget *widget, GdkEvent event, gpointer data)
@@ -202,18 +179,17 @@ gint MainBoxBrowseEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	                                gtk_entry_get_text(GTK_ENTRY(mainbox.file)));
 	selectionbox.wherefrom = 1; // From the Main Window
 	SelectionBoxRefocus();
-	return(TRUE);
+	return (TRUE);
 } // END MainBoxBrowseEvent()
 
 gint MainBoxDeviceEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 {
 	MainBoxUnfocus();
-
 	gtk_entry_set_text(GTK_ENTRY(devicebox.file),
 	                   gtk_entry_get_text(GTK_ENTRY(mainbox.file)));
 	gtk_window_set_focus(GTK_WINDOW(devicebox.window), devicebox.file);
 	gtk_widget_show_all(devicebox.window);
-	return(TRUE);
+	return (TRUE);
 } // END MainBoxBrowseEvent()
 
 gint MainBoxConversionEvent(GtkWidget *widget, GdkEvent event, gpointer data)
@@ -223,7 +199,7 @@ gint MainBoxConversionEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	                   gtk_entry_get_text(GTK_ENTRY(mainbox.file)));
 	gtk_window_set_focus(GTK_WINDOW(conversionbox.window), conversionbox.file);
 	gtk_widget_show_all(conversionbox.window);
-	return(TRUE);
+	return (TRUE);
 } // END MainBoxBrowseEvent()
 
 void MainBoxDisplay()
@@ -231,14 +207,12 @@ void MainBoxDisplay()
 	GtkWidget *item;
 	GtkWidget *hbox1;
 	GtkWidget *vbox1;
-
 	mainbox.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_container_set_border_width(GTK_CONTAINER(mainbox.window), 5);
 	gtk_window_set_title(GTK_WINDOW(mainbox.window), "CDVDisoEFP Configuration");
 	gtk_window_set_position(GTK_WINDOW(mainbox.window), GTK_WIN_POS_CENTER);
 	g_signal_connect(G_OBJECT(mainbox.window), "delete_event",
 	                 G_CALLBACK(MainBoxCancelEvent), NULL);
-
 	vbox1 = gtk_vbox_new(FALSE, 5);
 	gtk_container_add(GTK_CONTAINER(mainbox.window), vbox1);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox1), 5);
@@ -250,13 +224,11 @@ void MainBoxDisplay()
 	gtk_box_pack_start(GTK_BOX(hbox1), item, FALSE, FALSE, 0);
 	gtk_widget_show(item);
 	item = NULL;
-
 	mainbox.file = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox1), mainbox.file, TRUE, TRUE, 0);
 	gtk_widget_show(mainbox.file);
 	g_signal_connect(G_OBJECT(mainbox.file), "changed",
 	                 G_CALLBACK(MainBoxFileEvent), NULL);
-
 	mainbox.selectbutton = gtk_button_new_with_label("Browse");
 	gtk_box_pack_start(GTK_BOX(hbox1), mainbox.selectbutton, FALSE, FALSE, 0);
 	gtk_widget_show(mainbox.selectbutton);
@@ -274,17 +246,13 @@ void MainBoxDisplay()
 	gtk_widget_show(mainbox.startcheck);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mainbox.startcheck), FALSE);
 	if (conf.startconfigure != 0)
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mainbox.startcheck), TRUE);
-	} // ENDIF- Is this box supposed to be checked?
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mainbox.startcheck), TRUE); // ENDIF- Is this box supposed to be checked?
 	mainbox.restartcheck = gtk_check_button_new_with_label("Show Configure screen when restarting emulation");
 	gtk_box_pack_start(GTK_BOX(vbox1), mainbox.restartcheck, FALSE, FALSE, 0);
 	gtk_widget_show(mainbox.restartcheck);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mainbox.restartcheck), FALSE);
 	if (conf.restartconfigure != 0)
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mainbox.restartcheck), TRUE);
-	} // ENDIF- Is this box supposed to be checked?
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mainbox.restartcheck), TRUE); // ENDIF- Is this box supposed to be checked?
 	hbox1 = gtk_hbutton_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, TRUE, 0);
 	gtk_widget_show(hbox1);
@@ -311,7 +279,6 @@ void MainBoxDisplay()
 	item = NULL;
 	hbox1 = NULL;
 	vbox1 = NULL;
-
 	// We held off setting the name until now... so description would show.
 	gtk_entry_set_text(GTK_ENTRY(mainbox.file), conf.isoname);
 } // END MainBoxDisplay()

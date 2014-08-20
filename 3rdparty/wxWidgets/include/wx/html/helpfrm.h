@@ -68,78 +68,96 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlHelpWindow;
 
 class WXDLLIMPEXP_HTML wxHtmlHelpFrame : public wxFrame
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlHelpFrame)
+	DECLARE_DYNAMIC_CLASS(wxHtmlHelpFrame)
 
 public:
-    wxHtmlHelpFrame(wxHtmlHelpData* data = NULL) { Init(data); }
-    wxHtmlHelpFrame(wxWindow* parent, wxWindowID wxWindowID,
-                    const wxString& title = wxEmptyString,
-                    int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL,
-                    wxConfigBase *config=NULL, const wxString& rootpath = wxEmptyString);
-    bool Create(wxWindow* parent, wxWindowID id, const wxString& title = wxEmptyString,
-                int style = wxHF_DEFAULT_STYLE,
-                wxConfigBase *config=NULL, const wxString& rootpath = wxEmptyString);
-    virtual ~wxHtmlHelpFrame();
+	wxHtmlHelpFrame(wxHtmlHelpData* data = NULL)
+	{
+		Init(data);
+	}
+	wxHtmlHelpFrame(wxWindow* parent, wxWindowID wxWindowID,
+	                const wxString &title = wxEmptyString,
+	                int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL,
+	                wxConfigBase *config = NULL, const wxString &rootpath = wxEmptyString);
+	bool Create(wxWindow* parent, wxWindowID id, const wxString &title = wxEmptyString,
+	            int style = wxHF_DEFAULT_STYLE,
+	            wxConfigBase *config = NULL, const wxString &rootpath = wxEmptyString);
+	virtual ~wxHtmlHelpFrame();
 
-    /// Returns the data associated with the window.
-    wxHtmlHelpData* GetData() { return m_Data; }
+	/// Returns the data associated with the window.
+	wxHtmlHelpData* GetData()
+	{
+		return m_Data;
+	}
 
-    /// Returns the help controller associated with the window.
-    wxHtmlHelpController* GetController() const { return m_helpController; }
+	/// Returns the help controller associated with the window.
+	wxHtmlHelpController* GetController() const
+	{
+		return m_helpController;
+	}
 
-    /// Sets the help controller associated with the window.
-    void SetController(wxHtmlHelpController* controller) { m_helpController = controller; }
+	/// Sets the help controller associated with the window.
+	void SetController(wxHtmlHelpController* controller)
+	{
+		m_helpController = controller;
+	}
 
-    /// Returns the help window.
-    wxHtmlHelpWindow* GetHelpWindow() const { return m_HtmlHelpWin; }
+	/// Returns the help window.
+	wxHtmlHelpWindow* GetHelpWindow() const
+	{
+		return m_HtmlHelpWin;
+	}
 
-    // Sets format of title of the frame. Must contain exactly one "%s"
-    // (for title of displayed HTML page)
-    void SetTitleFormat(const wxString& format);
+	// Sets format of title of the frame. Must contain exactly one "%s"
+	// (for title of displayed HTML page)
+	void SetTitleFormat(const wxString &format);
 
-    // For compatibility
-    void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
+	// For compatibility
+	void UseConfig(wxConfigBase *config, const wxString &rootpath = wxEmptyString);
 
-    // Make the help controller's frame 'modal' if
-    // needed
-    void AddGrabIfNeeded();
+	// Make the help controller's frame 'modal' if
+	// needed
+	void AddGrabIfNeeded();
 
-    // Override to add custom buttons to the toolbar
-    virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {}
+	// Override to add custom buttons to the toolbar
+	virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {}
 
-    // we don't want to prevent the app from closing just because a help window
-    // remains opened
-    virtual bool ShouldPreventAppExit() const { return false; }
+	// we don't want to prevent the app from closing just because a help window
+	// remains opened
+	virtual bool ShouldPreventAppExit() const
+	{
+		return false;
+	}
 
 protected:
-    void Init(wxHtmlHelpData* data = NULL);
+	void Init(wxHtmlHelpData* data = NULL);
 
-    void OnCloseWindow(wxCloseEvent& event);
-    void OnActivate(wxActivateEvent& event);
+	void OnCloseWindow(wxCloseEvent &event);
+	void OnActivate(wxActivateEvent &event);
 
 #ifdef __WXMAC__
-    void OnClose(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
+	void OnClose(wxCommandEvent &event);
+	void OnAbout(wxCommandEvent &event);
 #endif
 
-    // Images:
-    enum {
-        IMG_Book = 0,
-        IMG_Folder,
-        IMG_Page
-    };
+	// Images:
+	enum {
+		IMG_Book = 0,
+		IMG_Folder,
+		IMG_Page
+	};
 
 protected:
-    wxHtmlHelpData* m_Data;
-    bool m_DataCreated;  // m_Data created by frame, or supplied?
-    wxString m_TitleFormat;  // title of the help frame
-    wxHtmlHelpWindow *m_HtmlHelpWin;
-    wxHtmlHelpController* m_helpController;
+	wxHtmlHelpData* m_Data;
+	bool m_DataCreated;  // m_Data created by frame, or supplied?
+	wxString m_TitleFormat;  // title of the help frame
+	wxHtmlHelpWindow *m_HtmlHelpWin;
+	wxHtmlHelpController* m_helpController;
 
 private:
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxHtmlHelpFrame)
+	DECLARE_EVENT_TABLE()
+	DECLARE_NO_COPY_CLASS(wxHtmlHelpFrame)
 };
 
 #endif // wxUSE_WXHTML_HELP

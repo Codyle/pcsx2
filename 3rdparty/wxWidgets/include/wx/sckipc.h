@@ -54,95 +54,101 @@ class WXDLLIMPEXP_FWD_NET wxTCPClient;
 
 class WXDLLIMPEXP_NET wxTCPConnection: public wxConnectionBase
 {
-  DECLARE_DYNAMIC_CLASS(wxTCPConnection)
+	DECLARE_DYNAMIC_CLASS(wxTCPConnection)
 
 public:
-  wxTCPConnection(wxChar *buffer, int size);
-  wxTCPConnection();
-  virtual ~wxTCPConnection();
+	wxTCPConnection(wxChar *buffer, int size);
+	wxTCPConnection();
+	virtual ~wxTCPConnection();
 
-  // Calls that CLIENT can make
-  virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
-  virtual wxChar *Request(const wxString& item, int *size = NULL, wxIPCFormat format = wxIPC_TEXT);
-  virtual bool Poke(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
-  virtual bool StartAdvise(const wxString& item);
-  virtual bool StopAdvise(const wxString& item);
+	// Calls that CLIENT can make
+	virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+	virtual wxChar *Request(const wxString &item, int *size = NULL, wxIPCFormat format = wxIPC_TEXT);
+	virtual bool Poke(const wxString &item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+	virtual bool StartAdvise(const wxString &item);
+	virtual bool StopAdvise(const wxString &item);
 
-  // Calls that SERVER can make
-  virtual bool Advise(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+	// Calls that SERVER can make
+	virtual bool Advise(const wxString &item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
 
-  // Calls that both can make
-  virtual bool Disconnect(void);
+	// Calls that both can make
+	virtual bool Disconnect(void);
 
-  // Callbacks to BOTH - override at will
-  // Default behaviour is to delete connection and return true
-  virtual bool OnDisconnect(void) { delete this; return true; }
+	// Callbacks to BOTH - override at will
+	// Default behaviour is to delete connection and return true
+	virtual bool OnDisconnect(void)
+	{
+		delete this;
+		return true;
+	}
 
-  // To enable the compressor (NOTE: not implemented!)
-  void Compress(bool on);
+	// To enable the compressor (NOTE: not implemented!)
+	void Compress(bool on);
 
-  // unhide the Execute overload from wxConnectionBase
-  virtual bool Execute(const wxString& str)
-    { return Execute(str, -1, wxIPC_TEXT); }
+	// unhide the Execute overload from wxConnectionBase
+	virtual bool Execute(const wxString &str)
+	{
+		return Execute(str, -1, wxIPC_TEXT);
+	}
 
 protected:
-  wxSocketBase       *m_sock;
-  wxSocketStream     *m_sockstrm;
-  wxDataInputStream  *m_codeci;
-  wxDataOutputStream *m_codeco;
-  wxString            m_topic;
+	wxSocketBase       *m_sock;
+	wxSocketStream     *m_sockstrm;
+	wxDataInputStream  *m_codeci;
+	wxDataOutputStream *m_codeco;
+	wxString            m_topic;
 
-  friend class wxTCPServer;
-  friend class wxTCPClient;
-  friend class wxTCPEventHandler;
+	friend class wxTCPServer;
+	friend class wxTCPClient;
+	friend class wxTCPEventHandler;
 
-  DECLARE_NO_COPY_CLASS(wxTCPConnection)
+	DECLARE_NO_COPY_CLASS(wxTCPConnection)
 };
 
 class WXDLLIMPEXP_NET wxTCPServer: public wxServerBase
 {
 public:
-  wxTCPConnection *topLevelConnection;
+	wxTCPConnection *topLevelConnection;
 
-  wxTCPServer();
-  virtual ~wxTCPServer();
+	wxTCPServer();
+	virtual ~wxTCPServer();
 
-  // Returns false on error (e.g. port number is already in use)
-  virtual bool Create(const wxString& serverName);
+	// Returns false on error (e.g. port number is already in use)
+	virtual bool Create(const wxString &serverName);
 
-  // Callbacks to SERVER - override at will
-  virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
+	// Callbacks to SERVER - override at will
+	virtual wxConnectionBase *OnAcceptConnection(const wxString &topic);
 
 protected:
-  wxSocketServer *m_server;
+	wxSocketServer *m_server;
 
 #ifdef __UNIX_LIKE__
-  // the name of the file associated to the Unix domain socket, may be empty
-  wxString m_filename;
+	// the name of the file associated to the Unix domain socket, may be empty
+	wxString m_filename;
 #endif // __UNIX_LIKE__
 
-  DECLARE_NO_COPY_CLASS(wxTCPServer)
-  DECLARE_DYNAMIC_CLASS(wxTCPServer)
+	DECLARE_NO_COPY_CLASS(wxTCPServer)
+	DECLARE_DYNAMIC_CLASS(wxTCPServer)
 };
 
 class WXDLLIMPEXP_NET wxTCPClient: public wxClientBase
 {
 public:
-  wxTCPClient();
-  virtual ~wxTCPClient();
+	wxTCPClient();
+	virtual ~wxTCPClient();
 
-  virtual bool ValidHost(const wxString& host);
+	virtual bool ValidHost(const wxString &host);
 
-  // Call this to make a connection. Returns NULL if cannot.
-  virtual wxConnectionBase *MakeConnection(const wxString& host,
-                                           const wxString& server,
-                                           const wxString& topic);
+	// Call this to make a connection. Returns NULL if cannot.
+	virtual wxConnectionBase *MakeConnection(const wxString &host,
+	                const wxString &server,
+	                const wxString &topic);
 
-  // Callbacks to CLIENT - override at will
-  virtual wxConnectionBase *OnMakeConnection();
+	// Callbacks to CLIENT - override at will
+	virtual wxConnectionBase *OnMakeConnection();
 
 private:
-  DECLARE_DYNAMIC_CLASS(wxTCPClient)
+	DECLARE_DYNAMIC_CLASS(wxTCPClient)
 };
 
 #endif // wxUSE_SOCKETS && wxUSE_IPC

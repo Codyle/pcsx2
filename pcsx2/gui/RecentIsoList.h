@@ -24,15 +24,17 @@ class RecentIsoManager : public wxEvtHandler,
 	public EventListener_AppStatus
 {
 protected:
-	struct RecentItem
-	{
+	struct RecentItem {
 		wxString	Filename;
 		wxMenuItem*	ItemPtr;
 
-		RecentItem() { ItemPtr = NULL; }
+		RecentItem()
+		{
+			ItemPtr = NULL;
+		}
 
-		RecentItem( const wxString& src )
-			: Filename( src )
+		RecentItem(const wxString &src)
+			: Filename(src)
 		{
 			ItemPtr = NULL;
 		}
@@ -49,20 +51,20 @@ protected:
 	wxMenuItem* m_Separator;
 
 public:
-	RecentIsoManager( wxMenu* menu , int firstIdForMenuItems_or_wxID_ANY );
+	RecentIsoManager(wxMenu* menu , int firstIdForMenuItems_or_wxID_ANY);
 	virtual ~RecentIsoManager() throw();
 
 	void RemoveAllFromMenu();
 	void Repopulate();
 	void Clear();
-	void Add( const wxString& src );
+	void Add(const wxString &src);
 
 protected:
-	void InsertIntoMenu( int id );
-	void OnChangedSelection( wxCommandEvent& evt );
-	void LoadListFrom( IniInterface& ini );
+	void InsertIntoMenu(int id);
+	void OnChangedSelection(wxCommandEvent &evt);
+	void LoadListFrom(IniInterface &ini);
 
-	void AppStatusEvent_OnUiSettingsLoadSave( const AppSettingsEventInfo& ini );
+	void AppStatusEvent_OnUiSettingsLoadSave(const AppSettingsEventInfo &ini);
 	void AppStatusEvent_OnSettingsApplied();
 };
 
@@ -70,8 +72,7 @@ protected:
 // --------------------------------------------------------------------------------------
 //  RecentIsoList
 // --------------------------------------------------------------------------------------
-struct RecentIsoList
-{
+struct RecentIsoList {
 	ScopedPtr<RecentIsoManager>		Manager;
 	ScopedPtr<wxMenu>				Menu;
 

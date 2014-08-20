@@ -125,48 +125,48 @@ struct Elf32_Rel {
 
 class ElfObject
 {
-	private:
-		SafeArray<u8> data;
-		ELF_PHR* proghead;
-		ELF_SHR* secthead;
-		wxString filename;
+private:
+	SafeArray<u8> data;
+	ELF_PHR* proghead;
+	ELF_SHR* secthead;
+	wxString filename;
 
-		void initElfHeaders();
-		void readIso(IsoFile file);
-		void readFile();
-		void checkElfSize(s64 elfsize);
+	void initElfHeaders();
+	void readIso(IsoFile file);
+	void readFile();
+	void checkElfSize(s64 elfsize);
 
-	public:
-		bool isCdvd;
-		ELF_HEADER& header;
+public:
+	bool isCdvd;
+	ELF_HEADER &header;
 
-		// Destructor!
-		// C++ does all the cleanup automagically for us.
-		virtual ~ElfObject() throw() { }
+	// Destructor!
+	// C++ does all the cleanup automagically for us.
+	virtual ~ElfObject() throw() { }
 
-		ElfObject(const wxString& srcfile, IsoFile isofile);
-		ElfObject( const wxString& srcfile, uint hdrsize );
+	ElfObject(const wxString &srcfile, IsoFile isofile);
+	ElfObject(const wxString &srcfile, uint hdrsize);
 
-		void loadProgramHeaders();
-		void loadSectionHeaders();
-		void loadHeaders();
+	void loadProgramHeaders();
+	void loadSectionHeaders();
+	void loadHeaders();
 
-		bool hasProgramHeaders();
-		bool hasSectionHeaders();
-		bool hasHeaders();
+	bool hasProgramHeaders();
+	bool hasSectionHeaders();
+	bool hasHeaders();
 
-		std::pair<u32,u32> getTextRange();
-		u32 getCRC();
+	std::pair<u32, u32> getTextRange();
+	u32 getCRC();
 };
 
 //-------------------
-extern void loadElfFile(const wxString& filename);
-extern int  GetPS2ElfName( wxString& dest );
+extern void loadElfFile(const wxString &filename);
+extern int  GetPS2ElfName(wxString &dest);
 
 
 extern u32 ElfCRC;
 extern u32 ElfEntry;
-extern std::pair<u32,u32> ElfTextRange;
+extern std::pair<u32, u32> ElfTextRange;
 extern wxString LastELF;
 
 #endif

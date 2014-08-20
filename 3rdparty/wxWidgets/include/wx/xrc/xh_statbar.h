@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxStatusBarXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxStatusBarXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxStatusBarXmlHandler)
 
 public:
-    wxStatusBarXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxStatusBarXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_STATUSBAR

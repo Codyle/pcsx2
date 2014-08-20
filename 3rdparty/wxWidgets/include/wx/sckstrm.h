@@ -19,54 +19,62 @@
 
 class WXDLLIMPEXP_NET wxSocketOutputStream : public wxOutputStream
 {
- public:
-  wxSocketOutputStream(wxSocketBase& s);
-  virtual ~wxSocketOutputStream();
+public:
+	wxSocketOutputStream(wxSocketBase &s);
+	virtual ~wxSocketOutputStream();
 
-  wxFileOffset SeekO( wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
-    { return -1; }
-  wxFileOffset TellO() const
-    { return -1; }
+	wxFileOffset SeekO(wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode))
+	{
+		return -1;
+	}
+	wxFileOffset TellO() const
+	{
+		return -1;
+	}
 
- protected:
-  wxSocketBase *m_o_socket;
+protected:
+	wxSocketBase *m_o_socket;
 
-  size_t OnSysWrite(const void *buffer, size_t bufsize);
+	size_t OnSysWrite(const void *buffer, size_t bufsize);
 
-    DECLARE_NO_COPY_CLASS(wxSocketOutputStream)
+	DECLARE_NO_COPY_CLASS(wxSocketOutputStream)
 };
 
 class WXDLLIMPEXP_NET wxSocketInputStream : public wxInputStream
 {
- public:
-  wxSocketInputStream(wxSocketBase& s);
-  virtual ~wxSocketInputStream();
+public:
+	wxSocketInputStream(wxSocketBase &s);
+	virtual ~wxSocketInputStream();
 
-  wxFileOffset SeekI( wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
-    { return -1; }
-  wxFileOffset TellI() const
-    { return -1; }
+	wxFileOffset SeekI(wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode))
+	{
+		return -1;
+	}
+	wxFileOffset TellI() const
+	{
+		return -1;
+	}
 
- protected:
-  wxSocketBase *m_i_socket;
+protected:
+	wxSocketBase *m_i_socket;
 
-  size_t OnSysRead(void *buffer, size_t bufsize);
+	size_t OnSysRead(void *buffer, size_t bufsize);
 
-    DECLARE_NO_COPY_CLASS(wxSocketInputStream)
+	DECLARE_NO_COPY_CLASS(wxSocketInputStream)
 };
 
 class WXDLLIMPEXP_NET wxSocketStream : public wxSocketInputStream,
-                   public wxSocketOutputStream
+	public wxSocketOutputStream
 {
- public:
-  wxSocketStream(wxSocketBase& s);
-  virtual ~wxSocketStream();
+public:
+	wxSocketStream(wxSocketBase &s);
+	virtual ~wxSocketStream();
 
-  DECLARE_NO_COPY_CLASS(wxSocketStream)
+	DECLARE_NO_COPY_CLASS(wxSocketStream)
 };
 
 #endif
-  // wxUSE_SOCKETS && wxUSE_STREAMS
+// wxUSE_SOCKETS && wxUSE_STREAMS
 
 #endif
-  // __SCK_STREAM_H__
+// __SCK_STREAM_H__

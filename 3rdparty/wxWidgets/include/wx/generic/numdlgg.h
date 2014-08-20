@@ -19,9 +19,9 @@
 #include "wx/dialog.h"
 
 #if wxUSE_SPINCTRL
-    class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
+class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 #else
-    class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 #endif // wxUSE_SPINCTRL
 
 // ----------------------------------------------------------------------------
@@ -31,33 +31,36 @@
 class WXDLLEXPORT wxNumberEntryDialog : public wxDialog
 {
 public:
-    wxNumberEntryDialog(wxWindow *parent,
-                        const wxString& message,
-                        const wxString& prompt,
-                        const wxString& caption,
-                        long value, long min, long max,
-                        const wxPoint& pos = wxDefaultPosition);
+	wxNumberEntryDialog(wxWindow *parent,
+	                    const wxString &message,
+	                    const wxString &prompt,
+	                    const wxString &caption,
+	                    long value, long min, long max,
+	                    const wxPoint &pos = wxDefaultPosition);
 
-    long GetValue() const { return m_value; }
+	long GetValue() const
+	{
+		return m_value;
+	}
 
-    // implementation only
-    void OnOK(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
+	// implementation only
+	void OnOK(wxCommandEvent &event);
+	void OnCancel(wxCommandEvent &event);
 
 protected:
 
 #if wxUSE_SPINCTRL
-    wxSpinCtrl *m_spinctrl;
+	wxSpinCtrl *m_spinctrl;
 #else
-    wxTextCtrl *m_spinctrl;
+	wxTextCtrl *m_spinctrl;
 #endif // wxUSE_SPINCTRL
 
-    long m_value, m_min, m_max;
+	long m_value, m_min, m_max;
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxNumberEntryDialog)
-    DECLARE_NO_COPY_CLASS(wxNumberEntryDialog)
+	DECLARE_EVENT_TABLE()
+	DECLARE_DYNAMIC_CLASS(wxNumberEntryDialog)
+	DECLARE_NO_COPY_CLASS(wxNumberEntryDialog)
 };
 
 // ----------------------------------------------------------------------------
@@ -65,14 +68,14 @@ private:
 // ----------------------------------------------------------------------------
 
 long WXDLLEXPORT
-wxGetNumberFromUser(const wxString& message,
-                    const wxString& prompt,
-                    const wxString& caption,
+wxGetNumberFromUser(const wxString &message,
+                    const wxString &prompt,
+                    const wxString &caption,
                     long value = 0,
                     long min = 0,
                     long max = 100,
                     wxWindow *parent = (wxWindow *)NULL,
-                    const wxPoint& pos = wxDefaultPosition);
+                    const wxPoint &pos = wxDefaultPosition);
 
 #endif // wxUSE_NUMBERDLG
 

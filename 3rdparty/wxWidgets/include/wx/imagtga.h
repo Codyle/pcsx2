@@ -21,24 +21,24 @@
 class WXDLLEXPORT wxTGAHandler : public wxImageHandler
 {
 public:
-    wxTGAHandler()
-    {
-        m_name = wxT("TGA file");
-        m_extension = wxT("tga");
-        m_type = wxBITMAP_TYPE_TGA;
-        m_mime = wxT("image/tga");
-    }
+	wxTGAHandler()
+	{
+		m_name = wxT("TGA file");
+		m_extension = wxT("tga");
+		m_type = wxBITMAP_TYPE_TGA;
+		m_mime = wxT("image/tga");
+	}
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile(wxImage* image, wxInputStream& stream,
-                            bool verbose = true, int index = -1);
-    virtual bool SaveFile(wxImage* image, wxOutputStream& stream,
-                             bool verbose = true);
+	virtual bool LoadFile(wxImage* image, wxInputStream &stream,
+	                      bool verbose = true, int index = -1);
+	virtual bool SaveFile(wxImage* image, wxOutputStream &stream,
+	                      bool verbose = true);
 protected:
-    virtual bool DoCanRead(wxInputStream& stream);
+	virtual bool DoCanRead(wxInputStream &stream);
 #endif // wxUSE_STREAMS
 
-    DECLARE_DYNAMIC_CLASS(wxTGAHandler)
+	DECLARE_DYNAMIC_CLASS(wxTGAHandler)
 };
 
 #endif // wxUSE_TGA

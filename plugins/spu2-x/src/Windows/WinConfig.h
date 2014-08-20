@@ -51,26 +51,24 @@ extern HINSTANCE hInstance;
 // *** BEGIN DRIVER-SPECIFIC CONFIGURATION ***
 // -------------------------------------------
 
-struct CONFIG_XAUDIO2
-{
+struct CONFIG_XAUDIO2 {
 	wxString Device;
 	s8 NumBuffers;
 
 	CONFIG_XAUDIO2() :
 		Device(),
-		NumBuffers( 2 )
+		NumBuffers(2)
 	{
 	}
 };
 
-struct CONFIG_WAVEOUT
-{
+struct CONFIG_WAVEOUT {
 	wxString Device;
 	s8 NumBuffers;
 
 	CONFIG_WAVEOUT() :
 		Device(),
-		NumBuffers( 4 )
+		NumBuffers(4)
 	{
 	}
 };

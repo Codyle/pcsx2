@@ -139,7 +139,7 @@ char* CALLBACK PS2EgetLibName(void);
 */
 
 // for 64bit compilers
-typedef char __keyEvent_Size__[(sizeof(keyEvent) == 8)?1:-1];
+typedef char __keyEvent_Size__[(sizeof(keyEvent) == 8) ? 1 : -1];
 
 // plugin types
 #define SIO_TYPE_PAD	0x00000001
@@ -150,8 +150,8 @@ typedef char __keyEvent_Size__[(sizeof(keyEvent) == 8)?1:-1];
 typedef int (CALLBACK * SIOchangeSlotCB)(int slot);
 
 typedef struct _cdvdSubQ {
-	u8 ctrl:4;		// control and mode bits
-	u8 mode:4;		// control and mode bits
+	u8 ctrl: 4;		// control and mode bits
+	u8 mode: 4;		// control and mode bits
 	u8 trackNum;	// current track number (1 to 99)
 	u8 trackIndex;	// current index within track (0 to 99)
 	u8 trackM;		// current minute location on the disc (BCD encoded)
@@ -210,10 +210,10 @@ typedef struct _cdvdTN {
 //	CDROM_DATA_TRACK	0x04	//do not enable this! (from linux kernel)
 
 typedef void (*DEV9callback)(int cycles);
-typedef int  (*DEV9handler)(void);
+typedef int (*DEV9handler)(void);
 
 typedef void (*USBcallback)(int cycles);
-typedef int  (*USBhandler)(void);
+typedef int (*USBhandler)(void);
 
 typedef struct _GSdriverInfo {
 	char name[8];
@@ -244,8 +244,8 @@ s32  CALLBACK GSinit();
 s32  CALLBACK GSopen(void *pDsp, char *Title, int multithread);
 void CALLBACK GSclose();
 void CALLBACK GSshutdown();
-void CALLBACK GSsetSettingsDir( const char* dir );
-void CALLBACK GSsetLogDir( const char* dir );
+void CALLBACK GSsetSettingsDir(const char* dir);
+void CALLBACK GSsetLogDir(const char* dir);
 
 void CALLBACK GSvsync(int field);
 void CALLBACK GSgifTransfer(const u32 *pMem, u32 addr);
@@ -282,7 +282,7 @@ int CALLBACK GSsetupRecording(int start, void* pData);
 void CALLBACK GSreset();
 //deprecated: GSgetTitleInfo was used in PCSX2 but no plugin supported it prior to r4070:
 //void CALLBACK GSgetTitleInfo( char dest[128] );
-void CALLBACK GSgetTitleInfo2( char* dest, size_t length );
+void CALLBACK GSgetTitleInfo2(char* dest, size_t length);
 void CALLBACK GSwriteCSR(u32 value);
 s32  CALLBACK GSfreeze(int mode, freezeData *data);
 void CALLBACK GSconfigure();
@@ -303,8 +303,8 @@ s32  CALLBACK PADinit(u32 flags);
 s32  CALLBACK PADopen(void *pDsp);
 void CALLBACK PADclose();
 void CALLBACK PADshutdown();
-void CALLBACK PADsetSettingsDir( const char* dir );
-void CALLBACK PADsetLogDir( const char* dir );
+void CALLBACK PADsetSettingsDir(const char* dir);
+void CALLBACK PADsetLogDir(const char* dir);
 
 // PADkeyEvent is called every vsync (return NULL if no event)
 keyEvent* CALLBACK PADkeyEvent();
@@ -350,8 +350,8 @@ s32  CALLBACK SPU2init();
 s32  CALLBACK SPU2open(void *pDsp);
 void CALLBACK SPU2close();
 void CALLBACK SPU2shutdown();
-void CALLBACK SPU2setSettingsDir( const char* dir );
-void CALLBACK SPU2setLogDir( const char* dir );
+void CALLBACK SPU2setSettingsDir(const char* dir);
+void CALLBACK SPU2setLogDir(const char* dir);
 
 void CALLBACK SPU2reset();
 void CALLBACK SPU2write(u32 mem, u16 value);
@@ -378,9 +378,9 @@ void CALLBACK SPU2setDMABaseAddr(uptr baseaddr);
 void CALLBACK SPU2interruptDMA7();
 
 u32 CALLBACK SPU2ReadMemAddr(int core);
-void CALLBACK SPU2WriteMemAddr(int core,u32 value);
+void CALLBACK SPU2WriteMemAddr(int core, u32 value);
 
-void CALLBACK SPU2irqCallback(void (*SPU2callback)(),void (*DMA4callback)(),void (*DMA7callback)());
+void CALLBACK SPU2irqCallback(void (*SPU2callback)(), void (*DMA4callback)(), void (*DMA7callback)());
 #endif
 
 // extended funcs
@@ -412,8 +412,8 @@ s32  CALLBACK CDVDinit();
 s32  CALLBACK CDVDopen(const char* pTitleFilename);
 void CALLBACK CDVDclose();
 void CALLBACK CDVDshutdown();
-void CALLBACK CDVDsetSettingsDir( const char* dir );
-void CALLBACK CDVDsetLogDir( const char* dir );
+void CALLBACK CDVDsetSettingsDir(const char* dir);
+void CALLBACK CDVDsetLogDir(const char* dir);
 
 s32  CALLBACK CDVDreadTrack(u32 lsn, int mode);
 
@@ -463,8 +463,8 @@ s32  CALLBACK DEV9init();
 s32  CALLBACK DEV9open(void *pDsp);
 void CALLBACK DEV9close();
 void CALLBACK DEV9shutdown();
-void CALLBACK DEV9setSettingsDir( const char* dir );
-void CALLBACK DEV9setLogDir( const char* dir );
+void CALLBACK DEV9setSettingsDir(const char* dir);
+void CALLBACK DEV9setLogDir(const char* dir);
 
 u8   CALLBACK DEV9read8(u32 addr);
 u16  CALLBACK DEV9read16(u32 addr);
@@ -506,8 +506,8 @@ s32  CALLBACK USBinit();
 s32  CALLBACK USBopen(void *pDsp);
 void CALLBACK USBclose();
 void CALLBACK USBshutdown();
-void CALLBACK USBsetSettingsDir( const char* dir );
-void CALLBACK USBsetLogDir( const char* dir );
+void CALLBACK USBsetSettingsDir(const char* dir);
+void CALLBACK USBsetLogDir(const char* dir);
 
 u8   CALLBACK USBread8(u32 addr);
 u16  CALLBACK USBread16(u32 addr);
@@ -545,8 +545,8 @@ s32  CALLBACK FWinit();
 s32  CALLBACK FWopen(void *pDsp);
 void CALLBACK FWclose();
 void CALLBACK FWshutdown();
-void CALLBACK FWsetSettingsDir( const char* dir );
-void CALLBACK FWsetLogDir( const char* dir );
+void CALLBACK FWsetSettingsDir(const char* dir);
+void CALLBACK FWsetLogDir(const char* dir);
 
 u32  CALLBACK FWread32(u32 addr);
 void CALLBACK FWwrite32(u32 addr, u32 value);
@@ -563,8 +563,8 @@ s32  CALLBACK FWtest();
 // might be useful for emulators
 #ifdef PLUGINtypedefs
 
-typedef u32  (CALLBACK* _PS2EgetLibType)(void);
-typedef u32  (CALLBACK* _PS2EgetLibVersion2)(u32 type);
+typedef u32(CALLBACK* _PS2EgetLibType)(void);
+typedef u32(CALLBACK* _PS2EgetLibVersion2)(u32 type);
 typedef char*(CALLBACK* _PS2EgetLibName)(void);
 
 typedef void (CALLBACK* _PS2EsetEmuVersion)(const char* emuId, u32 version);		// HACK to let some plugins know it's 0.9.7 PCSX2 --air
@@ -572,8 +572,8 @@ typedef void (CALLBACK* _PS2EsetEmuVersion)(const char* emuId, u32 version);		//
 // GS
 // NOTE: GSreadFIFOX/GSwriteCSR functions CANNOT use XMM/MMX regs
 // If you want to use them, need to save and restore current ones
-typedef s32  (CALLBACK* _GSopen)(void *pDsp, char *Title, int multithread);
-typedef s32  (CALLBACK* _GSopen2)( void *pDsp, u32 flags );
+typedef s32(CALLBACK* _GSopen)(void *pDsp, char *Title, int multithread);
+typedef s32(CALLBACK* _GSopen2)(void *pDsp, u32 flags);
 typedef void (CALLBACK* _GSvsync)(int field);
 typedef void (CALLBACK* _GSgifTransfer)(const u32 *pMem, u32 size);
 typedef void (CALLBACK* _GSgifTransfer1)(u32 *pMem, u32 addr);
@@ -602,27 +602,27 @@ typedef void (CALLBACK* _GSmakeSnapshot)(const char *path);
 typedef void (CALLBACK* _GSmakeSnapshot2)(const char *path, int*, int);
 
 // PAD
-typedef s32  (CALLBACK* _PADinit)(u32 flags);
-typedef s32  (CALLBACK* _PADopen)(void *pDsp);
-typedef u8   (CALLBACK* _PADstartPoll)(int pad);
-typedef u8   (CALLBACK* _PADpoll)(u8 value);
-typedef u32  (CALLBACK* _PADquery)(int pad);
+typedef s32(CALLBACK* _PADinit)(u32 flags);
+typedef s32(CALLBACK* _PADopen)(void *pDsp);
+typedef u8(CALLBACK* _PADstartPoll)(int pad);
+typedef u8(CALLBACK* _PADpoll)(u8 value);
+typedef u32(CALLBACK* _PADquery)(int pad);
 typedef void (CALLBACK* _PADupdate)(int pad);
 typedef keyEvent* (CALLBACK* _PADkeyEvent)();
 typedef void (CALLBACK* _PADgsDriverInfo)(GSdriverInfo *info);
-typedef s32  (CALLBACK* _PADsetSlot)(u8 port, u8 slot);
-typedef s32  (CALLBACK* _PADqueryMtap)(u8 port);
+typedef s32(CALLBACK* _PADsetSlot)(u8 port, u8 slot);
+typedef s32(CALLBACK* _PADqueryMtap)(u8 port);
 typedef void (CALLBACK* _PADWriteEvent)(keyEvent &evt);
 
 // SPU2
-typedef s32  (CALLBACK* _SPU2open)(void *pDsp);
+typedef s32(CALLBACK* _SPU2open)(void *pDsp);
 typedef void (CALLBACK* _SPU2reset)();
 typedef void (CALLBACK* _SPU2write)(u32 mem, u16 value);
-typedef u16  (CALLBACK* _SPU2read)(u32 mem);
+typedef u16(CALLBACK* _SPU2read)(u32 mem);
 
 #ifdef ENABLE_NEW_IOPDMA_SPU2
-typedef s32  (CALLBACK* _SPU2dmaRead)(s32 channel, u32* data, u32 bytesLeft, u32* bytesProcessed);
-typedef s32  (CALLBACK* _SPU2dmaWrite)(s32 channel, u32* data, u32 bytesLeft, u32* bytesProcessed);
+typedef s32(CALLBACK* _SPU2dmaRead)(s32 channel, u32* data, u32 bytesLeft, u32* bytesProcessed);
+typedef s32(CALLBACK* _SPU2dmaWrite)(s32 channel, u32* data, u32 bytesLeft, u32* bytesProcessed);
 typedef void (CALLBACK* _SPU2dmaInterrupt)(s32 channel);
 
 // dma irq callbacks not needed anymore, they are handled by the dmac
@@ -635,9 +635,9 @@ typedef void (CALLBACK* _SPU2readDMA7Mem)(u16 *pMem, int size);
 typedef void (CALLBACK* _SPU2writeDMA7Mem)(u16 *pMem, int size);
 typedef void (CALLBACK* _SPU2setDMABaseAddr)(uptr baseaddr);
 typedef void (CALLBACK* _SPU2interruptDMA7)();
-typedef void (CALLBACK* _SPU2irqCallback)(void (*SPU2callback)(),void (*DMA4callback)(),void (*DMA7callback)());
-typedef u32  (CALLBACK* _SPU2ReadMemAddr)(int core);
-typedef void (CALLBACK* _SPU2WriteMemAddr)(int core,u32 value);
+typedef void (CALLBACK* _SPU2irqCallback)(void (*SPU2callback)(), void (*DMA4callback)(), void (*DMA7callback)());
+typedef u32(CALLBACK* _SPU2ReadMemAddr)(int core);
+typedef void (CALLBACK* _SPU2WriteMemAddr)(int core, u32 value);
 #endif
 
 typedef int (CALLBACK* _SPU2setupRecording)(int, void*);
@@ -651,12 +651,12 @@ typedef void (CALLBACK* _SPU2async)(u32 cycles);
 // CDVD
 // NOTE: The read/write functions CANNOT use XMM/MMX regs
 // If you want to use them, need to save and restore current ones
-typedef s32  (CALLBACK* _CDVDopen)(const char* pTitleFilename);
+typedef s32(CALLBACK* _CDVDopen)(const char* pTitleFilename);
 
 // Initiates an asynchronous track read operation.
 // Returns -1 on error (invalid track)
 // Returns 0 on success.
-typedef s32  (CALLBACK* _CDVDreadTrack)(u32 lsn, int mode);
+typedef s32(CALLBACK* _CDVDreadTrack)(u32 lsn, int mode);
 
 // *OBSOLETE* returns a pointer to the buffer, or NULL if data hasn't finished
 // loading yet.
@@ -666,18 +666,18 @@ typedef u8*  (CALLBACK* _CDVDgetBuffer)();
 // Returns -2 if the asynchronous read is still pending.
 // Returns -1 if the asyncronous read failed.
 // Returns 0 on success.
-typedef s32  (CALLBACK* _CDVDgetBuffer2)(u8* buffer);
+typedef s32(CALLBACK* _CDVDgetBuffer2)(u8* buffer);
 
-typedef s32  (CALLBACK* _CDVDreadSubQ)(u32 lsn, cdvdSubQ* subq);
-typedef s32  (CALLBACK* _CDVDgetTN)(cdvdTN *Buffer);
-typedef s32  (CALLBACK* _CDVDgetTD)(u8 Track, cdvdTD *Buffer);
-typedef s32  (CALLBACK* _CDVDgetTOC)(void* toc);
-typedef s32  (CALLBACK* _CDVDgetDiskType)();
-typedef s32  (CALLBACK* _CDVDgetTrayStatus)();
-typedef s32  (CALLBACK* _CDVDctrlTrayOpen)();
-typedef s32  (CALLBACK* _CDVDctrlTrayClose)();
-typedef s32  (CALLBACK* _CDVDreadSector)(u8* buffer, u32 lsn, int mode);
-typedef s32  (CALLBACK* _CDVDgetDualInfo)(s32* dualType, u32* _layer1start);
+typedef s32(CALLBACK* _CDVDreadSubQ)(u32 lsn, cdvdSubQ* subq);
+typedef s32(CALLBACK* _CDVDgetTN)(cdvdTN *Buffer);
+typedef s32(CALLBACK* _CDVDgetTD)(u8 Track, cdvdTD *Buffer);
+typedef s32(CALLBACK* _CDVDgetTOC)(void* toc);
+typedef s32(CALLBACK* _CDVDgetDiskType)();
+typedef s32(CALLBACK* _CDVDgetTrayStatus)();
+typedef s32(CALLBACK* _CDVDctrlTrayOpen)();
+typedef s32(CALLBACK* _CDVDctrlTrayClose)();
+typedef s32(CALLBACK* _CDVDreadSector)(u8* buffer, u32 lsn, int mode);
+typedef s32(CALLBACK* _CDVDgetDualInfo)(s32* dualType, u32* _layer1start);
 
 typedef void (CALLBACK* _CDVDnewDiskCB)(void (*callback)());
 
@@ -685,43 +685,43 @@ typedef void (CALLBACK* _CDVDnewDiskCB)(void (*callback)());
 // DEV9
 // NOTE: The read/write functions CANNOT use XMM/MMX regs
 // If you want to use them, need to save and restore current ones
-typedef s32  (CALLBACK* _DEV9open)(void *pDsp);
-typedef u8   (CALLBACK* _DEV9read8)(u32 mem);
-typedef u16  (CALLBACK* _DEV9read16)(u32 mem);
-typedef u32  (CALLBACK* _DEV9read32)(u32 mem);
+typedef s32(CALLBACK* _DEV9open)(void *pDsp);
+typedef u8(CALLBACK* _DEV9read8)(u32 mem);
+typedef u16(CALLBACK* _DEV9read16)(u32 mem);
+typedef u32(CALLBACK* _DEV9read32)(u32 mem);
 typedef void (CALLBACK* _DEV9write8)(u32 mem, u8 value);
 typedef void (CALLBACK* _DEV9write16)(u32 mem, u16 value);
 typedef void (CALLBACK* _DEV9write32)(u32 mem, u32 value);
 #ifdef ENABLE_NEW_IOPDMA_DEV9
-typedef s32  (CALLBACK* _DEV9dmaRead)(s32 channel, u32* data, u32 bytesLeft, u32* bytesProcessed);
-typedef s32  (CALLBACK* _DEV9dmaWrite)(s32 channel, u32* data, u32 bytesLeft, u32* bytesProcessed);
+typedef s32(CALLBACK* _DEV9dmaRead)(s32 channel, u32* data, u32 bytesLeft, u32* bytesProcessed);
+typedef s32(CALLBACK* _DEV9dmaWrite)(s32 channel, u32* data, u32 bytesLeft, u32* bytesProcessed);
 typedef void (CALLBACK* _DEV9dmaInterrupt)(s32 channel);
 #else
 typedef void (CALLBACK* _DEV9readDMA8Mem)(u32 *pMem, int size);
 typedef void (CALLBACK* _DEV9writeDMA8Mem)(u32 *pMem, int size);
 #endif
 typedef void (CALLBACK* _DEV9irqCallback)(DEV9callback callback);
-typedef DEV9handler (CALLBACK* _DEV9irqHandler)(void);
+typedef DEV9handler(CALLBACK* _DEV9irqHandler)(void);
 
 // USB
 // NOTE: The read/write functions CANNOT use XMM/MMX regs
 // If you want to use them, need to save and restore current ones
-typedef s32  (CALLBACK* _USBopen)(void *pDsp);
-typedef u8   (CALLBACK* _USBread8)(u32 mem);
-typedef u16  (CALLBACK* _USBread16)(u32 mem);
-typedef u32  (CALLBACK* _USBread32)(u32 mem);
+typedef s32(CALLBACK* _USBopen)(void *pDsp);
+typedef u8(CALLBACK* _USBread8)(u32 mem);
+typedef u16(CALLBACK* _USBread16)(u32 mem);
+typedef u32(CALLBACK* _USBread32)(u32 mem);
 typedef void (CALLBACK* _USBwrite8)(u32 mem, u8 value);
 typedef void (CALLBACK* _USBwrite16)(u32 mem, u16 value);
 typedef void (CALLBACK* _USBwrite32)(u32 mem, u32 value);
 typedef void (CALLBACK* _USBasync)(u32 cycles);
 
 typedef void (CALLBACK* _USBirqCallback)(USBcallback callback);
-typedef USBhandler (CALLBACK* _USBirqHandler)(void);
+typedef USBhandler(CALLBACK* _USBirqHandler)(void);
 typedef void (CALLBACK* _USBsetRAM)(void *mem);
 
 //FW
-typedef s32  (CALLBACK* _FWopen)(void *pDsp);
-typedef u32  (CALLBACK* _FWread32)(u32 mem);
+typedef s32(CALLBACK* _FWopen)(void *pDsp);
+typedef u32(CALLBACK* _FWread32)(u32 mem);
 typedef void (CALLBACK* _FWwrite32)(u32 mem, u32 value);
 typedef void (CALLBACK* _FWirqCallback)(void (*callback)());
 #endif

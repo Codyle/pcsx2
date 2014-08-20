@@ -207,7 +207,8 @@ struct InitInfo {
 
 // Mostly self-contained, but bindings are modified by config.cpp, to make
 // updating the ListView simpler.
-class Device {
+class Device
+{
 public:
 	DeviceAPI api;
 	DeviceType type;
@@ -287,17 +288,20 @@ public:
 
 	void CalcVirtualState();
 
-	virtual int Activate(InitInfo *args) {
+	virtual int Activate(InitInfo *args)
+	{
 		return 0;
 	}
 
-	inline virtual void Deactivate() {
+	inline virtual void Deactivate()
+	{
 		FreeState();
 		active = 0;
 	}
 
 	// Default update proc.  All that's needed for post-based APIs.
-	inline virtual int Update() {
+	inline virtual int Update()
+	{
 		return active;
 	}
 
@@ -317,7 +321,8 @@ public:
 	virtual void PostRead();
 };
 
-class InputDeviceManager {
+class InputDeviceManager
+{
 public:
 	Device **devices;
 	int numDevices;
@@ -351,7 +356,8 @@ public:
 	void ReleaseInput();
 
 	void DisableDevice(int index);
-	inline void EnableDevice(int i) {
+	inline void EnableDevice(int i)
+	{
 		devices[i]->enabled = 1;
 	}
 

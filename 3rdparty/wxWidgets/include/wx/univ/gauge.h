@@ -19,57 +19,65 @@
 class WXDLLEXPORT wxGauge : public wxGaugeBase
 {
 public:
-    wxGauge() { Init(); }
+	wxGauge()
+	{
+		Init();
+	}
 
-    wxGauge(wxWindow *parent,
-            wxWindowID id,
-            int range,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxGA_HORIZONTAL,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxGaugeNameStr)
-    {
-        Init();
+	wxGauge(wxWindow *parent,
+	        wxWindowID id,
+	        int range,
+	        const wxPoint &pos = wxDefaultPosition,
+	        const wxSize &size = wxDefaultSize,
+	        long style = wxGA_HORIZONTAL,
+	        const wxValidator &validator = wxDefaultValidator,
+	        const wxString &name = wxGaugeNameStr)
+	{
+		Init();
+		(void)Create(parent, id, range, pos, size, style, validator, name);
+	}
 
-        (void)Create(parent, id, range, pos, size, style, validator, name);
-    }
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            int range,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxGA_HORIZONTAL,
+	            const wxValidator &validator = wxDefaultValidator,
+	            const wxString &name = wxGaugeNameStr);
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                int range,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxGA_HORIZONTAL,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxGaugeNameStr);
+	// implement base class virtuals
+	virtual void SetRange(int range);
+	virtual void SetValue(int pos);
 
-    // implement base class virtuals
-    virtual void SetRange(int range);
-    virtual void SetValue(int pos);
+	// wxUniv-specific methods
 
-    // wxUniv-specific methods
+	// is it a smooth progress bar or a discrete one?
+	bool IsSmooth() const
+	{
+		return (GetWindowStyle() & wxGA_SMOOTH) != 0;
+	}
 
-    // is it a smooth progress bar or a discrete one?
-    bool IsSmooth() const { return (GetWindowStyle() & wxGA_SMOOTH) != 0; }
-
-    // is it a vertica; progress bar or a horizontal one?
-    bool IsVertical() const { return (GetWindowStyle() & wxGA_VERTICAL) != 0; }
+	// is it a vertica; progress bar or a horizontal one?
+	bool IsVertical() const
+	{
+		return (GetWindowStyle() & wxGA_VERTICAL) != 0;
+	}
 
 protected:
-    // common part of all ctors
-    void Init();
+	// common part of all ctors
+	void Init();
 
-    // return the def border for a progress bar
-    virtual wxBorder GetDefaultBorder() const;
+	// return the def border for a progress bar
+	virtual wxBorder GetDefaultBorder() const;
 
-    // return the default size
-    virtual wxSize DoGetBestClientSize() const;
+	// return the default size
+	virtual wxSize DoGetBestClientSize() const;
 
-    // draw the control
-    virtual void DoDraw(wxControlRenderer *renderer);
+	// draw the control
+	virtual void DoDraw(wxControlRenderer *renderer);
 
-    DECLARE_DYNAMIC_CLASS(wxGauge)
+	DECLARE_DYNAMIC_CLASS(wxGauge)
 };
 
 #endif // _WX_UNIV_GAUGE_H_

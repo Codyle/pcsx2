@@ -29,13 +29,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -87,23 +87,23 @@ typedef unsigned long PaWinWaveFormatChannelMask;
 #define PAWIN_SPEAKER_MONO						(PAWIN_SPEAKER_FRONT_CENTER)
 #define PAWIN_SPEAKER_STEREO					(PAWIN_SPEAKER_FRONT_LEFT | PAWIN_SPEAKER_FRONT_RIGHT)
 #define PAWIN_SPEAKER_QUAD						(PAWIN_SPEAKER_FRONT_LEFT | PAWIN_SPEAKER_FRONT_RIGHT | \
-												PAWIN_SPEAKER_BACK_LEFT  | PAWIN_SPEAKER_BACK_RIGHT)
+                PAWIN_SPEAKER_BACK_LEFT  | PAWIN_SPEAKER_BACK_RIGHT)
 #define PAWIN_SPEAKER_SURROUND					(PAWIN_SPEAKER_FRONT_LEFT | PAWIN_SPEAKER_FRONT_RIGHT | \
-												PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_BACK_CENTER)
+                PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_BACK_CENTER)
 #define PAWIN_SPEAKER_5POINT1					(PAWIN_SPEAKER_FRONT_LEFT | PAWIN_SPEAKER_FRONT_RIGHT | \
-												PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_LOW_FREQUENCY | \
-												PAWIN_SPEAKER_BACK_LEFT  | PAWIN_SPEAKER_BACK_RIGHT)
+                PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_LOW_FREQUENCY | \
+                PAWIN_SPEAKER_BACK_LEFT  | PAWIN_SPEAKER_BACK_RIGHT)
 #define PAWIN_SPEAKER_7POINT1					(PAWIN_SPEAKER_FRONT_LEFT | PAWIN_SPEAKER_FRONT_RIGHT | \
-												PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_LOW_FREQUENCY | \
-												PAWIN_SPEAKER_BACK_LEFT | PAWIN_SPEAKER_BACK_RIGHT | \
-												PAWIN_SPEAKER_FRONT_LEFT_OF_CENTER | PAWIN_SPEAKER_FRONT_RIGHT_OF_CENTER)
+                PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_LOW_FREQUENCY | \
+                PAWIN_SPEAKER_BACK_LEFT | PAWIN_SPEAKER_BACK_RIGHT | \
+                PAWIN_SPEAKER_FRONT_LEFT_OF_CENTER | PAWIN_SPEAKER_FRONT_RIGHT_OF_CENTER)
 #define PAWIN_SPEAKER_5POINT1_SURROUND			(PAWIN_SPEAKER_FRONT_LEFT | PAWIN_SPEAKER_FRONT_RIGHT | \
-												PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_LOW_FREQUENCY | \
-												PAWIN_SPEAKER_SIDE_LEFT  | PAWIN_SPEAKER_SIDE_RIGHT)
+                PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_LOW_FREQUENCY | \
+                PAWIN_SPEAKER_SIDE_LEFT  | PAWIN_SPEAKER_SIDE_RIGHT)
 #define PAWIN_SPEAKER_7POINT1_SURROUND			(PAWIN_SPEAKER_FRONT_LEFT | PAWIN_SPEAKER_FRONT_RIGHT | \
-												PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_LOW_FREQUENCY | \
-												PAWIN_SPEAKER_BACK_LEFT | PAWIN_SPEAKER_BACK_RIGHT | \
-												PAWIN_SPEAKER_SIDE_LEFT | PAWIN_SPEAKER_SIDE_RIGHT)
+                PAWIN_SPEAKER_FRONT_CENTER | PAWIN_SPEAKER_LOW_FREQUENCY | \
+                PAWIN_SPEAKER_BACK_LEFT | PAWIN_SPEAKER_BACK_RIGHT | \
+                PAWIN_SPEAKER_SIDE_LEFT | PAWIN_SPEAKER_SIDE_RIGHT)
 /*
  According to the Microsoft documentation:
  The following are obsolete 5.1 and 7.1 settings (they lack side speakers).  Note this means
@@ -125,31 +125,31 @@ typedef unsigned long PaWinWaveFormatChannelMask;
 
 /*
 	PaWinWaveFormat is defined here to provide compatibility with
-	compilation environments which don't have headers defining 
+	compilation environments which don't have headers defining
 	WAVEFORMATEXTENSIBLE (e.g. older versions of MSVC, Borland C++ etc.
 
 	The fields for WAVEFORMATEX and WAVEFORMATEXTENSIBLE are declared as an
-    unsigned char array here to avoid clients who include this file having 
+    unsigned char array here to avoid clients who include this file having
     a dependency on windows.h and mmsystem.h, and also to to avoid having
     to write separate packing pragmas for each compiler.
 */
 #define PAWIN_SIZEOF_WAVEFORMATEX   18
 #define PAWIN_SIZEOF_WAVEFORMATEXTENSIBLE (PAWIN_SIZEOF_WAVEFORMATEX + 22)
 
-typedef struct{
-    unsigned char fields[ PAWIN_SIZEOF_WAVEFORMATEXTENSIBLE ];
-    unsigned long extraLongForAlignment; /* ensure that compiler aligns struct to DWORD */ 
+typedef struct {
+	unsigned char fields[ PAWIN_SIZEOF_WAVEFORMATEXTENSIBLE ];
+	unsigned long extraLongForAlignment; /* ensure that compiler aligns struct to DWORD */
 } PaWinWaveFormat;
 
 /*
     WAVEFORMATEXTENSIBLE fields:
-    
+
     union  {
-	    WORD  wValidBitsPerSample;    
-	    WORD  wSamplesPerBlock;    
-	    WORD  wReserved;  
+	    WORD  wValidBitsPerSample;
+	    WORD  wSamplesPerBlock;
+	    WORD  wReserved;
     } Samples;
-    DWORD  dwChannelMask;  
+    DWORD  dwChannelMask;
     GUID  SubFormat;
 */
 
@@ -173,23 +173,23 @@ typedef struct{
     returns PAWIN_WAVE_FORMAT_PCM or PAWIN_WAVE_FORMAT_IEEE_FLOAT
     depending on the sampleFormat parameter.
 */
-int PaWin_SampleFormatToLinearWaveFormatTag( PaSampleFormat sampleFormat );
+int PaWin_SampleFormatToLinearWaveFormatTag(PaSampleFormat sampleFormat);
 
 /*
 	Use the following two functions to initialize the waveformat structure.
 */
 
-void PaWin_InitializeWaveFormatEx( PaWinWaveFormat *waveFormat, 
-		int numChannels, PaSampleFormat sampleFormat, int waveFormatTag, double sampleRate );
+void PaWin_InitializeWaveFormatEx(PaWinWaveFormat *waveFormat,
+                                  int numChannels, PaSampleFormat sampleFormat, int waveFormatTag, double sampleRate);
 
 
-void PaWin_InitializeWaveFormatExtensible( PaWinWaveFormat *waveFormat, 
-		int numChannels, PaSampleFormat sampleFormat, int waveFormatTag, double sampleRate,
-	    PaWinWaveFormatChannelMask channelMask );
+void PaWin_InitializeWaveFormatExtensible(PaWinWaveFormat *waveFormat,
+                int numChannels, PaSampleFormat sampleFormat, int waveFormatTag, double sampleRate,
+                PaWinWaveFormatChannelMask channelMask);
 
 
 /* Map a channel count to a speaker channel mask */
-PaWinWaveFormatChannelMask PaWin_DefaultChannelMask( int numChannels );
+PaWinWaveFormatChannelMask PaWin_DefaultChannelMask(int numChannels);
 
 
 #ifdef __cplusplus

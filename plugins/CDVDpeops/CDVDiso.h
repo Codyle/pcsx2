@@ -16,8 +16,7 @@ int CDVD_GetDir_RPC_get_entries(struct TocEntry tocEntry[], int req_entries);
 #pragma pack(1)
 #endif
 
-struct rootDirTocHeader
-{
+struct rootDirTocHeader {
 	u16	length;			//+00
 	u32 tocLBA;			//+02
 	u32 tocLBA_bigend;	//+06
@@ -33,8 +32,7 @@ struct rootDirTocHeader
 } __attribute__((packed));
 #endif
 
-struct asciiDate
-{
+struct asciiDate {
 	char	year[4];
 	char	month[2];
 	char	day[2];
@@ -49,8 +47,7 @@ struct asciiDate
 } __attribute__((packed));
 #endif
 
-struct cdVolDesc
-{
+struct cdVolDesc {
 	u8		filesystemType;	// 0x01 = ISO9660, 0x02 = Joliet, 0xFF = NULL
 	u8		volID[5];		// "CD001"
 	u8		reserved2;
@@ -91,8 +88,7 @@ struct cdVolDesc
 } __attribute__((packed));
 #endif
 
-struct dirTableEntry
-{
+struct dirTableEntry {
 	u8	dirNameLength;
 	u8	reserved;
 	u32	dirTOCLBA;
@@ -104,8 +100,7 @@ struct dirTableEntry
 } __attribute__((packed));
 #endif
 
-struct dirTocEntry
-{
+struct dirTocEntry {
 	short	length;
 	unsigned int	fileLBA;
 	unsigned int	fileLBA_bigend;

@@ -21,49 +21,52 @@
 class WXDLLEXPORT wxEventLoop : public wxEventLoopManual
 {
 public:
-    wxEventLoop();
+	wxEventLoop();
 
-    // implement base class pure virtuals
-    virtual bool Pending() const;
-    virtual bool Dispatch();
+	// implement base class pure virtuals
+	virtual bool Pending() const;
+	virtual bool Dispatch();
 
-    // MSW-specific methods
-    // --------------------
+	// MSW-specific methods
+	// --------------------
 
-    // preprocess a message, return true if processed (i.e. no further
-    // dispatching required)
-    virtual bool PreProcessMessage(WXMSG *msg);
+	// preprocess a message, return true if processed (i.e. no further
+	// dispatching required)
+	virtual bool PreProcessMessage(WXMSG *msg);
 
-    // process a single message
-    virtual void ProcessMessage(WXMSG *msg);
+	// process a single message
+	virtual void ProcessMessage(WXMSG *msg);
 
-    // set the critical window: this is the window such that all the events
-    // except those to this window (and its children) stop to be processed
-    // (typical examples: assert or crash report dialog)
-    //
-    // calling this function with NULL argument restores the normal event
-    // handling
-    static void SetCriticalWindow(wxWindowMSW *win) { ms_winCritical = win; }
+	// set the critical window: this is the window such that all the events
+	// except those to this window (and its children) stop to be processed
+	// (typical examples: assert or crash report dialog)
+	//
+	// calling this function with NULL argument restores the normal event
+	// handling
+	static void SetCriticalWindow(wxWindowMSW *win)
+	{
+		ms_winCritical = win;
+	}
 
-    // return true if there is no critical window or if this window is [a child
-    // of] the critical one
-    static bool AllowProcessing(wxWindowMSW *win)
-    {
-        return !ms_winCritical || IsChildOfCriticalWindow(win);
-    }
+	// return true if there is no critical window or if this window is [a child
+	// of] the critical one
+	static bool AllowProcessing(wxWindowMSW *win)
+	{
+		return !ms_winCritical || IsChildOfCriticalWindow(win);
+	}
 
 protected:
-    // override/implement base class virtuals
-    virtual void WakeUp();
-    virtual void OnNextIteration();
+	// override/implement base class virtuals
+	virtual void WakeUp();
+	virtual void OnNextIteration();
 
-    // check if the given window is a child of ms_winCritical (which must be
-    // non NULL)
-    static bool IsChildOfCriticalWindow(wxWindowMSW *win);
+	// check if the given window is a child of ms_winCritical (which must be
+	// non NULL)
+	static bool IsChildOfCriticalWindow(wxWindowMSW *win);
 
 
-    // critical window or NULL
-    static wxWindowMSW *ms_winCritical;
+	// critical window or NULL
+	static wxWindowMSW *ms_winCritical;
 };
 
 #endif // _WX_MSW_EVTLOOP_H_

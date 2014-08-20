@@ -23,23 +23,23 @@
 class WXDLLEXPORT wxJPEGHandler: public wxImageHandler
 {
 public:
-    inline wxJPEGHandler()
-    {
-        m_name = wxT("JPEG file");
-        m_extension = wxT("jpg");
-        m_type = wxBITMAP_TYPE_JPEG;
-        m_mime = wxT("image/jpeg");
-    }
+	inline wxJPEGHandler()
+	{
+		m_name = wxT("JPEG file");
+		m_extension = wxT("jpg");
+		m_type = wxBITMAP_TYPE_JPEG;
+		m_mime = wxT("image/jpeg");
+	}
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );
-    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true );
+	virtual bool LoadFile(wxImage *image, wxInputStream &stream, bool verbose = true, int index = -1);
+	virtual bool SaveFile(wxImage *image, wxOutputStream &stream, bool verbose = true);
 protected:
-    virtual bool DoCanRead( wxInputStream& stream );
+	virtual bool DoCanRead(wxInputStream &stream);
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxJPEGHandler)
+	DECLARE_DYNAMIC_CLASS(wxJPEGHandler)
 };
 
 #endif // wxUSE_LIBJPEG

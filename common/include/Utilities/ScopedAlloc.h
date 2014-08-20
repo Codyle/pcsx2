@@ -33,7 +33,7 @@
 #define safe_delete_array( ptr ) \
 	((void) (delete[] (ptr)), (ptr) = NULL)
 
-// No checks for NULL -- wxWidgets says it's safe to skip NULL checks and it runs on 
+// No checks for NULL -- wxWidgets says it's safe to skip NULL checks and it runs on
 // just about every compiler and libc implementation of any recentness.
 #define safe_free( ptr ) \
 	( (void) (free( ptr ), !!0), (ptr) = NULL )
@@ -64,7 +64,7 @@ extern void pcsx2_aligned_free(void* pmem);
 //  pxDoOutOfMemory
 // --------------------------------------------------------------------------------------
 
-typedef void FnType_OutOfMemory( uptr blocksize );
+typedef void FnType_OutOfMemory(uptr blocksize);
 typedef FnType_OutOfMemory* Fnptr_OutOfMemory;
 
 // This method is meant to be assigned by applications that link against pxWex.  It is called
@@ -91,7 +91,7 @@ extern Fnptr_OutOfMemory pxDoOutOfMemory;
 // destructing container for malloc.  The entire class is almost completely dependency free,
 // and thus can be included everywhere and anywhere without dependency hassles.
 //
-template< typename T >
+template<typename T>
 class BaseScopedAlloc
 {
 protected:
@@ -111,55 +111,61 @@ public:
 	}
 
 public:
-	size_t GetSize() const { return m_size; }
-	size_t GetLength() const { return m_size; }
-	
+	size_t GetSize() const
+	{
+		return m_size;
+	}
+	size_t GetLength() const
+	{
+		return m_size;
+	}
+
 	// Allocates the object to the specified size.  If an existing allocation is in
 	// place, it is freed and replaced with the new allocation, and all data is lost.
 	// Parameter:
 	//   newSize - size of the new allocation, in elements (not bytes!).  If the specified
 	//     size is 0, the the allocation is freed, same as calling Free().
-	virtual void Alloc( size_t newsize )=0;
+	virtual void Alloc(size_t newsize) = 0;
 
 	// Re-sizes the allocation to the requested size, without any data loss.
 	// Parameter:
 	//   newSize - size of the new allocation, in elements (not bytes!).  If the specified
 	//     size is 0, the the allocation is freed, same as calling Free().
-	virtual void Resize( size_t newsize )=0;
+	virtual void Resize(size_t newsize) = 0;
 
 	void Free()
 	{
-		Alloc( 0 );
-	}
-	
-	// Makes enough room for the requested size.  Existing data in the array is retained.
-	void MakeRoomFor( uint size )
-	{
-		if (size <= m_size) return;
-		Resize( size );
+		Alloc(0);
 	}
 
-	T* GetPtr( uint idx=0 ) const
+	// Makes enough room for the requested size.  Existing data in the array is retained.
+	void MakeRoomFor(uint size)
 	{
-		#if pxUSE_SECURE_MALLOC
-		IndexBoundsAssumeDev( "ScopedAlloc", idx, m_size );
-		#endif
+		if (size <= m_size) return;
+		Resize(size);
+	}
+
+	T* GetPtr(uint idx = 0) const
+	{
+#if pxUSE_SECURE_MALLOC
+		IndexBoundsAssumeDev("ScopedAlloc", idx, m_size);
+#endif
 		return &m_buffer[idx];
 	}
 
-	T& operator[]( uint idx )
+	T &operator[](uint idx)
 	{
-		#if pxUSE_SECURE_MALLOC
-		IndexBoundsAssumeDev( "ScopedAlloc", idx, m_size );
-		#endif
+#if pxUSE_SECURE_MALLOC
+		IndexBoundsAssumeDev("ScopedAlloc", idx, m_size);
+#endif
 		return m_buffer[idx];
 	}
 
-	const T& operator[]( uint idx ) const
+	const T &operator[](uint idx) const
 	{
-		#if pxUSE_SECURE_MALLOC
-		IndexBoundsAssumeDev( "ScopedAlloc", idx, m_size );
-		#endif
+#if pxUSE_SECURE_MALLOC
+		IndexBoundsAssumeDev("ScopedAlloc", idx, m_size);
+#endif
 		return m_buffer[idx];
 	}
 };
@@ -173,13 +179,13 @@ public:
 //
 // See docs for BaseScopedAlloc for details and rationale.
 //
-template< typename T >
+template<typename T>
 class ScopedAlloc : public BaseScopedAlloc<T>
 {
 	typedef BaseScopedAlloc<T> _parent;
 
 public:
-	ScopedAlloc( size_t size=0 ) : _parent()
+	ScopedAlloc(size_t size = 0) : _parent()
 	{
 		Alloc(size);
 	}
@@ -189,26 +195,24 @@ public:
 		Alloc(0);
 	}
 
-	virtual void Alloc( size_t newsize )
+	virtual void Alloc(size_t newsize)
 	{
 		safe_free(this->m_buffer);
 		this->m_size = newsize;
 		if (!this->m_size) return;
-
-		this->m_buffer = (T*)malloc( this->m_size * sizeof(T) );
+		this->m_buffer = (T*)malloc(this->m_size * sizeof(T));
 		if (!this->m_buffer)
 			throw Exception::OutOfMemory(L"ScopedAlloc");
 	}
 
-	virtual void Resize( size_t newsize )
+	virtual void Resize(size_t newsize)
 	{
 		this->m_size		= newsize;
 		this->m_buffer		= (T*)realloc(this->m_buffer, this->m_size * sizeof(T));
-
 		if (!this->m_buffer)
 			throw Exception::OutOfMemory(L"ScopedAlloc::Resize");
 	}
-	
+
 	using _parent::operator[];
 };
 
@@ -221,41 +225,39 @@ public:
 //
 // See docs for BaseScopedAlloc for details and rationale.
 //
-template< typename T, uint align >
+template<typename T, uint align>
 class ScopedAlignedAlloc : public BaseScopedAlloc<T>
 {
 	typedef BaseScopedAlloc<T> _parent;
 
 public:
-	ScopedAlignedAlloc( size_t size=0 ) : _parent()
+	ScopedAlignedAlloc(size_t size = 0) : _parent()
 	{
 		Alloc(size);
 	}
-	
+
 	virtual ~ScopedAlignedAlloc() throw()
 	{
 		Alloc(0);
 	}
 
-	virtual void Alloc( size_t newsize )
+	virtual void Alloc(size_t newsize)
 	{
 		safe_aligned_free(this->m_buffer);
 		this->m_size = newsize;
 		if (!this->m_size) return;
-
-		this->m_buffer = (T*)_aligned_malloc( this->m_size * sizeof(T), align );
+		this->m_buffer = (T*)_aligned_malloc(this->m_size * sizeof(T), align);
 		if (!this->m_buffer)
 			throw Exception::OutOfMemory(L"ScopedAlignedAlloc");
 	}
 
-	virtual void Resize( size_t newsize )
+	virtual void Resize(size_t newsize)
 	{
 		this->m_size		= newsize;
 		this->m_buffer	= (T*)_aligned_realloc(this->m_buffer, newsize * sizeof(T), align);
-
 		if (!this->m_buffer)
 			throw Exception::OutOfMemory(L"ScopedAlignedAlloc::Resize");
 	}
-	
+
 	using _parent::operator[];
 };

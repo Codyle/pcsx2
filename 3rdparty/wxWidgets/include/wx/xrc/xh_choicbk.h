@@ -17,16 +17,16 @@ class WXDLLIMPEXP_FWD_CORE wxChoicebook;
 
 class WXDLLIMPEXP_XRC wxChoicebookXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxChoicebookXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxChoicebookXmlHandler)
 
 public:
-    wxChoicebookXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxChoicebookXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_isInside;
-    wxChoicebook *m_choicebook;
+	bool m_isInside;
+	wxChoicebook *m_choicebook;
 };
 
 #endif // wxUSE_XRC && wxUSE_CHOICEBOOK

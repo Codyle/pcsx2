@@ -34,27 +34,26 @@ typedef char FnChar_t;
 // --------------------------------------------------------------------------------------
 //  DiagnosticOrigin
 // --------------------------------------------------------------------------------------
-struct DiagnosticOrigin
-{
+struct DiagnosticOrigin {
 	const wxChar*	srcfile;
 	const FnChar_t*	function;
 	const wxChar*	condition;
 	int				line;
 
-	DiagnosticOrigin( const wxChar *_file, int _line, const FnChar_t *_func, const wxChar* _cond = NULL )
-		: srcfile( _file )
-		, function( _func )
-		, condition( _cond )
-		, line( _line )
+	DiagnosticOrigin(const wxChar *_file, int _line, const FnChar_t *_func, const wxChar* _cond = NULL)
+		: srcfile(_file)
+		, function(_func)
+		, condition(_cond)
+		, line(_line)
 	{
 	}
 
-	wxString ToString( const wxChar* msg=NULL ) const;
+	wxString ToString(const wxChar* msg = NULL) const;
 };
 
 // Returns ture if the assertion is to trap into the debugger, or false if execution
 // of the program should continue unimpeded.
-typedef bool pxDoAssertFnType(const DiagnosticOrigin& origin, const wxChar *msg);
+typedef bool pxDoAssertFnType(const DiagnosticOrigin &origin, const wxChar *msg);
 
 extern pxDoAssertFnType pxAssertImpl_LogIt;
 
@@ -122,18 +121,18 @@ extern pxDoAssertFnType* pxDoAssert;
 
 #elif defined(PCSX2_DEVBUILD)
 
-	// Devel builds now will give you a release-mode assertion dialog window if any of the
-	// following macro's 'cond' field is false.
-	// Note: Only use pxAssume/Msg/Dev if you know what you're doing, __assume is supposed
-	// to be used as an optimization hint, yet many devs have been using psAssume
-	// thinking its the same as an assertion.
-	// __assume(0) is also very dangerous because it is a special case of __assume() which
-	// tells the compiler that the code path is not reachable, and it can cause unpredictable
-	// results if the code path can be reached.
-	// i.e. if (1) { __assume(0); something(); } 
-	// In the above example, something() may never be called.
-	// __assume(0)'s real use is in optimizing stuff such as "default:" cases on a switch
-	// statement. See jNO_DEFAULT
+// Devel builds now will give you a release-mode assertion dialog window if any of the
+// following macro's 'cond' field is false.
+// Note: Only use pxAssume/Msg/Dev if you know what you're doing, __assume is supposed
+// to be used as an optimization hint, yet many devs have been using psAssume
+// thinking its the same as an assertion.
+// __assume(0) is also very dangerous because it is a special case of __assume() which
+// tells the compiler that the code path is not reachable, and it can cause unpredictable
+// results if the code path can be reached.
+// i.e. if (1) { __assume(0); something(); }
+// In the above example, something() may never be called.
+// __assume(0)'s real use is in optimizing stuff such as "default:" cases on a switch
+// statement. See jNO_DEFAULT
 
 #	define pxAssertMsg(cond, msg)	pxAssertRel(cond, msg)
 #	define pxAssertDev(cond, msg)	pxAssertRel(cond, msg)
@@ -146,8 +145,8 @@ extern pxDoAssertFnType* pxDoAssert;
 
 #else
 
-	// Release Builds just use __assume as an optimization, and return the conditional
-	// as a result (which is optimized to nil if unused).
+// Release Builds just use __assume as an optimization, and return the conditional
+// as a result (which is optimized to nil if unused).
 
 #	define pxAssertMsg(cond, msg)	(likely(cond))
 #	define pxAssertDev(cond, msg)	(likely(cond))
@@ -170,20 +169,20 @@ extern pxDoAssertFnType* pxDoAssert;
 // IndexBoundsCheckDev.
 
 #define IndexBoundsCheck( objname, idx, sze )		pxAssertMsg( (uint)(idx) < (uint)(sze), \
-	pxsFmt( L"Array index out of bounds accessing object '%s' (index=%d, size=%d)", objname, (idx), (sze) ) )
+                pxsFmt( L"Array index out of bounds accessing object '%s' (index=%d, size=%d)", objname, (idx), (sze) ) )
 
 #define IndexBoundsCheckDev( objname, idx, sze )	pxAssertDev( (uint)(idx) < (uint)(sze), \
-	pxsFmt( L"Array index out of bounds accessing object '%s' (index=%d, size=%d)", objname, (idx), (sze) ) )
+                pxsFmt( L"Array index out of bounds accessing object '%s' (index=%d, size=%d)", objname, (idx), (sze) ) )
 
 #define IndexBoundsAssume( objname, idx, sze )		pxAssumeMsg( (uint)(idx) < (uint)(sze), \
-	pxsFmt( L"Array index out of bounds accessing object '%s' (index=%d, size=%d)", objname, (idx), (sze) ) )
+                pxsFmt( L"Array index out of bounds accessing object '%s' (index=%d, size=%d)", objname, (idx), (sze) ) )
 
 #define IndexBoundsAssumeDev( objname, idx, sze )	pxAssumeDev( (uint)(idx) < (uint)(sze), \
-	pxsFmt( L"Array index out of bounds accessing object '%s' (index=%d, size=%d)", objname, (idx), (sze) ) )
+                pxsFmt( L"Array index out of bounds accessing object '%s' (index=%d, size=%d)", objname, (idx), (sze) ) )
 
 
-extern void pxOnAssert( const DiagnosticOrigin& origin, const wxChar* msg=NULL );
-extern void pxOnAssert( const DiagnosticOrigin& origin, const char* msg );
+extern void pxOnAssert(const DiagnosticOrigin &origin, const wxChar* msg = NULL);
+extern void pxOnAssert(const DiagnosticOrigin &origin, const char* msg);
 
 // --------------------------------------------------------------------------------------
 // jNO_DEFAULT -- disables the default case in a switch, which improves switch optimization
@@ -197,9 +196,9 @@ extern void pxOnAssert( const DiagnosticOrigin& origin, const char* msg );
 //
 #ifndef jNO_DEFAULT
 #	define jNO_DEFAULT \
-		default: \
-		{ \
-			pxAssumeDev( 0, "Incorrect usage of jNO_DEFAULT detected (default case is not unreachable!)" ); \
-			break; \
-		}
+	default: \
+	{ \
+		pxAssumeDev( 0, "Incorrect usage of jNO_DEFAULT detected (default case is not unreachable!)" ); \
+		break; \
+	}
 #endif

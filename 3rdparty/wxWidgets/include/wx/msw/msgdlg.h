@@ -23,20 +23,20 @@ extern WXDLLEXPORT_DATA(const wxChar) wxMessageBoxCaptionStr[];
 
 class WXDLLEXPORT wxMessageDialog: public wxDialog, public wxMessageDialogBase
 {
-DECLARE_DYNAMIC_CLASS(wxMessageDialog)
+	DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 protected:
-    wxString    m_caption;
-    wxString    m_message;
-    wxWindow *  m_parent;
+	wxString    m_caption;
+	wxString    m_message;
+	wxWindow *  m_parent;
 public:
-    wxMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption = wxMessageBoxCaptionStr,
-        long style = wxOK|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
+	wxMessageDialog(wxWindow *parent, const wxString &message, const wxString &caption = wxMessageBoxCaptionStr,
+	                long style = wxOK | wxCENTRE, const wxPoint &pos = wxDefaultPosition);
 
-    int ShowModal(void);
+	int ShowModal(void);
 
-    DECLARE_NO_COPY_CLASS(wxMessageDialog)
+	DECLARE_NO_COPY_CLASS(wxMessageDialog)
 };
 
 
 #endif
-    // _WX_MSGBOXDLG_H_
+// _WX_MSGBOXDLG_H_

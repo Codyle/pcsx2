@@ -40,41 +40,45 @@ class CSourceStream;  // The class that will handle each pin
 //
 // Override construction to provide a means of creating
 // CSourceStream derived objects - ie a way of creating pins.
-class CSource : public CBaseFilter {
+class CSource : public CBaseFilter
+{
 public:
 
-    CSource(TCHAR *pName, LPUNKNOWN lpunk, CLSID clsid, HRESULT *phr);
-    CSource(TCHAR *pName, LPUNKNOWN lpunk, CLSID clsid);
+	CSource(TCHAR *pName, LPUNKNOWN lpunk, CLSID clsid, HRESULT *phr);
+	CSource(TCHAR *pName, LPUNKNOWN lpunk, CLSID clsid);
 #ifdef UNICODE
-    CSource(CHAR *pName, LPUNKNOWN lpunk, CLSID clsid, HRESULT *phr);
-    CSource(CHAR *pName, LPUNKNOWN lpunk, CLSID clsid);
+	CSource(CHAR *pName, LPUNKNOWN lpunk, CLSID clsid, HRESULT *phr);
+	CSource(CHAR *pName, LPUNKNOWN lpunk, CLSID clsid);
 #endif
-    ~CSource();
+	~CSource();
 
-    int       GetPinCount(void);
-    CBasePin *GetPin(int n);
+	int       GetPinCount(void);
+	CBasePin *GetPin(int n);
 
-    // -- Utilities --
+	// -- Utilities --
 
-    CCritSec*	pStateLock(void) { return &m_cStateLock; }	// provide our critical section
+	CCritSec*	pStateLock(void)
+	{
+		return &m_cStateLock;        // provide our critical section
+	}
 
-    HRESULT     AddPin(CSourceStream *);
-    HRESULT     RemovePin(CSourceStream *);
+	HRESULT     AddPin(CSourceStream *);
+	HRESULT     RemovePin(CSourceStream *);
 
-    STDMETHODIMP FindPin(
-        LPCWSTR Id,
-        IPin ** ppPin
-    );
+	STDMETHODIMP FindPin(
+	        LPCWSTR Id,
+	        IPin ** ppPin
+	);
 
-    int FindPinNumber(IPin *iPin);
+	int FindPinNumber(IPin *iPin);
 
 protected:
 
-    int             m_iPins;       // The number of pins on this filter. Updated by CSourceStream
-    	   			   // constructors & destructors.
-    CSourceStream **m_paStreams;   // the pins on this filter.
+	int             m_iPins;       // The number of pins on this filter. Updated by CSourceStream
+	// constructors & destructors.
+	CSourceStream **m_paStreams;   // the pins on this filter.
 
-    CCritSec m_cStateLock;	// Lock this to serialize function accesses to the filter state
+	CCritSec m_cStateLock;	// Lock this to serialize function accesses to the filter state
 
 };
 
@@ -85,87 +89,121 @@ protected:
 // Use this class to manage a stream of data that comes from a
 // pin.
 // Uses a worker thread to put data on the pin.
-class CSourceStream : public CAMThread, public CBaseOutputPin {
+class CSourceStream : public CAMThread, public CBaseOutputPin
+{
 public:
 
-    CSourceStream(TCHAR *pObjectName,
-                  HRESULT *phr,
-                  CSource *pms,
-                  LPCWSTR pName);
+	CSourceStream(TCHAR *pObjectName,
+	              HRESULT *phr,
+	              CSource *pms,
+	              LPCWSTR pName);
 #ifdef UNICODE
-    CSourceStream(CHAR *pObjectName,
-                  HRESULT *phr,
-                  CSource *pms,
-                  LPCWSTR pName);
+	CSourceStream(CHAR *pObjectName,
+	              HRESULT *phr,
+	              CSource *pms,
+	              LPCWSTR pName);
 #endif
-    virtual ~CSourceStream(void);  // virtual destructor ensures derived class destructors are called too.
+	virtual ~CSourceStream(void);  // virtual destructor ensures derived class destructors are called too.
 
 protected:
 
-    CSource *m_pFilter;	// The parent of this stream
+	CSource *m_pFilter;	// The parent of this stream
 
-    // *
-    // * Data Source
-    // *
-    // * The following three functions: FillBuffer, OnThreadCreate/Destroy, are
-    // * called from within the ThreadProc. They are used in the creation of
-    // * the media samples this pin will provide
-    // *
+	// *
+	// * Data Source
+	// *
+	// * The following three functions: FillBuffer, OnThreadCreate/Destroy, are
+	// * called from within the ThreadProc. They are used in the creation of
+	// * the media samples this pin will provide
+	// *
 
-    // Override this to provide the worker thread a means
-    // of processing a buffer
-    virtual HRESULT FillBuffer(IMediaSample *pSamp) PURE;
+	// Override this to provide the worker thread a means
+	// of processing a buffer
+	virtual HRESULT FillBuffer(IMediaSample *pSamp) PURE;
 
-    // Called as the thread is created/destroyed - use to perform
-    // jobs such as start/stop streaming mode
-    // If OnThreadCreate returns an error the thread will exit.
-    virtual HRESULT OnThreadCreate(void) {return NOERROR;};
-    virtual HRESULT OnThreadDestroy(void) {return NOERROR;};
-    virtual HRESULT OnThreadStartPlay(void) {return NOERROR;};
+	// Called as the thread is created/destroyed - use to perform
+	// jobs such as start/stop streaming mode
+	// If OnThreadCreate returns an error the thread will exit.
+	virtual HRESULT OnThreadCreate(void)
+	{
+		return NOERROR;
+	};
+	virtual HRESULT OnThreadDestroy(void)
+	{
+		return NOERROR;
+	};
+	virtual HRESULT OnThreadStartPlay(void)
+	{
+		return NOERROR;
+	};
 
-    // *
-    // * Worker Thread
-    // *
+	// *
+	// * Worker Thread
+	// *
 
-    HRESULT Active(void);    // Starts up the worker thread
-    HRESULT Inactive(void);  // Exits the worker thread.
+	HRESULT Active(void);    // Starts up the worker thread
+	HRESULT Inactive(void);  // Exits the worker thread.
 
 public:
-    // thread commands
-    enum Command {CMD_INIT, CMD_PAUSE, CMD_RUN, CMD_STOP, CMD_EXIT};
-    HRESULT Init(void) { return CallWorker(CMD_INIT); }
-    HRESULT Exit(void) { return CallWorker(CMD_EXIT); }
-    HRESULT Run(void) { return CallWorker(CMD_RUN); }
-    HRESULT Pause(void) { return CallWorker(CMD_PAUSE); }
-    HRESULT Stop(void) { return CallWorker(CMD_STOP); }
+	// thread commands
+	enum Command {CMD_INIT, CMD_PAUSE, CMD_RUN, CMD_STOP, CMD_EXIT};
+	HRESULT Init(void)
+	{
+		return CallWorker(CMD_INIT);
+	}
+	HRESULT Exit(void)
+	{
+		return CallWorker(CMD_EXIT);
+	}
+	HRESULT Run(void)
+	{
+		return CallWorker(CMD_RUN);
+	}
+	HRESULT Pause(void)
+	{
+		return CallWorker(CMD_PAUSE);
+	}
+	HRESULT Stop(void)
+	{
+		return CallWorker(CMD_STOP);
+	}
 
 protected:
-    Command GetRequest(void) { return (Command) CAMThread::GetRequest(); }
-    BOOL    CheckRequest(Command *pCom) { return CAMThread::CheckRequest( (DWORD *) pCom); }
+	Command GetRequest(void)
+	{
+		return (Command) CAMThread::GetRequest();
+	}
+	BOOL    CheckRequest(Command *pCom)
+	{
+		return CAMThread::CheckRequest((DWORD *) pCom);
+	}
 
-    // override these if you want to add thread commands
-    virtual DWORD ThreadProc(void);  		// the thread function
+	// override these if you want to add thread commands
+	virtual DWORD ThreadProc(void);  		// the thread function
 
-    virtual HRESULT DoBufferProcessingLoop(void);    // the loop executed whilst running
+	virtual HRESULT DoBufferProcessingLoop(void);    // the loop executed whilst running
 
 
-    // *
-    // * AM_MEDIA_TYPE support
-    // *
+	// *
+	// * AM_MEDIA_TYPE support
+	// *
 
-    // If you support more than one media type then override these 2 functions
-    virtual HRESULT CheckMediaType(const CMediaType *pMediaType);
-    virtual HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);  // List pos. 0-n
+	// If you support more than one media type then override these 2 functions
+	virtual HRESULT CheckMediaType(const CMediaType *pMediaType);
+	virtual HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);  // List pos. 0-n
 
-    // If you support only one type then override this fn.
-    // This will only be called by the default implementations
-    // of CheckMediaType and GetMediaType(int, CMediaType*)
-    // You must override this fn. or the above 2!
-    virtual HRESULT GetMediaType(CMediaType *pMediaType) {return E_UNEXPECTED;}
+	// If you support only one type then override this fn.
+	// This will only be called by the default implementations
+	// of CheckMediaType and GetMediaType(int, CMediaType*)
+	// You must override this fn. or the above 2!
+	virtual HRESULT GetMediaType(CMediaType *pMediaType)
+	{
+		return E_UNEXPECTED;
+	}
 
-    STDMETHODIMP QueryId(
-        LPWSTR * Id
-    );
+	STDMETHODIMP QueryId(
+	        LPWSTR * Id
+	);
 };
 
 #endif // __CSOURCE__

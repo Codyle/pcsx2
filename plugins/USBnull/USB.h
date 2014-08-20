@@ -23,7 +23,7 @@
 #include "PS2Eext.h"
 
 typedef struct {
-  int Log;
+	int Log;
 } Config;
 
 extern USBcallback USBirq;

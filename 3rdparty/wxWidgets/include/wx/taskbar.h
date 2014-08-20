@@ -27,24 +27,27 @@ class WXDLLIMPEXP_FWD_ADV wxTaskBarIconEvent;
 class WXDLLIMPEXP_ADV wxTaskBarIconBase : public wxEvtHandler
 {
 public:
-    wxTaskBarIconBase() { }
+	wxTaskBarIconBase() { }
 
-    // Operations:
-    virtual bool SetIcon(const wxIcon& icon,
-                         const wxString& tooltip = wxEmptyString) = 0;
-    virtual bool RemoveIcon() = 0;
-    virtual bool PopupMenu(wxMenu *menu) = 0;
+	// Operations:
+	virtual bool SetIcon(const wxIcon &icon,
+	                     const wxString &tooltip = wxEmptyString) = 0;
+	virtual bool RemoveIcon() = 0;
+	virtual bool PopupMenu(wxMenu *menu) = 0;
 
 protected:
-    // creates menu to be displayed when user clicks on the icon
-    virtual wxMenu *CreatePopupMenu() { return NULL; }
+	// creates menu to be displayed when user clicks on the icon
+	virtual wxMenu *CreatePopupMenu()
+	{
+		return NULL;
+	}
 
 private:
-    // default events handling, calls CreatePopupMenu:
-    void OnRightButtonDown(wxTaskBarIconEvent& event);
+	// default events handling, calls CreatePopupMenu:
+	void OnRightButtonDown(wxTaskBarIconEvent &event);
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxTaskBarIconBase)
+	DECLARE_EVENT_TABLE()
+	DECLARE_NO_COPY_CLASS(wxTaskBarIconBase)
 };
 
 
@@ -53,15 +56,15 @@ private:
 // ----------------------------------------------------------------------------
 
 #if defined(__WXPALMOS__)
-    #include "wx/palmos/taskbar.h"
+#include "wx/palmos/taskbar.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/taskbar.h"
+#include "wx/msw/taskbar.h"
 #elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
-    #include "wx/unix/taskbarx11.h"
+#include "wx/unix/taskbarx11.h"
 #elif defined (__WXMAC__) && defined(__WXMAC_OSX__)
-    #include "wx/mac/taskbarosx.h"
+#include "wx/mac/taskbarosx.h"
 #elif defined (__WXCOCOA__)
-    #include "wx/cocoa/taskbar.h"
+#include "wx/cocoa/taskbar.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -71,35 +74,38 @@ private:
 class WXDLLIMPEXP_ADV wxTaskBarIconEvent : public wxEvent
 {
 public:
-    wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon)
-        : wxEvent(wxID_ANY, evtType)
-    {
-        SetEventObject(tbIcon);
-    }
+	wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon)
+		: wxEvent(wxID_ANY, evtType)
+	{
+		SetEventObject(tbIcon);
+	}
 
-    virtual wxEvent *Clone() const { return new wxTaskBarIconEvent(*this); }
+	virtual wxEvent *Clone() const
+	{
+		return new wxTaskBarIconEvent(*this);
+	}
 
 private:
-    DECLARE_NO_ASSIGN_CLASS(wxTaskBarIconEvent)
+	DECLARE_NO_ASSIGN_CLASS(wxTaskBarIconEvent)
 };
 
-typedef void (wxEvtHandler::*wxTaskBarIconEventFunction)(wxTaskBarIconEvent&);
+typedef void (wxEvtHandler::*wxTaskBarIconEventFunction)(wxTaskBarIconEvent &);
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_MOVE,1550)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_LEFT_DOWN,1551)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_LEFT_UP,1552)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_RIGHT_DOWN,1553)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_RIGHT_UP,1554)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_LEFT_DCLICK,1555)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_RIGHT_DCLICK,1556)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_TASKBAR_MOVE, 1550)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_TASKBAR_LEFT_DOWN, 1551)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_TASKBAR_LEFT_UP, 1552)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_TASKBAR_RIGHT_DOWN, 1553)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_TASKBAR_RIGHT_UP, 1554)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_TASKBAR_LEFT_DCLICK, 1555)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_TASKBAR_RIGHT_DCLICK, 1556)
 END_DECLARE_EVENT_TYPES()
 
 #define wxTaskBarIconEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTaskBarIconEventFunction, &func)
+	(wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTaskBarIconEventFunction, &func)
 
 #define wx__DECLARE_TASKBAREVT(evt, fn) \
-    wx__DECLARE_EVT0(wxEVT_TASKBAR_ ## evt, wxTaskBarIconEventHandler(fn))
+	wx__DECLARE_EVT0(wxEVT_TASKBAR_ ## evt, wxTaskBarIconEventHandler(fn))
 
 #define EVT_TASKBAR_MOVE(fn)         wx__DECLARE_TASKBAREVT(MOVE, fn)
 #define EVT_TASKBAR_LEFT_DOWN(fn)    wx__DECLARE_TASKBAREVT(LEFT_DOWN, fn)
@@ -113,9 +119,9 @@ END_DECLARE_EVENT_TYPES()
 // where it's shown on right button release, using this event type and macro
 // allows to write code which works correctly on all platforms
 #ifdef __WXMSW__
-    #define wxEVT_TASKBAR_CLICK wxEVT_TASKBAR_RIGHT_UP
+#define wxEVT_TASKBAR_CLICK wxEVT_TASKBAR_RIGHT_UP
 #else
-    #define wxEVT_TASKBAR_CLICK wxEVT_TASKBAR_RIGHT_DOWN
+#define wxEVT_TASKBAR_CLICK wxEVT_TASKBAR_RIGHT_DOWN
 #endif
 #define EVT_TASKBAR_CLICK(fn)        wx__DECLARE_TASKBAREVT(CLICK, fn)
 

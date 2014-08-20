@@ -19,8 +19,7 @@
 #ifndef __LINUX_H__
 #define __LINUX_H__
 
-struct confOptsStruct
-{
+struct confOptsStruct {
 	int value;
 	const char *desc;
 } confOpts;

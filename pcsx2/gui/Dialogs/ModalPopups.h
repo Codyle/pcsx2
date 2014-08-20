@@ -26,121 +26,129 @@ class FirstTimeWizard : public wxWizard
 	typedef wxWizard _parent;
 
 protected:
-	wxWizardPageSimple&		m_page_intro;
-	wxWizardPageSimple&		m_page_plugins;
-	wxWizardPageSimple&		m_page_bios;
+	wxWizardPageSimple		&m_page_intro;
+	wxWizardPageSimple		&m_page_plugins;
+	wxWizardPageSimple		&m_page_bios;
 
-	wxPanelWithHelpers&				m_panel_Intro;
-	Panels::PluginSelectorPanel&	m_panel_PluginSel;
-	Panels::BiosSelectorPanel&		m_panel_BiosSel;
+	wxPanelWithHelpers				&m_panel_Intro;
+	Panels::PluginSelectorPanel	&m_panel_PluginSel;
+	Panels::BiosSelectorPanel		&m_panel_BiosSel;
 
 public:
-	FirstTimeWizard( wxWindow* parent );
+	FirstTimeWizard(wxWindow* parent);
 	virtual ~FirstTimeWizard() throw();
 
-	wxWizardPage *GetFirstPage() const { return &m_page_intro; }
+	wxWizardPage *GetFirstPage() const
+	{
+		return &m_page_intro;
+	}
 
 	void ForceEnumPlugins()
 	{
 		m_panel_PluginSel.OnShown();
 	}
-	
+
 	int ShowModal();
 
 protected:
-	virtual void OnPageChanging( wxWizardEvent& evt );
-	virtual void OnPageChanged( wxWizardEvent& evt );
-	virtual void OnDoubleClicked( wxCommandEvent& evt );
+	virtual void OnPageChanging(wxWizardEvent &evt);
+	virtual void OnPageChanged(wxWizardEvent &evt);
+	virtual void OnDoubleClicked(wxCommandEvent &evt);
 
-	void OnRestartWizard( wxCommandEvent& evt );
+	void OnRestartWizard(wxCommandEvent &evt);
 };
 
 
 namespace Dialogs
 {
-	class AboutBoxDialog: public wxDialogWithHelpers
+class AboutBoxDialog: public wxDialogWithHelpers
+{
+protected:
+	//wxStaticBitmap m_bitmap_logo;
+	wxStaticBitmap m_bitmap_dualshock;
+
+public:
+	AboutBoxDialog(wxWindow* parent = NULL);
+	virtual ~AboutBoxDialog() throw() {}
+
+	static wxString GetNameStatic()
 	{
-	protected:
-		//wxStaticBitmap m_bitmap_logo;
-		wxStaticBitmap m_bitmap_dualshock;
-
-	public:
-		AboutBoxDialog( wxWindow* parent=NULL );
-		virtual ~AboutBoxDialog() throw() {}
-
-		static wxString GetNameStatic() { return L"AboutBox"; }
-		wxString GetDialogName() const { return GetNameStatic(); }
-	};
-
-
-	class PickUserModeDialog : public BaseApplicableDialog
+		return L"AboutBox";
+	}
+	wxString GetDialogName() const
 	{
-	protected:
-		Panels::DocsFolderPickerPanel* m_panel_usersel;
-		Panels::LanguageSelectionPanel* m_panel_langsel;
-
-	public:
-		PickUserModeDialog( wxWindow* parent );
-		virtual ~PickUserModeDialog() throw() {}
-
-	protected:
-		void OnOk_Click( wxCommandEvent& evt );
-	};
+		return GetNameStatic();
+	}
+};
 
 
-	class ImportSettingsDialog : public wxDialogWithHelpers
-	{
-	public:
-		ImportSettingsDialog( wxWindow* parent );
-		virtual ~ImportSettingsDialog() throw() {}
+class PickUserModeDialog : public BaseApplicableDialog
+{
+protected:
+	Panels::DocsFolderPickerPanel* m_panel_usersel;
+	Panels::LanguageSelectionPanel* m_panel_langsel;
 
-	protected:
-		void OnImport_Click( wxCommandEvent& evt );
-		void OnOverwrite_Click( wxCommandEvent& evt );
-	};
+public:
+	PickUserModeDialog(wxWindow* parent);
+	virtual ~PickUserModeDialog() throw() {}
 
-	class AssertionDialog : public wxDialogWithHelpers
-	{
-	public:
-		AssertionDialog( const wxString& text, const wxString& stacktrace );
-		virtual ~AssertionDialog() throw() {}
-	};
+protected:
+	void OnOk_Click(wxCommandEvent &evt);
+};
 
-	// There are two types of stuck threads:
-	//  * Threads stuck on any action that is not a cancellation.
-	//  * Threads stuck trying to cancel.
-	//
-	// The former means we can provide a "cancel" action for the user, which would itself
-	// open a new dialog in the latter category.  The latter means that there's really nothing
-	// we can do, since pthreads API provides no good way for killing threads.  The only
-	// valid options for the user in that case is to either wait (boring!) or kill the
-	// process (awesome!).
 
-	enum StuckThreadActionType
-	{
-		// Allows the user to attempt a cancellation of a stuck thread.  This should only be
-		// used on threads which are not already stuck during a cancellation action (ie, suspension
-		// or other job requests).  Also, if the running thread is known to not have any
-		// cancellation points then this shouldn't be used either.
-		StacT_TryCancel,
+class ImportSettingsDialog : public wxDialogWithHelpers
+{
+public:
+	ImportSettingsDialog(wxWindow* parent);
+	virtual ~ImportSettingsDialog() throw() {}
 
-		// Allows the user to kill the entire process for a stuck thread.  Use this for any
-		// thread which has failed to cancel in a reasonable timeframe, or for any stuck action
-		// if the thread is known to have no cancellation points.
-		StacT_KillProcess,
-	};
+protected:
+	void OnImport_Click(wxCommandEvent &evt);
+	void OnOverwrite_Click(wxCommandEvent &evt);
+};
 
-	class StuckThreadDialog : public wxDialogWithHelpers,
-		public EventListener_Thread
-	{
-	public:
-		StuckThreadDialog( wxWindow* parent, StuckThreadActionType action, Threading::pxThread& stuck_thread );
-		virtual ~StuckThreadDialog() throw() {}
+class AssertionDialog : public wxDialogWithHelpers
+{
+public:
+	AssertionDialog(const wxString &text, const wxString &stacktrace);
+	virtual ~AssertionDialog() throw() {}
+};
 
-	protected:
-		void OnThreadCleanup();
-	};
+// There are two types of stuck threads:
+//  * Threads stuck on any action that is not a cancellation.
+//  * Threads stuck trying to cancel.
+//
+// The former means we can provide a "cancel" action for the user, which would itself
+// open a new dialog in the latter category.  The latter means that there's really nothing
+// we can do, since pthreads API provides no good way for killing threads.  The only
+// valid options for the user in that case is to either wait (boring!) or kill the
+// process (awesome!).
+
+enum StuckThreadActionType {
+	// Allows the user to attempt a cancellation of a stuck thread.  This should only be
+	// used on threads which are not already stuck during a cancellation action (ie, suspension
+	// or other job requests).  Also, if the running thread is known to not have any
+	// cancellation points then this shouldn't be used either.
+	StacT_TryCancel,
+
+	// Allows the user to kill the entire process for a stuck thread.  Use this for any
+	// thread which has failed to cancel in a reasonable timeframe, or for any stuck action
+	// if the thread is known to have no cancellation points.
+	StacT_KillProcess,
+};
+
+class StuckThreadDialog : public wxDialogWithHelpers,
+	public EventListener_Thread
+{
+public:
+	StuckThreadDialog(wxWindow* parent, StuckThreadActionType action, Threading::pxThread &stuck_thread);
+	virtual ~StuckThreadDialog() throw() {}
+
+protected:
+	void OnThreadCleanup();
+};
 }
 
-wxWindowID pxIssueConfirmation( wxDialogWithHelpers& confirmDlg, const MsgButtons& buttons );
-wxWindowID pxIssueConfirmation( wxDialogWithHelpers& confirmDlg, const MsgButtons& buttons, const wxString& disablerKey );
+wxWindowID pxIssueConfirmation(wxDialogWithHelpers &confirmDlg, const MsgButtons &buttons);
+wxWindowID pxIssueConfirmation(wxDialogWithHelpers &confirmDlg, const MsgButtons &buttons, const wxString &disablerKey);

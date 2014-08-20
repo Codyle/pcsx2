@@ -24,8 +24,7 @@
 
 #include "onepad.h"
 
-typedef struct
-{
+typedef struct {
 	u8 lx, ly;
 	u8 rx, ry;
 } PADAnalog;
@@ -34,39 +33,48 @@ typedef struct
 
 class KeyStatus
 {
-	private:
-		u16 m_button[2];
-		u16 m_internal_button_kbd[2];
-		u16 m_internal_button_joy[2];
+private:
+	u16 m_button[2];
+	u16 m_internal_button_kbd[2];
+	u16 m_internal_button_joy[2];
 
-		u8 m_button_pressure[2][MAX_KEYS];
-		u8 m_internal_button_pressure[2][MAX_KEYS];
+	u8 m_button_pressure[2][MAX_KEYS];
+	u8 m_internal_button_pressure[2][MAX_KEYS];
 
-		bool m_state_acces[2];
+	bool m_state_acces[2];
 
-		PADAnalog m_analog[2];
-		PADAnalog m_internal_analog_kbd[2];
-		PADAnalog m_internal_analog_joy[2];
+	PADAnalog m_analog[2];
+	PADAnalog m_internal_analog_kbd[2];
+	PADAnalog m_internal_analog_joy[2];
 
-		void analog_set(u32 pad, u32 index, u8 value);
-		bool analog_is_reversed(u32 index);
-		u8   analog_merge(u8 kbd, u8 joy);
+	void analog_set(u32 pad, u32 index, u8 value);
+	bool analog_is_reversed(u32 index);
+	u8   analog_merge(u8 kbd, u8 joy);
 
-	public:
-		KeyStatus() { Init(); }
-		void Init();
+public:
+	KeyStatus()
+	{
+		Init();
+	}
+	void Init();
 
-		void keyboard_state_acces(u32 pad) { m_state_acces[pad] = true; }
-		void joystick_state_acces(u32 pad) { m_state_acces[pad] = false; }
+	void keyboard_state_acces(u32 pad)
+	{
+		m_state_acces[pad] = true;
+	}
+	void joystick_state_acces(u32 pad)
+	{
+		m_state_acces[pad] = false;
+	}
 
-		void press(u32 pad, u32 index, s32 value = 0xFF);
-		void release(u32 pad, u32 index);
+	void press(u32 pad, u32 index, s32 value = 0xFF);
+	void release(u32 pad, u32 index);
 
-		u16  get(u32 pad);
-		u8   get(u32 pad, u32 index);
+	u16  get(u32 pad);
+	u8   get(u32 pad, u32 index);
 
 
-		void commit_status(u32 pad);
+	void commit_status(u32 pad);
 };
 
 extern KeyStatus* key_status;

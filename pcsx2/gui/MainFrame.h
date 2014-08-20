@@ -13,7 +13,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 
- #pragma once
+#pragma once
 
 #include "App.h"
 #include "AppSaveStates.h"
@@ -21,8 +21,7 @@
 #include <wx/image.h>
 #include <wx/docview.h>
 
-struct PluginMenuAddition
-{
+struct PluginMenuAddition {
 	wxString			Text;
 	wxString			HelpText;
 	PS2E_MenuItemStyle	Flags;
@@ -33,7 +32,7 @@ struct PluginMenuAddition
 	// Optional user data pointer (or typecast integer value)
 	void*				UserPtr;
 
-	void (PS2E_CALLBACK *OnClicked)( PS2E_THISPTR* thisptr, void* userptr );
+	void (PS2E_CALLBACK *OnClicked)(PS2E_THISPTR* thisptr, void* userptr);
 };
 
 // --------------------------------------------------------------------------------------
@@ -57,21 +56,27 @@ protected:
 
 public:
 	PluginsEnum_t		PluginId;
-	wxMenu&				MyMenu;
+	wxMenu				&MyMenu;
 
 public:
-	PerPluginMenuInfo() : MyMenu( *new wxMenu() )
+	PerPluginMenuInfo() : MyMenu(*new wxMenu())
 	{
 	}
 
 	virtual ~PerPluginMenuInfo() throw();
 
-	void Populate( PluginsEnum_t pid );
+	void Populate(PluginsEnum_t pid);
 	void OnUnloaded();
 	void OnLoaded();
 
-	operator wxMenu*() { return &MyMenu; }
-	operator const wxMenu*() const { return &MyMenu; }
+	operator wxMenu*()
+	{
+		return &MyMenu;
+	}
+	operator const wxMenu*() const
+	{
+		return &MyMenu;
+	}
 };
 
 // --------------------------------------------------------------------------------------
@@ -85,16 +90,16 @@ protected:
 	MenuIdentifiers		m_menu_cmd;
 
 public:
-	InvokeMenuCommand_OnSysStateUnlocked( MenuIdentifiers menu_command )
+	InvokeMenuCommand_OnSysStateUnlocked(MenuIdentifiers menu_command)
 	{
 		m_menu_cmd = menu_command;
 	}
-	
+
 	virtual ~InvokeMenuCommand_OnSysStateUnlocked() throw() {}
 
 	virtual void SaveStateAction_OnCreateFinished()
 	{
-		wxGetApp().PostMenuAction( m_menu_cmd );
+		wxGetApp().PostMenuAction(m_menu_cmd);
 	}
 };
 
@@ -107,63 +112,66 @@ class MainEmuFrame : public wxFrame,
 	public EventListener_AppStatus
 {
 	typedef wxFrame _parent;
-	
+
 protected:
 	bool			m_RestartEmuOnDelete;
 
-	wxStatusBar&	m_statusbar;
+	wxStatusBar	&m_statusbar;
 	wxStaticBitmap	m_background;
 
-	wxMenuBar&		m_menubar;
+	wxMenuBar		&m_menubar;
 
-	wxMenu&			m_menuCDVD;
-	wxMenu&			m_menuSys;
-	wxMenu&			m_menuConfig;
-	wxMenu&			m_menuMisc;
-	wxMenu&			m_menuDebug;
+	wxMenu			&m_menuCDVD;
+	wxMenu			&m_menuSys;
+	wxMenu			&m_menuConfig;
+	wxMenu			&m_menuMisc;
+	wxMenu			&m_menuDebug;
 
-	wxMenu&			m_LoadStatesSubmenu;
-	wxMenu&			m_SaveStatesSubmenu;
+	wxMenu			&m_LoadStatesSubmenu;
+	wxMenu			&m_SaveStatesSubmenu;
 
-	wxMenuItem&		m_MenuItem_Console;
-	wxMenuItem&		m_MenuItem_Console_Stdio;
+	wxMenuItem		&m_MenuItem_Console;
+	wxMenuItem		&m_MenuItem_Console_Stdio;
 
 	PerPluginMenuInfo	m_PluginMenuPacks[PluginId_Count];
 
-	virtual void DispatchEvent( const PluginEventType& plugin_evt );
-	virtual void DispatchEvent( const CoreThreadStatus& status );
+	virtual void DispatchEvent(const PluginEventType &plugin_evt);
+	virtual void DispatchEvent(const CoreThreadStatus &status);
 	virtual void AppStatusEvent_OnSettingsApplied();
 
 public:
-	MainEmuFrame(wxWindow* parent, const wxString& title);
+	MainEmuFrame(wxWindow* parent, const wxString &title);
 	virtual ~MainEmuFrame() throw();
 
 	void OnLogBoxHidden();
 
-	bool IsPaused() const { return GetMenuBar()->IsChecked( MenuId_Sys_SuspendResume ); }
+	bool IsPaused() const
+	{
+		return GetMenuBar()->IsChecked(MenuId_Sys_SuspendResume);
+	}
 	void UpdateIsoSrcSelection();
 	void RemoveCdvdMenu();
-	void EnableMenuItem( int id, bool enable );
+	void EnableMenuItem(int id, bool enable);
 	void EnableCdvdPluginSubmenu(bool isEnable = true);
-	
+
 	bool Destroy();
 
-	void ApplyConfigToGui( AppConfig& configToApply, int flags=0 ); //flags are: AppConfig::APPLY_CONFIG_FROM_PRESET and (currently unused) AppConfig::APPLY_CONFIG_MANUALLY PROPAGATE
+	void ApplyConfigToGui(AppConfig &configToApply, int flags = 0); //flags are: AppConfig::APPLY_CONFIG_FROM_PRESET and (currently unused) AppConfig::APPLY_CONFIG_MANUALLY PROPAGATE
 	void CommitPreset_noTrigger();
 
 protected:
-	void DoGiveHelp(const wxString& text, bool show);
+	void DoGiveHelp(const wxString &text, bool show);
 
 	//Apply here is from config to GUI.
 	void ApplySettings();
 	void ApplyCoreStatus();
 
-	void InitLogBoxPosition( AppConfig::ConsoleLogOptions& conf );
+	void InitLogBoxPosition(AppConfig::ConsoleLogOptions &conf);
 
-	void OnCloseWindow( wxCloseEvent& evt );
-	void OnMoveAround( wxMoveEvent& evt );
-	void OnFocus( wxFocusEvent& evt );
-	void OnActivate( wxActivateEvent& evt );
+	void OnCloseWindow(wxCloseEvent &evt);
+	void OnMoveAround(wxMoveEvent &evt);
+	void OnFocus(wxFocusEvent &evt);
+	void OnActivate(wxActivateEvent &evt);
 
 	void Menu_SysSettings_Click(wxCommandEvent &event);
 	void Menu_McdSettings_Click(wxCommandEvent &event);
@@ -209,14 +217,14 @@ protected:
 	void Menu_ShowAboutBox(wxCommandEvent &event);
 
 	void _DoBootCdvd();
-	bool _DoSelectIsoBrowser( wxString& dest );
+	bool _DoSelectIsoBrowser(wxString &dest);
 	bool _DoSelectELFBrowser();
 
-// ------------------------------------------------------------------------
-//     MainEmuFram Internal API for Populating Main Menu Contents
-// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	//     MainEmuFram Internal API for Populating Main Menu Contents
+	// ------------------------------------------------------------------------
 
-	wxMenu* MakeStatesSubMenu( int baseid, int loadBackupId=-1 ) const;
+	wxMenu* MakeStatesSubMenu(int baseid, int loadBackupId = -1) const;
 	wxMenu* MakeStatesMenu();
 	wxMenu* MakeLanguagesMenu() const;
 
@@ -225,4 +233,4 @@ protected:
 	friend class Pcsx2App;
 };
 
-extern int GetPluginMenuId_Settings( PluginsEnum_t pid );
+extern int GetPluginMenuId_Settings(PluginsEnum_t pid);

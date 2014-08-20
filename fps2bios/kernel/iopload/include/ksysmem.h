@@ -21,7 +21,7 @@ unsigned int	QueryMaxFreeMemSize();
 unsigned int	QueryTotalFreeMemSize();
 void		*QueryBlockTopAddress(void *address);
 int		QueryBlockSize(void *address);
-char		*Kprintf(const char *format,...);		//14(06,14,26)
+char		*Kprintf(const char *format, ...);		//14(06,14,26)
 void		sysmem_call15_set_Kprintf(char* (*newKprintf)(unsigned int unk, const char*, ...), unsigned int newunk);
 
 #endif //__SYSMEM_H__

@@ -32,7 +32,7 @@
 #include "Pcsx2Api.h"
 
 typedef void (*DEV9callback)(int cycles);
-typedef int  (*DEV9handler)(void);
+typedef int (*DEV9handler)(void);
 
 // Basic functions.
 // NOTE: The read/write functions CANNOT use XMM/MMX regs

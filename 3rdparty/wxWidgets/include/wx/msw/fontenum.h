@@ -18,23 +18,26 @@
 
 class wxFontEnumerator: public wxObject
 {
-DECLARE_CLASS(wxFontEnumerator)
+	DECLARE_CLASS(wxFontEnumerator)
 public:
-    wxFontEnumerator() {}
+	wxFontEnumerator() {}
 
-    // Enumerate the fonts.
-    bool Enumerate();
+	// Enumerate the fonts.
+	bool Enumerate();
 
-    // Stop enumeration if false is returned.
-    // By default, the enumerator stores the facenames in a list for
-    // retrieval via GetFacenames().
-    virtual bool OnFont(const wxFont& font);
+	// Stop enumeration if false is returned.
+	// By default, the enumerator stores the facenames in a list for
+	// retrieval via GetFacenames().
+	virtual bool OnFont(const wxFont &font);
 
-    // Return the list of facenames.
-    wxStringList& GetFacenames() { return (wxStringList&) m_faceNames; }
+	// Return the list of facenames.
+	wxStringList &GetFacenames()
+	{
+		return (wxStringList &) m_faceNames;
+	}
 protected:
-    wxStringList    m_faceNames;
+	wxStringList    m_faceNames;
 };
 
 #endif
-  // _WX_FONTENUM_MSW_H_
+// _WX_FONTENUM_MSW_H_

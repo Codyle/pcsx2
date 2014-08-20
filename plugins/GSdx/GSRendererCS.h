@@ -26,68 +26,66 @@
 
 class GSRendererCS : public GSRenderer
 {
-	struct VSSelector
-	{
-		union
-		{
-			struct
-			{
-				uint32 tme:1;
-				uint32 fst:1;
+	struct VSSelector {
+		union {
+			struct {
+				uint32 tme: 1;
+				uint32 fst: 1;
 			};
 
 			uint32 key;
 		};
 
-		operator uint32() {return key & 0x3;}
+		operator uint32()
+		{
+			return key & 0x3;
+		}
 
 		VSSelector() : key(0) {}
 	};
 
-	__aligned(struct, 32) VSConstantBuffer
-	{
+	__aligned(struct, 32) VSConstantBuffer {
 		GSVector4 VertexScale;
 		GSVector4 VertexOffset;
 	};
 
-	struct GSSelector
-	{
-		union
-		{
-			struct
-			{
-				uint32 iip:1;
-				uint32 prim:2;
+	struct GSSelector {
+		union {
+			struct {
+				uint32 iip: 1;
+				uint32 prim: 2;
 			};
 
 			uint32 key;
 		};
 
-		operator uint32() {return key & 0x7;}
+		operator uint32()
+		{
+			return key & 0x7;
+		}
 
 		GSSelector() : key(0) {}
 	};
 
-	struct PSSelector
-	{
-		union
-		{
-			struct
-			{
-				uint32 fpsm:6;
-				uint32 zpsm:6;
+	struct PSSelector {
+		union {
+			struct {
+				uint32 fpsm: 6;
+				uint32 zpsm: 6;
 			};
 
 			uint32 key;
 		};
 
-		operator uint32() {return key & 0x3ff;}
+		operator uint32()
+		{
+			return key & 0x3ff;
+		}
 
 		PSSelector() : key(0) {}
 	};
 
-	__aligned(struct, 32) PSConstantBuffer
-	{
+	__aligned(struct, 32) PSConstantBuffer {
 		uint32 fm;
 		uint32 zm;
 	};
@@ -107,18 +105,17 @@ class GSRendererCS : public GSRenderer
 	uint32 m_vm_valid[16];
 	CComPtr<ID3D11Buffer> m_pb;
 	//CComPtr<ID3D11Texture2D> m_pb;
-	hash_map<uint32, GSVertexShader11 > m_vs;
+	hash_map<uint32, GSVertexShader11> m_vs;
 	CComPtr<ID3D11Buffer> m_vs_cb;
-	hash_map<uint32, CComPtr<ID3D11GeometryShader> > m_gs;
+	hash_map<uint32, CComPtr<ID3D11GeometryShader>> m_gs;
 	CComPtr<ID3D11PixelShader> m_ps0;
-	hash_map<uint32, CComPtr<ID3D11PixelShader> > m_ps1;
+	hash_map<uint32, CComPtr<ID3D11PixelShader>> m_ps1;
 	CComPtr<ID3D11Buffer> m_ps_cb;
 
-	void Write(GSOffset* o, const GSVector4i& r);
-	void Read(GSOffset* o, const GSVector4i& r, bool invalidate);
+	void Write(GSOffset* o, const GSVector4i &r);
+	void Read(GSOffset* o, const GSVector4i &r, bool invalidate);
 
-	struct OffsetBuffer
-	{
+	struct OffsetBuffer {
 		CComPtr<ID3D11Buffer> row, col;
 		CComPtr<ID3D11ShaderResourceView> row_srv, col_srv;
 	};
@@ -136,8 +133,8 @@ protected:
 	void VSync(int field);
 	GSTexture* GetOutput(int i);
 	void Draw();
-	void InvalidateVideoMem(const GIFRegBITBLTBUF& BITBLTBUF, const GSVector4i& r);
-	void InvalidateLocalMem(const GIFRegBITBLTBUF& BITBLTBUF, const GSVector4i& r, bool clut);
+	void InvalidateVideoMem(const GIFRegBITBLTBUF &BITBLTBUF, const GSVector4i &r);
+	void InvalidateLocalMem(const GIFRegBITBLTBUF &BITBLTBUF, const GSVector4i &r, bool clut);
 
 public:
 	GSRendererCS();

@@ -53,12 +53,15 @@ public:
 	GSDump();
 	virtual ~GSDump();
 
-	void Open(const string& fn, u32 crc, const freezeData& fd, u8* regs);
+	void Open(const string &fn, u32 crc, const freezeData &fd, u8* regs);
 	void Close();
 	void ReadFIFO(u32 size);
 	void Transfer(int index, const u32* mem, size_t size, u32 real_size);
 	void VSync(int field, bool last, u8* regs);
-	operator bool() {return m_gs != NULL;}
+	operator bool()
+	{
+		return m_gs != NULL;
+	}
 };
 
 extern GSDump g_dump;

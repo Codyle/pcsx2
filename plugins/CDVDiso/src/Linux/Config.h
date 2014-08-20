@@ -31,7 +31,7 @@
 #include <bzlib.h>
 #include <gtk/gtk.h>
 
- #ifdef __cplusplus
+#ifdef __cplusplus
 extern "C"
 {
 #endif
@@ -59,7 +59,7 @@ extern GtkWidget *AboutDlg, *ConfDlg, *MsgDlg, *FileSel;
 extern GtkWidget *Edit, *CdEdit;
 extern bool stop;
 
-extern GtkWidget *Method,*Progress;
+extern GtkWidget *Method, *Progress;
 extern GtkWidget *BtnCompress, *BtnDecompress;
 extern GtkWidget *BtnCreate, *BtnCreateZ;
 

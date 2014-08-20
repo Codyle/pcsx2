@@ -28,8 +28,7 @@
 #define MAX_KEYS 20
 #endif
 
-enum KeyType
-{
+enum KeyType {
 	PAD_JOYBUTTONS = 0,
 	PAD_AXIS,
 	PAD_HAT,
@@ -55,20 +54,23 @@ extern int hat_to_key(int dir, int axis_id);
 
 extern int PadEnum[2][2];
 
-struct PADconf
-{
-	public:
+struct PADconf {
+public:
 	u32 keys[2][MAX_KEYS];
 	u32 log;
 	u32 options;  // upper 16 bits are for pad2
 	u32 sensibility;
 	u32 joyid_map;
 	u32 ff_intensity;
-	map<u32,u32> keysym_map[2];
+	map<u32, u32> keysym_map[2];
 
-	PADconf() { init(); }
+	PADconf()
+	{
+		init();
+	}
 
-	void init() {
+	void init()
+	{
 		memset(&keys, 0, sizeof(keys));
 		log = options = joyid_map = 0;
 		ff_intensity = 100;
@@ -77,13 +79,15 @@ struct PADconf
 			keysym_map[pad].clear();
 	}
 
-	void set_joyid(u32 pad, u32 joy_id) {
+	void set_joyid(u32 pad, u32 joy_id)
+	{
 		int shift = 8 * pad;
 		joyid_map &= ~(0xFF << shift); // clear
 		joyid_map |= (joy_id & 0xFF) << shift; // set
 	}
 
-	u32 get_joyid(u32 pad) {
+	u32 get_joyid(u32 pad)
+	{
 		int shift = 8 * pad;
 		return ((joyid_map >> shift) & 0xFF);
 	}

@@ -39,13 +39,13 @@ extern "C"
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -56,13 +56,12 @@ extern "C"
 #include "pa_ringbuffer.h"
 #include <string.h>
 
-typedef struct
-{
-    RingBuffer   inFIFO;
-    RingBuffer   outFIFO;
-    PortAudioStream *stream;
-    int          bytesPerFrame;
-    int          samplesPerFrame;
+typedef struct {
+	RingBuffer   inFIFO;
+	RingBuffer   outFIFO;
+	PortAudioStream *stream;
+	int          bytesPerFrame;
+	int          samplesPerFrame;
 }
 PABLIO_Stream;
 
@@ -77,25 +76,25 @@ PABLIO_Stream;
  * Write data to ring buffer.
  * Will not return until all the data has been written.
  */
-long WriteAudioStream( PABLIO_Stream *aStream, void *data, long numFrames );
+long WriteAudioStream(PABLIO_Stream *aStream, void *data, long numFrames);
 
 /************************************************************
  * Read data from ring buffer.
  * Will not return until all the data has been read.
  */
-long ReadAudioStream( PABLIO_Stream *aStream, void *data, long numFrames );
+long ReadAudioStream(PABLIO_Stream *aStream, void *data, long numFrames);
 
 /************************************************************
  * Return the number of frames that could be written to the stream without
  * having to wait.
  */
-long GetAudioStreamWriteable( PABLIO_Stream *aStream );
+long GetAudioStreamWriteable(PABLIO_Stream *aStream);
 
 /************************************************************
  * Return the number of frames that are available to be read from the
  * stream without having to wait.
  */
-long GetAudioStreamReadable( PABLIO_Stream *aStream );
+long GetAudioStreamReadable(PABLIO_Stream *aStream);
 
 /************************************************************
  * Opens a PortAudio stream with default characteristics.
@@ -105,10 +104,10 @@ long GetAudioStreamReadable( PABLIO_Stream *aStream );
  *    PABLIO_READ, PABLIO_WRITE, or PABLIO_READ_WRITE,
  *    and either PABLIO_MONO or PABLIO_STEREO
  */
-PaError OpenAudioStream( PABLIO_Stream **aStreamPtr, double sampleRate,
-                         PaSampleFormat format, long flags );
+PaError OpenAudioStream(PABLIO_Stream **aStreamPtr, double sampleRate,
+                        PaSampleFormat format, long flags);
 
-PaError CloseAudioStream( PABLIO_Stream *aStream );
+PaError CloseAudioStream(PABLIO_Stream *aStream);
 
 #ifdef __cplusplus
 }

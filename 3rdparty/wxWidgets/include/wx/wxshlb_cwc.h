@@ -18,28 +18,28 @@
 
 #if __option(profile)
 #ifdef __cplusplus
-    #if __POWERPC__
-        #include "wxshlb_Carbon++_prof.mch"
-    #endif
+#if __POWERPC__
+#include "wxshlb_Carbon++_prof.mch"
+#endif
 #else
-    #if __POWERPC__
-        #include "wxshlb_Carbon_prof.mch"
-    #endif
+#if __POWERPC__
+#include "wxshlb_Carbon_prof.mch"
+#endif
 #endif
 #else
 #ifdef __cplusplus
-    #if __MACH__
-        #include "wxshlb_Mach++.mch"
-    #elif __POWERPC__
-        #include "wxshlb_Carbon++.mch"
-    #endif
+#if __MACH__
+#include "wxshlb_Mach++.mch"
+#elif __POWERPC__
+#include "wxshlb_Carbon++.mch"
+#endif
 #else
-    #if __MACH__
-        #include "wxshlb_Mach.mch"
-    #elif __POWERPC__
-        #include "wxshlb_Carbon.mch"
-    #endif
+#if __MACH__
+#include "wxshlb_Mach.mch"
+#elif __POWERPC__
+#include "wxshlb_Carbon.mch"
 #endif
 #endif
 #endif
-    // _WX_CW__
+#endif
+// _WX_CW__

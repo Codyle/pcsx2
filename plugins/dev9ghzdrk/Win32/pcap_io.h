@@ -22,25 +22,21 @@ extern "C" {
 
 #pragma pack(push,1)
 
-typedef struct _ip_address
-{
+typedef struct _ip_address {
 	u_char bytes[4];
 } ip_address;
 
-typedef struct _mac_address
-{
+typedef struct _mac_address {
 	u_char bytes[6];
 } mac_address;
 
-typedef struct _ethernet_header
-{
+typedef struct _ethernet_header {
 	mac_address dst;
 	mac_address src;
 	u_short protocol;
 } ethernet_header;
 
-typedef struct _arp_packet
-{
+typedef struct _arp_packet {
 	u_short		hw_type;
 	u_short		protocol;
 	u_char		h_addr_len;
@@ -62,7 +58,7 @@ typedef struct _ip_header {
 	u_char		proto;		/* protocol */
 	u_short		hdr_csum;	/* checksum */
 	ip_address	src;      /* source and dest address */
-	ip_address	dst;	
+	ip_address	dst;
 } ip_header;
 
 /* Internet Control Message Protocol Constants and Packet Format */
@@ -112,8 +108,8 @@ typedef struct _icmp_header {	/* ICMP packet			*/
 
 	union	{
 		struct {
-			int	ic1_id:16; /* echo type, a message id	*/
-			int	ic1_seq:16;/* echo type, a seq. number	*/
+			int	ic1_id: 16; /* echo type, a message id	*/
+			int	ic1_seq: 16; /* echo type, a seq. number	*/
 		} ic1;
 		ip_address	ic2_gw;		/* for redirect, gateway	*/
 		struct {
@@ -131,8 +127,7 @@ typedef struct _icmp_header {	/* ICMP packet			*/
   u16	csum;
 } udp_header;*/
 
-typedef struct _full_arp_packet
-{
+typedef struct _full_arp_packet {
 	ethernet_header header;
 	arp_packet arp;
 } full_arp_packet;
@@ -156,8 +151,8 @@ int pcap_io_recv(void* packet, int max_len);
 void pcap_io_close();
 */
 int pcap_io_get_dev_num();
-char* pcap_io_get_dev_desc(int num,int md);
-char* pcap_io_get_dev_name(int num,int md);
+char* pcap_io_get_dev_desc(int num, int md);
+char* pcap_io_get_dev_name(int num, int md);
 
 #ifdef __cplusplus
 }

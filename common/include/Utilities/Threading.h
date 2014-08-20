@@ -41,14 +41,17 @@ public:
 
 	ConsoleLogSource_Threading();
 
-	bool Write( const wxString& thrname, const wxChar* msg ) {
-		return _parent::Write( wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg );
+	bool Write(const wxString &thrname, const wxChar* msg)
+	{
+		return _parent::Write(wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg);
 	}
-	bool Warn( const wxString& thrname, const wxChar* msg )	{
-		return _parent::Warn( wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg );
+	bool Warn(const wxString &thrname, const wxChar* msg)
+	{
+		return _parent::Warn(wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg);
 	}
-	bool Error( const wxString& thrname, const wxChar* msg ) {
-		return _parent::Error( wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg );
+	bool Error(const wxString &thrname, const wxChar* msg)
+	{
+		return _parent::Error(wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg);
 	}
 };
 
@@ -77,72 +80,73 @@ class wxTimeSpan;
 
 namespace Threading
 {
-	class pxThread;
-	class RwMutex;
+class pxThread;
+class RwMutex;
 
-	extern void pxTestCancel();
-	extern pxThread* pxGetCurrentThread();
-	extern wxString pxGetCurrentThreadName();
-	extern u64 GetThreadCpuTime();
-	extern u64 GetThreadTicksPerSecond();
+extern void pxTestCancel();
+extern pxThread* pxGetCurrentThread();
+extern wxString pxGetCurrentThreadName();
+extern u64 GetThreadCpuTime();
+extern u64 GetThreadTicksPerSecond();
 
-	// Yields the current thread and provides cancellation points if the thread is managed by
-	// pxThread.  Unmanaged threads use standard Sleep.
-	extern void pxYield( int ms );
+// Yields the current thread and provides cancellation points if the thread is managed by
+// pxThread.  Unmanaged threads use standard Sleep.
+extern void pxYield(int ms);
 }
 
 namespace Exception
 {
-	class BaseThreadError : public RuntimeError
+class BaseThreadError : public RuntimeError
+{
+	DEFINE_EXCEPTION_COPYTORS(BaseThreadError, RuntimeError)
+	DEFINE_EXCEPTION_MESSAGES(BaseThreadError)
+
+public:
+	Threading::pxThread*	m_thread;
+
+protected:
+	BaseThreadError()
 	{
-		DEFINE_EXCEPTION_COPYTORS( BaseThreadError, RuntimeError )
-		DEFINE_EXCEPTION_MESSAGES( BaseThreadError )
+		m_thread = NULL;
+	}
 
-	public:
-		Threading::pxThread*	m_thread;
-
-	protected:
-		BaseThreadError() {
-			m_thread = NULL;
-		}
-
-	public:
-		explicit BaseThreadError( Threading::pxThread* _thread )
-		{
-			m_thread = _thread;
-			m_message_diag = L"An unspecified thread-related error occurred (thread=%s)";
-		}
-
-		explicit BaseThreadError( Threading::pxThread& _thread )
-		{
-			m_thread = &_thread;
-			m_message_diag = L"An unspecified thread-related error occurred (thread=%s)";
-		}
-
-		virtual wxString FormatDiagnosticMessage() const;
-		virtual wxString FormatDisplayMessage() const;
-
-		Threading::pxThread& Thread();
-		const Threading::pxThread& Thread() const;
-	};
-
-	class ThreadCreationError : public BaseThreadError
+public:
+	explicit BaseThreadError(Threading::pxThread* _thread)
 	{
-		DEFINE_EXCEPTION_COPYTORS( ThreadCreationError, BaseThreadError )
+		m_thread = _thread;
+		m_message_diag = L"An unspecified thread-related error occurred (thread=%s)";
+	}
 
-	public:
-		explicit ThreadCreationError( Threading::pxThread* _thread )
-		{
-			m_thread = _thread;
-			SetBothMsgs( L"Thread creation failure.  An unspecified error occurred while trying to create the %s thread." );
-		}
+	explicit BaseThreadError(Threading::pxThread &_thread)
+	{
+		m_thread = &_thread;
+		m_message_diag = L"An unspecified thread-related error occurred (thread=%s)";
+	}
 
-		explicit ThreadCreationError( Threading::pxThread& _thread )
-		{
-			m_thread = &_thread;
-			SetBothMsgs( L"Thread creation failure.  An unspecified error occurred while trying to create the %s thread." );
-		}
-	};
+	virtual wxString FormatDiagnosticMessage() const;
+	virtual wxString FormatDisplayMessage() const;
+
+	Threading::pxThread &Thread();
+	const Threading::pxThread &Thread() const;
+};
+
+class ThreadCreationError : public BaseThreadError
+{
+	DEFINE_EXCEPTION_COPYTORS(ThreadCreationError, BaseThreadError)
+
+public:
+	explicit ThreadCreationError(Threading::pxThread* _thread)
+	{
+		m_thread = _thread;
+		SetBothMsgs(L"Thread creation failure.  An unspecified error occurred while trying to create the %s thread.");
+	}
+
+	explicit ThreadCreationError(Threading::pxThread &_thread)
+	{
+		m_thread = &_thread;
+		SetBothMsgs(L"Thread creation failure.  An unspecified error occurred while trying to create the %s thread.");
+	}
+};
 }
 
 
@@ -154,23 +158,23 @@ namespace Threading
 // The following set of documented functions have Linux/Win32 specific implementations,
 // which are found in WinThreads.cpp and LnxThreads.cpp
 
-	// Releases a timeslice to other threads.
-	extern void Timeslice();
+// Releases a timeslice to other threads.
+extern void Timeslice();
 
-	// For use in spin/wait loops.
-	extern void SpinWait();
-	
-	// Use prior to committing data to another thread (internal memcpy_qwc does not use fencing,
-	// so that many memcpys can be issued in a row more efficiently)
-	extern void StoreFence();
+// For use in spin/wait loops.
+extern void SpinWait();
 
-	// Optional implementation to enable hires thread/process scheduler for the operating system.
-	// Needed by Windows, but might not be relevant to other platforms.
-	extern void EnableHiresScheduler();
-	extern void DisableHiresScheduler();
+// Use prior to committing data to another thread (internal memcpy_qwc does not use fencing,
+// so that many memcpys can be issued in a row more efficiently)
+extern void StoreFence();
 
-	// sleeps the current thread for the given number of milliseconds.
-	extern void Sleep( int ms );
+// Optional implementation to enable hires thread/process scheduler for the operating system.
+// Needed by Windows, but might not be relevant to other platforms.
+extern void EnableHiresScheduler();
+extern void DisableHiresScheduler();
+
+// sleeps the current thread for the given number of milliseconds.
+extern void Sleep(int ms);
 
 // --------------------------------------------------------------------------------------
 //  AtomicExchange / AtomicIncrement
@@ -179,41 +183,40 @@ namespace Threading
 // from these little beasties!  (these are all implemented internally using cross-platform
 // implementations of _InterlockedExchange and such)
 
-	extern u32 AtomicRead( volatile u32& Target );
-	extern s32 AtomicRead( volatile s32& Target );
-	extern u32 AtomicExchange( volatile u32& Target, u32 value );
-	extern s32 AtomicExchange( volatile s32& Target, s32 value );
-	extern u32 AtomicExchangeAdd( volatile u32& Target, u32 value );
-	extern s32 AtomicExchangeAdd( volatile s32& Target, s32 value );
-	extern s32 AtomicExchangeSub( volatile s32& Target, s32 value );
-	extern u32 AtomicIncrement( volatile u32& Target );
-	extern s32 AtomicIncrement( volatile s32& Target );
-	extern u32 AtomicDecrement( volatile u32& Target );
-	extern s32 AtomicDecrement( volatile s32& Target );
+extern u32 AtomicRead(volatile u32 &Target);
+extern s32 AtomicRead(volatile s32 &Target);
+extern u32 AtomicExchange(volatile u32 &Target, u32 value);
+extern s32 AtomicExchange(volatile s32 &Target, s32 value);
+extern u32 AtomicExchangeAdd(volatile u32 &Target, u32 value);
+extern s32 AtomicExchangeAdd(volatile s32 &Target, s32 value);
+extern s32 AtomicExchangeSub(volatile s32 &Target, s32 value);
+extern u32 AtomicIncrement(volatile u32 &Target);
+extern s32 AtomicIncrement(volatile s32 &Target);
+extern u32 AtomicDecrement(volatile u32 &Target);
+extern s32 AtomicDecrement(volatile s32 &Target);
 
-	extern bool AtomicBitTestAndReset( volatile u32& bitset, u8 bit );
-	extern bool AtomicBitTestAndReset( volatile s32& bitset, u8 bit );
+extern bool AtomicBitTestAndReset(volatile u32 &bitset, u8 bit);
+extern bool AtomicBitTestAndReset(volatile s32 &bitset, u8 bit);
 
-	extern void* _AtomicExchangePointer( volatile uptr& target, uptr value );
-	extern void* _AtomicCompareExchangePointer( volatile uptr& target, uptr value, uptr comparand );
+extern void* _AtomicExchangePointer(volatile uptr &target, uptr value);
+extern void* _AtomicCompareExchangePointer(volatile uptr &target, uptr value, uptr comparand);
 
 #define AtomicExchangePointer( dest, src )				_AtomicExchangePointer( (uptr&)dest, (uptr)src )
 #define AtomicCompareExchangePointer( dest, comp, src )	_AtomicExchangePointer( (uptr&)dest, (uptr)comp, (uptr)src )
 
-	// pthread Cond is an evil api that is not suited for Pcsx2 needs.
-	// Let's not use it. Use mutexes and semaphores instead to create waits. (Air)
+// pthread Cond is an evil api that is not suited for Pcsx2 needs.
+// Let's not use it. Use mutexes and semaphores instead to create waits. (Air)
 #if 0
-	struct WaitEvent
-	{
-		pthread_cond_t cond;
-		pthread_mutex_t mutex;
+struct WaitEvent {
+	pthread_cond_t cond;
+	pthread_mutex_t mutex;
 
-		WaitEvent();
-		~WaitEvent() throw();
+	WaitEvent();
+	~WaitEvent() throw();
 
-		void Set();
-		void Wait();
-	};
+	void Set();
+	void Wait();
+};
 #endif
 
 // --------------------------------------------------------------------------------------
@@ -227,175 +230,192 @@ namespace Threading
 // If TryAcquire() returns true, you've locked the object and are *responsible* for unlocking
 // it later.
 //
-	class NonblockingMutex
+class NonblockingMutex
+{
+protected:
+	volatile int val;
+
+public:
+	NonblockingMutex() : val(false) {}
+	virtual ~NonblockingMutex() throw() {}
+
+	bool TryAcquire() throw()
 	{
-	protected:
-		volatile int val;
+		return !AtomicExchange(val, true);
+	}
 
-	public:
-		NonblockingMutex() : val( false ) {}
-		virtual ~NonblockingMutex() throw() {}
-
-		bool TryAcquire() throw()
-		{
-			return !AtomicExchange( val, true );
-		}
-
-		bool IsLocked()
-		{ return !!val; }
-
-		void Release()
-		{
-			AtomicExchange( val, false );
-		}
-	};
-
-	class Semaphore
+	bool IsLocked()
 	{
-	protected:
-		sem_t m_sema;
+		return !!val;
+	}
 
-	public:
-		Semaphore();
-		virtual ~Semaphore() throw();
-
-		void Reset();
-		void Post();
-		void Post( int multiple );
-
-		void WaitWithoutYield();
-		bool WaitWithoutYield( const wxTimeSpan& timeout );
-		void WaitNoCancel();
-		void WaitNoCancel( const wxTimeSpan& timeout );
-		int  Count();
-
-		void Wait();
-		bool Wait( const wxTimeSpan& timeout );
-	};
-
-	class Mutex
+	void Release()
 	{
-	protected:
-		pthread_mutex_t m_mutex;
+		AtomicExchange(val, false);
+	}
+};
 
-	public:
-		Mutex();
-		virtual ~Mutex() throw();
-		virtual bool IsRecursive() const { return false; }
+class Semaphore
+{
+protected:
+	sem_t m_sema;
 
-		void Recreate();
-		bool RecreateIfLocked();
-		void Detach();
+public:
+	Semaphore();
+	virtual ~Semaphore() throw();
 
-		void Acquire();
-		bool Acquire( const wxTimeSpan& timeout );
-		bool TryAcquire();
-		void Release();
+	void Reset();
+	void Post();
+	void Post(int multiple);
 
-		void AcquireWithoutYield();
-		bool AcquireWithoutYield( const wxTimeSpan& timeout );
+	void WaitWithoutYield();
+	bool WaitWithoutYield(const wxTimeSpan &timeout);
+	void WaitNoCancel();
+	void WaitNoCancel(const wxTimeSpan &timeout);
+	int  Count();
 
-		void Wait();
-		bool Wait( const wxTimeSpan& timeout );
-		void WaitWithoutYield();
-		bool WaitWithoutYield( const wxTimeSpan& timeout );
+	void Wait();
+	bool Wait(const wxTimeSpan &timeout);
+};
 
-	protected:
-		// empty constructor used by MutexLockRecursive
-		Mutex( bool ) {}
-	};
+class Mutex
+{
+protected:
+	pthread_mutex_t m_mutex;
 
-	class MutexRecursive : public Mutex
+public:
+	Mutex();
+	virtual ~Mutex() throw();
+	virtual bool IsRecursive() const
 	{
-	public:
-		MutexRecursive();
-		virtual ~MutexRecursive() throw();
-		virtual bool IsRecursive() const { return true; }
-	};
+		return false;
+	}
 
-	// --------------------------------------------------------------------------------------
-	//  ScopedLock
-	// --------------------------------------------------------------------------------------
-	// Helper class for using Mutexes.  Using this class provides an exception-safe (and
-	// generally clean) method of locking code inside a function or conditional block.  The lock
-	// will be automatically released on any return or exit from the function.
-	//
-	// Const qualification note:
-	//  ScopedLock takes const instances of the mutex, even though the mutex is modified 
-	//  by locking and unlocking.  Two rationales:
-	//
-	//  1) when designing classes with accessors (GetString, GetValue, etc) that need mutexes,
-	//     this class needs a const hack to allow those accessors to be const (which is typically
-	//     *very* important).
-	//
-	//  2) The state of the Mutex is guaranteed to be unchanged when the calling function or
-	//     scope exits, by any means.  Only via manual calls to Release or Acquire does that
-	//     change, and typically those are only used in very special circumstances of their own.
-	//
-	class ScopedLock
+	void Recreate();
+	bool RecreateIfLocked();
+	void Detach();
+
+	void Acquire();
+	bool Acquire(const wxTimeSpan &timeout);
+	bool TryAcquire();
+	void Release();
+
+	void AcquireWithoutYield();
+	bool AcquireWithoutYield(const wxTimeSpan &timeout);
+
+	void Wait();
+	bool Wait(const wxTimeSpan &timeout);
+	void WaitWithoutYield();
+	bool WaitWithoutYield(const wxTimeSpan &timeout);
+
+protected:
+	// empty constructor used by MutexLockRecursive
+	Mutex(bool) {}
+};
+
+class MutexRecursive : public Mutex
+{
+public:
+	MutexRecursive();
+	virtual ~MutexRecursive() throw();
+	virtual bool IsRecursive() const
 	{
-		DeclareNoncopyableObject(ScopedLock);
+		return true;
+	}
+};
 
-	protected:
-		Mutex*	m_lock;
-		bool	m_IsLocked;
+// --------------------------------------------------------------------------------------
+//  ScopedLock
+// --------------------------------------------------------------------------------------
+// Helper class for using Mutexes.  Using this class provides an exception-safe (and
+// generally clean) method of locking code inside a function or conditional block.  The lock
+// will be automatically released on any return or exit from the function.
+//
+// Const qualification note:
+//  ScopedLock takes const instances of the mutex, even though the mutex is modified
+//  by locking and unlocking.  Two rationales:
+//
+//  1) when designing classes with accessors (GetString, GetValue, etc) that need mutexes,
+//     this class needs a const hack to allow those accessors to be const (which is typically
+//     *very* important).
+//
+//  2) The state of the Mutex is guaranteed to be unchanged when the calling function or
+//     scope exits, by any means.  Only via manual calls to Release or Acquire does that
+//     change, and typically those are only used in very special circumstances of their own.
+//
+class ScopedLock
+{
+	DeclareNoncopyableObject(ScopedLock);
 
-	public:
-		virtual ~ScopedLock() throw();
-		explicit ScopedLock( const Mutex* locker=NULL );
-		explicit ScopedLock( const Mutex& locker );
-		void AssignAndLock( const Mutex& locker );
-		void AssignAndLock( const Mutex* locker );
+protected:
+	Mutex*	m_lock;
+	bool	m_IsLocked;
 
-		void Assign( const Mutex& locker );
-		void Assign( const Mutex* locker );
+public:
+	virtual ~ScopedLock() throw();
+	explicit ScopedLock(const Mutex* locker = NULL);
+	explicit ScopedLock(const Mutex &locker);
+	void AssignAndLock(const Mutex &locker);
+	void AssignAndLock(const Mutex* locker);
 
-		void Release();
-		void Acquire();
+	void Assign(const Mutex &locker);
+	void Assign(const Mutex* locker);
 
-		bool IsLocked() const { return m_IsLocked; }
+	void Release();
+	void Acquire();
 
-	protected:
-		// Special constructor used by ScopedTryLock
-		ScopedLock( const Mutex& locker, bool isTryLock );
-	};
-
-	class ScopedTryLock : public ScopedLock
+	bool IsLocked() const
 	{
-	public:
-		ScopedTryLock( const Mutex& locker ) : ScopedLock( locker, true ) { }
-		virtual ~ScopedTryLock() throw() {}
-		bool Failed() const { return !m_IsLocked; }
-	};
+		return m_IsLocked;
+	}
+
+protected:
+	// Special constructor used by ScopedTryLock
+	ScopedLock(const Mutex &locker, bool isTryLock);
+};
+
+class ScopedTryLock : public ScopedLock
+{
+public:
+	ScopedTryLock(const Mutex &locker) : ScopedLock(locker, true) { }
+	virtual ~ScopedTryLock() throw() {}
+	bool Failed() const
+	{
+		return !m_IsLocked;
+	}
+};
 
 // --------------------------------------------------------------------------------------
 //  ScopedNonblockingLock
 // --------------------------------------------------------------------------------------
 // A ScopedTryLock branded for use with Nonblocking mutexes.  See ScopedTryLock for details.
 //
-	class ScopedNonblockingLock
+class ScopedNonblockingLock
+{
+	DeclareNoncopyableObject(ScopedNonblockingLock);
+
+protected:
+	NonblockingMutex	&m_lock;
+	bool				m_IsLocked;
+
+public:
+	ScopedNonblockingLock(NonblockingMutex &locker) :
+		m_lock(locker)
+		,	m_IsLocked(m_lock.TryAcquire())
 	{
-		DeclareNoncopyableObject(ScopedNonblockingLock);
+	}
 
-	protected:
-		NonblockingMutex&	m_lock;
-		bool				m_IsLocked;
+	virtual ~ScopedNonblockingLock() throw()
+	{
+		if (m_IsLocked)
+			m_lock.Release();
+	}
 
-	public:
-		ScopedNonblockingLock( NonblockingMutex& locker ) :
-			m_lock( locker )
-		,	m_IsLocked( m_lock.TryAcquire() )
-		{
-		}
-
-		virtual ~ScopedNonblockingLock() throw()
-		{
-			if( m_IsLocked )
-				m_lock.Release();
-		}
-
-		bool Failed() const { return !m_IsLocked; }
-	};
+	bool Failed() const
+	{
+		return !m_IsLocked;
+	}
+};
 
 // --------------------------------------------------------------------------------------
 //  ScopedLockBool
@@ -404,30 +424,34 @@ namespace Threading
 // Note that the isLockedBool should only be used as an indicator for the locked status,
 // and not actually depended on for thread synchronization...
 
-	struct ScopedLockBool {	
-		ScopedLock m_lock;
-		volatile __aligned(4) bool& m_bool;
+struct ScopedLockBool {
+	ScopedLock m_lock;
+	volatile __aligned(4) bool &m_bool;
 
 #ifdef __LINUX__
-		ScopedLockBool(Mutex& mutexToLock, volatile bool& isLockedBool)
+	ScopedLockBool(Mutex &mutexToLock, volatile bool &isLockedBool)
 #else
-		ScopedLockBool(Mutex& mutexToLock, volatile __aligned(4) bool& isLockedBool)
+	ScopedLockBool(Mutex &mutexToLock, volatile __aligned(4) bool &isLockedBool)
 #endif
-			: m_lock(mutexToLock),
-			  m_bool(isLockedBool) {
-			m_bool = m_lock.IsLocked();
-		}
-		virtual ~ScopedLockBool() throw() {
-			m_bool = false;
-		}
-		void Acquire() {
-			m_lock.Acquire();
-			m_bool = m_lock.IsLocked();
-		}
-		void Release() {
-			m_bool = false;
-			m_lock.Release();
-		}
-	};
+		: m_lock(mutexToLock),
+		  m_bool(isLockedBool)
+	{
+		m_bool = m_lock.IsLocked();
+	}
+	virtual ~ScopedLockBool() throw()
+	{
+		m_bool = false;
+	}
+	void Acquire()
+	{
+		m_lock.Acquire();
+		m_bool = m_lock.IsLocked();
+	}
+	void Release()
+	{
+		m_bool = false;
+		m_lock.Release();
+	}
+};
 }
 

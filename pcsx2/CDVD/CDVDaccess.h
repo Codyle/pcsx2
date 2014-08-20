@@ -17,15 +17,13 @@
 
 #include "Plugins.h"
 
-enum CDVD_SourceType
-{
+enum CDVD_SourceType {
 	CDVDsrc_Iso = 0,	// use built in ISO api
 	CDVDsrc_Plugin,		// use external plugin
 	CDVDsrc_NoDisc,		// use built in CDVDnull
 };
 
-struct CDVD_API
-{
+struct CDVD_API {
 	void (CALLBACK *close)();
 
 	// Don't need init or shutdown.  iso/nodisc have no init/shutdown and plugin's
@@ -67,9 +65,9 @@ extern CDVD_API CDVDapi_NoDisc;
 
 extern const wxChar* CDVD_SourceLabels[];
 
-extern void CDVDsys_ChangeSource( CDVD_SourceType type );
-extern void CDVDsys_SetFile( CDVD_SourceType srctype, const wxString& newfile );
-extern const wxString& CDVDsys_GetFile( CDVD_SourceType srctype );
+extern void CDVDsys_ChangeSource(CDVD_SourceType type);
+extern void CDVDsys_SetFile(CDVD_SourceType srctype, const wxString &newfile);
+extern const wxString &CDVDsys_GetFile(CDVD_SourceType srctype);
 extern CDVD_SourceType CDVDsys_GetSourceType();
 
 extern bool DoCDVDopen();

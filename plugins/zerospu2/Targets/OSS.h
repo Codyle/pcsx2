@@ -24,10 +24,9 @@
 extern int OSSSetupSound();
 extern void OSSRemoveSound();
 extern int OSSSoundGetBytesBuffered();
-extern void OSSSoundFeedVoiceData(unsigned char* pSound,long lBytes);
+extern void OSSSoundFeedVoiceData(unsigned char* pSound, long lBytes);
 
-static SoundCallbacks OSSCmds =
-{
+static SoundCallbacks OSSCmds = {
 	(intFunction)OSSSetupSound,
 	(voidFunction)OSSRemoveSound,
 	(intFunction)OSSSoundGetBytesBuffered,

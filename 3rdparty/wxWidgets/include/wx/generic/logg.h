@@ -26,17 +26,17 @@
 class WXDLLEXPORT wxLogTextCtrl : public wxLog
 {
 public:
-    wxLogTextCtrl(wxTextCtrl *pTextCtrl);
+	wxLogTextCtrl(wxTextCtrl *pTextCtrl);
 
 protected:
-    // implement sink function
-    virtual void DoLogString(const wxChar *szString, time_t t);
+	// implement sink function
+	virtual void DoLogString(const wxChar *szString, time_t t);
 
 private:
-    // the control we use
-    wxTextCtrl *m_pTextCtrl;
+	// the control we use
+	wxTextCtrl *m_pTextCtrl;
 
-    DECLARE_NO_COPY_CLASS(wxLogTextCtrl)
+	DECLARE_NO_COPY_CLASS(wxLogTextCtrl)
 };
 
 #endif // wxUSE_TEXTCTRL
@@ -50,24 +50,24 @@ private:
 class WXDLLEXPORT wxLogGui : public wxLog
 {
 public:
-    // ctor
-    wxLogGui();
+	// ctor
+	wxLogGui();
 
-    // show all messages that were logged since the last Flush()
-    virtual void Flush();
+	// show all messages that were logged since the last Flush()
+	virtual void Flush();
 
 protected:
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
+	virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
 
-    // empty everything
-    void Clear();
+	// empty everything
+	void Clear();
 
-    wxArrayString m_aMessages;      // the log message texts
-    wxArrayInt    m_aSeverity;      // one of wxLOG_XXX values
-    wxArrayLong   m_aTimes;         // the time of each message
-    bool          m_bErrors,        // do we have any errors?
-                  m_bWarnings,      // any warnings?
-                  m_bHasMessages;   // any messages at all?
+	wxArrayString m_aMessages;      // the log message texts
+	wxArrayInt    m_aSeverity;      // one of wxLOG_XXX values
+	wxArrayLong   m_aTimes;         // the time of each message
+	bool          m_bErrors,        // do we have any errors?
+	              m_bWarnings,      // any warnings?
+	              m_bHasMessages;   // any messages at all?
 
 };
 
@@ -85,40 +85,40 @@ protected:
 class WXDLLEXPORT wxLogWindow : public wxLogPassThrough
 {
 public:
-    wxLogWindow(wxWindow *pParent,         // the parent frame (can be NULL)
-                const wxChar *szTitle,    // the title of the frame
-                bool bShow = true,        // show window immediately?
-                bool bPassToOld = true);  // pass messages to the old target?
+	wxLogWindow(wxWindow *pParent,         // the parent frame (can be NULL)
+	            const wxChar *szTitle,    // the title of the frame
+	            bool bShow = true,        // show window immediately?
+	            bool bPassToOld = true);  // pass messages to the old target?
 
-    virtual ~wxLogWindow();
+	virtual ~wxLogWindow();
 
-    // window operations
-        // show/hide the log window
-    void Show(bool bShow = true);
-        // retrieve the pointer to the frame
-    wxFrame *GetFrame() const;
+	// window operations
+	// show/hide the log window
+	void Show(bool bShow = true);
+	// retrieve the pointer to the frame
+	wxFrame *GetFrame() const;
 
-    // overridables
-        // called immediately after the log frame creation allowing for
-        // any extra initializations
-    virtual void OnFrameCreate(wxFrame *frame);
-        // called if the user closes the window interactively, will not be
-        // called if it is destroyed for another reason (such as when program
-        // exits) - return true from here to allow the frame to close, false
-        // to prevent this from happening
-    virtual bool OnFrameClose(wxFrame *frame);
-        // called right before the log frame is going to be deleted: will
-        // always be called unlike OnFrameClose()
-    virtual void OnFrameDelete(wxFrame *frame);
+	// overridables
+	// called immediately after the log frame creation allowing for
+	// any extra initializations
+	virtual void OnFrameCreate(wxFrame *frame);
+	// called if the user closes the window interactively, will not be
+	// called if it is destroyed for another reason (such as when program
+	// exits) - return true from here to allow the frame to close, false
+	// to prevent this from happening
+	virtual bool OnFrameClose(wxFrame *frame);
+	// called right before the log frame is going to be deleted: will
+	// always be called unlike OnFrameClose()
+	virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
-    virtual void DoLogString(const wxChar *szString, time_t t);
+	virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
+	virtual void DoLogString(const wxChar *szString, time_t t);
 
 private:
-    wxLogFrame *m_pLogFrame;      // the log frame
+	wxLogFrame *m_pLogFrame;      // the log frame
 
-    DECLARE_NO_COPY_CLASS(wxLogWindow)
+	DECLARE_NO_COPY_CLASS(wxLogWindow)
 };
 
 #endif // wxUSE_LOGWINDOW

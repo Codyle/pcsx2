@@ -19,7 +19,7 @@
 // define this to 0 when building wxBase library - this can also be done from
 // makefile/project file overriding the value here
 #ifndef wxUSE_GUI
-    #define wxUSE_GUI 1
+#define wxUSE_GUI 1
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -74,9 +74,9 @@
 //
 // Recommended setting: 0
 #ifdef __MWERKS__
-    #define wxUSE_DEBUG_CONTEXT 1
+#define wxUSE_DEBUG_CONTEXT 1
 #else
-    #define wxUSE_DEBUG_CONTEXT 0
+#define wxUSE_DEBUG_CONTEXT 0
 #endif
 
 // If 1, enables debugging versions of wxObject::new and wxObject::delete *IF*
@@ -123,9 +123,9 @@
 //
 // Recommended setting: 1 if your compiler supports it.
 #ifdef _MSC_VER
-    #define wxUSE_ON_FATAL_EXCEPTION 1
+#define wxUSE_ON_FATAL_EXCEPTION 1
 #else
-    #define wxUSE_ON_FATAL_EXCEPTION 0
+#define wxUSE_ON_FATAL_EXCEPTION 0
 #endif
 
 // ----------------------------------------------------------------------------
@@ -144,7 +144,7 @@
 //
 // Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
+#define wxUSE_UNICODE 0
 #endif
 
 // Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWidgets in Unicode mode
@@ -172,9 +172,9 @@
 //
 // Recommended setting: 1 for win32 else 0
 #if defined(__WIN32__) || defined(__WATCOMC__)
-    #define wxUSE_WCHAR_T 1
+#define wxUSE_WCHAR_T 1
 #else
-    #define wxUSE_WCHAR_T 0
+#define wxUSE_WCHAR_T 0
 #endif
 
 // ----------------------------------------------------------------------------
@@ -253,9 +253,9 @@
 
 // Use standard C++ streams if 1. If 0, use wxWin streams implementation.
 #ifdef __MWERKS__
-    #define wxUSE_STD_IOSTREAM 1
+#define wxUSE_STD_IOSTREAM 1
 #else
-    #define wxUSE_STD_IOSTREAM 0
+#define wxUSE_STD_IOSTREAM 0
 #endif
 
 // Enable conversion to standard C++ string if 1.
@@ -270,9 +270,9 @@
 // many warnings that can't be turned off when compiled at warning level 4.
 #if defined(__DMC__) || defined(__WATCOMC__) \
         || (defined(_MSC_VER) && _MSC_VER < 1200)
-    #define wxUSE_STD_STRING  0
+#define wxUSE_STD_STRING  0
 #else
-    #define wxUSE_STD_STRING  1
+#define wxUSE_STD_STRING  1
 #endif
 
 // Support for positional parameters (e.g. %1$d, %2$s ...) in wxVsnprintf.
@@ -404,9 +404,9 @@
 //
 // Recommended setting: 0 (universal should not use native)
 #if defined(__WIN32__)
-    #define wxUSE_CONFIG_NATIVE 0
+#define wxUSE_CONFIG_NATIVE 0
 #else
-    #define wxUSE_CONFIG_NATIVE 0
+#define wxUSE_CONFIG_NATIVE 0
 #endif
 
 // If wxUSE_DIALUP_MANAGER is 1, compile in wxDialUpManager class which allows
@@ -417,9 +417,9 @@
 //
 // Recommended setting: 1
 #if defined(__WIN32__)
-    #define wxUSE_DIALUP_MANAGER 1
+#define wxUSE_DIALUP_MANAGER 1
 #else
-    #define wxUSE_DIALUP_MANAGER 0
+#define wxUSE_DIALUP_MANAGER 0
 #endif
 
 // Compile in classes for run-time DLL loading and function calling.
@@ -431,16 +431,16 @@
 //
 // Recommended setting: 1
 #if defined(__WIN32__)
-    #define wxUSE_DYNLIB_CLASS 1
+#define wxUSE_DYNLIB_CLASS 1
 #else
-    #define wxUSE_DYNLIB_CLASS 0
+#define wxUSE_DYNLIB_CLASS 0
 #endif
 
 // experimental, don't use for now
 #if defined(__WIN32__)
-    #define wxUSE_DYNAMIC_LOADER 1
+#define wxUSE_DYNAMIC_LOADER 1
 #else
-    #define wxUSE_DYNAMIC_LOADER 0
+#define wxUSE_DYNAMIC_LOADER 0
 #endif
 
 // Set to 1 to use socket classes
@@ -482,9 +482,9 @@
 
 // Joystick support class
 #if defined(__WIN32__)
-    #define wxUSE_JOYSTICK 1
+#define wxUSE_JOYSTICK 1
 #else
-    #define wxUSE_JOYSTICK 1
+#define wxUSE_JOYSTICK 1
 #endif
 
 // wxFontMapper class
@@ -859,9 +859,9 @@
 //
 // Recommended setting: 1
 #ifdef __WIN32__
-    #define wxUSE_TOOLTIPS 1
+#define wxUSE_TOOLTIPS 1
 #else
-    #define wxUSE_TOOLTIPS 0
+#define wxUSE_TOOLTIPS 0
 #endif
 
 // wxValidator class and related methods
@@ -916,9 +916,9 @@
 //
 // Recommended setting: 1 (used in many places in the library itself)
 #if defined(__WIN32__)
-    #define wxUSE_FILEDLG 1
+#define wxUSE_FILEDLG 1
 #else
-    #define wxUSE_FILEDLG 1
+#define wxUSE_FILEDLG 1
 #endif
 
 // Use find/replace dialogs.
@@ -986,13 +986,13 @@
 //
 // Recommended setting: default or 0 for everything for portable programs.
 #if defined(__WIN32__)
-    #define wxUSE_METAFILE 1
-    #define wxUSE_ENH_METAFILE 1
-    #define wxUSE_WIN_METAFILES_ALWAYS 0
+#define wxUSE_METAFILE 1
+#define wxUSE_ENH_METAFILE 1
+#define wxUSE_WIN_METAFILES_ALWAYS 0
 #else
-    #define wxUSE_METAFILE 0
-    #define wxUSE_ENH_METAFILE 0
-    #define wxUSE_WIN_METAFILES_ALWAYS 0
+#define wxUSE_METAFILE 0
+#define wxUSE_ENH_METAFILE 0
+#define wxUSE_WIN_METAFILES_ALWAYS 0
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1038,9 +1038,9 @@
 //
 // Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
 #if defined(__WIN32__)
-    #define wxUSE_GLCANVAS 1
+#define wxUSE_GLCANVAS 1
 #else
-    #define wxUSE_GLCANVAS 0
+#define wxUSE_GLCANVAS 0
 #endif
 
 // wxRichTextCtrl allows editing of styled text.
@@ -1081,9 +1081,9 @@
 //
 // Recommended setting: 1
 #if defined(__WIN32__)
-    #define wxUSE_DRAG_AND_DROP 1
+#define wxUSE_DRAG_AND_DROP 1
 #else
-    #define wxUSE_DRAG_AND_DROP 0
+#define wxUSE_DRAG_AND_DROP 0
 #endif
 
 // Use wxAccessible for enhanced and customisable accessibility.
@@ -1106,9 +1106,9 @@
 // Recommended setting: 1 (the class is tiny, disabling it won't save much
 // space)
 #if defined(__WIN32__)
-    #define wxUSE_SNGLINST_CHECKER 1
+#define wxUSE_SNGLINST_CHECKER 1
 #else
-    #define wxUSE_SNGLINST_CHECKER 0
+#define wxUSE_SNGLINST_CHECKER 0
 #endif
 
 // Drag image
@@ -1119,9 +1119,9 @@
 
 // Help
 #if defined(__WIN32__)
-    #define wxUSE_HELP 1
+#define wxUSE_HELP 1
 #else
-    #define wxUSE_HELP 1
+#define wxUSE_HELP 1
 #endif
 
 // MS help
@@ -1194,9 +1194,9 @@
 //
 // Recommended setting: whatever your compiler likes more
 #ifdef __MWERKS__
-    #define wxUSE_IOSTREAMH 1
+#define wxUSE_IOSTREAMH 1
 #else
-    #define wxUSE_IOSTREAMH 0
+#define wxUSE_IOSTREAMH 0
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1242,7 +1242,7 @@
 #define wxUSE_ICO_CUR 0
 
 // Set to 1 to compile in wxPalette class
- #define wxUSE_PALETTE 1
+#define wxUSE_PALETTE 1
 
 // ----------------------------------------------------------------------------
 // Windows-only settings
@@ -1264,14 +1264,14 @@
 // Default is 1.
 //
 // Recommended setting: 1 for WIN32
-    #define wxUSE_OLE 1
+#define wxUSE_OLE 1
 
 // Set to 0 to disable PostScript print/preview architecture code under Windows
 // (just use Windows printing).
 #if defined(__WIN32__)
-    #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 #else
-    #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 #endif
 
 // Set this to 1 to use RICHEDIT controls for wxTextCtrl with style wxTE_RICH
@@ -1285,12 +1285,12 @@
 #if defined(__WIN95__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
 // TODO:  This should be ifdef'ed for any compilers that don't support
 //        RichEdit 2.0 but do have RichEdit 1.0...
-    #define wxUSE_RICHEDIT 0 // currently not supported
-    #define wxUSE_RICHEDIT2 0 // currently not supported
+#define wxUSE_RICHEDIT 0 // currently not supported
+#define wxUSE_RICHEDIT2 0 // currently not supported
 
 #else
-    #define wxUSE_RICHEDIT 0
-    #define wxUSE_RICHEDIT2 0
+#define wxUSE_RICHEDIT 0
+#define wxUSE_RICHEDIT2 0
 #endif
 
 // Set this to 1 to enable support for the owner-drawn menu and listboxes.
@@ -1320,9 +1320,9 @@
 
 //??????
 #if defined(__WIN32__)
-    #define wxUSE_DDE_FOR_IPC 0
+#define wxUSE_DDE_FOR_IPC 0
 #else
-    #define wxUSE_DDE_FOR_IPC 0
+#define wxUSE_DDE_FOR_IPC 0
 #endif
 
 #endif // _WX_UNIV_SETUP_H_

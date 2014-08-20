@@ -23,9 +23,9 @@
 #ifdef __LINUX__
 extern "C" {
 #endif
-extern void SuperVUExecuteProgram(u32 startpc, int vuindex);
-extern void SuperVUEndProgram();
-extern void svudispfntemp();
+	extern void SuperVUExecuteProgram(u32 startpc, int vuindex);
+	extern void SuperVUEndProgram();
+	extern void svudispfntemp();
 #ifdef __LINUX__
 }
 #endif

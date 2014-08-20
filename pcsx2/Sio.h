@@ -19,8 +19,7 @@
 // Games are highly unlikely to need timed IRQ's for PAD and MemoryCard handling anyway (rama).
 #define SIO_INLINE_IRQS
 
-struct _mcd
-{
+struct _mcd {
 	u8 term; // terminator value;
 
 	bool goodSector; // xor sector check
@@ -28,8 +27,8 @@ struct _mcd
 	u32 transferAddr; // Transfer address
 
 	u8 FLAG;  // for PSX;
-	
-	u8 port; // port 
+
+	u8 port; // port
 	u8 slot; // and slot for this memcard
 
 	// Auto Eject
@@ -53,15 +52,15 @@ struct _mcd
 	}
 
 	// Read from memorycard to dest
-	void Read(u8 *dest, int size) 
+	void Read(u8 *dest, int size)
 	{
 		SysPlugins.McdRead(port, slot, dest, transferAddr, size);
 	}
 
 	// Write to memorycard from src
-	void Write(u8 *src, int size) 
+	void Write(u8 *src, int size)
 	{
-		SysPlugins.McdSave(port, slot, src,transferAddr, size);
+		SysPlugins.McdSave(port, slot, src, transferAddr, size);
 	}
 
 	bool IsPresent()
@@ -72,7 +71,7 @@ struct _mcd
 	u8 DoXor(const u8 *buf, uint length)
 	{
 		u8 i, x;
-		for (x=0, i=0; i<length; i++) x ^= buf[i];
+		for (x = 0, i = 0; i < length; i++) x ^= buf[i];
 		return x;
 	}
 
@@ -82,8 +81,7 @@ struct _mcd
 	}
 };
 
-struct _sio
-{
+struct _sio {
 	u16 StatReg;
 	u16 ModeReg;
 	u16 CtrlReg;
@@ -102,8 +100,14 @@ struct _sio
 	u8 port;    // current port
 	u8 slot[2]; // current slot
 
-	u8 GetPort() { return port; }
-	u8 GetSlot() { return slot[port]; }
+	u8 GetPort()
+	{
+		return port;
+	}
+	u8 GetSlot()
+	{
+		return slot[port];
+	}
 };
 
 extern _sio sio;

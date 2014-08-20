@@ -23,14 +23,15 @@
 
 #include "GLState.h"
 
-class GSUniformBufferOGL {
+class GSUniformBufferOGL
+{
 	GLuint buffer;		// data object
 	GLuint index;		// GLSL slot
 	uint32   size;	    // size of the data
 
 public:
 	GSUniformBufferOGL(GLuint index, uint32 size) : index(index)
-												  , size(size)
+		, size(size)
 	{
 		gl_GenBuffers(1, &buffer);
 		bind();
@@ -65,7 +66,8 @@ public:
 		gl_BufferSubData(GL_UNIFORM_BUFFER, 0, size, src);
 	}
 
-	~GSUniformBufferOGL() {
+	~GSUniformBufferOGL()
+	{
 		gl_DeleteBuffers(1, &buffer);
 	}
 };

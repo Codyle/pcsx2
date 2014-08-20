@@ -32,34 +32,37 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxAccessible : public wxAccessibleBase
 {
 public:
-    wxAccessible(wxWindow *win = NULL);
-    virtual ~wxAccessible();
+	wxAccessible(wxWindow *win = NULL);
+	virtual ~wxAccessible();
 
-// Overridables
+	// Overridables
 
-// Accessors
+	// Accessors
 
-    // Returns the wxIAccessible pointer
-    wxIAccessible* GetIAccessible() { return m_pIAccessible; }
+	// Returns the wxIAccessible pointer
+	wxIAccessible* GetIAccessible()
+	{
+		return m_pIAccessible;
+	}
 
-    // Returns the IAccessible standard interface pointer
-    void* GetIAccessibleStd() ;
+	// Returns the IAccessible standard interface pointer
+	void* GetIAccessibleStd() ;
 
-// Operations
+	// Operations
 
-    // Sends an event when something changes in an accessible object.
-    static void NotifyEvent(int eventType, wxWindow* window, wxAccObject objectType,
-                            int objectId);
+	// Sends an event when something changes in an accessible object.
+	static void NotifyEvent(int eventType, wxWindow* window, wxAccObject objectType,
+	                        int objectId);
 
 protected:
-    void Init();
+	void Init();
 
 private:
-    wxIAccessible * m_pIAccessible;  // the pointer to COM interface
-    void*           m_pIAccessibleStd;  // the pointer to the standard COM interface,
-                                        // for default processing
+	wxIAccessible * m_pIAccessible;  // the pointer to COM interface
+	void*           m_pIAccessibleStd;  // the pointer to the standard COM interface,
+	// for default processing
 
-    DECLARE_NO_COPY_CLASS(wxAccessible)
+	DECLARE_NO_COPY_CLASS(wxAccessible)
 };
 
 #endif  //wxUSE_ACCESSIBILITY

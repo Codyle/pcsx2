@@ -38,79 +38,52 @@
 
 
 INLINE int
-pthread_mutex_unlock (pthread_mutex_t * mutex)
+pthread_mutex_unlock(pthread_mutex_t * mutex)
 {
-  int result = 0;
-  pthread_mutex_t mx;
-
-  /*
-   * Let the system deal with invalid pointers.
-   */
-
-  mx = *mutex;
-
-  /*
-   * If the thread calling us holds the mutex then there is no
-   * race condition. If another thread holds the
-   * lock then we shouldn't be in here.
-   */
-  if (!ptw32_static_mutex_enable || (mx < PTHREAD_ERRORCHECK_MUTEX_INITIALIZER))
-    {
-      if (mx->kind == PTHREAD_MUTEX_NORMAL)
-	{
-	  LONG idx;
-
-	  idx = _InterlockedExchange (&mx->lock_idx, 0);
-	  if (idx != 0)
-	    {
-	      if (idx < 0)
-		{
-		  /*
-		   * Someone may be waiting on that mutex.
-		   */
-		  if (SetEvent (mx->event) == 0)
-		    {
-		      result = EINVAL;
-		    }
-		}
-	    }
-	  else
-	    {
-	      /*
-	       * Was not locked (so can't be owned by us).
-	       */
-	      result = EPERM;
-	    }
-	}
-      else
-	{
-	  if (pthread_equal (mx->ownerThread, pthread_self ()))
-	    {
-	      if (mx->kind != PTHREAD_MUTEX_RECURSIVE
-		  || 0 == --mx->recursive_count)
-		{
-		  mx->ownerThread.p = NULL;
-
-		  if (_InterlockedExchange (&mx->lock_idx, 0) < 0)
-		    {
-		      /* Someone may be waiting on that mutex */
-		      if (SetEvent (mx->event) == 0)
-			{
-			  result = EINVAL;
+	int result = 0;
+	pthread_mutex_t mx;
+	/*
+	 * Let the system deal with invalid pointers.
+	 */
+	mx = *mutex;
+	/*
+	 * If the thread calling us holds the mutex then there is no
+	 * race condition. If another thread holds the
+	 * lock then we shouldn't be in here.
+	 */
+	if (!ptw32_static_mutex_enable || (mx < PTHREAD_ERRORCHECK_MUTEX_INITIALIZER)) {
+		if (mx->kind == PTHREAD_MUTEX_NORMAL) {
+			LONG idx;
+			idx = _InterlockedExchange(&mx->lock_idx, 0);
+			if (idx != 0) {
+				if (idx < 0) {
+					/*
+					 * Someone may be waiting on that mutex.
+					 */
+					if (SetEvent(mx->event) == 0)
+						result = EINVAL;
+				}
+			} else {
+				/*
+				 * Was not locked (so can't be owned by us).
+				 */
+				result = EPERM;
 			}
-		    }
+		} else {
+			if (pthread_equal(mx->ownerThread, pthread_self())) {
+				if (mx->kind != PTHREAD_MUTEX_RECURSIVE
+				    || 0 == --mx->recursive_count) {
+					mx->ownerThread.p = NULL;
+					if (_InterlockedExchange(&mx->lock_idx, 0) < 0) {
+						/* Someone may be waiting on that mutex */
+						if (SetEvent(mx->event) == 0)
+							result = EINVAL;
+					}
+				}
+			} else
+				result = EPERM;
 		}
-	    }
-	  else
-	    {
-	      result = EPERM;
-	    }
-	}
-    }
-  else
-    {
-      result = EINVAL;
-    }
-
-  return (result);
+	} else
+		result = EINVAL;
+	return (result);
 }

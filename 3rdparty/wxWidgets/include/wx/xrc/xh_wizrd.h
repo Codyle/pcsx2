@@ -20,16 +20,16 @@ class WXDLLIMPEXP_FWD_ADV wxWizardPageSimple;
 
 class WXDLLIMPEXP_XRC wxWizardXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxWizardXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxWizardXmlHandler)
 
 public:
-    wxWizardXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxWizardXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    wxWizard *m_wizard;
-    wxWizardPageSimple *m_lastSimplePage;
+	wxWizard *m_wizard;
+	wxWizardPageSimple *m_lastSimplePage;
 };
 
 #endif // wxUSE_XRC && wxUSE_WIZARDDLG

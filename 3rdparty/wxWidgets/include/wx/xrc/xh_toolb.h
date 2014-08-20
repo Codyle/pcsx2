@@ -19,16 +19,16 @@ class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
 class WXDLLIMPEXP_XRC wxToolBarXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxToolBarXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxToolBarXmlHandler)
 
 public:
-    wxToolBarXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxToolBarXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_isInside;
-    wxToolBar *m_toolbar;
+	bool m_isInside;
+	wxToolBar *m_toolbar;
 };
 
 #endif // wxUSE_XRC && wxUSE_TOOLBAR

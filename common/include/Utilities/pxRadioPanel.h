@@ -23,8 +23,7 @@
 //  RadioPanelItem
 // --------------------------------------------------------------------------------------
 
-struct RadioPanelItem
-{
+struct RadioPanelItem {
 	wxString		Label;
 	wxString		SubText;
 	wxString		ToolTip;
@@ -32,34 +31,34 @@ struct RadioPanelItem
 	int				SomeInt;
 	void*			SomePtr;
 
-	RadioPanelItem( const wxString& label, const wxString& subtext=wxEmptyString, const wxString& tooltip=wxEmptyString )
-		: Label( label )
-		, SubText( subtext )
-		, ToolTip( tooltip )
+	RadioPanelItem(const wxString &label, const wxString &subtext = wxEmptyString, const wxString &tooltip = wxEmptyString)
+		: Label(label)
+		, SubText(subtext)
+		, ToolTip(tooltip)
 	{
 		SomeInt = 0;
 		SomePtr = NULL;
 	}
 
-	RadioPanelItem& SetToolTip( const wxString& tip )
+	RadioPanelItem &SetToolTip(const wxString &tip)
 	{
 		ToolTip = tip;
 		return *this;
 	}
 
-	RadioPanelItem& SetSubText( const wxString& text )
+	RadioPanelItem &SetSubText(const wxString &text)
 	{
 		SubText = text;
 		return *this;
 	}
-	
-	RadioPanelItem& SetInt( int intval )
+
+	RadioPanelItem &SetInt(int intval)
 	{
 		SomeInt = intval;
-		return *this;	
+		return *this;
 	}
 
-	RadioPanelItem& SetPtr( void* ptrval )
+	RadioPanelItem &SetPtr(void* ptrval)
 	{
 		SomePtr = ptrval;
 		return *this;
@@ -69,8 +68,7 @@ struct RadioPanelItem
 
 // Used as a cache for the "original" labels and subtexts, so that text can be properly
 // wrapped and re-wrapped with multiple calls to OnResize().
-struct RadioPanelObjects
-{
+struct RadioPanelObjects {
 	wxRadioButton*		LabelObj;
 	pxStaticText*		SubTextObj;
 };
@@ -104,15 +102,15 @@ protected:
 	int				m_DefaultIdx;		// index of the default option (gets specific color/font treatment)
 
 public:
-	template< int size >
-	pxRadioPanel( wxWindow* parent, const RadioPanelItem (&src)[size] )
-		: wxPanelWithHelpers( parent, wxVERTICAL )
+	template<int size>
+	pxRadioPanel(wxWindow* parent, const RadioPanelItem(&src)[size])
+		: wxPanelWithHelpers(parent, wxVERTICAL)
 	{
-		Init( src, size );
+		Init(src, size);
 	}
 
-	pxRadioPanel( wxWindow* parent )
-		: wxPanelWithHelpers( parent, wxVERTICAL )
+	pxRadioPanel(wxWindow* parent)
+		: wxPanelWithHelpers(parent, wxVERTICAL)
 	{
 		Init();
 	}
@@ -122,55 +120,67 @@ public:
 	void Reset();
 	void Realize();
 
-	pxStaticText* GetSubText( int idx );
-	const pxStaticText* GetSubText( int idx ) const;
-	pxRadioPanel& Append( const RadioPanelItem& entry );
+	pxStaticText* GetSubText(int idx);
+	const pxStaticText* GetSubText(int idx) const;
+	pxRadioPanel &Append(const RadioPanelItem &entry);
 
-	pxRadioPanel& SetToolTip( int idx, const wxString& tip );
-	pxRadioPanel& SetSelection( int idx );
-	pxRadioPanel& SetDefaultItem( int idx );
-	pxRadioPanel& EnableItem( int idx, bool enable=true );
+	pxRadioPanel &SetToolTip(int idx, const wxString &tip);
+	pxRadioPanel &SetSelection(int idx);
+	pxRadioPanel &SetDefaultItem(int idx);
+	pxRadioPanel &EnableItem(int idx, bool enable = true);
 
-	const RadioPanelItem& Item(int idx) const;
-	RadioPanelItem& Item(int idx);
+	const RadioPanelItem &Item(int idx) const;
+	RadioPanelItem &Item(int idx);
 
 	int GetSelection() const;
 	wxWindowID GetSelectionId() const;
-	bool IsSelected( int idx ) const;
+	bool IsSelected(int idx) const;
 
-	const RadioPanelItem&	SelectedItem() const	{ return Item(GetSelection()); }
-	RadioPanelItem&			SelectedItem()			{ return Item(GetSelection()); }
-
-	wxRadioButton* GetButton( int idx );
-	const wxRadioButton* GetButton( int idx ) const;
-
-	int GetPaddingVert() const		{ return m_padding.GetHeight(); }
-	int GetIndentation() const		{ return m_Indentation; }
-
-	pxRadioPanel& SetPaddingHoriz( int newpad )
+	const RadioPanelItem	&SelectedItem() const
 	{
-		m_padding.SetHeight( newpad );
+		return Item(GetSelection());
+	}
+	RadioPanelItem			&SelectedItem()
+	{
+		return Item(GetSelection());
+	}
+
+	wxRadioButton* GetButton(int idx);
+	const wxRadioButton* GetButton(int idx) const;
+
+	int GetPaddingVert() const
+	{
+		return m_padding.GetHeight();
+	}
+	int GetIndentation() const
+	{
+		return m_Indentation;
+	}
+
+	pxRadioPanel &SetPaddingHoriz(int newpad)
+	{
+		m_padding.SetHeight(newpad);
 		return *this;
 	}
 
-	pxRadioPanel& SetIndentation( int newdent )
+	pxRadioPanel &SetIndentation(int newdent)
 	{
 		m_Indentation = newdent;
 		return *this;
 	}
 
-	bool HasSubText( int idx ) const
+	bool HasSubText(int idx) const
 	{
 		return !m_buttonStrings[idx].SubText.IsEmpty();
 	}
 
-	pxRadioPanel& Append( const wxString& label, const wxString& subtext=wxEmptyString, const wxString& tooltip=wxEmptyString )
+	pxRadioPanel &Append(const wxString &label, const wxString &subtext = wxEmptyString, const wxString &tooltip = wxEmptyString)
 	{
-		return Append( RadioPanelItem(label, subtext, tooltip) );
+		return Append(RadioPanelItem(label, subtext, tooltip));
 	}
 
 protected:
-	void Init( const RadioPanelItem* srcArray=NULL, int arrsize=0 );
-	void _setToolTipImmediate( int idx, const wxString &tip );
+	void Init(const RadioPanelItem* srcArray = NULL, int arrsize = 0);
+	void _setToolTipImmediate(int idx, const wxString &tip);
 	void _RealizeDefaultOption();
 };

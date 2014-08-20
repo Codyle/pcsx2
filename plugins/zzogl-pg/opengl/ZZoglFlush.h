@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
- 
+
 #ifndef ZZOGLFLUSH_H_INCLUDED
 #define ZZOGLFLUSH_H_INCLUDED
 
@@ -43,23 +43,21 @@ extern bool g_bSaveTex;	// saves the current texture
 extern bool g_bSaveResolved;
 #endif // !defined(ZEROGS_DEVBUILD)
 
-enum StencilBits
-{
+enum StencilBits {
 	STENCIL_ALPHABIT = 1,		// if set, dest alpha >= 0x80
 	STENCIL_PIXELWRITE = 2,		// if set, pixel just written (reset after every Flush)
 	STENCIL_FBA = 4,			// if set, just written pixel's alpha >= 0 (reset after every Flush)
 	STENCIL_SPECIAL = 8		// if set, indicates that pixel passed its alpha test (reset after every Flush)
-	//STENCIL_PBE = 16	
+	                  //STENCIL_PBE = 16
 };
 #define STENCIL_CLEAR	   (2|4|8|16)
 
-enum ColorMask 
-{
+enum ColorMask {
 	COLORMASK_RED = 1,
 	COLORMASK_GREEN = 2,
 	COLORMASK_BLUE = 4,
 	COLORMASK_ALPHA = 8
-	
+
 };
 #define GL_COLORMASK(mask) glColorMask(!!((mask)&COLORMASK_RED), !!((mask)&COLORMASK_GREEN), !!((mask)&COLORMASK_BLUE), !!((mask)&COLORMASK_ALPHA))
 
@@ -76,10 +74,8 @@ extern GLuint g_vboBuffers[VB_NUMBUFFERS]; // VBOs for all drawing commands
 extern CRangeManager s_RangeMngr; // manages overwritten memory				// zz
 
 #if 0
-typedef union
-{
-	struct
-	{
+typedef union {
+	struct {
 		u8 _bNeedAlphaColor;		// set if vAlphaBlendColor needs to be set
 		u8 _b2XAlphaTest;		   // Only valid when bNeedAlphaColor is set. if 1st bit set set, double all alpha testing values
 		// otherwise alpha testing needs to be done separately.
@@ -103,16 +99,16 @@ void FlushTransferRanges(const tex0Info* ptex);						//zz
 // use to update the state
 void SetTexVariables(int context, FRAGMENTSHADER* pfragment);			// zz
 void SetTexInt(int context, FRAGMENTSHADER* pfragment, int settexint);		// zz
-void SetAlphaVariables(const alphaInfo& ainfo);					// zzz
+void SetAlphaVariables(const alphaInfo &ainfo);					// zzz
 //void ResetAlphaVariables();
 
 inline void SetAlphaTestInt(pixTest curtest);
 
-inline void RenderAlphaTest(const VB& curvb, FRAGMENTSHADER* pfragment);
-inline void RenderStencil(const VB& curvb, u32 dwUsingSpecialTesting);
-inline void ProcessStencil(const VB& curvb);
-inline void RenderFBA(const VB& curvb, FRAGMENTSHADER* pfragment);
-inline void ProcessFBA(const VB& curvb, FRAGMENTSHADER* pfragment);			// zz
+inline void RenderAlphaTest(const VB &curvb, FRAGMENTSHADER* pfragment);
+inline void RenderStencil(const VB &curvb, u32 dwUsingSpecialTesting);
+inline void ProcessStencil(const VB &curvb);
+inline void RenderFBA(const VB &curvb, FRAGMENTSHADER* pfragment);
+inline void ProcessFBA(const VB &curvb, FRAGMENTSHADER* pfragment);			// zz
 
 void SetContextTarget(int context);
 

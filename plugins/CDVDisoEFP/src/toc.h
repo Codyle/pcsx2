@@ -35,8 +35,7 @@
 #ifdef _WIN32
 #pragma pack(1)
 #endif /* _WIN32 */
-struct tocTD
-{
+struct tocTD {
 	unsigned long lsn;
 	unsigned char type;
 #ifdef _WIN32
@@ -45,8 +44,7 @@ struct tocTD
 } __attribute__((packed));
 #endif /* _WIN32 */
 
-struct tocTN
-{
+struct tocTN {
 	unsigned char strack;
 	unsigned char etrack;
 #ifdef _WIN32
@@ -65,8 +63,8 @@ struct tocTN
 extern void IsoInitTOC(struct IsoFile *isofile);
 extern void IsoAddTNToTOC(struct IsoFile *isofile, struct tocTN toctn);
 extern void IsoAddTDToTOC(struct IsoFile *isofile,
-	                          unsigned char track,
-	                          struct tocTD toctd);
+                          unsigned char track,
+                          struct tocTD toctd);
 extern int IsoLoadTOC(struct IsoFile *isofile);
 extern int IsoSaveTOC(struct IsoFile *isofile);
 

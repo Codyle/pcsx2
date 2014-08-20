@@ -29,5 +29,5 @@
 
 
 INLINE void StartREVERB(int ch);
-INLINE void StoreREVERB(int ch,int ns);
+INLINE void StoreREVERB(int ch, int ns);
 

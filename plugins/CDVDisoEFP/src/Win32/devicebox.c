@@ -46,8 +46,7 @@ HWND deviceboxwindow;
 
 void DeviceBoxDestroy()
 {
-	if (deviceboxwindow != NULL)
-	{
+	if (deviceboxwindow != NULL) {
 		EndDialog(deviceboxwindow, FALSE);
 		deviceboxwindow = NULL;
 	} // ENDIF- Do we have a Main Window still?
@@ -70,20 +69,16 @@ void DeviceBoxDeviceEvent()
 	char tempdevice[256];
 	struct stat filestat;
 	int returnval;
-
 	GetDlgItemText(deviceboxwindow, IDC_0302, tempdevice, 256);
 	returnval = stat(tempdevice, &filestat);
-	if (returnval == -1)
-	{
+	if (returnval == -1) {
 		SetDlgItemText(deviceboxwindow, IDC_0303, "Device Type: ---");
 		return;
 	} // ENDIF- Not a name of any sort?
-	if (S_ISDIR(filestat.st_mode) != 0)
-	{
+	if (S_ISDIR(filestat.st_mode) != 0) {
 		SetDlgItemText(deviceboxwindow, IDC_0303, "Device Type: Not a device");
 		return;
 	} // ENDIF- Not a regular file?
-
 	SetDlgItemText(deviceboxwindow, IDC_0303, "Device Type: Device Likely");
 	return;
 } // END DeviceBoxDeviceEvent()
@@ -93,31 +88,24 @@ void DeviceBoxFileEvent()
 	int returnval;
 	char templine[256];
 	struct IsoFile *tempfile;
-
 	GetDlgItemText(deviceboxwindow, IDC_0305, templine, 256);
 	returnval = IsIsoFile(templine);
-	if (returnval == -1)
-	{
+	if (returnval == -1) {
 		SetDlgItemText(deviceboxwindow, IDC_0307, "File Type: ---");
 		return;
 	} // ENDIF- Not a name of any sort?
-	if (returnval == -2)
-	{
+	if (returnval == -2) {
 		SetDlgItemText(deviceboxwindow, IDC_0307, "File Type: Not a file");
 		return;
 	} // ENDIF- Not a regular file?
-
-	if (returnval == -3)
-	{
+	if (returnval == -3) {
 		SetDlgItemText(deviceboxwindow, IDC_0307, "File Type: Not a valid image file");
 		return;
 	} // ENDIF- Not an image file?
-	if (returnval == -4)
-	{
+	if (returnval == -4) {
 		SetDlgItemText(deviceboxwindow, IDC_0307, "File Type: Missing Table File (will rebuild)");
 		return;
 	} // ENDIF- Not a regular file?
-
 	tempfile = IsoFileOpenForRead(templine);
 	sprintf(templine, "File Type: %s%s%s",
 	        multinames[tempfile->multi],
@@ -168,8 +156,7 @@ void DeviceBoxOKEvent()
 	DeviceBoxUnfocus();
 	GetDlgItemText(deviceboxwindow, IDC_0302, conf.devicename, 256);
 	retval = DeviceOpen();
-	if (retval != 0)
-	{
+	if (retval != 0) {
 		DeviceClose();
 		DeviceBoxRefocus();
 		MessageBox(deviceboxwindow,
@@ -180,8 +167,7 @@ void DeviceBoxOKEvent()
 	} // ENDIF- Trouble opening device? Abort here.
 	DeviceTrayStatus();
 	retval = DiscInserted();
-	if (retval != 0)
-	{
+	if (retval != 0) {
 		DeviceClose();
 		DeviceBoxRefocus();
 		MessageBox(deviceboxwindow,
@@ -191,8 +177,7 @@ void DeviceBoxOKEvent()
 		return;
 	} // ENDIF- Trouble opening device? Abort here.
 	retval = DeviceGetTD(0, &cdvdtd); // Fish for Ending Sector
-	if (retval < 0)
-	{
+	if (retval < 0) {
 		DeviceClose();
 		DeviceBoxRefocus();
 		MessageBox(deviceboxwindow,
@@ -201,25 +186,21 @@ void DeviceBoxOKEvent()
 		           MB_OK | MB_ICONWARNING | MB_SETFOREGROUND);
 		return;
 	} // ENDIF- Trouble getting disc sector count?
-
 	tempitem = GetDlgItem(deviceboxwindow, IDC_0309);
 	compressmethod = ComboBox_GetCurSel(tempitem);
 	tempitem = NULL;
 	if (compressmethod > 0)  compressmethod += 2;
 	multi = 0;
 	if (IsDlgButtonChecked(deviceboxwindow, IDC_0311))  multi = 1;
-
 	imagetype = 0;
 	if ((disctype != CDVD_TYPE_PS2DVD) &&
-	        (disctype != CDVD_TYPE_DVDV))  imagetype = 8;
-
+	    (disctype != CDVD_TYPE_DVDV))  imagetype = 8;
 	GetDlgItemText(deviceboxwindow, IDC_0305, templine, 256);
 	tofile = IsoFileOpenForWrite(templine,
 	                             imagetype,
 	                             multi,
 	                             compressmethod);
-	if (tofile == NULL)
-	{
+	if (tofile == NULL) {
 		DeviceClose();
 		DeviceBoxRefocus();
 		MessageBox(deviceboxwindow,
@@ -233,34 +214,25 @@ void DeviceBoxOKEvent()
 	ProgressBoxStart(templine, (off64_t) cdvdtd.lsn);
 	tofile->cdvdtype = disctype;
 	for (i = 0; i < 2048; i++)  tofile->toc[i] = tocbuffer[i];
-
 	stop = 0;
 	mainboxstop = 0;
 	progressboxstop = 0;
-	while ((stop == 0) && (tofile->sectorpos < cdvdtd.lsn))
-	{
-		if (imagetype == 0)
-		{
+	while ((stop == 0) && (tofile->sectorpos < cdvdtd.lsn)) {
+		if (imagetype == 0) {
 			retval = DeviceReadTrack((u32) tofile->sectorpos,
 			                         CDVD_MODE_2048,
 			                         tempbuffer);
-		}
-		else
-		{
+		} else {
 			retval = DeviceReadTrack((u32) tofile->sectorpos,
 			                         CDVD_MODE_2352,
 			                         tempbuffer);
 		} // ENDIF- Are we reading a DVD sector? (Or a CD sector?)
-		if (retval < 0)
-		{
+		if (retval < 0) {
 			for (i = 0; i < 2352; i++)
-			{
-				tempbuffer[i] = 0;
-			} // NEXT i- Zeroing the buffer
+				tempbuffer[i] = 0; // NEXT i- Zeroing the buffer
 		} // ENDIF- Trouble reading next block?
 		retval = IsoFileWrite(tofile, tempbuffer);
-		if (retval < 0)
-		{
+		if (retval < 0) {
 			MessageBox(deviceboxwindow,
 			           "Trouble writing new file",
 			           "CDVDisoEFP Message",
@@ -272,23 +244,17 @@ void DeviceBoxOKEvent()
 		if (progressboxstop != 0)  stop = 2;
 	} // ENDWHILE- No reason found to stop...
 	ProgressBoxStop();
-	if (stop == 0)
-	{
+	if (stop == 0) {
 		if (tofile->multi == 1)  tofile->name[tofile->multipos] = '0'; // First file
 		strcpy(templine, tofile->name);
 	} // ENDIF- Did we succeed with the transfer?
-
 	DeviceClose();
-	if (stop == 0)
-	{
+	if (stop == 0) {
 		IsoSaveTOC(tofile);
 		tofile = IsoFileClose(tofile);
 		SetDlgItemText(mainboxwindow, IDC_0202, templine);
-	}
-	else
-	{
-		tofile = IsoFileCloseAndDelete(tofile);
-	} // ENDIF- (Failed to complete writing file? Get rid of the garbage files.)
+	} else
+		tofile = IsoFileCloseAndDelete(tofile); // ENDIF- (Failed to complete writing file? Get rid of the garbage files.)
 	DeviceBoxRefocus();
 	if (stop == 0)  DeviceBoxCancelEvent();
 	return;
@@ -299,7 +265,6 @@ void DeviceBoxBrowseEvent()
 	OPENFILENAME filebox;
 	char newfilename[256];
 	BOOL returnbool;
-
 	filebox.lStructSize = sizeof(filebox);
 	filebox.hwndOwner = deviceboxwindow;
 	filebox.hInstance = NULL;
@@ -321,14 +286,10 @@ void DeviceBoxBrowseEvent()
 	filebox.lCustData = 0;
 	filebox.lpfnHook = NULL;
 	filebox.lpTemplateName = NULL;
-
 	GetDlgItemText(deviceboxwindow, IDC_0305, newfilename, 256);
 	returnbool = GetOpenFileName(&filebox);
 	if (returnbool != FALSE)
-	{
-		SetDlgItemText(deviceboxwindow, IDC_0305, newfilename);
-	} // ENDIF- User actually selected a name? Save it.
-
+		SetDlgItemText(deviceboxwindow, IDC_0305, newfilename); // ENDIF- User actually selected a name? Save it.
 	return;
 } // END DeviceBoxBrowseEvent()
 
@@ -342,13 +303,10 @@ void DeviceBoxDisplay()
 	// DeviceBoxDeviceEvent(); // Needed?
 	GetDlgItemText(mainboxwindow, IDC_0202, templine, 256);
 	SetDlgItemText(deviceboxwindow, IDC_0305, templine);
-
 	// DeviceBoxFileEvent(); // Needed?
-
 	itemptr = GetDlgItem(deviceboxwindow, IDC_0309); // Compression Combo
 	itemcount = 0;
-	while (compressnames[itemcount] != NULL)
-	{
+	while (compressnames[itemcount] != NULL) {
 		ComboBox_AddString(itemptr, compressnames[itemcount]);
 		itemcount++;
 	} // ENDWHILE- loading compression types into combo box
@@ -363,45 +321,39 @@ BOOL CALLBACK DeviceBoxCallback(HWND window,
                                 WPARAM param,
                                 LPARAM param2)
 {
-	switch (msg)
-	{
+	switch (msg) {
 		case WM_INITDIALOG:
 			deviceboxwindow = window;
 			DeviceBoxDisplay(); // Final touches to this window
-			return(FALSE); // Let Windows display this window
+			return (FALSE); // Let Windows display this window
 			break;
-
 		case WM_CLOSE: // The "X" in the upper right corner was hit.
 			DeviceBoxCancelEvent();
-			return(TRUE);
+			return (TRUE);
 			break;
 		case WM_COMMAND:
-			switch (LOWORD(param))
-			{
+			switch (LOWORD(param)) {
 				case IDC_0302: // Device Edit Box
 					DeviceBoxDeviceEvent();
-					return(FALSE);
+					return (FALSE);
 					break;
-
 				case IDC_0305: // Filename Edit Box
 					DeviceBoxFileEvent();
-					return(FALSE);
+					return (FALSE);
 					break;
 				case IDC_0306: // "Browse" Button
 					DeviceBoxBrowseEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
-
 				case IDC_0312: // "Make File" Button
 					DeviceBoxOKEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 				case IDC_0313: // "Cancel" Button
 					DeviceBoxCancelEvent();
-					return(TRUE);
+					return (TRUE);
 					break;
 			} // ENDSWITCH param- Which object got the message?
 	} // ENDSWITCH msg- What message has been sent to this window?
-
-	return(FALSE);
+	return (FALSE);
 } // END DeviceBoxCallback()

@@ -30,8 +30,8 @@ extern int mainboxstop;
 extern void MainBoxRefocus();
 extern void MainBoxDisplay();
 extern BOOL CALLBACK MainBoxCallback(HWND window,
-	                                     UINT msg,
-	                                     WPARAM param,
-	                                     LPARAM param2);
+                                     UINT msg,
+                                     WPARAM param,
+                                     LPARAM param2);
 
 #endif /* MAINBOX_H */

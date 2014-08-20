@@ -50,43 +50,38 @@ const static char* g_pTexTypes[] = { "32", "tex32", "clut32", "tex32to16", "tex1
 
 static __forceinline int GET_SHADER_INDEX(int type, int texfilter, int texwrap, int fog, int writedepth, int testaem, int exactcolor, int context, int ps)
 {
-	return type + texfilter*NUM_TYPES + NUM_FILTERS*NUM_TYPES*texwrap + NUM_TEXWRAPS*NUM_FILTERS*NUM_TYPES*(fog+2*writedepth+4*testaem+8*exactcolor+16*context+32*ps);
+	return type + texfilter * NUM_TYPES + NUM_FILTERS * NUM_TYPES * texwrap + NUM_TEXWRAPS * NUM_FILTERS * NUM_TYPES * (fog + 2 * writedepth + 4 * testaem + 8 * exactcolor + 16 * context + 32 * ps);
 }
 
 extern ZZshContext g_cgcontext;
 
 static CGprogram LoadShaderFromType(const char* srcdir, const char* srcfile, int type, int texfilter, int texwrap, int fog, int writedepth, int testaem, int exactcolor, int ps, int context)
 {
-	assert( texwrap < NUM_TEXWRAPS);
-	assert( type < NUM_TYPES );
-
+	assert(texwrap < NUM_TEXWRAPS);
+	assert(type < NUM_TYPES);
 	char str[255], strctx[255];
-	sprintf(str, "Texture%s%d_%sPS", fog?"Fog":"", texfilter, g_pTexTypes[type]);
-	sprintf(strctx, "-I%s%s", srcdir, context?"ctx1":"ctx0");
-
+	sprintf(str, "Texture%s%d_%sPS", fog ? "Fog" : "", texfilter, g_pTexTypes[type]);
+	sprintf(strctx, "-I%s%s", srcdir, context ? "ctx1" : "ctx0");
 	vector<const char*> macros;
 	macros.push_back(strctx);
 #ifdef _DEBUG
 	macros.push_back("-bestprecision");
 #endif
-	if( g_pPsTexWrap[texwrap] != NULL ) macros.push_back(g_pPsTexWrap[texwrap]);
-	if( writedepth ) macros.push_back("-DWRITE_DEPTH");
-	if( testaem ) macros.push_back("-DTEST_AEM");
-	if( exactcolor ) macros.push_back("-DEXACT_COLOR");
-	if( ps & SHADER_ACCURATE ) macros.push_back("-DACCURATE_DECOMPRESSION");
+	if (g_pPsTexWrap[texwrap] != NULL) macros.push_back(g_pPsTexWrap[texwrap]);
+	if (writedepth) macros.push_back("-DWRITE_DEPTH");
+	if (testaem) macros.push_back("-DTEST_AEM");
+	if (exactcolor) macros.push_back("-DEXACT_COLOR");
+	if (ps & SHADER_ACCURATE) macros.push_back("-DACCURATE_DECOMPRESSION");
 	macros.push_back(NULL);
-
 	ZZshProgram prog = cgCreateProgramFromFile(g_cgcontext, CG_SOURCE, srcfile, CG_PROFILE_ARBFP1, str, &macros[0]);
-	if( !cgIsProgram(prog) ) {
+	if (!cgIsProgram(prog)) {
 		printf("Failed to load shader %s: \n%s\n", str, cgGetLastListing(g_cgcontext));
 		return NULL;
 	}
-
 	return prog;
 }
 
-struct SHADERHEADER
-{
+struct SHADERHEADER {
 	unsigned int index, offset, size; // if highest bit of index is set, pixel shader
 };
 

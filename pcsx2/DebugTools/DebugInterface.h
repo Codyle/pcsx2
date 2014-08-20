@@ -43,13 +43,13 @@ public:
 	virtual u32 getPC() = 0;
 	virtual void setPc(u32 newPc) = 0;
 	virtual void setRegister(int cat, int num, u128 newValue) = 0;
-	
+
 	virtual std::string disasm(u32 address) = 0;
 	virtual bool isValidAddress(u32 address) = 0;
 	virtual u32 getCycles() = 0;
-	
-	bool initExpression(const char* exp, PostfixExpression& dest);
-	bool parseExpression(PostfixExpression& exp, u64& dest);
+
+	bool initExpression(const char* exp, PostfixExpression &dest);
+	bool parseExpression(PostfixExpression &exp, u64 &dest);
 	bool isAlive();
 	bool isCpuPaused();
 	void pauseCpu();

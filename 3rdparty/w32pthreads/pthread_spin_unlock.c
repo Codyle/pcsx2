@@ -38,32 +38,22 @@
 
 
 int
-pthread_spin_unlock (pthread_spinlock_t * lock)
+pthread_spin_unlock(pthread_spinlock_t * lock)
 {
-  register pthread_spinlock_t s;
-
-  if (NULL == lock || NULL == *lock)
-    {
-      return (EINVAL);
-    }
-
-  s = *lock;
-
-  if (s == PTHREAD_SPINLOCK_INITIALIZER)
-    {
-      return EPERM;
-    }
-
-  switch ((long)
-	  _InterlockedCompareExchange (&(s->interlock), PTW32_SPIN_UNLOCKED, PTW32_SPIN_LOCKED))
-    {
-    case PTW32_SPIN_LOCKED:
-      return 0;
-    case PTW32_SPIN_UNLOCKED:
-      return EPERM;
-    case PTW32_SPIN_USE_MUTEX:
-      return pthread_mutex_unlock (&(s->u.mutex));
-    }
-
-  return EINVAL;
+	register pthread_spinlock_t s;
+	if (NULL == lock || NULL == *lock)
+		return (EINVAL);
+	s = *lock;
+	if (s == PTHREAD_SPINLOCK_INITIALIZER)
+		return EPERM;
+	switch ((long)
+	        _InterlockedCompareExchange(&(s->interlock), PTW32_SPIN_UNLOCKED, PTW32_SPIN_LOCKED)) {
+		case PTW32_SPIN_LOCKED:
+			return 0;
+		case PTW32_SPIN_UNLOCKED:
+			return EPERM;
+		case PTW32_SPIN_USE_MUTEX:
+			return pthread_mutex_unlock(&(s->u.mutex));
+	}
+	return EINVAL;
 }

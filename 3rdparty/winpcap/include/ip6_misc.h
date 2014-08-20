@@ -39,19 +39,17 @@
 
 #if defined(__MINGW32__) && defined(DEFINE_ADDITIONAL_IPV6_STUFF)
 /* IPv6 address */
-struct in6_addr
-  {
-    union
-      {
-	u_int8_t		u6_addr8[16];
-	u_int16_t	u6_addr16[8];
-	u_int32_t	u6_addr32[4];
-      } in6_u;
+struct in6_addr {
+	union {
+		u_int8_t		u6_addr8[16];
+		u_int16_t	u6_addr16[8];
+		u_int32_t	u6_addr32[4];
+	} in6_u;
 #define s6_addr			in6_u.u6_addr8
 #define s6_addr16		in6_u.u6_addr16
 #define s6_addr32		in6_u.u6_addr32
 #define s6_addr64		in6_u.u6_addr64
-  };
+};
 
 #define IN6ADDR_ANY_INIT { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
 #define IN6ADDR_LOOPBACK_INIT { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }
@@ -66,16 +64,15 @@ typedef unsigned short	sa_family_t;
 #if defined(__MINGW32__) && defined(DEFINE_ADDITIONAL_IPV6_STUFF)
 
 #define	__SOCKADDR_COMMON(sa_prefix) \
-  sa_family_t sa_prefix##family
+	sa_family_t sa_prefix##family
 
 /* Ditto, for IPv6.  */
-struct sockaddr_in6
-  {
-    __SOCKADDR_COMMON (sin6_);
-    u_int16_t sin6_port;		/* Transport layer port # */
-    u_int32_t sin6_flowinfo;	/* IPv6 flow information */
-    struct in6_addr sin6_addr;	/* IPv6 address */
-  };
+struct sockaddr_in6 {
+	__SOCKADDR_COMMON(sin6_);
+	u_int16_t sin6_port;		/* Transport layer port # */
+	u_int32_t sin6_flowinfo;	/* IPv6 flow information */
+	struct in6_addr sin6_addr;	/* IPv6 address */
+};
 
 #define IN6_IS_ADDR_V4MAPPED(a) \
 	((((u_int32_t *) (a))[0] == 0) && (((u_int32_t *) (a))[1] == 0) && \

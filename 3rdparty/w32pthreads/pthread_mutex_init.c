@@ -37,71 +37,49 @@
 #include "ptw32pch.h"
 
 int
-pthread_mutex_init (pthread_mutex_t * mutex, const pthread_mutexattr_t * attr)
+pthread_mutex_init(pthread_mutex_t * mutex, const pthread_mutexattr_t * attr)
 {
-  int result = 0;
-  pthread_mutex_t mx;
-
-  if (mutex == NULL)
-    {
-      return EINVAL;
-    }
-
+	int result = 0;
+	pthread_mutex_t mx;
+	if (mutex == NULL)
+		return EINVAL;
 #ifdef PTW32_STATIC_LIB
-  // This allos for C++ static initializers to function without crashes. (air)
-  pthread_win32_process_attach_np();
+	// This allos for C++ static initializers to function without crashes. (air)
+	pthread_win32_process_attach_np();
 #endif
-
-  if (attr != NULL
-      && *attr != NULL && (*attr)->pshared == PTHREAD_PROCESS_SHARED)
-    {
-      /*
-       * Creating mutex that can be shared between
-       * processes.
-       */
+	if (attr != NULL
+	    && *attr != NULL && (*attr)->pshared == PTHREAD_PROCESS_SHARED) {
+		/*
+		 * Creating mutex that can be shared between
+		 * processes.
+		 */
 #if _POSIX_THREAD_PROCESS_SHARED >= 0
-
-      /*
-       * Not implemented yet.
-       */
-
+		/*
+		 * Not implemented yet.
+		 */
 #error ERROR [__FILE__, line __LINE__]: Process shared mutexes are not supported yet.
-
 #else
-
-      return ENOSYS;
-
+		return ENOSYS;
 #endif /* _POSIX_THREAD_PROCESS_SHARED */
-
-    }
-
-  mx = (pthread_mutex_t) calloc (1, sizeof (*mx));
-
-  if (mx == NULL)
-    {
-      result = ENOMEM;
-    }
-  else
-    {
-      mx->lock_idx = 0;
-      mx->recursive_count = 0;
-      mx->kind = (attr == NULL || *attr == NULL
-		  ? PTHREAD_MUTEX_DEFAULT : (*attr)->kind);
-      mx->ownerThread.p = NULL;
-
-      mx->event = CreateEvent (NULL, PTW32_FALSE,    /* manual reset = No */
-                              PTW32_FALSE,           /* initial state = not signaled */
-                              NULL);                 /* event name */
-
-      if (0 == mx->event)
-        {
-          result = ENOSPC;
-          free (mx);
-          mx = NULL;
-        }
-    }
-
-  *mutex = mx;
-
-  return (result);
+	}
+	mx = (pthread_mutex_t) calloc(1, sizeof(*mx));
+	if (mx == NULL)
+		result = ENOMEM;
+	else {
+		mx->lock_idx = 0;
+		mx->recursive_count = 0;
+		mx->kind = (attr == NULL || *attr == NULL
+		            ? PTHREAD_MUTEX_DEFAULT : (*attr)->kind);
+		mx->ownerThread.p = NULL;
+		mx->event = CreateEvent(NULL, PTW32_FALSE,     /* manual reset = No */
+		                        PTW32_FALSE,           /* initial state = not signaled */
+		                        NULL);                 /* event name */
+		if (0 == mx->event) {
+			result = ENOSPC;
+			free(mx);
+			mx = NULL;
+		}
+	}
+	*mutex = mx;
+	return (result);
 }

@@ -38,51 +38,35 @@
 
 
 INLINE int
-pthread_mutex_trylock (pthread_mutex_t * mutex)
+pthread_mutex_trylock(pthread_mutex_t * mutex)
 {
-  int result = 0;
-  pthread_mutex_t mx;
-
-  /*
-   * Let the system deal with invalid pointers.
-   */
-
-  /*
-   * We do a quick check to see if we need to do more work
-   * to initialise a static mutex. We check
-   * again inside the guarded section of ptw32_mutex_check_need_init()
-   * to avoid race conditions.
-   */
-  if (ptw32_static_mutex_enable && (*mutex >= PTHREAD_ERRORCHECK_MUTEX_INITIALIZER))
-    {
-      if ((result = ptw32_mutex_check_need_init (mutex)) != 0)
-	{
-	  return (result);
+	int result = 0;
+	pthread_mutex_t mx;
+	/*
+	 * Let the system deal with invalid pointers.
+	 */
+	/*
+	 * We do a quick check to see if we need to do more work
+	 * to initialise a static mutex. We check
+	 * again inside the guarded section of ptw32_mutex_check_need_init()
+	 * to avoid race conditions.
+	 */
+	if (ptw32_static_mutex_enable && (*mutex >= PTHREAD_ERRORCHECK_MUTEX_INITIALIZER)) {
+		if ((result = ptw32_mutex_check_need_init(mutex)) != 0)
+			return (result);
 	}
-    }
-
-  mx = *mutex;
-
-  if (0 == (LONG) _InterlockedCompareExchange(&mx->lock_idx, 1, 0))
-    {
-      if (mx->kind != PTHREAD_MUTEX_NORMAL)
-	{
-	  mx->recursive_count = 1;
-	  mx->ownerThread = pthread_self ();
+	mx = *mutex;
+	if (0 == (LONG) _InterlockedCompareExchange(&mx->lock_idx, 1, 0)) {
+		if (mx->kind != PTHREAD_MUTEX_NORMAL) {
+			mx->recursive_count = 1;
+			mx->ownerThread = pthread_self();
+		}
+	} else {
+		if (mx->kind == PTHREAD_MUTEX_RECURSIVE &&
+		    pthread_equal(mx->ownerThread, pthread_self()))
+			mx->recursive_count++;
+		else
+			result = EBUSY;
 	}
-    }
-  else
-    {
-      if (mx->kind == PTHREAD_MUTEX_RECURSIVE &&
-	  pthread_equal (mx->ownerThread, pthread_self ()))
-	{
-	  mx->recursive_count++;
-	}
-      else
-	{
-	  result = EBUSY;
-	}
-    }
-
-  return (result);
+	return (result);
 }

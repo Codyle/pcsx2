@@ -48,11 +48,9 @@ void IsoTableRebuild(const char *filename)
 	//   out so at least we can rebuild 1 part of a multifile at a time.
 	// IsoNameStripExt(datafile);
 	// IsoNameStripMulti(datafile);
-
 	// Prep tablefile to hold ONLY a table (no data)
 	tablefile = (struct IsoFile *) malloc(sizeof(struct IsoFile));
-	if (tablefile == NULL)
-	{
+	if (tablefile == NULL) {
 		datafile = IsoFileClose(datafile);
 		return;
 	} // ENDIF- Failed to allocate? Abort.
@@ -65,8 +63,7 @@ void IsoTableRebuild(const char *filename)
 	tablefile->handle = ACTUALHANDLENULL;
 	tablefile->namepos = 0;
 	while ((tablefile->namepos < 255) &&
-	        (*(filename + tablefile->namepos) != 0))
-	{
+	       (*(filename + tablefile->namepos) != 0)) {
 		tablefile->name[tablefile->namepos] = *(filename + tablefile->namepos);
 		tablefile->namepos++;
 	} // ENDWHILE- Copying file name into tablefile
@@ -75,13 +72,11 @@ void IsoTableRebuild(const char *filename)
 	tablefile->blocksize = datafile->blocksize;
 	tablefile->blockoffset = datafile->blockoffset;
 	tablefile->cdvdtype = 0; // Not important right now.
-
 	tablefile->compress = datafile->compress;
 	tablefile->compresspos = datafile->compresspos;
 	tablefile->numsectors = datafile->numsectors;
 	tablefile->tabledata = NULL;
-	switch (tablefile->compress)
-	{
+	switch (tablefile->compress) {
 		case 1:
 			retval = GZipV1OpenTableForWrite(tablefile);
 			break;
@@ -101,21 +96,17 @@ void IsoTableRebuild(const char *filename)
 			retval = -1;
 			break;
 	} // ENDSWITCH compress- Which table are we writing out?
-	if (retval < 0)
-	{
+	if (retval < 0) {
 		datafile = IsoFileClose(datafile);
 		return;
 	} // ENDIF- Failed to open table file? Abort
-
 	sprintf(tempblock, "Rebuilding table for %s", datafile->name);
 	ProgressBoxStart(tempblock, datafile->filebytesize);
 	stop = 0;
 	mainbox.stop = 0;
 	progressbox.stop = 0;
-	while ((stop == 0) && (datafile->filebytepos < datafile->filebytesize))
-	{
-		switch (datafile->compress)
-		{
+	while ((stop == 0) && (datafile->filebytepos < datafile->filebytesize)) {
+		switch (datafile->compress) {
 			case 1:
 				retval = GZipV1Read(datafile, 0, tempblock);
 				break;
@@ -135,20 +126,15 @@ void IsoTableRebuild(const char *filename)
 				retval = -1;
 				break;
 		} // ENDSWITCH compress- Scanning for the next complete compressed block
-
-		if (retval <= 0)
-		{
+		if (retval <= 0) {
 #ifdef FUNCTION_WARNING_TABLEREBUILD
 			PrintLog("CDVDiso rebuild:   failed to decompress - data corrupt");
 #endif /* FUNCTION_WARNING_TABLEREBUILD */
 			stop = 1;
-		}
-		else
-		{
+		} else {
 			table.offset = datafile->filebytepos - retval;
 			table.size = retval;
-			switch (tablefile->compress)
-			{
+			switch (tablefile->compress) {
 				case 1:
 					retval = GZipV1WriteTable(tablefile, table);
 					break;
@@ -172,18 +158,13 @@ void IsoTableRebuild(const char *filename)
 		} // ENDIF- Do we have a valid record to write an entry for?
 		ProgressBoxTick(datafile->filebytepos);
 		// while(gtk_events_pending())  gtk_main_iteration();
-
 		if (mainbox.stop != 0)  stop = 2;
 		if (progressbox.stop != 0)  stop = 2;
 	} // ENDWHILE- Read in the data file and writing a table, 1 block at a time
-
 	ProgressBoxStop();
-
 	CompressClose(tablefile); // Guarentee the table is flushed and closed.
 	if (stop != 0)
-	{
-		ActualFileDelete(tablefile->tablename);
-	} // ENDIF- Aborted or trouble? Delete the table file
+		ActualFileDelete(tablefile->tablename); // ENDIF- Aborted or trouble? Delete the table file
 	tablefile = IsoFileClose(tablefile);
 	datafile = IsoFileClose(datafile);
 	return;

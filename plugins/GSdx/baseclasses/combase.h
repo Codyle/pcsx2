@@ -113,13 +113,12 @@ AMOVIESETUP_MEDIATYPE, * PAMOVIESETUP_MEDIATYPE, * FAR LPAMOVIESETUP_MEDIATYPE;
 typedef REGFILTERPINS
 AMOVIESETUP_PIN, * PAMOVIESETUP_PIN, * FAR LPAMOVIESETUP_PIN;
 
-typedef struct _AMOVIESETUP_FILTER
-{
-  const CLSID * clsID;
-  const WCHAR * strName;
-  DWORD      dwMerit;
-  UINT       nPins;
-  const AMOVIESETUP_PIN * lpPin;
+typedef struct _AMOVIESETUP_FILTER {
+	const CLSID * clsID;
+	const WCHAR * strName;
+	DWORD      dwMerit;
+	UINT       nPins;
+	const AMOVIESETUP_PIN * lpPin;
 }
 AMOVIESETUP_FILTER, * PAMOVIESETUP_FILTER, * FAR LPAMOVIESETUP_FILTER;
 
@@ -138,9 +137,9 @@ extern OSVERSIONINFO g_osInfo;     // Filled in by GetVersionEx
 #ifndef INONDELEGATINGUNKNOWN_DEFINED
 DECLARE_INTERFACE(INonDelegatingUnknown)
 {
-    STDMETHOD(NonDelegatingQueryInterface) (THIS_ REFIID, LPVOID *) PURE;
-    STDMETHOD_(ULONG, NonDelegatingAddRef)(THIS) PURE;
-    STDMETHOD_(ULONG, NonDelegatingRelease)(THIS) PURE;
+	STDMETHOD(NonDelegatingQueryInterface)(THIS_ REFIID, LPVOID *) PURE;
+	STDMETHOD_(ULONG, NonDelegatingAddRef)(THIS) PURE;
+	STDMETHOD_(ULONG, NonDelegatingRelease)(THIS) PURE;
 };
 #define INONDELEGATINGUNKNOWN_DEFINED
 #endif
@@ -160,36 +159,37 @@ class CBaseObject
 
 private:
 
-    // Disable the copy constructor and assignment by default so you will get
-    //   compiler errors instead of unexpected behaviour if you pass objects
-    //   by value or assign objects.
-    CBaseObject(const CBaseObject& objectSrc);          // no implementation
-    void operator=(const CBaseObject& objectSrc);       // no implementation
+	// Disable the copy constructor and assignment by default so you will get
+	//   compiler errors instead of unexpected behaviour if you pass objects
+	//   by value or assign objects.
+	CBaseObject(const CBaseObject &objectSrc);          // no implementation
+	void operator=(const CBaseObject &objectSrc);       // no implementation
 
 private:
-    static LONG m_cObjects;     /* Total number of objects active */
+	static LONG m_cObjects;     /* Total number of objects active */
 
 protected:
 #ifdef DEBUG
-    DWORD m_dwCookie;           /* Cookie identifying this object */
+	DWORD m_dwCookie;           /* Cookie identifying this object */
 #endif
 
 
 public:
 
-    /* These increment and decrement the number of active objects */
+	/* These increment and decrement the number of active objects */
 
-    CBaseObject(const TCHAR *pName);
+	CBaseObject(const TCHAR *pName);
 #ifdef UNICODE
-    CBaseObject(const char *pName);
+	CBaseObject(const char *pName);
 #endif
-    ~CBaseObject();
+	~CBaseObject();
 
-    /* Call this to find if there are any CUnknown derived objects active */
+	/* Call this to find if there are any CUnknown derived objects active */
 
-    static LONG ObjectsActive() {
-        return m_cObjects;
-    };
+	static LONG ObjectsActive()
+	{
+		return m_cObjects;
+	};
 };
 
 
@@ -198,54 +198,59 @@ public:
    support, and an implementation of the core non delegating IUnknown */
 
 class AM_NOVTABLE CUnknown : public INonDelegatingUnknown,
-                 public CBaseObject
+	public CBaseObject
 {
 private:
-    const LPUNKNOWN m_pUnknown; /* Owner of this object */
+	const LPUNKNOWN m_pUnknown; /* Owner of this object */
 
 protected:                      /* So we can override NonDelegatingRelease() */
-    volatile LONG m_cRef;       /* Number of reference counts */
+	volatile LONG m_cRef;       /* Number of reference counts */
 
 public:
 
-    CUnknown(const TCHAR *pName, LPUNKNOWN pUnk);
-    virtual ~CUnknown() {};
+	CUnknown(const TCHAR *pName, LPUNKNOWN pUnk);
+	virtual ~CUnknown() {};
 
-    // This is redundant, just use the other constructor
-    //   as we never touch the HRESULT in this anyway
-    CUnknown(TCHAR *pName, LPUNKNOWN pUnk,HRESULT *phr);
+	// This is redundant, just use the other constructor
+	//   as we never touch the HRESULT in this anyway
+	CUnknown(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr);
 #ifdef UNICODE
-    CUnknown(const char *pName, LPUNKNOWN pUnk);
-    CUnknown(char *pName, LPUNKNOWN pUnk,HRESULT *phr);
+	CUnknown(const char *pName, LPUNKNOWN pUnk);
+	CUnknown(char *pName, LPUNKNOWN pUnk, HRESULT *phr);
 #endif
 
-    /* Return the owner of this object */
+	/* Return the owner of this object */
 
-    LPUNKNOWN GetOwner() const {
-        return m_pUnknown;
-    };
+	LPUNKNOWN GetOwner() const
+	{
+		return m_pUnknown;
+	};
 
-    /* Called from the class factory to create a new instance, it is
-       pure virtual so it must be overriden in your derived class */
+	/* Called from the class factory to create a new instance, it is
+	   pure virtual so it must be overriden in your derived class */
 
-    /* static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *) */
+	/* static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *) */
 
-    /* Non delegating unknown implementation */
+	/* Non delegating unknown implementation */
 
-    STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
-    STDMETHODIMP_(ULONG) NonDelegatingAddRef();
-    STDMETHODIMP_(ULONG) NonDelegatingRelease();
+	STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
+	STDMETHODIMP_(ULONG) NonDelegatingAddRef();
+	STDMETHODIMP_(ULONG) NonDelegatingRelease();
 };
 
 #if (_MSC_VER <= 1200)
 #pragma warning(disable:4211)
 
 /* The standard InterlockedXXX functions won't take volatiles */
-static inline LONG WINAPI InterlockedIncrement( volatile LONG * plong )
-{ return InterlockedIncrement( const_cast<LONG*>( plong ) ); }
+static inline LONG WINAPI InterlockedIncrement(volatile LONG * plong)
+{
+	return InterlockedIncrement(const_cast<LONG*>(plong));
+}
 
-static inline LONG WINAPI InterlockedDecrement( volatile LONG * plong )
-{ return InterlockedDecrement( const_cast<LONG*>( plong ) ); }
+static inline LONG WINAPI InterlockedDecrement(volatile LONG * plong)
+{
+	return InterlockedDecrement(const_cast<LONG*>(plong));
+}
 
 #pragma warning(default:4211)
 #endif
@@ -271,24 +276,27 @@ typedef void (CALLBACK *LPFNInitRoutine)(BOOL bLoading, const CLSID *rclsid);
 /* Create one of these per object class in an array so that
    the default class factory code can create new instances */
 
-class CFactoryTemplate {
+class CFactoryTemplate
+{
 
 public:
 
-    const WCHAR *              m_Name;
-    const CLSID *              m_ClsID;
-    LPFNNewCOMObject           m_lpfnNew;
-    LPFNInitRoutine            m_lpfnInit;
-    const AMOVIESETUP_FILTER * m_pAMovieSetup_Filter;
+	const WCHAR *              m_Name;
+	const CLSID *              m_ClsID;
+	LPFNNewCOMObject           m_lpfnNew;
+	LPFNInitRoutine            m_lpfnInit;
+	const AMOVIESETUP_FILTER * m_pAMovieSetup_Filter;
 
-    BOOL IsClassID(REFCLSID rclsid) const {
-        return (IsEqualCLSID(*m_ClsID,rclsid));
-    };
+	BOOL IsClassID(REFCLSID rclsid) const
+	{
+		return (IsEqualCLSID(*m_ClsID, rclsid));
+	};
 
-    CUnknown *CreateInstance(LPUNKNOWN pUnk, HRESULT *phr) const {
-        CheckPointer(phr,NULL);
-        return m_lpfnNew(pUnk, phr);
-    };
+	CUnknown *CreateInstance(LPUNKNOWN pUnk, HRESULT *phr) const
+	{
+		CheckPointer(phr, NULL);
+		return m_lpfnNew(pUnk, phr);
+	};
 };
 
 
@@ -297,15 +305,15 @@ public:
    class supports (the default implementation only supports IUnknown) */
 
 #define DECLARE_IUNKNOWN                                        \
-    STDMETHODIMP QueryInterface(REFIID riid, void **ppv) {      \
-        return GetOwner()->QueryInterface(riid,ppv);            \
-    };                                                          \
-    STDMETHODIMP_(ULONG) AddRef() {                             \
-        return GetOwner()->AddRef();                            \
-    };                                                          \
-    STDMETHODIMP_(ULONG) Release() {                            \
-        return GetOwner()->Release();                           \
-    };
+	STDMETHODIMP QueryInterface(REFIID riid, void **ppv) {      \
+		return GetOwner()->QueryInterface(riid,ppv);            \
+	};                                                          \
+	STDMETHODIMP_(ULONG) AddRef() {                             \
+		return GetOwner()->AddRef();                            \
+	};                                                          \
+	STDMETHODIMP_(ULONG) Release() {                            \
+		return GetOwner()->Release();                           \
+	};
 
 
 

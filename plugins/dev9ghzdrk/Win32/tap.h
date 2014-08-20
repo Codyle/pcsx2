@@ -18,8 +18,7 @@
 #include "net.h"
 using namespace std;
 
-struct tap_adapter
-{
+struct tap_adapter {
 	string name;
 	string guid;
 };
@@ -27,7 +26,7 @@ vector<tap_adapter>* GetTapAdapters();
 class TAPAdapter : public NetAdapter
 {
 	HANDLE htap;
-	OVERLAPPED read,write;
+	OVERLAPPED read, write;
 public:
 	TAPAdapter();
 	virtual bool blocks();

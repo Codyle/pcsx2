@@ -31,19 +31,22 @@ protected:
 	wxString	m_filename;
 
 public:
-	pxStreamBase(const wxString& filename);
+	pxStreamBase(const wxString &filename);
 	virtual ~pxStreamBase() throw() {}
 
 	// Implementing classes should return the base wxStream object (usually either a wxInputStream
 	// or wxOputStream derivative).
-	virtual wxStreamBase* GetWxStreamBase() const=0;
-	virtual void Close()=0;
-	virtual wxFileOffset Tell() const=0;
-	virtual wxFileOffset Seek( wxFileOffset ofs, wxSeekMode mode = wxFromStart )=0;
+	virtual wxStreamBase* GetWxStreamBase() const = 0;
+	virtual void Close() = 0;
+	virtual wxFileOffset Tell() const = 0;
+	virtual wxFileOffset Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart) = 0;
 
 	virtual wxFileOffset Length() const;
 	bool IsOk() const;
-	wxString GetStreamName() const { return m_filename; }
+	wxString GetStreamName() const
+	{
+		return m_filename;
+	}
 };
 
 
@@ -58,27 +61,30 @@ protected:
 	ScopedPtr<wxOutputStream>	m_stream_out;
 
 public:
-	pxOutputStream(const wxString& filename, ScopedPtr<wxOutputStream>& output);
-	pxOutputStream(const wxString& filename, wxOutputStream* output);
+	pxOutputStream(const wxString &filename, ScopedPtr<wxOutputStream> &output);
+	pxOutputStream(const wxString &filename, wxOutputStream* output);
 
 	virtual ~pxOutputStream() throw() {}
-	virtual void Write( const void* data, size_t size );
-	
-	void SetStream( const wxString& filename, ScopedPtr<wxOutputStream>& stream );
-	void SetStream( const wxString& filename, wxOutputStream* stream );
+	virtual void Write(const void* data, size_t size);
 
-	void Close() { m_stream_out.Delete(); }
+	void SetStream(const wxString &filename, ScopedPtr<wxOutputStream> &stream);
+	void SetStream(const wxString &filename, wxOutputStream* stream);
+
+	void Close()
+	{
+		m_stream_out.Delete();
+	}
 
 	virtual wxStreamBase* GetWxStreamBase() const;
 
-	template< typename T >
-	void Write( const T& data )
+	template<typename T>
+	void Write(const T &data)
 	{
-		Write( &data, sizeof(data) );
+		Write(&data, sizeof(data));
 	}
 
 	wxFileOffset Tell() const;
-	wxFileOffset Seek( wxFileOffset ofs, wxSeekMode mode = wxFromStart );
+	wxFileOffset Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
 };
 
 // --------------------------------------------------------------------------------------
@@ -92,25 +98,28 @@ protected:
 	ScopedPtr<wxInputStream>	m_stream_in;
 
 public:
-	pxInputStream(const wxString& filename, ScopedPtr<wxInputStream>& input);
-	pxInputStream(const wxString& filename, wxInputStream* input);
+	pxInputStream(const wxString &filename, ScopedPtr<wxInputStream> &input);
+	pxInputStream(const wxString &filename, wxInputStream* input);
 
 	virtual ~pxInputStream() throw() {}
-	virtual void Read( void* dest, size_t size );
-	
-	void SetStream( const wxString& filename, ScopedPtr<wxInputStream>& stream );
-	void SetStream( const wxString& filename, wxInputStream* stream );
+	virtual void Read(void* dest, size_t size);
 
-	void Close() { m_stream_in.Delete(); }
+	void SetStream(const wxString &filename, ScopedPtr<wxInputStream> &stream);
+	void SetStream(const wxString &filename, wxInputStream* stream);
+
+	void Close()
+	{
+		m_stream_in.Delete();
+	}
 
 	virtual wxStreamBase* GetWxStreamBase() const;
 
-	template< typename T >
-	void Read( T& dest )
+	template<typename T>
+	void Read(T &dest)
 	{
-		Read( &dest, sizeof(dest) );
+		Read(&dest, sizeof(dest));
 	}
 
 	wxFileOffset Tell() const;
-	wxFileOffset Seek( wxFileOffset ofs, wxSeekMode mode = wxFromStart );
+	wxFileOffset Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
 };

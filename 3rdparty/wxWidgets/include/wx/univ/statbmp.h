@@ -21,54 +21,60 @@
 class WXDLLEXPORT wxStaticBitmap : public wxStaticBitmapBase
 {
 public:
-    wxStaticBitmap()
-    {
-    }
+	wxStaticBitmap()
+	{
+	}
 
-    wxStaticBitmap(wxWindow *parent,
-                   const wxBitmap& label,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = 0)
-    {
-        Create(parent, wxID_ANY, label, pos, size, style);
-    }
+	wxStaticBitmap(wxWindow *parent,
+	               const wxBitmap &label,
+	               const wxPoint &pos = wxDefaultPosition,
+	               const wxSize &size = wxDefaultSize,
+	               long style = 0)
+	{
+		Create(parent, wxID_ANY, label, pos, size, style);
+	}
 
-    wxStaticBitmap(wxWindow *parent,
-                   wxWindowID id,
-                   const wxBitmap& label,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = 0,
-                   const wxString& name = wxStaticBitmapNameStr)
-    {
-        Create(parent, id, label, pos, size, style, name);
-    }
+	wxStaticBitmap(wxWindow *parent,
+	               wxWindowID id,
+	               const wxBitmap &label,
+	               const wxPoint &pos = wxDefaultPosition,
+	               const wxSize &size = wxDefaultSize,
+	               long style = 0,
+	               const wxString &name = wxStaticBitmapNameStr)
+	{
+		Create(parent, id, label, pos, size, style, name);
+	}
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxBitmap& label,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxString& name = wxStaticBitmapNameStr);
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            const wxBitmap &label,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = 0,
+	            const wxString &name = wxStaticBitmapNameStr);
 
-    virtual void SetBitmap(const wxBitmap& bitmap);
-    virtual void SetIcon(const wxIcon& icon);
-    virtual wxBitmap GetBitmap() const { return m_bitmap; }
+	virtual void SetBitmap(const wxBitmap &bitmap);
+	virtual void SetIcon(const wxIcon &icon);
+	virtual wxBitmap GetBitmap() const
+	{
+		return m_bitmap;
+	}
 
-    wxIcon GetIcon() const;
+	wxIcon GetIcon() const;
 
-    virtual bool HasTransparentBackground() { return true; }
+	virtual bool HasTransparentBackground()
+	{
+		return true;
+	}
 
 protected:
-    virtual void DoDraw(wxControlRenderer *renderer);
+	virtual void DoDraw(wxControlRenderer *renderer);
 
 private:
-    // the bitmap which we show
-    wxBitmap m_bitmap;
+	// the bitmap which we show
+	wxBitmap m_bitmap;
 
-    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+	DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
 };
 
 #endif // _WX_UNIV_STATBMP_H_

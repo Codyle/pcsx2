@@ -29,21 +29,21 @@
 class WXDLLEXPORT wxPrintDialogBase : public wxDialog
 {
 public:
-    wxPrintDialogBase() { }
-    wxPrintDialogBase(wxWindow *parent,
-                      wxWindowID id = wxID_ANY,
-                      const wxString &title = wxEmptyString,
-                      const wxPoint &pos = wxDefaultPosition,
-                      const wxSize &size = wxDefaultSize,
-                      long style = wxDEFAULT_DIALOG_STYLE);
+	wxPrintDialogBase() { }
+	wxPrintDialogBase(wxWindow *parent,
+	                  wxWindowID id = wxID_ANY,
+	                  const wxString &title = wxEmptyString,
+	                  const wxPoint &pos = wxDefaultPosition,
+	                  const wxSize &size = wxDefaultSize,
+	                  long style = wxDEFAULT_DIALOG_STYLE);
 
-    virtual wxPrintDialogData& GetPrintDialogData() = 0;
-    virtual wxPrintData& GetPrintData() = 0;
-    virtual wxDC *GetPrintDC() = 0;
+	virtual wxPrintDialogData &GetPrintDialogData() = 0;
+	virtual wxPrintData &GetPrintData() = 0;
+	virtual wxDC *GetPrintDC() = 0;
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxPrintDialogBase)
-    DECLARE_NO_COPY_CLASS(wxPrintDialogBase)
+	DECLARE_ABSTRACT_CLASS(wxPrintDialogBase)
+	DECLARE_NO_COPY_CLASS(wxPrintDialogBase)
 };
 
 // ---------------------------------------------------------------------------
@@ -53,22 +53,22 @@ private:
 class WXDLLEXPORT wxPrintDialog : public wxObject
 {
 public:
-    wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
-    wxPrintDialog(wxWindow *parent, wxPrintData* data);
-    virtual ~wxPrintDialog();
+	wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
+	wxPrintDialog(wxWindow *parent, wxPrintData* data);
+	virtual ~wxPrintDialog();
 
-    virtual int ShowModal();
+	virtual int ShowModal();
 
-    virtual wxPrintDialogData& GetPrintDialogData();
-    virtual wxPrintData& GetPrintData();
-    virtual wxDC *GetPrintDC();
-
-private:
-    wxPrintDialogBase  *m_pimpl;
+	virtual wxPrintDialogData &GetPrintDialogData();
+	virtual wxPrintData &GetPrintData();
+	virtual wxDC *GetPrintDC();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPrintDialog)
-    DECLARE_NO_COPY_CLASS(wxPrintDialog)
+	wxPrintDialogBase  *m_pimpl;
+
+private:
+	DECLARE_DYNAMIC_CLASS(wxPrintDialog)
+	DECLARE_NO_COPY_CLASS(wxPrintDialog)
 };
 
 // ---------------------------------------------------------------------------
@@ -78,19 +78,19 @@ private:
 class WXDLLEXPORT wxPageSetupDialogBase: public wxDialog
 {
 public:
-    wxPageSetupDialogBase() { }
-    wxPageSetupDialogBase(wxWindow *parent,
-                      wxWindowID id = wxID_ANY,
-                      const wxString &title = wxEmptyString,
-                      const wxPoint &pos = wxDefaultPosition,
-                      const wxSize &size = wxDefaultSize,
-                      long style = wxDEFAULT_DIALOG_STYLE);
+	wxPageSetupDialogBase() { }
+	wxPageSetupDialogBase(wxWindow *parent,
+	                      wxWindowID id = wxID_ANY,
+	                      const wxString &title = wxEmptyString,
+	                      const wxPoint &pos = wxDefaultPosition,
+	                      const wxSize &size = wxDefaultSize,
+	                      long style = wxDEFAULT_DIALOG_STYLE);
 
-    virtual wxPageSetupDialogData& GetPageSetupDialogData() = 0;
+	virtual wxPageSetupDialogData &GetPageSetupDialogData() = 0;
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxPageSetupDialogBase)
-    DECLARE_NO_COPY_CLASS(wxPageSetupDialogBase)
+	DECLARE_ABSTRACT_CLASS(wxPageSetupDialogBase)
+	DECLARE_NO_COPY_CLASS(wxPageSetupDialogBase)
 };
 
 // ---------------------------------------------------------------------------
@@ -100,23 +100,23 @@ private:
 class WXDLLEXPORT wxPageSetupDialog: public wxObject
 {
 public:
-    wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
-    virtual ~wxPageSetupDialog();
+	wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+	virtual ~wxPageSetupDialog();
 
-    int ShowModal();
-    wxPageSetupDialogData& GetPageSetupDialogData();
-    // old name
-    wxPageSetupDialogData& GetPageSetupData();
-
-private:
-    wxPageSetupDialogBase  *m_pimpl;
+	int ShowModal();
+	wxPageSetupDialogData &GetPageSetupDialogData();
+	// old name
+	wxPageSetupDialogData &GetPageSetupData();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
-    DECLARE_NO_COPY_CLASS(wxPageSetupDialog)
+	wxPageSetupDialogBase  *m_pimpl;
+
+private:
+	DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
+	DECLARE_NO_COPY_CLASS(wxPageSetupDialog)
 };
 
 #endif
 
 #endif
-    // _WX_PRINTDLG_H_BASE_
+// _WX_PRINTDLG_H_BASE_

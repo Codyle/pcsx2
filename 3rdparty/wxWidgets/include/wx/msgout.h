@@ -27,20 +27,20 @@
 class WXDLLIMPEXP_BASE wxMessageOutput
 {
 public:
-    virtual ~wxMessageOutput() { }
+	virtual ~wxMessageOutput() { }
 
-    // show a message to the user
-    virtual void Printf(const wxChar* format, ...)  ATTRIBUTE_PRINTF_2 = 0;
+	// show a message to the user
+	virtual void Printf(const wxChar* format, ...)  ATTRIBUTE_PRINTF_2 = 0;
 
-    // gets the current wxMessageOutput object (may be NULL during
-    // initialization or shutdown)
-    static wxMessageOutput* Get();
+	// gets the current wxMessageOutput object (may be NULL during
+	// initialization or shutdown)
+	static wxMessageOutput* Get();
 
-    // sets the global wxMessageOutput instance; returns the previous one
-    static wxMessageOutput* Set(wxMessageOutput* msgout);
+	// sets the global wxMessageOutput instance; returns the previous one
+	static wxMessageOutput* Set(wxMessageOutput* msgout);
 
 private:
-    static wxMessageOutput* ms_msgOut;
+	static wxMessageOutput* ms_msgOut;
 };
 
 // ----------------------------------------------------------------------------
@@ -52,9 +52,9 @@ private:
 class WXDLLIMPEXP_BASE wxMessageOutputBest : public wxMessageOutput
 {
 public:
-    wxMessageOutputBest() { }
+	wxMessageOutputBest() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+	virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 // ----------------------------------------------------------------------------
@@ -64,9 +64,9 @@ public:
 class WXDLLIMPEXP_BASE wxMessageOutputStderr : public wxMessageOutput
 {
 public:
-    wxMessageOutputStderr() { }
+	wxMessageOutputStderr() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+	virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 // ----------------------------------------------------------------------------
@@ -78,9 +78,9 @@ public:
 class WXDLLIMPEXP_CORE wxMessageOutputMessageBox : public wxMessageOutput
 {
 public:
-    wxMessageOutputMessageBox() { }
+	wxMessageOutputMessageBox() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+	virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 #endif // wxUSE_GUI
@@ -92,9 +92,9 @@ public:
 class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutput
 {
 public:
-    wxMessageOutputDebug() { }
+	wxMessageOutputDebug() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+	virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 // ----------------------------------------------------------------------------
@@ -104,10 +104,10 @@ public:
 class WXDLLIMPEXP_BASE wxMessageOutputLog : public wxMessageOutput
 {
 public:
-    wxMessageOutputLog() { }
+	wxMessageOutputLog() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+	virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 #endif
-    // _WX_MSGOUT_H_
+// _WX_MSGOUT_H_

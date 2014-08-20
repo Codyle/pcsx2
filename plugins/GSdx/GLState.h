@@ -24,51 +24,52 @@
 #include "GSdx.h"
 #include "GSVector.h"
 
-namespace GLState {
-	extern GLuint fbo; // frame buffer object
-	extern GLenum draw; // Drawing buffer
-	extern GSVector2i viewport;
-	extern GSVector4i scissor;
+namespace GLState
+{
+extern GLuint fbo; // frame buffer object
+extern GLenum draw; // Drawing buffer
+extern GSVector2i viewport;
+extern GSVector4i scissor;
 
-	extern bool blend;
-	extern GLenum eq_RGB;
-	extern GLenum eq_A;
-	extern GLenum f_sRGB;
-	extern GLenum f_dRGB;
-	extern GLenum f_sA;
-	extern GLenum f_dA;
-	extern bool r_msk;
-	extern bool g_msk;
-	extern bool b_msk;
-	extern bool a_msk;
-	extern float bf;
+extern bool blend;
+extern GLenum eq_RGB;
+extern GLenum eq_A;
+extern GLenum f_sRGB;
+extern GLenum f_dRGB;
+extern GLenum f_sA;
+extern GLenum f_dA;
+extern bool r_msk;
+extern bool g_msk;
+extern bool b_msk;
+extern bool a_msk;
+extern float bf;
 
-	extern bool depth;
-	extern GLenum depth_func;
-	extern bool depth_mask;
+extern bool depth;
+extern GLenum depth_func;
+extern bool depth_mask;
 
-	extern bool stencil;
-	extern GLenum stencil_func;
-	extern GLenum stencil_pass;
+extern bool stencil;
+extern GLenum stencil_func;
+extern GLenum stencil_pass;
 
-	extern GLuint ubo; // uniform buffer object
+extern GLuint ubo; // uniform buffer object
 
-	extern GLuint ps_ss; // sampler
+extern GLuint ps_ss; // sampler
 
-	extern GLuint rt; // render target
-	extern GLuint ds; // Depth-Stencil
-	extern GLuint tex_unit[2]; // shader input texture
-	extern GLuint tex; // Generic texture (for tex operation)
-	extern GLuint64 tex_handle[2]; // shader input texture
+extern GLuint rt; // render target
+extern GLuint ds; // Depth-Stencil
+extern GLuint tex_unit[2]; // shader input texture
+extern GLuint tex; // Generic texture (for tex operation)
+extern GLuint64 tex_handle[2]; // shader input texture
 
-	extern GLuint ps;
-	extern GLuint gs;
-	extern GLuint vs;
-	extern GLuint program; // monolith program (when sso isn't supported)
-	extern bool dirty_prog;
-	extern bool dirty_subroutine_vs;
-	extern bool dirty_subroutine_ps;
-	extern bool dirty_ressources;
+extern GLuint ps;
+extern GLuint gs;
+extern GLuint vs;
+extern GLuint program; // monolith program (when sso isn't supported)
+extern bool dirty_prog;
+extern bool dirty_subroutine_vs;
+extern bool dirty_subroutine_ps;
+extern bool dirty_ressources;
 
-	extern void Clear();
+extern void Clear();
 }

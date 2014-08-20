@@ -23,34 +23,37 @@
 class WXDLLEXPORT wxColourDialog : public wxDialog
 {
 public:
-    wxColourDialog();
-    wxColourDialog(wxWindow *parent, wxColourData *data = NULL);
+	wxColourDialog();
+	wxColourDialog(wxWindow *parent, wxColourData *data = NULL);
 
-    bool Create(wxWindow *parent, wxColourData *data = NULL);
+	bool Create(wxWindow *parent, wxColourData *data = NULL);
 
-    wxColourData& GetColourData() { return m_colourData; }
+	wxColourData &GetColourData()
+	{
+		return m_colourData;
+	}
 
-    // override some base class virtuals
-    virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle() const;
+	// override some base class virtuals
+	virtual void SetTitle(const wxString &title);
+	virtual wxString GetTitle() const;
 
-    virtual int ShowModal();
+	virtual int ShowModal();
 
 protected:
-    virtual void DoGetPosition( int *x, int *y ) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+	virtual void DoGetPosition(int *x, int *y) const;
+	virtual void DoGetSize(int *width, int *height) const;
+	virtual void DoGetClientSize(int *width, int *height) const;
+	virtual void DoSetSize(int x, int y,
+	                       int width, int height,
+	                       int sizeFlags = wxSIZE_AUTO);
 
-    wxColourData        m_colourData;
-    wxString            m_title;
+	wxColourData        m_colourData;
+	wxString            m_title;
 
-    wxPoint             m_pos;
+	wxPoint             m_pos;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxColourDialog)
+	DECLARE_DYNAMIC_CLASS_NO_COPY(wxColourDialog)
 };
 
 #endif
-    // _WX_COLORDLG_H_
+// _WX_COLORDLG_H_

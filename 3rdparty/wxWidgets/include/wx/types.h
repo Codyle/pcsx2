@@ -89,5 +89,5 @@
 #define wxTYPE_USER            500
 
 #endif
-    // _WX_TYPESH__
+// _WX_TYPESH__
 

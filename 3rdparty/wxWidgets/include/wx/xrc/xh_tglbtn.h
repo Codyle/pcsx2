@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxToggleButtonXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxToggleButtonXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxToggleButtonXmlHandler)
 
 public:
-    wxToggleButtonXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxToggleButtonXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_TOGGLEBTN

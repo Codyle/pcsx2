@@ -42,7 +42,7 @@
 #define USB_LOG __Log
 
 typedef struct {
-  bool Log;
+	bool Log;
 } Config;
 
 extern Config conf;

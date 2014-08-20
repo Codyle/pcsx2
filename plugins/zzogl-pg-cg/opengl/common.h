@@ -196,7 +196,7 @@ typedef signed __int64 int64_t;
 /* dprintf macros */
 #	if defined(CONFIG_WIN32) && !defined(__MINGW32__)
 
-inline void dprintf(const char* fmt,...) {}
+inline void dprintf(const char* fmt, ...) {}
 
 #	else
 
@@ -226,10 +226,10 @@ extern const uint32_t inverse[256];
 	({\
 		int ret,dmy;\
 		asm volatile(\
-			"mull %3"\
-			:"=d"(ret),"=a"(dmy)\
-			:"1"(a),"g"(inverse[b])\
-			);\
+		             "mull %3"\
+		             :"=d"(ret),"=a"(dmy)\
+		             :"1"(a),"g"(inverse[b])\
+		            );\
 		ret;\
 	})
 #elif defined(CONFIG_FASTDIV)
@@ -240,18 +240,20 @@ extern const uint32_t inverse[256];
 
 #ifdef ARCH_X86
 // avoid +32 for shift optimization (gcc should do that ...)
-static inline  int32_t NEG_SSR32( int32_t a, int8_t s){
-	asm ("sarl %1, %0\n\t"
-		 : "+r" (a)
-		 : "ic" ((uint8_t)(-s))
-	);
+static inline  int32_t NEG_SSR32(int32_t a, int8_t s)
+{
+	asm("sarl %1, %0\n\t"
+	    : "+r"(a)
+	    : "ic"((uint8_t)(-s))
+	   );
 	return a;
 }
-static inline uint32_t NEG_USR32(uint32_t a, int8_t s){
-	asm ("shrl %1, %0\n\t"
-		 : "+r" (a)
-		 : "ic" ((uint8_t)(-s))
-	);
+static inline uint32_t NEG_USR32(uint32_t a, int8_t s)
+{
+	asm("shrl %1, %0\n\t"
+	    : "+r"(a)
+	    : "ic"((uint8_t)(-s))
+	   );
 	return a;
 }
 #else
@@ -278,9 +280,9 @@ typedef struct PutBitContext {
 } PutBitContext;
 
 void init_put_bits(PutBitContext *s,
-				   uint8_t *buffer, int buffer_size,
-				   void *opaque,
-				   void (*write_data)(void *, uint8_t *, int));
+                   uint8_t *buffer, int buffer_size,
+                   void *opaque,
+                   void (*write_data)(void *, uint8_t *, int));
 
 int64_t get_bit_count(PutBitContext *s); /* XXX: change function name */
 void align_put_bits(PutBitContext *s);
@@ -312,7 +314,7 @@ static inline int get_bits_count(GetBitContext *s);
 
 typedef struct VLC {
 	int bits;
-	VLC_TYPE (*table)[2]; ///< code, bits
+	VLC_TYPE(*table)[2];  ///< code, bits
 	int table_size, table_allocated;
 } VLC;
 
@@ -331,19 +333,21 @@ typedef struct RL_VLC_ELEM {
 #	define unaligned32(a) (*(uint32_t*)(a))
 #else
 #	ifdef __GNUC__
-static inline uint32_t unaligned32(const void *v) {
+static inline uint32_t unaligned32(const void *v)
+{
 	struct Unaligned {
-	uint32_t i;
+		uint32_t i;
 	} __attribute__((packed));
-
 	return ((const struct Unaligned *) v)->i;
 }
 #	elif defined(__DECC)
-static inline uint32_t unaligned32(const void *v) {
+static inline uint32_t unaligned32(const void *v)
+{
 	return *(const __unaligned uint32_t *) v;
 }
 #	else
-static inline uint32_t unaligned32(const void *v) {
+static inline uint32_t unaligned32(const void *v)
+{
 	return *(const uint32_t *) v;
 }
 #	endif
@@ -354,23 +358,20 @@ static inline void put_bits(PutBitContext *s, int n, unsigned int value)
 {
 	unsigned int bit_buf;
 	int bit_left;
-
 #ifdef STATS
 	st_out_bit_counts[st_current_index] += n;
 #endif
 	//	ZZLog::Debug_Log("put_bits=%d %x.", n, value);
 	assert(n == 32 || value < (1U << n));
-
 	bit_buf = s->bit_buf;
 	bit_left = s->bit_left;
-
 	//	ZZLog::Debug_Log("n=%d value=%x cnt=%d buf=%x.", n, value, bit_cnt, bit_buf);
 	/* XXX: optimize */
 	if (n < bit_left) {
-		bit_buf = (bit_buf<<n) | value;
-		bit_left-=n;
+		bit_buf = (bit_buf << n) | value;
+		bit_left -= n;
 	} else {
-	bit_buf<<=bit_left;
+		bit_buf <<= bit_left;
 		bit_buf |= value >> (n - bit_left);
 #ifdef UNALIGNED_STORES_ARE_BAD
 		if (3 & (int) s->buf_ptr) {
@@ -380,13 +381,12 @@ static inline void put_bits(PutBitContext *s, int n, unsigned int value)
 			s->buf_ptr[3] = bit_buf	  ;
 		} else
 #endif
-		*(uint32_t *)s->buf_ptr = be2me_32(bit_buf);
+			*(uint32_t *)s->buf_ptr = be2me_32(bit_buf);
 		//ZZLog::Debug_Log("bitbuf = %08x.", bit_buf);
-		s->buf_ptr+=4;
-	bit_left+=32 - n;
+		s->buf_ptr += 4;
+		bit_left += 32 - n;
 		bit_buf = value;
 	}
-
 	s->bit_buf = bit_buf;
 	s->bit_left = bit_left;
 }
@@ -399,61 +399,58 @@ static inline void put_bits(PutBitContext *s, int n, unsigned int value)
 #	ifdef ALIGNED_BITSTREAM_WRITER
 #		ifdef ARCH_X86
 	asm volatile(
-	"movl %0, %%ecx			\n\t"
-	"xorl %%eax, %%eax		\n\t"
-	"shrdl %%cl, %1, %%eax		\n\t"
-	"shrl %%cl, %1			\n\t"
-	"movl %0, %%ecx			\n\t"
-	"shrl $3, %%ecx			\n\t"
-	"andl $0xFFFFFFFC, %%ecx	\n\t"
-	"bswapl %1			\n\t"
-	"orl %1, (%2, %%ecx)		\n\t"
-	"bswapl %%eax			\n\t"
-	"addl %3, %0			\n\t"
-	"movl %%eax, 4(%2, %%ecx)	\n\t"
-	: "=&r" (s->index), "=&r" (value)
-	: "r" (s->buf), "r" (n), "0" (s->index), "1" (value<<(-n))
-	: "%eax", "%ecx"
+	        "movl %0, %%ecx			\n\t"
+	        "xorl %%eax, %%eax		\n\t"
+	        "shrdl %%cl, %1, %%eax		\n\t"
+	        "shrl %%cl, %1			\n\t"
+	        "movl %0, %%ecx			\n\t"
+	        "shrl $3, %%ecx			\n\t"
+	        "andl $0xFFFFFFFC, %%ecx	\n\t"
+	        "bswapl %1			\n\t"
+	        "orl %1, (%2, %%ecx)		\n\t"
+	        "bswapl %%eax			\n\t"
+	        "addl %3, %0			\n\t"
+	        "movl %%eax, 4(%2, %%ecx)	\n\t"
+	        : "=&r"(s->index), "=&r"(value)
+	        : "r"(s->buf), "r"(n), "0"(s->index), "1"(value<<(-n))
+	        : "%eax", "%ecx"
 	);
 #		else
-	int index= s->index;
-	uint32_t *ptr= ((uint32_t *)s->buf)+(index>>5);
-
-	value<<= 32-n;
-
-	ptr[0] |= be2me_32(value>>(index&31));
-	ptr[1]  = be2me_32(value<<(32-(index&31)));
-//	if (n > 24) ZZLog::Debug_Log("%d %d", n, value);
-	index+= n;
-	s->index= index;
+	int index = s->index;
+	uint32_t *ptr = ((uint32_t *)s->buf) + (index >> 5);
+	value <<= 32 - n;
+	ptr[0] |= be2me_32(value >> (index & 31));
+	ptr[1]  = be2me_32(value << (32 - (index & 31)));
+	//	if (n > 24) ZZLog::Debug_Log("%d %d", n, value);
+	index += n;
+	s->index = index;
 #		endif
 #	else //ALIGNED_BITSTREAM_WRITER
 #		ifdef ARCH_X86
 	asm volatile(
-	"movl $7, %%ecx			\n\t"
-	"andl %0, %%ecx			\n\t"
-	"addl %3, %%ecx			\n\t"
-	"negl %%ecx			\n\t"
-	"shll %%cl, %1			\n\t"
-	"bswapl %1			\n\t"
-	"movl %0, %%ecx			\n\t"
-	"shrl $3, %%ecx			\n\t"
-	"orl %1, (%%ecx, %2)		\n\t"
-	"addl %3, %0			\n\t"
-	"movl $0, 4(%%ecx, %2)		\n\t"
-	: "=&r" (s->index), "=&r" (value)
-	: "r" (s->buf), "r" (n), "0" (s->index), "1" (value)
-	: "%ecx"
+	        "movl $7, %%ecx			\n\t"
+	        "andl %0, %%ecx			\n\t"
+	        "addl %3, %%ecx			\n\t"
+	        "negl %%ecx			\n\t"
+	        "shll %%cl, %1			\n\t"
+	        "bswapl %1			\n\t"
+	        "movl %0, %%ecx			\n\t"
+	        "shrl $3, %%ecx			\n\t"
+	        "orl %1, (%%ecx, %2)		\n\t"
+	        "addl %3, %0			\n\t"
+	        "movl $0, 4(%%ecx, %2)		\n\t"
+	        : "=&r"(s->index), "=&r"(value)
+	        : "r"(s->buf), "r"(n), "0"(s->index), "1"(value)
+	        : "%ecx"
 	);
 #		else
-	int index= s->index;
-	uint32_t *ptr= (uint32_t*)(((uint8_t *)s->buf)+(index>>3));
-
-	ptr[0] |= be2me_32(value<<(32-n-(index&7) ));
+	int index = s->index;
+	uint32_t *ptr = (uint32_t*)(((uint8_t *)s->buf) + (index >> 3));
+	ptr[0] |= be2me_32(value << (32 - n - (index & 7)));
 	ptr[1] = 0;
-//	if (n > 24) ZZLog::Debug_Log("%d %d", n, value);
-	index+= n;
-	s->index= index;
+	//	if (n > 24) ZZLog::Debug_Log("%d %d", n, value);
+	index += n;
+	s->index = index;
 #		endif
 #	endif //!ALIGNED_BITSTREAM_WRITER
 }
@@ -463,7 +460,7 @@ static inline void put_bits(PutBitContext *s, int n, unsigned int value)
 static inline uint8_t* pbBufPtr(PutBitContext *s)
 {
 #ifdef ALT_BITSTREAM_WRITER
-	return s->buf + (s->index>>3);
+	return s->buf + (s->index >> 3);
 #else
 	return s->buf_ptr;
 #endif
@@ -517,10 +514,10 @@ for examples see get_bits, show_bits, skip_bits, get_vlc
 static inline int unaligned32_be(const void *v)
 {
 #ifdef CONFIG_ALIGN
-	const uint8_t *p=v;
-	return (((p[0]<<8) | p[1])<<16) | (p[2]<<8) | (p[3]);
+	const uint8_t *p = v;
+	return (((p[0] << 8) | p[1]) << 16) | (p[2] << 8) | (p[3]);
 #else
-	return be2me_32( unaligned32(v)); //original
+	return be2me_32(unaligned32(v));  //original
 #endif
 }
 
@@ -528,41 +525,42 @@ static inline int unaligned32_be(const void *v)
 #   define MIN_CACHE_BITS 25
 
 #   define OPEN_READER(name, gb)\
-		int name##_index= (gb)->index;\
-		int name##_cache= 0;\
-
+	int name##_index= (gb)->index;\
+	int name##_cache= 0;\
+	 
 #   define CLOSE_READER(name, gb)\
-		(gb)->index= name##_index;\
-
+	(gb)->index= name##_index;\
+	 
 #   define UPDATE_CACHE(name, gb)\
-		name##_cache= unaligned32_be( ((uint8_t *)(gb)->buffer)+(name##_index>>3) ) << (name##_index&0x07);\
-
+	name##_cache= unaligned32_be( ((uint8_t *)(gb)->buffer)+(name##_index>>3) ) << (name##_index&0x07);\
+	 
 #   define SKIP_CACHE(name, gb, num)\
-		name##_cache <<= (num);\
-
+	name##_cache <<= (num);\
+	 
 // FIXME name?
 #   define SKIP_COUNTER(name, gb, num)\
-		name##_index += (num);\
-
+	name##_index += (num);\
+	 
 #   define SKIP_BITS(name, gb, num)\
-		{\
-			SKIP_CACHE(name, gb, num)\
-			SKIP_COUNTER(name, gb, num)\
-		}\
-
+	{\
+		SKIP_CACHE(name, gb, num)\
+		SKIP_COUNTER(name, gb, num)\
+	}\
+	 
 #   define LAST_SKIP_BITS(name, gb, num) SKIP_COUNTER(name, gb, num)
 #   define LAST_SKIP_CACHE(name, gb, num) ;
 
 #   define SHOW_UBITS(name, gb, num)\
-		NEG_USR32(name##_cache, num)
+	NEG_USR32(name##_cache, num)
 
 #   define SHOW_SBITS(name, gb, num)\
-		NEG_SSR32(name##_cache, num)
+	NEG_SSR32(name##_cache, num)
 
 #   define GET_CACHE(name, gb)\
-		((uint32_t)name##_cache)
+	((uint32_t)name##_cache)
 
-static inline int get_bits_count(GetBitContext *s){
+static inline int get_bits_count(GetBitContext *s)
+{
 	return s->index;
 }
 #elif defined LIBMPEG2_BITSTREAM_READER
@@ -571,15 +569,15 @@ static inline int get_bits_count(GetBitContext *s){
 #   define MIN_CACHE_BITS 17
 
 #   define OPEN_READER(name, gb)\
-		int name##_bit_count=(gb)->bit_count;\
-		int name##_cache= (gb)->cache;\
-		uint8_t * name##_buffer_ptr=(gb)->buffer_ptr;\
-
+	int name##_bit_count=(gb)->bit_count;\
+	int name##_cache= (gb)->cache;\
+	uint8_t * name##_buffer_ptr=(gb)->buffer_ptr;\
+	 
 #   define CLOSE_READER(name, gb)\
-		(gb)->bit_count= name##_bit_count;\
-		(gb)->cache= name##_cache;\
-		(gb)->buffer_ptr= name##_buffer_ptr;\
-
+	(gb)->bit_count= name##_bit_count;\
+	(gb)->cache= name##_cache;\
+	(gb)->buffer_ptr= name##_buffer_ptr;\
+	 
 #ifdef LIBMPEG2_BITSTREAM_READER_HACK
 
 #   define UPDATE_CACHE(name, gb)\
@@ -588,7 +586,7 @@ static inline int get_bits_count(GetBitContext *s){
 		((uint16_t*)name##_buffer_ptr)++;\
 		name##_bit_count-= 16;\
 	}\
-
+	 
 #else
 
 #   define UPDATE_CACHE(name, gb)\
@@ -597,35 +595,36 @@ static inline int get_bits_count(GetBitContext *s){
 		name##_buffer_ptr+=2;\
 		name##_bit_count-= 16;\
 	}\
-
+	 
 #endif
 
 #   define SKIP_CACHE(name, gb, num)\
-		name##_cache <<= (num);\
-
+	name##_cache <<= (num);\
+	 
 #   define SKIP_COUNTER(name, gb, num)\
-		name##_bit_count += (num);\
-
+	name##_bit_count += (num);\
+	 
 #   define SKIP_BITS(name, gb, num)\
-		{\
-			SKIP_CACHE(name, gb, num)\
-			SKIP_COUNTER(name, gb, num)\
-		}\
-
+	{\
+		SKIP_CACHE(name, gb, num)\
+		SKIP_COUNTER(name, gb, num)\
+	}\
+	 
 #   define LAST_SKIP_BITS(name, gb, num) SKIP_BITS(name, gb, num)
 #   define LAST_SKIP_CACHE(name, gb, num) SKIP_CACHE(name, gb, num)
 
 #   define SHOW_UBITS(name, gb, num)\
-		NEG_USR32(name##_cache, num)
+	NEG_USR32(name##_cache, num)
 
 #   define SHOW_SBITS(name, gb, num)\
-		NEG_SSR32(name##_cache, num)
+	NEG_SSR32(name##_cache, num)
 
 #   define GET_CACHE(name, gb)\
-		((uint32_t)name##_cache)
+	((uint32_t)name##_cache)
 
-static inline int get_bits_count(GetBitContext *s){
-	return (s->buffer_ptr - s->buffer)*8 - 16 + s->bit_count;
+static inline int get_bits_count(GetBitContext *s)
+{
+	return (s->buffer_ptr - s->buffer) * 8 - 16 + s->bit_count;
 }
 
 #elif defined A32_BITSTREAM_READER
@@ -633,17 +632,17 @@ static inline int get_bits_count(GetBitContext *s){
 #   define MIN_CACHE_BITS 32
 
 #   define OPEN_READER(name, gb)\
-		int name##_bit_count=(gb)->bit_count;\
-		uint32_t name##_cache0= (gb)->cache0;\
-		uint32_t name##_cache1= (gb)->cache1;\
-		uint32_t * name##_buffer_ptr=(gb)->buffer_ptr;\
-
+	int name##_bit_count=(gb)->bit_count;\
+	uint32_t name##_cache0= (gb)->cache0;\
+	uint32_t name##_cache1= (gb)->cache1;\
+	uint32_t * name##_buffer_ptr=(gb)->buffer_ptr;\
+	 
 #   define CLOSE_READER(name, gb)\
-		(gb)->bit_count= name##_bit_count;\
-		(gb)->cache0= name##_cache0;\
-		(gb)->cache1= name##_cache1;\
-		(gb)->buffer_ptr= name##_buffer_ptr;\
-
+	(gb)->bit_count= name##_bit_count;\
+	(gb)->cache0= name##_cache0;\
+	(gb)->cache1= name##_cache1;\
+	(gb)->buffer_ptr= name##_buffer_ptr;\
+	 
 #   define UPDATE_CACHE(name, gb)\
 	if(name##_bit_count > 0){\
 		const uint32_t next= be2me_32( *name##_buffer_ptr );\
@@ -652,45 +651,46 @@ static inline int get_bits_count(GetBitContext *s){
 		name##_buffer_ptr++;\
 		name##_bit_count-= 32;\
 	}\
-
+	 
 #ifdef ARCH_X86
 #   define SKIP_CACHE(name, gb, num)\
-		asm(\
-			"shldl %2, %1, %0		\n\t"\
-			"shll %2, %1		\n\t"\
-			: "+r" (name##_cache0), "+r" (name##_cache1)\
-			: "Ic" ((uint8_t)num)\
-		   );
+	asm(\
+	    "shldl %2, %1, %0		\n\t"\
+	    "shll %2, %1		\n\t"\
+	    : "+r" (name##_cache0), "+r" (name##_cache1)\
+	    : "Ic" ((uint8_t)num)\
+	   );
 #else
 #   define SKIP_CACHE(name, gb, num)\
-		name##_cache0 <<= (num);\
-		name##_cache0 |= NEG_USR32(name##_cache1,num);\
-		name##_cache1 <<= (num);
+	name##_cache0 <<= (num);\
+	name##_cache0 |= NEG_USR32(name##_cache1,num);\
+	name##_cache1 <<= (num);
 #endif
 
 #   define SKIP_COUNTER(name, gb, num)\
-		name##_bit_count += (num);\
-
+	name##_bit_count += (num);\
+	 
 #   define SKIP_BITS(name, gb, num)\
-		{\
-			SKIP_CACHE(name, gb, num)\
-			SKIP_COUNTER(name, gb, num)\
-		}\
-
+	{\
+		SKIP_CACHE(name, gb, num)\
+		SKIP_COUNTER(name, gb, num)\
+	}\
+	 
 #   define LAST_SKIP_BITS(name, gb, num) SKIP_BITS(name, gb, num)
 #   define LAST_SKIP_CACHE(name, gb, num) SKIP_CACHE(name, gb, num)
 
 #   define SHOW_UBITS(name, gb, num)\
-		NEG_USR32(name##_cache0, num)
+	NEG_USR32(name##_cache0, num)
 
 #   define SHOW_SBITS(name, gb, num)\
-		NEG_SSR32(name##_cache0, num)
+	NEG_SSR32(name##_cache0, num)
 
 #   define GET_CACHE(name, gb)\
-		(name##_cache0)
+	(name##_cache0)
 
-static inline int get_bits_count(GetBitContext *s){
-	return ((uint8_t*)s->buffer_ptr - s->buffer)*8 - 32 + s->bit_count;
+static inline int get_bits_count(GetBitContext *s)
+{
+	return ((uint8_t*)s->buffer_ptr - s->buffer) * 8 - 32 + s->bit_count;
 }
 
 #endif
@@ -701,29 +701,31 @@ static inline int get_bits_count(GetBitContext *s){
  * @param n length in bits
  * @author BERO
  */
-static inline int get_xbits(GetBitContext *s, int n){
+static inline int get_xbits(GetBitContext *s, int n)
+{
 	register int tmp;
 	register int32_t cache;
 	OPEN_READER(re, s)
 	UPDATE_CACHE(re, s)
-	cache = GET_CACHE(re,s);
-	if ((int32_t)cache<0) { //MSB=1
-		tmp = NEG_USR32(cache,n);
-	} else {
-	//   tmp = (-1<<n) | NEG_USR32(cache,n) + 1; mpeg12.c algo
-	//   tmp = - (NEG_USR32(cache,n) ^ ((1 << n) - 1)); h263.c algo
-		tmp = - NEG_USR32(~cache,n);
+	cache = GET_CACHE(re, s);
+	if ((int32_t)cache < 0) //MSB=1
+		tmp = NEG_USR32(cache, n);
+	else {
+		//   tmp = (-1<<n) | NEG_USR32(cache,n) + 1; mpeg12.c algo
+		//   tmp = - (NEG_USR32(cache,n) ^ ((1 << n) - 1)); h263.c algo
+		tmp = - NEG_USR32(~cache, n);
 	}
 	LAST_SKIP_BITS(re, s, n)
 	CLOSE_READER(re, s)
 	return tmp;
 }
 
-static inline int get_sbits(GetBitContext *s, int n){
+static inline int get_sbits(GetBitContext *s, int n)
+{
 	register int tmp;
 	OPEN_READER(re, s)
 	UPDATE_CACHE(re, s)
-	tmp= SHOW_SBITS(re, s, n);
+	tmp = SHOW_SBITS(re, s, n);
 	LAST_SKIP_BITS(re, s, n)
 	CLOSE_READER(re, s)
 	return tmp;
@@ -733,11 +735,12 @@ static inline int get_sbits(GetBitContext *s, int n){
  * reads 0-17 bits.
  * Note, the alt bitstream reader can read upto 25 bits, but the libmpeg2 reader cant
  */
-static inline unsigned int get_bits(GetBitContext *s, int n){
+static inline unsigned int get_bits(GetBitContext *s, int n)
+{
 	register int tmp;
 	OPEN_READER(re, s)
 	UPDATE_CACHE(re, s)
-	tmp= SHOW_UBITS(re, s, n);
+	tmp = SHOW_UBITS(re, s, n);
 	LAST_SKIP_BITS(re, s, n)
 	CLOSE_READER(re, s)
 	return tmp;
@@ -749,56 +752,60 @@ unsigned int get_bits_long(GetBitContext *s, int n);
  * shows 0-17 bits.
  * Note, the alt bitstream reader can read upto 25 bits, but the libmpeg2 reader cant
  */
-static inline unsigned int show_bits(GetBitContext *s, int n){
+static inline unsigned int show_bits(GetBitContext *s, int n)
+{
 	register int tmp;
 	OPEN_READER(re, s)
 	UPDATE_CACHE(re, s)
-	tmp= SHOW_UBITS(re, s, n);
-//	CLOSE_READER(re, s)
+	tmp = SHOW_UBITS(re, s, n);
+	//	CLOSE_READER(re, s)
 	return tmp;
 }
 
 unsigned int show_bits_long(GetBitContext *s, int n);
 
-static inline void skip_bits(GetBitContext *s, int n){
- //Note gcc seems to optimize this to s->index+=n for the ALT_READER :))
+static inline void skip_bits(GetBitContext *s, int n)
+{
+	//Note gcc seems to optimize this to s->index+=n for the ALT_READER :))
 	OPEN_READER(re, s)
 	UPDATE_CACHE(re, s)
 	LAST_SKIP_BITS(re, s, n)
 	CLOSE_READER(re, s)
 }
 
-static inline unsigned int get_bits1(GetBitContext *s){
+static inline unsigned int get_bits1(GetBitContext *s)
+{
 #ifdef ALT_BITSTREAM_READER
-	int index= s->index;
-	uint8_t result= s->buffer[ index>>3 ];
-	result<<= (index&0x07);
-	result>>= 8 - 1;
+	int index = s->index;
+	uint8_t result = s->buffer[ index >> 3 ];
+	result <<= (index & 0x07);
+	result >>= 8 - 1;
 	index++;
-	s->index= index;
-
+	s->index = index;
 	return result;
 #else
 	return get_bits(s, 1);
 #endif
 }
 
-static inline unsigned int show_bits1(GetBitContext *s){
+static inline unsigned int show_bits1(GetBitContext *s)
+{
 	return show_bits(s, 1);
 }
 
-static inline void skip_bits1(GetBitContext *s){
+static inline void skip_bits1(GetBitContext *s)
+{
 	skip_bits(s, 1);
 }
 
 void init_get_bits(GetBitContext *s,
-				   const uint8_t *buffer, int buffer_size);
+                   const uint8_t *buffer, int buffer_size);
 
 int check_marker(GetBitContext *s, const char *msg);
 void align_get_bits(GetBitContext *s);
 int init_vlc(VLC *vlc, int nb_bits, int nb_codes,
-			 const void *bits, int bits_wrap, int bits_size,
-			 const void *codes, int codes_wrap, int codes_size);
+             const void *bits, int bits_wrap, int bits_size,
+             const void *codes, int codes_wrap, int codes_size);
 void free_vlc(VLC *vlc);
 
 /**
@@ -808,69 +815,66 @@ void free_vlc(VLC *vlc);
  * is undefined
  */
 #define GET_VLC(code, name, gb, table, bits, max_depth)\
-{\
-	int n, index, nb_bits;\
-\
-	index= SHOW_UBITS(name, gb, bits);\
-	code = table[index][0];\
-	n	= table[index][1];\
-\
-	if(max_depth > 1 && n < 0){\
-		LAST_SKIP_BITS(name, gb, bits)\
-		UPDATE_CACHE(name, gb)\
-\
-		nb_bits = -n;\
-\
-		index= SHOW_UBITS(name, gb, nb_bits) + code;\
+	{\
+		int n, index, nb_bits;\
+		\
+		index= SHOW_UBITS(name, gb, bits);\
 		code = table[index][0];\
 		n	= table[index][1];\
-		if(max_depth > 2 && n < 0){\
-			LAST_SKIP_BITS(name, gb, nb_bits)\
+		\
+		if(max_depth > 1 && n < 0){\
+			LAST_SKIP_BITS(name, gb, bits)\
 			UPDATE_CACHE(name, gb)\
-\
+			\
 			nb_bits = -n;\
-\
+			\
 			index= SHOW_UBITS(name, gb, nb_bits) + code;\
 			code = table[index][0];\
 			n	= table[index][1];\
+			if(max_depth > 2 && n < 0){\
+				LAST_SKIP_BITS(name, gb, nb_bits)\
+				UPDATE_CACHE(name, gb)\
+				\
+				nb_bits = -n;\
+				\
+				index= SHOW_UBITS(name, gb, nb_bits) + code;\
+				code = table[index][0];\
+				n	= table[index][1];\
+			}\
 		}\
-	}\
-	SKIP_BITS(name, gb, n)\
-}
+		SKIP_BITS(name, gb, n)\
+	}
 
 #define GET_RL_VLC(level, run, name, gb, table, bits, max_depth)\
-{\
-	int n, index, nb_bits;\
-\
-	index= SHOW_UBITS(name, gb, bits);\
-	level = table[index].level;\
-	n	 = table[index].len;\
-\
-	if(max_depth > 1 && n < 0){\
-		LAST_SKIP_BITS(name, gb, bits)\
-		UPDATE_CACHE(name, gb)\
-\
-		nb_bits = -n;\
-\
-		index= SHOW_UBITS(name, gb, nb_bits) + level;\
+	{\
+		int n, index, nb_bits;\
+		\
+		index= SHOW_UBITS(name, gb, bits);\
 		level = table[index].level;\
 		n	 = table[index].len;\
-	}\
-	run= table[index].run;\
-	SKIP_BITS(name, gb, n)\
-}
+		\
+		if(max_depth > 1 && n < 0){\
+			LAST_SKIP_BITS(name, gb, bits)\
+			UPDATE_CACHE(name, gb)\
+			\
+			nb_bits = -n;\
+			\
+			index= SHOW_UBITS(name, gb, nb_bits) + level;\
+			level = table[index].level;\
+			n	 = table[index].len;\
+		}\
+		run= table[index].run;\
+		SKIP_BITS(name, gb, n)\
+	}
 
 // deprecated, dont use get_vlc for new code, use get_vlc2 instead or use GET_VLC directly
 static inline int get_vlc(GetBitContext *s, VLC *vlc)
 {
 	int code;
-	VLC_TYPE (*table)[2]= vlc->table;
-
+	VLC_TYPE(*table)[2] = vlc->table;
 	OPEN_READER(re, s)
 	UPDATE_CACHE(re, s)
-
 	GET_VLC(code, re, s, table, vlc->bits, 3)
-
 	CLOSE_READER(re, s)
 	return code;
 }
@@ -883,16 +887,13 @@ static inline int get_vlc(GetBitContext *s, VLC *vlc)
  *				  read the longest vlc code
  *				  = (max_vlc_length + bits - 1) / bits
  */
-static always_inline int get_vlc2(GetBitContext *s, VLC_TYPE (*table)[2],
-								  int bits, int max_depth)
+static always_inline int get_vlc2(GetBitContext *s, VLC_TYPE(*table)[2],
+                                  int bits, int max_depth)
 {
 	int code;
-
 	OPEN_READER(re, s)
 	UPDATE_CACHE(re, s)
-
 	GET_VLC(code, re, s, table, bits, max_depth)
-
 	CLOSE_READER(re, s)
 	return code;
 }
@@ -901,43 +902,41 @@ static always_inline int get_vlc2(GetBitContext *s, VLC_TYPE (*table)[2],
 
 #ifdef TRACE
 
-static inline void print_bin(int bits, int n){
+static inline void print_bin(int bits, int n)
+{
 #if _DEBUG
 	int i;
-
-	for(i=n-1; i>=0; i--){
-		ZZLog::Log("%d", (bits>>i)&1);
-	}
-	for(i=n; i<24; i++)
+	for (i = n - 1; i >= 0; i--)
+		ZZLog::Log("%d", (bits >> i) & 1);
+	for (i = n; i < 24; i++)
 		ZZLog::Log(" ");
 #endif
 }
 
-static inline int get_bits_trace(GetBitContext *s, int n, char *file, char *func, int line){
-	int r= get_bits(s, n);
-
+static inline int get_bits_trace(GetBitContext *s, int n, char *file, char *func, int line)
+{
+	int r = get_bits(s, n);
 	print_bin(r, n);
-	ZZLog::Debug_Log("%5d %2d %3d bit @%5d in %s %s:%d", r, n, r, get_bits_count(s)-n, file, func, line);
+	ZZLog::Debug_Log("%5d %2d %3d bit @%5d in %s %s:%d", r, n, r, get_bits_count(s) - n, file, func, line);
 	return r;
 }
-static inline int get_vlc_trace(GetBitContext *s, VLC_TYPE (*table)[2], int bits, int max_depth, char *file, char *func, int line){
-	int show= show_bits(s, 24);
-	int pos= get_bits_count(s);
-	int r= get_vlc2(s, table, bits, max_depth);
-	int len= get_bits_count(s) - pos;
-	int bits2= show>>(24-len);
-
+static inline int get_vlc_trace(GetBitContext *s, VLC_TYPE(*table)[2], int bits, int max_depth, char *file, char *func, int line)
+{
+	int show = show_bits(s, 24);
+	int pos = get_bits_count(s);
+	int r = get_vlc2(s, table, bits, max_depth);
+	int len = get_bits_count(s) - pos;
+	int bits2 = show >> (24 - len);
 	print_bin(bits2, len);
-
 	ZZLog::Debug_Log("%5d %2d %3d vlc @%5d in %s %s:%d", bits2, len, r, pos, file, func, line);
 	return r;
 }
-static inline int get_xbits_trace(GetBitContext *s, int n, char *file, char *func, int line){
-	int show= show_bits(s, n);
-	int r= get_xbits(s, n);
-
+static inline int get_xbits_trace(GetBitContext *s, int n, char *file, char *func, int line)
+{
+	int show = show_bits(s, n);
+	int r = get_xbits(s, n);
 	print_bin(show, n);
-	ZZLog::Debug_Log("%5d %2d %3d xbt @%5d in %s %s:%d", show, n, r, get_bits_count(s)-n, file, func, line);
+	ZZLog::Debug_Log("%5d %2d %3d xbt @%5d in %s %s:%d", show, n, r, get_bits_count(s) - n, file, func, line);
 	return r;
 }
 
@@ -983,7 +982,6 @@ extern const uint8_t ff_log2_tab[256];
 static inline int av_log2(unsigned int v)
 {
 	int n;
-
 	n = 0;
 	if (v & 0xffff0000) {
 		v >>= 16;
@@ -994,21 +992,18 @@ static inline int av_log2(unsigned int v)
 		n += 8;
 	}
 	n += ff_log2_tab[v];
-
 	return n;
 }
 
 static inline int av_log2_16bit(unsigned int v)
 {
 	int n;
-
 	n = 0;
 	if (v & 0xff00) {
 		v >>= 8;
 		n += 8;
 	}
 	n += ff_log2_tab[v];
-
 	return n;
 }
 
@@ -1021,13 +1016,11 @@ static inline int mid_pred(int a, int b, int c)
 	if (b < vmin)
 		vmin = b;
 	else
-	vmax = b;
-
+		vmax = b;
 	if (c < vmin)
 		vmin = c;
 	else if (c > vmax)
 		vmax = c;
-
 	return a + b + c - vmin - vmax;
 }
 
@@ -1048,17 +1041,15 @@ int64_t ff_gcd(int64_t a, int64_t b);
 
 static inline int ff_sqrt(int a)
 {
-	int ret=0;
+	int ret = 0;
 	int s;
-	int ret_sq=0;
-
-	if(a<128) return ff_sqrt_tab[a];
-
-	for(s=15; s>=0; s--){
-		int b= ret_sq + (1<<(s*2)) + (ret<<s)*2;
-		if(b<=a){
-			ret_sq=b;
-			ret+= 1<<s;
+	int ret_sq = 0;
+	if (a < 128) return ff_sqrt_tab[a];
+	for (s = 15; s >= 0; s--) {
+		int b = ret_sq + (1 << (s * 2)) + (ret << s) * 2;
+		if (b <= a) {
+			ret_sq = b;
+			ret += 1 << s;
 		}
 	}
 	return ret;
@@ -1067,10 +1058,10 @@ static inline int ff_sqrt(int a)
 /**
  * converts fourcc string to int
  */
-static inline int ff_get_fourcc(const char *s){
-	assert( strlen(s)==4 );
-
-	return (s[0]) + (s[1]<<8) + (s[2]<<16) + (s[3]<<24);
+static inline int ff_get_fourcc(const char *s)
+{
+	assert(strlen(s) == 4);
+	return (s[0]) + (s[1] << 8) + (s[2] << 16) + (s[3] << 24);
 }
 
 #define MKTAG(a,b,c,d) (a | (b << 8) | (c << 16) | (d << 24))
@@ -1082,65 +1073,65 @@ void ff_float2fraction(int *nom_arg, int *denom_arg, double f, int max);
 
 #ifdef ARCH_X86
 #define MASK_ABS(mask, level)\
-			asm volatile(\
-		"cdq			\n\t"\
-		"xorl %1, %0		\n\t"\
-		"subl %1, %0		\n\t"\
-		: "+a" (level), "=&d" (mask)\
-		);
+	asm volatile(\
+	             "cdq			\n\t"\
+	             "xorl %1, %0		\n\t"\
+	             "subl %1, %0		\n\t"\
+	             : "+a" (level), "=&d" (mask)\
+	            );
 #else
 #define MASK_ABS(mask, level)\
-			mask= level>>31;\
-			level= (level^mask)-mask;
+	mask= level>>31;\
+	level= (level^mask)-mask;
 #endif
 
 
 #if __CPU__ >= 686 && !defined(RUNTIME_CPUDETECT)
 #define COPY3_IF_LT(x,y,a,b,c,d)\
-asm volatile (\
-	"cmpl %0, %3	\n\t"\
-	"cmovl %3, %0	\n\t"\
-	"cmovl %4, %1	\n\t"\
-	"cmovl %5, %2	\n\t"\
-	: "+r" (x), "+r" (a), "+r" (c)\
-	: "r" (y), "r" (b), "r" (d)\
-);
+	asm volatile (\
+	              "cmpl %0, %3	\n\t"\
+	              "cmovl %3, %0	\n\t"\
+	              "cmovl %4, %1	\n\t"\
+	              "cmovl %5, %2	\n\t"\
+	              : "+r" (x), "+r" (a), "+r" (c)\
+	              : "r" (y), "r" (b), "r" (d)\
+	             );
 #else
 #define COPY3_IF_LT(x,y,a,b,c,d)\
-if((y)<(x)){\
-	 (x)=(y);\
-	 (a)=(b);\
-	 (c)=(d);\
-}
+	if((y)<(x)){\
+		(x)=(y);\
+		(a)=(b);\
+		(c)=(d);\
+	}
 #endif
 
 #ifdef ARCH_X86
 static inline long long rdtsc()
 {
 	long long l;
-	asm volatile(	"rdtsc\n\t"
-		: "=A" (l)
-	);
+	asm volatile("rdtsc\n\t"
+	             : "=A"(l)
+	            );
 	return l;
 }
 
 #define START_TIMER \
-static uint64_t tsum=0;\
-static int tcount=0;\
-static int tskip_count=0;\
-uint64_t tend;\
-uint64_t tstart= rdtsc();\
-
+	static uint64_t tsum=0;\
+	static int tcount=0;\
+	static int tskip_count=0;\
+	uint64_t tend;\
+	uint64_t tstart= rdtsc();\
+	 
 #define STOP_TIMER(id) \
-tend= rdtsc();\
-if(tcount<2 || tend - tstart < 4*tsum/tcount){\
-	tsum+= tend - tstart;\
-	tcount++;\
-}else\
-	tskip_count++;\
-if(256*256*256*64%(tcount+tskip_count)==0){\
-	fprintf(stderr, "%Ld dezicycles in %s, %d runs, %d skips\n", tsum*10/tcount, id, tcount, tskip_count);\
-}
+	tend= rdtsc();\
+	if(tcount<2 || tend - tstart < 4*tsum/tcount){\
+		tsum+= tend - tstart;\
+		tcount++;\
+	}else\
+		tskip_count++;\
+	if(256*256*256*64%(tcount+tskip_count)==0){\
+		fprintf(stderr, "%Ld dezicycles in %s, %d runs, %d skips\n", tsum*10/tcount, id, tcount, tskip_count);\
+	}
 #endif
 
 #define CLAMP_TO_8BIT(d) ((d > 0xff) ? 0xff : (d < 0) ? 0 : d)
@@ -1151,13 +1142,13 @@ if(256*256*256*64%(tcount+tskip_count)==0){\
 #define realloc please_use_av_realloc
 
 #define CHECKED_ALLOCZ(p, size)\
-{\
-	p= av_mallocz(size);\
-	if(p==NULL && (size)!=0){\
-		perror("malloc");\
-		goto fail;\
-	}\
-}
+	{\
+		p= av_mallocz(size);\
+		if(p==NULL && (size)!=0){\
+			perror("malloc");\
+			goto fail;\
+		}\
+	}
 
 #endif /* HAVE_AV_CONFIG_H */
 

@@ -46,7 +46,7 @@ protected:
 	virtual void ResetDevice() {}
 	virtual GSTexture* GetOutput() = 0;
 
-    #ifdef _WINDOWS
+#ifdef _WINDOWS
 
 	HWND m_hWnd;
 	WNDPROC m_wndproc;
@@ -55,7 +55,7 @@ protected:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	LRESULT OnMessage(UINT message, WPARAM wParam, LPARAM lParam);
 
-	#endif
+#endif
 
 	GSWnd* m_wnd;
 
@@ -65,7 +65,7 @@ public:
 
 	virtual bool Create(void* hWnd);
 	virtual void VSync();
-	virtual bool MakeSnapshot(const string& path);
+	virtual bool MakeSnapshot(const string &path);
 };
 
 template<class Vertex>
@@ -81,7 +81,6 @@ protected:
 	{
 		m_count = 0;
 		m_vl.RemoveAll();
-
 		GPURenderer::Reset();
 	}
 
@@ -92,8 +91,7 @@ protected:
 
 	void FlushPrim()
 	{
-		if(m_count > 0)
-		{
+		if (m_count > 0) {
 			/*
 			Dump("db");
 
@@ -109,11 +107,8 @@ protected:
 				Dump(format("da_%d_%d_%d_%d_%d", m_env.STATUS.TP, r.left, r.top, r.right, r.bottom).c_str(), m_env.STATUS.TP, r, false);
 			}
 			*/
-
 			Draw();
-
 			m_count = 0;
-
 			//Dump("dc", false);
 		}
 	}
@@ -122,63 +117,48 @@ protected:
 	{
 		int maxcount = std::max<int>(m_maxcount * 3 / 2, 10000);
 		Vertex* vertices = (Vertex*)_aligned_malloc(sizeof(Vertex) * maxcount, 32);
-
-		if (!vertices)
-		{
+		if (!vertices) {
 			printf("GSdx: failed to allocate %d bytes for verticles.\n", sizeof(Vertex) * maxcount);
 			throw GSDXError();
 		}
-
-		if (m_vertices != NULL)
-		{
+		if (m_vertices != NULL) {
 			memcpy(vertices, m_vertices, sizeof(Vertex) * m_maxcount);
 			_aligned_free(m_vertices);
 		}
-
 		m_vertices = vertices;
 		m_maxcount = maxcount - 100;
 	}
 
-	__forceinline Vertex* DrawingKick(int& count)
+	__forceinline Vertex* DrawingKick(int &count)
 	{
 		count = (int)m_env.PRIM.VTX;
-
-		if(m_vl.GetCount() < count)
-		{
+		if (m_vl.GetCount() < count)
 			return NULL;
-		}
-
-		if(m_count >= m_maxcount)
-		{
+		if (m_count >= m_maxcount)
 			GrowVertexBuffer();
-		}
-
 		Vertex* v = &m_vertices[m_count];
-
-		switch(m_env.PRIM.TYPE)
-		{
-		case GPU_POLYGON:
-			m_vl.GetAt(0, v[0]);
-			m_vl.GetAt(1, v[1]);
-			m_vl.GetAt(2, v[2]);
-			m_vl.RemoveAll();
-			break;
-		case GPU_LINE:
-			m_vl.GetAt(0, v[0]);
-			m_vl.GetAt(1, v[1]);
-			m_vl.RemoveAll();
-			break;
-		case GPU_SPRITE:
-			m_vl.GetAt(0, v[0]);
-			m_vl.GetAt(1, v[1]);
-			m_vl.RemoveAll();
-			break;
-		default:
-			ASSERT(0);
-			m_vl.RemoveAll();
-			return NULL;
+		switch (m_env.PRIM.TYPE) {
+			case GPU_POLYGON:
+				m_vl.GetAt(0, v[0]);
+				m_vl.GetAt(1, v[1]);
+				m_vl.GetAt(2, v[2]);
+				m_vl.RemoveAll();
+				break;
+			case GPU_LINE:
+				m_vl.GetAt(0, v[0]);
+				m_vl.GetAt(1, v[1]);
+				m_vl.RemoveAll();
+				break;
+			case GPU_SPRITE:
+				m_vl.GetAt(0, v[0]);
+				m_vl.GetAt(1, v[1]);
+				m_vl.RemoveAll();
+				break;
+			default:
+				ASSERT(0);
+				m_vl.RemoveAll();
+				return NULL;
 		}
-
 		return v;
 	}
 
@@ -197,6 +177,6 @@ public:
 
 	virtual ~GPURendererT()
 	{
-		if(m_vertices) _aligned_free(m_vertices);
+		if (m_vertices) _aligned_free(m_vertices);
 	}
 };

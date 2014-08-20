@@ -3,11 +3,11 @@
 
 #define THSEMAP_VER	0x101
 
-struct thsema_sema{
-    unsigned int	attr;
-    unsigned int	option;
-    int			initCount;
-    int			maxCount;
+struct thsema_sema {
+	unsigned int	attr;
+	unsigned int	option;
+	int			initCount;
+	int			maxCount;
 };
 
 int CreateSema(struct thsema_sema* sema);	// 4(15)

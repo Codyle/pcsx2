@@ -16,7 +16,7 @@ typedef struct {
 // info about a module file
 typedef struct module_info {
 	int		type;			// module type (MOD_TYPE_*)
-	int		(*entry)(void*);// module entry point address
+	int	(*entry)(void*); // module entry point address
 	int		gpValue;		// module gp value
 	int		progVAddr;		// programs virtual address
 	int		textSize;		// size of text section
@@ -73,7 +73,7 @@ typedef struct tag_COFF_AOUTHDR {
 	int	gp_value;	//+34
 } COFF_AOUTHDR, COHDR;		//=38
 
-typedef struct tag_CHDR{
+typedef struct tag_CHDR {
 	short	f_magic;	//+00
 	short	f_nscns;	//+02
 	int	f_timdat;	//+04
@@ -83,7 +83,7 @@ typedef struct tag_CHDR{
 	short	f_flags;	//+12
 } CHDR;				//=14
 
-typedef struct tag_COFF_HEADER{		//same header as above
+typedef struct tag_COFF_HEADER {		//same header as above
 	short	f_magic;	//+00
 	short	f_nscns;	//+02
 	int	f_timdat;	//+04
@@ -94,8 +94,7 @@ typedef struct tag_COFF_HEADER{		//same header as above
 	COFF_AOUTHDR	opthdr;	//+14
 } COFF_HEADER;			//=4C
 
-typedef struct tag_COFF_scnhdr
-{
+typedef struct tag_COFF_scnhdr {
 	char	s_name[8];	//+00
 	int	s_paddr;	//+08
 	int	s_vaddr;	//+0C
@@ -108,16 +107,15 @@ typedef struct tag_COFF_scnhdr
 	int	s_flags;	//+24
 } COFF_scnhdr, SHDR;		//=28
 
-typedef struct _fileInfo
-{
+typedef struct _fileInfo {
 	u32			type,		//+00
-				entry,		//+04
-				gp_value,	//+08
-				p1_vaddr,	//+0C
-				text_size,	//+10
-				data_size,	//+14
-				bss_size,	//+18
-				p1_memsz;	//+1C
+	                        entry,		//+04
+	                        gp_value,	//+08
+	                        p1_vaddr,	//+0C
+	                        text_size,	//+10
+	                        data_size,	//+14
+	                        bss_size,	//+18
+	                        p1_memsz;	//+1C
 	moduleInfo	*moduleinfo;	//+20
 } fileInfo;
 
@@ -143,24 +141,24 @@ typedef struct {
 //6=The array element must specify location and size of the program header table.
 
 typedef struct {
-    u32 r_offset;
-    u32 r_info;
+	u32 r_offset;
+	u32 r_info;
 } ELF_REL;
 
 typedef struct {
-    char* moduleinfo;
-    u32 entry; //+04
-    u32 gp_value; //+08
-    u32 text_size; //+0C
-    u32 data_size; //+10
-    u32 bss_size;//+14
-    short moduleversion;//+18
-    char* modulename;   //+1A
+	char* moduleinfo;
+	u32 entry; //+04
+	u32 gp_value; //+08
+	u32 text_size; //+0C
+	u32 data_size; //+10
+	u32 bss_size;//+14
+	short moduleversion;//+18
+	char* modulename;   //+1A
 } ELF_IOPMOD;
 
 typedef struct {
 	u32	sh_name;        //+00 No. to the index of the Section header stringtable index
-    u32	sh_type;        //+04 See notes2
+	u32	sh_type;        //+04 See notes2
 	u32	sh_flags;       //+08 see notes3
 	u32	sh_addr;        //+0C Section start address
 	u32	sh_offset;      //+10 Offset from start of file to section
@@ -206,17 +204,17 @@ typedef struct {
 	u32 next;		//+00
 	char	*name;		//+04
 	short	version,	//+08
-		flags,		//+0A
-		modid,		//+0C
-		HE;		//+0E
+	        flags,		//+0A
+	        modid,		//+0C
+	        HE;		//+0E
 	u32	entry,		//+10
-		gp_value,	//+14
-		p1_vaddr,	//+18
-		text_size,	//+1C
-		data_size,	//+20
-		bss_size,	//+24
-		H28,		//+28
-		H2C;		//+2C
+	        gp_value,	//+14
+	        p1_vaddr,	//+18
+	        text_size,	//+1C
+	        data_size,	//+20
+	        bss_size,	//+24
+	        H28,		//+28
+	        H2C;		//+2C
 } imageInfo;
 
 // pass in the memory to load the elf file from

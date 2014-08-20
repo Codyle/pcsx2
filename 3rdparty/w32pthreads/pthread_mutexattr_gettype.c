@@ -38,18 +38,12 @@
 
 
 int
-pthread_mutexattr_gettype (pthread_mutexattr_t * attr, int *kind)
+pthread_mutexattr_gettype(pthread_mutexattr_t * attr, int *kind)
 {
-  int result = 0;
-
-  if (attr != NULL && *attr != NULL && kind != NULL)
-    {
-      *kind = (*attr)->kind;
-    }
-  else
-    {
-      result = EINVAL;
-    }
-
-  return (result);
+	int result = 0;
+	if (attr != NULL && *attr != NULL && kind != NULL)
+		*kind = (*attr)->kind;
+	else
+		result = EINVAL;
+	return (result);
 }

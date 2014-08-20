@@ -48,121 +48,145 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxHyperlinkCtrlNameStr[];
 class WXDLLIMPEXP_ADV wxHyperlinkCtrl : public wxControl
 {
 public:
-    // Default constructor (for two-step construction).
-    wxHyperlinkCtrl() { }
+	// Default constructor (for two-step construction).
+	wxHyperlinkCtrl() { }
 
-    // Constructor.
-    wxHyperlinkCtrl(wxWindow *parent,
-                    wxWindowID id,
-                    const wxString& label, const wxString& url,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxHL_DEFAULT_STYLE,
-                    const wxString& name = wxHyperlinkCtrlNameStr)
-    {
-        (void)Create(parent, id, label, url, pos, size, style, name);
-    }
+	// Constructor.
+	wxHyperlinkCtrl(wxWindow *parent,
+	                wxWindowID id,
+	                const wxString &label, const wxString &url,
+	                const wxPoint &pos = wxDefaultPosition,
+	                const wxSize &size = wxDefaultSize,
+	                long style = wxHL_DEFAULT_STYLE,
+	                const wxString &name = wxHyperlinkCtrlNameStr)
+	{
+		(void)Create(parent, id, label, url, pos, size, style, name);
+	}
 
-    // Creation function (for two-step construction).
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxString& label, const wxString& url,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxHL_DEFAULT_STYLE,
-                const wxString& name = wxHyperlinkCtrlNameStr);
+	// Creation function (for two-step construction).
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            const wxString &label, const wxString &url,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = wxHL_DEFAULT_STYLE,
+	            const wxString &name = wxHyperlinkCtrlNameStr);
 
 
-    // get/set
-    wxColour GetHoverColour() const { return m_hoverColour; }
-    void SetHoverColour(const wxColour &colour) { m_hoverColour = colour; }
+	// get/set
+	wxColour GetHoverColour() const
+	{
+		return m_hoverColour;
+	}
+	void SetHoverColour(const wxColour &colour)
+	{
+		m_hoverColour = colour;
+	}
 
-    wxColour GetNormalColour() const { return m_normalColour; }
-    void SetNormalColour(const wxColour &colour);
+	wxColour GetNormalColour() const
+	{
+		return m_normalColour;
+	}
+	void SetNormalColour(const wxColour &colour);
 
-    wxColour GetVisitedColour() const { return m_visitedColour; }
-    void SetVisitedColour(const wxColour &colour);
+	wxColour GetVisitedColour() const
+	{
+		return m_visitedColour;
+	}
+	void SetVisitedColour(const wxColour &colour);
 
-    wxString GetURL() const { return m_url; }
-    void SetURL (const wxString &url) { m_url=url; }
+	wxString GetURL() const
+	{
+		return m_url;
+	}
+	void SetURL(const wxString &url)
+	{
+		m_url = url;
+	}
 
-    void SetVisited(bool visited = true) { m_visited=visited; }
-    bool GetVisited() const { return m_visited; }
+	void SetVisited(bool visited = true)
+	{
+		m_visited = visited;
+	}
+	bool GetVisited() const
+	{
+		return m_visited;
+	}
 
-    // NOTE: also wxWindow::Set/GetLabel, wxWindow::Set/GetBackgroundColour,
-    //       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
+	// NOTE: also wxWindow::Set/GetLabel, wxWindow::Set/GetBackgroundColour,
+	//       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
 
 
 protected:
-    // event handlers
+	// event handlers
 
-    // Renders the hyperlink.
-    void OnPaint(wxPaintEvent& event);
+	// Renders the hyperlink.
+	void OnPaint(wxPaintEvent &event);
 
-    // Returns the wxRect of the label of this hyperlink.
-    // This is different from the clientsize's rectangle when
-    // clientsize != bestsize and this rectangle is influenced
-    // by the alignment of the label (wxHL_ALIGN_*).
-    wxRect GetLabelRect() const;
+	// Returns the wxRect of the label of this hyperlink.
+	// This is different from the clientsize's rectangle when
+	// clientsize != bestsize and this rectangle is influenced
+	// by the alignment of the label (wxHL_ALIGN_*).
+	wxRect GetLabelRect() const;
 
-    // If the click originates inside the bounding box of the label,
-    // a flag is set so that an event will be fired when the left
-    // button is released.
-    void OnLeftDown(wxMouseEvent& event);
+	// If the click originates inside the bounding box of the label,
+	// a flag is set so that an event will be fired when the left
+	// button is released.
+	void OnLeftDown(wxMouseEvent &event);
 
-    // If the click both originated and finished inside the bounding box
-    // of the label, a HyperlinkEvent is fired.
-    void OnLeftUp(wxMouseEvent& event);
-    void OnRightUp(wxMouseEvent& event);
+	// If the click both originated and finished inside the bounding box
+	// of the label, a HyperlinkEvent is fired.
+	void OnLeftUp(wxMouseEvent &event);
+	void OnRightUp(wxMouseEvent &event);
 
-    // Changes the cursor to a hand, if the mouse is inside the label's
-    // bounding box.
-    void OnMotion(wxMouseEvent& event);
+	// Changes the cursor to a hand, if the mouse is inside the label's
+	// bounding box.
+	void OnMotion(wxMouseEvent &event);
 
-    // Changes the cursor back to the default, if necessary.
-    void OnLeaveWindow(wxMouseEvent& event);
+	// Changes the cursor back to the default, if necessary.
+	void OnLeaveWindow(wxMouseEvent &event);
 
-    // handles "Copy URL" menuitem
-    void OnPopUpCopy(wxCommandEvent& event);
+	// handles "Copy URL" menuitem
+	void OnPopUpCopy(wxCommandEvent &event);
 
-    // Refreshes the control to update label's position if necessary
-    void OnSize(wxSizeEvent& event);
+	// Refreshes the control to update label's position if necessary
+	void OnSize(wxSizeEvent &event);
 
 
-    // overridden base class virtuals
+	// overridden base class virtuals
 
-    // Returns the best size for the window, which is the size needed
-    // to display the text label.
-    virtual wxSize DoGetBestSize() const;
+	// Returns the best size for the window, which is the size needed
+	// to display the text label.
+	virtual wxSize DoGetBestSize() const;
 
-    // creates a context menu with "Copy URL" menuitem
-    virtual void DoContextMenu(const wxPoint &);
-
-private:
-    // URL associated with the link. This is transmitted inside
-    // the HyperlinkEvent fired when the user clicks on the label.
-    wxString m_url;
-
-    // Foreground colours for various link types.
-    // NOTE: wxWindow::m_backgroundColour is used for background,
-    //       wxWindow::m_foregroundColour is used to render non-visited links
-    wxColour m_hoverColour;
-    wxColour m_normalColour;
-    wxColour m_visitedColour;
-
-    // True if the mouse cursor is inside the label's bounding box.
-    bool m_rollover;
-
-    // True if the link has been clicked before.
-    bool m_visited;
-
-    // True if a click is in progress (left button down) and the click
-    // originated inside the label's bounding box.
-    bool m_clicking;
+	// creates a context menu with "Copy URL" menuitem
+	virtual void DoContextMenu(const wxPoint &);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxHyperlinkCtrl)
-    DECLARE_EVENT_TABLE()
+	// URL associated with the link. This is transmitted inside
+	// the HyperlinkEvent fired when the user clicks on the label.
+	wxString m_url;
+
+	// Foreground colours for various link types.
+	// NOTE: wxWindow::m_backgroundColour is used for background,
+	//       wxWindow::m_foregroundColour is used to render non-visited links
+	wxColour m_hoverColour;
+	wxColour m_normalColour;
+	wxColour m_visitedColour;
+
+	// True if the mouse cursor is inside the label's bounding box.
+	bool m_rollover;
+
+	// True if the link has been clicked before.
+	bool m_visited;
+
+	// True if a click is in progress (left button down) and the click
+	// originated inside the label's bounding box.
+	bool m_clicking;
+
+private:
+	DECLARE_DYNAMIC_CLASS(wxHyperlinkCtrl)
+	DECLARE_EVENT_TABLE()
 };
 
 
@@ -172,7 +196,7 @@ private:
 
 // Declare an event identifier.
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_HYPERLINK, 3700)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_HYPERLINK, 3700)
 END_DECLARE_EVENT_TYPES()
 
 //
@@ -182,28 +206,37 @@ END_DECLARE_EVENT_TYPES()
 class WXDLLIMPEXP_ADV wxHyperlinkEvent : public wxCommandEvent
 {
 public:
-    wxHyperlinkEvent() {}
-    wxHyperlinkEvent(wxObject *generator, wxWindowID id, const wxString& url)
-        : wxCommandEvent(wxEVT_COMMAND_HYPERLINK, id),
-          m_url(url)
-    {
-        SetEventObject(generator);
-    }
+	wxHyperlinkEvent() {}
+	wxHyperlinkEvent(wxObject *generator, wxWindowID id, const wxString &url)
+		: wxCommandEvent(wxEVT_COMMAND_HYPERLINK, id),
+		  m_url(url)
+	{
+		SetEventObject(generator);
+	}
 
-    // Returns the URL associated with the hyperlink control
-    // that the user clicked on.
-    wxString GetURL() const { return m_url; }
-    void SetURL(const wxString &url) { m_url=url; }
+	// Returns the URL associated with the hyperlink control
+	// that the user clicked on.
+	wxString GetURL() const
+	{
+		return m_url;
+	}
+	void SetURL(const wxString &url)
+	{
+		m_url = url;
+	}
 
-    // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const { return new wxHyperlinkEvent(*this); }
+	// default copy ctor, assignment operator and dtor are ok
+	virtual wxEvent *Clone() const
+	{
+		return new wxHyperlinkEvent(*this);
+	}
 
 private:
 
-    // URL associated with the hyperlink control that the used clicked on.
-    wxString m_url;
+	// URL associated with the hyperlink control that the used clicked on.
+	wxString m_url;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHyperlinkEvent)
+	DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHyperlinkEvent)
 };
 
 
@@ -211,18 +244,18 @@ private:
 // event types and macros
 // ----------------------------------------------------------------------------
 
-typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
+typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent &);
 
 #define wxHyperlinkEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxHyperlinkEventFunction, &func)
+	(wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxHyperlinkEventFunction, &func)
 
 #define EVT_HYPERLINK(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_HYPERLINK, id, wxHyperlinkEventHandler(fn))
+	wx__DECLARE_EVT1(wxEVT_COMMAND_HYPERLINK, id, wxHyperlinkEventHandler(fn))
 
 #ifdef _WX_DEFINE_DATE_EVENTS_
-    DEFINE_EVENT_TYPE(wxEVT_COMMAND_HYPERLINK)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_HYPERLINK)
 
-    IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
 #endif
 
 

@@ -25,8 +25,7 @@ static const int FIFO_SIF_W = 128;
 // the EE's DMAtag in its upper 64 bits.  Note that only the lower 24 bits of 'data' is
 // the IOP's chain transfer address (loaded into MADR).  Bits 30 and 31 are transfer stop
 // bits of some sort.
-struct sifData
-{
+struct sifData {
 	s32 data;
 	s32 words;
 
@@ -34,8 +33,7 @@ struct sifData
 	tDMA_TAG	tag_hi;		// EE DMA tag
 };
 
-struct sifFifo
-{
+struct sifFifo {
 	u32 data[FIFO_SIF_W];
 	s32 readPos;
 	s32 writePos;
@@ -48,14 +46,11 @@ struct sifFifo
 
 	void write(u32 *from, int words)
 	{
-		if (words > 0)
-		{
+		if (words > 0) {
 			const int wP0 = min((FIFO_SIF_W - writePos), words);
 			const int wP1 = words - wP0;
-
 			memcpy_fast(&data[writePos], from, wP0 << 2);
 			memcpy_fast(&data[0], &from[wP0], wP1 << 2);
-
 			writePos = (writePos + words) & (FIFO_SIF_W - 1);
 			size += words;
 		}
@@ -64,14 +59,11 @@ struct sifFifo
 
 	void read(u32 *to, int words)
 	{
-		if (words > 0)
-		{
+		if (words > 0) {
 			const int wP0 = min((FIFO_SIF_W - readPos), words);
 			const int wP1 = words - wP0;
-
 			memcpy_fast(to, &data[readPos], wP0 << 2);
 			memcpy_fast(&to[wP0], &data[0], wP1 << 2);
-
 			readPos = (readPos + words) & (FIFO_SIF_W - 1);
 			size -= words;
 		}
@@ -86,8 +78,7 @@ struct sifFifo
 	}
 };
 
-struct old_sif_structure
-{
+struct old_sif_structure {
 	sifFifo fifo; // Used in both.
 	s32 chain; // Not used.
 	s32 end; // Only used for EE.
@@ -96,16 +87,14 @@ struct old_sif_structure
 	struct sifData data; // Only used in IOP.
 };
 
-struct sif_ee
-{
+struct sif_ee {
 	bool end; // Only used for EE.
 	bool busy;
 
 	s32 cycles;
 };
 
-struct sif_iop
-{
+struct sif_iop {
 	bool end;
 	bool busy;
 
@@ -115,8 +104,7 @@ struct sif_iop
 	struct sifData data; // Only used in IOP.
 };
 
-struct _sif
-{
+struct _sif {
 	sifFifo fifo; // Used in both.
 	sif_ee ee;
 	sif_iop iop;

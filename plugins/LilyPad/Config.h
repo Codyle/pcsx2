@@ -76,8 +76,8 @@ public:
 	// Unlike the others, not a changeable value.
 	DWORD osVersion;
 
-	wchar_t lastSaveConfigPath[MAX_PATH+1];
-	wchar_t lastSaveConfigFileName[MAX_PATH+1];
+	wchar_t lastSaveConfigPath[MAX_PATH + 1];
+	wchar_t lastSaveConfigFileName[MAX_PATH + 1];
 };
 
 extern GeneralConfig config;

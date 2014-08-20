@@ -23,8 +23,7 @@
 
 #include <gtk/gtkwidget.h>
 
-struct ConversionBoxData
-{
+struct ConversionBoxData {
 	GtkWidget *window; // GtkWindow
 	GtkWidget *file; // GtkEntry
 	GtkWidget *selectbutton; // GtkButton

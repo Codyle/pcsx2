@@ -22,8 +22,7 @@
 #include "DebugInterface.h"
 #include "Pcsx2Types.h"
 
-struct BreakPointCond
-{
+struct BreakPointCond {
 	DebugInterface *debug;
 	PostfixExpression expression;
 	char expressionString[128];
@@ -36,13 +35,12 @@ struct BreakPointCond
 	u32 Evaluate()
 	{
 		u64 result;
-		if (debug->parseExpression(expression,result) == false || result == 0) return 0;
+		if (debug->parseExpression(expression, result) == false || result == 0) return 0;
 		return 1;
 	}
 };
 
-struct BreakPoint
-{
+struct BreakPoint {
 	BreakPoint() : hasCond(false) {}
 
 	u32	addr;
@@ -52,16 +50,17 @@ struct BreakPoint
 	bool hasCond;
 	BreakPointCond cond;
 
-	bool operator == (const BreakPoint &other) const {
+	bool operator == (const BreakPoint &other) const
+	{
 		return addr == other.addr;
 	}
-	bool operator < (const BreakPoint &other) const {
+	bool operator < (const BreakPoint &other) const
+	{
 		return addr < other.addr;
 	}
 };
 
-enum MemCheckCondition
-{
+enum MemCheckCondition {
 	MEMCHECK_READ = 0x01,
 	MEMCHECK_WRITE = 0x02,
 	MEMCHECK_WRITE_ONCHANGE = 0x04,
@@ -69,8 +68,7 @@ enum MemCheckCondition
 	MEMCHECK_READWRITE = 0x03,
 };
 
-enum MemCheckResult
-{
+enum MemCheckResult {
 	MEMCHECK_IGNORE = 0x00,
 	MEMCHECK_LOG = 0x01,
 	MEMCHECK_BREAK = 0x02,
@@ -78,8 +76,7 @@ enum MemCheckResult
 	MEMCHECK_BOTH = 0x03,
 };
 
-struct MemCheck
-{
+struct MemCheck {
 	MemCheck();
 	u32 start;
 	u32 end;
@@ -99,7 +96,8 @@ struct MemCheck
 
 	void Log(u32 addr, bool write, int size, u32 pc);
 
-	bool operator == (const MemCheck &other) const {
+	bool operator == (const MemCheck &other) const
+	{
 		return start == other.start && end == other.end;
 	}
 };
@@ -143,8 +141,14 @@ public:
 
 	static void Update(u32 addr = 0);
 
-	static void SetBreakpointTriggered(bool b) { breakpointTriggered_ = b; };
-	static bool GetBreakpointTriggered() { return breakpointTriggered_; };
+	static void SetBreakpointTriggered(bool b)
+	{
+		breakpointTriggered_ = b;
+	};
+	static bool GetBreakpointTriggered()
+	{
+		return breakpointTriggered_;
+	};
 
 private:
 	static size_t FindBreakpoint(u32 addr, bool matchTemp = false, bool temp = false);

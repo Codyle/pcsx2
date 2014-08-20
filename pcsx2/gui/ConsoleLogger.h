@@ -18,7 +18,7 @@
 #include "App.h"
 
 BEGIN_DECLARE_EVENT_TYPES()
-	DECLARE_EVENT_TYPE(pxEvt_DockConsole, -1)
+DECLARE_EVENT_TYPE(pxEvt_DockConsole, -1)
 END_DECLARE_EVENT_TYPES()
 
 static const bool EnableThreadedLoggingTest = false; //true;
@@ -33,16 +33,16 @@ class LogWriteEvent;
 //
 class PipeRedirectionBase
 {
-	DeclareNoncopyableObject( PipeRedirectionBase );
+	DeclareNoncopyableObject(PipeRedirectionBase);
 
 public:
-	virtual ~PipeRedirectionBase() throw()=0;	// abstract destructor, forces abstract class behavior
+	virtual ~PipeRedirectionBase() throw() = 0;	// abstract destructor, forces abstract class behavior
 
 protected:
 	PipeRedirectionBase() {}
 };
 
-extern PipeRedirectionBase* NewPipeRedir( FILE* stdstream );
+extern PipeRedirectionBase* NewPipeRedir(FILE* stdstream);
 
 // --------------------------------------------------------------------------------------
 //  pxLogConsole
@@ -76,7 +76,7 @@ protected:
 
 public:
 	ConsoleTestThread() :
-		m_done( false )
+		m_done(false)
 	{
 	}
 
@@ -101,20 +101,23 @@ public:
 	pxLogTextCtrl(wxWindow* parent);
 	virtual ~pxLogTextCtrl() throw();
 
-	bool HasWriteLock() const { return m_FreezeWrites; }
+	bool HasWriteLock() const
+	{
+		return m_FreezeWrites;
+	}
 	void ConcludeIssue();
 
 #ifdef __WXMSW__
-	virtual void WriteText(const wxString& text);
+	virtual void WriteText(const wxString &text);
 #endif
 
 protected:
-	virtual void OnThumbTrack(wxScrollWinEvent& event);
-	virtual void OnThumbRelease(wxScrollWinEvent& event);
-	virtual void OnResize( wxSizeEvent& evt );
+	virtual void OnThumbTrack(wxScrollWinEvent &event);
+	virtual void OnThumbRelease(wxScrollWinEvent &event);
+	virtual void OnResize(wxSizeEvent &evt);
 
-	void DispatchEvent( const CoreThreadStatus& status );
-	void DispatchEvent( const PluginEventType& evt );
+	void DispatchEvent(const CoreThreadStatus &status);
+	void DispatchEvent(const PluginEventType &evt);
 };
 
 // --------------------------------------------------------------------------------------
@@ -138,19 +141,19 @@ protected:
 
 	public:
 		virtual ~ColorArray() throw();
-		ColorArray( int fontsize=8 );
+		ColorArray(int fontsize = 8);
 
-		void Create( int fontsize );
+		void Create(int fontsize);
 		void Cleanup();
 
-		void SetFont( const wxFont& font );
-		void SetFont( int fontsize );
+		void SetFont(const wxFont &font);
+		void SetFont(int fontsize);
 
-		const wxTextAttr& operator[]( ConsoleColors coloridx ) const
+		const wxTextAttr &operator[](ConsoleColors coloridx) const
 		{
 			return m_table[(int)coloridx];
 		}
-		
+
 		void SetColorScheme_Dark();
 		void SetColorScheme_Light();
 	};
@@ -162,19 +165,19 @@ protected:
 		int				startpoint;
 
 		ColorSection() {}
-		ColorSection( ConsoleColors _color, int msgptr ) : color(_color), startpoint(msgptr) { }
+		ColorSection(ConsoleColors _color, int msgptr) : color(_color), startpoint(msgptr) { }
 	};
 
 protected:
-	ConLogConfig&	m_conf;
-	pxLogTextCtrl&	m_TextCtrl;
+	ConLogConfig	&m_conf;
+	pxLogTextCtrl	&m_TextCtrl;
 	wxTimer			m_timer_FlushLimiter;
 	wxTimer			m_timer_FlushUnlocker;
 	ColorArray		m_ColorTable;
 
 	int				m_flushevent_counter;
 	bool			m_FlushRefreshLocked;
-	
+
 	// ----------------------------------------------------------------------------
 	//  Queue State Management Vars
 	// ----------------------------------------------------------------------------
@@ -221,46 +224,49 @@ protected:
 
 public:
 	// ctor & dtor
-	ConsoleLogFrame( MainEmuFrame *pParent, const wxString& szTitle, ConLogConfig& options );
+	ConsoleLogFrame(MainEmuFrame *pParent, const wxString &szTitle, ConLogConfig &options);
 	virtual ~ConsoleLogFrame();
 
 	virtual void DockedMove();
 
 	// Retrieves the current configuration options settings for this box.
 	// (settings change if the user moves the window or changes the font size)
-	const ConLogConfig& GetConfig() const { return m_conf; }
+	const ConLogConfig &GetConfig() const
+	{
+		return m_conf;
+	}
 
-	bool Write( ConsoleColors color, const wxString& text );
+	bool Write(ConsoleColors color, const wxString &text);
 	bool Newline();
 
 protected:
 	// menu callbacks
-	void OnOpen (wxCommandEvent& event);
-	void OnClose(wxCommandEvent& event);
-	void OnSave (wxCommandEvent& event);
-	void OnClear(wxCommandEvent& event);
+	void OnOpen(wxCommandEvent &event);
+	void OnClose(wxCommandEvent &event);
+	void OnSave(wxCommandEvent &event);
+	void OnClear(wxCommandEvent &event);
 
-	void OnEnableAllLogging(wxCommandEvent& event);
-	void OnDisableAllLogging(wxCommandEvent& event);
+	void OnEnableAllLogging(wxCommandEvent &event);
+	void OnDisableAllLogging(wxCommandEvent &event);
 
-	void OnToggleTheme(wxCommandEvent& event);
-	void OnFontSize(wxCommandEvent& event);
-	void OnToggleSource(wxCommandEvent& event);
-	void OnToggleCDVDInfo(wxCommandEvent& event);
+	void OnToggleTheme(wxCommandEvent &event);
+	void OnFontSize(wxCommandEvent &event);
+	void OnToggleSource(wxCommandEvent &event);
+	void OnToggleCDVDInfo(wxCommandEvent &event);
 
-	virtual void OnCloseWindow(wxCloseEvent& event);
+	virtual void OnCloseWindow(wxCloseEvent &event);
 
-	void OnSetTitle( wxCommandEvent& event );
-	void OnDockedMove( wxCommandEvent& event );
-	void OnFlushUnlockerTimer( wxTimerEvent& evt );
-	void OnFlushEvent( wxCommandEvent& event );
+	void OnSetTitle(wxCommandEvent &event);
+	void OnDockedMove(wxCommandEvent &event);
+	void OnFlushUnlockerTimer(wxTimerEvent &evt);
+	void OnFlushEvent(wxCommandEvent &event);
 
 	void DoFlushQueue();
-	void DoFlushEvent( bool isPending );
+	void DoFlushEvent(bool isPending);
 
-	void OnMoveAround( wxMoveEvent& evt );
-	void OnResize( wxSizeEvent& evt );
-	void OnActivate( wxActivateEvent& evt );
-	
+	void OnMoveAround(wxMoveEvent &evt);
+	void OnResize(wxSizeEvent &evt);
+	void OnActivate(wxActivateEvent &evt);
+
 	void OnLoggingChanged();
 };

@@ -62,8 +62,7 @@ using namespace std;
 
 extern char libraryName[256];
 
-enum PadOptions
-{
+enum PadOptions {
 	PADOPTION_FORCEFEEDBACK = 0x1,
 	PADOPTION_REVERSELX = 0x2,
 	PADOPTION_REVERSELY = 0x4,
@@ -81,8 +80,7 @@ extern bool toggleAutoRepeat;
 #define PAD_LOG __Log
 //#define PAD_LOG __LogToConsole
 
-enum PadCommands
-{
+enum PadCommands {
 	CMD_SET_VREF_PARAM = 0x40,
 	CMD_QUERY_DS2_ANALOG_MODE = 0x41,
 	CMD_READ_DATA_AND_VIBRATE = 0x42,
@@ -96,8 +94,7 @@ enum PadCommands
 	CMD_SET_DS2_NATIVE_MODE = 0x4F // SET_DS2_NATIVE_MODE
 };
 
-enum gamePadValues
-{
+enum gamePadValues {
 	PAD_L2 = 0,
 	PAD_R2,
 	PAD_L1,

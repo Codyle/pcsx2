@@ -31,29 +31,29 @@
 // issue is the unsupported praga push/pop
 // Note it impact GSVertexTrace.cpp => void GSVertexTrace::Update(const GSVertexHWOGL* v, int count, GS_PRIM_CLASS primclass)
 class GSRendererOGL : public GSRendererHW
-//class GSRendererOGL : public GSRendererHW<GSVertexHWOGL>
+	//class GSRendererOGL : public GSRendererHW<GSVertexHWOGL>
 {
-	private:
-		GSVector2 m_pixelcenter;
-		bool m_logz;
-		bool m_fba;
-		bool UserHacks_AlphaHack;
-		bool UserHacks_AlphaStencil;
-		bool UserHacks_DateGL4;
-		unsigned int UserHacks_TCOffset;
-		float UserHacks_TCO_x, UserHacks_TCO_y;
+private:
+	GSVector2 m_pixelcenter;
+	bool m_logz;
+	bool m_fba;
+	bool UserHacks_AlphaHack;
+	bool UserHacks_AlphaStencil;
+	bool UserHacks_DateGL4;
+	unsigned int UserHacks_TCOffset;
+	float UserHacks_TCO_x, UserHacks_TCO_y;
 
-	protected:
-		void EmulateGS();
-		void SetupIA();
+protected:
+	void EmulateGS();
+	void SetupIA();
 
-	public:
-		GSRendererOGL();
-		virtual ~GSRendererOGL() {};
+public:
+	GSRendererOGL();
+	virtual ~GSRendererOGL() {};
 
-		bool CreateDevice(GSDevice* dev);
+	bool CreateDevice(GSDevice* dev);
 
-		void UpdateFBA(GSTexture* rt);
+	void UpdateFBA(GSTexture* rt);
 
-		void DrawPrims(GSTexture* rt, GSTexture* ds, GSTextureCache::Source* tex);
+	void DrawPrims(GSTexture* rt, GSTexture* ds, GSTextureCache::Source* tex);
 };

@@ -26,14 +26,14 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLEXPORT wxBusyInfo : public wxObject
 {
 public:
-    wxBusyInfo(const wxString& message, wxWindow *parent = NULL);
+	wxBusyInfo(const wxString &message, wxWindow *parent = NULL);
 
-    virtual ~wxBusyInfo();
+	virtual ~wxBusyInfo();
 
 private:
-    wxFrame *m_InfoFrame;
+	wxFrame *m_InfoFrame;
 
-    DECLARE_NO_COPY_CLASS(wxBusyInfo)
+	DECLARE_NO_COPY_CLASS(wxBusyInfo)
 };
 
 

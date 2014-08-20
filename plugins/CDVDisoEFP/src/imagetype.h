@@ -31,8 +31,7 @@
 // #include "PS2Edefs.h"
 #include "isofile.h"
 
-struct ImageTypes
-{
+struct ImageTypes {
 	char *name;
 	off64_t blocksize;
 	off64_t fileoffset;

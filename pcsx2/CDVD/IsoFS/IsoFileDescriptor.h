@@ -15,10 +15,8 @@
 
 #pragma once
 
-struct IsoFileDescriptor
-{
-	struct FileDate // not 1:1 with iso9660 date struct
-	{
+struct IsoFileDescriptor {
+	struct FileDate { // not 1:1 with iso9660 date struct
 		s32	year;
 		u8	month;
 		u8	day;
@@ -37,8 +35,14 @@ struct IsoFileDescriptor
 	IsoFileDescriptor();
 	IsoFileDescriptor(const u8* data, int length);
 
-	void Load( const u8* data, int length );
+	void Load(const u8* data, int length);
 
-	bool IsFile() const { return !(flags & 2); }
-	bool IsDir() const { return !IsFile(); }
+	bool IsFile() const
+	{
+		return !(flags & 2);
+	}
+	bool IsDir() const
+	{
+		return !IsFile();
+	}
 };

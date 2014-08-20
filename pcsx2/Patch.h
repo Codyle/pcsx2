@@ -36,10 +36,9 @@ enum patch_data_type {
 	EXTENDED_T
 };
 
-typedef void PATCHTABLEFUNC( const wxString& text1, const wxString& text2 );
+typedef void PATCHTABLEFUNC(const wxString &text1, const wxString &text2);
 
-struct IniPatch
-{
+struct IniPatch {
 	int enabled;
 	int group;
 	patch_data_type type;
@@ -51,19 +50,19 @@ struct IniPatch
 
 namespace PatchFunc
 {
-	PATCHTABLEFUNC comment;
-	PATCHTABLEFUNC gametitle;
-	PATCHTABLEFUNC patch;
-	PATCHTABLEFUNC cheat;
+PATCHTABLEFUNC comment;
+PATCHTABLEFUNC gametitle;
+PATCHTABLEFUNC patch;
+PATCHTABLEFUNC cheat;
 }
 
 extern void ResetCheatsCount();
-extern int  LoadCheats(wxString name, const wxDirName& folderName, const wxString& friendlyName);
-extern int  LoadCheatsFromZip(wxString gameCRC, const wxString& cheatsArchiveFilename);
-extern void inifile_command(bool isCheat, const wxString& cmd);
-extern void inifile_trim(wxString& buffer);
+extern int  LoadCheats(wxString name, const wxDirName &folderName, const wxString &friendlyName);
+extern int  LoadCheatsFromZip(wxString gameCRC, const wxString &cheatsArchiveFilename);
+extern void inifile_command(bool isCheat, const wxString &cmd);
+extern void inifile_trim(wxString &buffer);
 
-extern int  InitPatches(const wxString& name, const Game_Data& game);
+extern int  InitPatches(const wxString &name, const Game_Data &game);
 extern int  AddPatch(int Mode, int Place, int Address, int Size, u64 data);
 extern void ResetPatch(void);
 extern void ApplyPatch(int place = 1);

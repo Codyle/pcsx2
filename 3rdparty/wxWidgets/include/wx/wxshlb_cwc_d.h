@@ -20,19 +20,19 @@
 #error "profiling is not supported in debug versions"
 #else
 #ifdef __cplusplus
-    #ifdef __MACH__
-        #include "wxshlb_Mach++_d.mch"
-    #elif __POWERPC__
-        #include "wxshlb_Carbon++_d.mch"
-    #endif
+#ifdef __MACH__
+#include "wxshlb_Mach++_d.mch"
+#elif __POWERPC__
+#include "wxshlb_Carbon++_d.mch"
+#endif
 #else
-    #ifdef __MACH__
-        #include "wxshlb_Mach_d.mch"
-    #elif __POWERPC__
-        #include "wxshlb_Carbon_d.mch"
-    #endif
+#ifdef __MACH__
+#include "wxshlb_Mach_d.mch"
+#elif __POWERPC__
+#include "wxshlb_Carbon_d.mch"
+#endif
 #endif
 #endif
 
 #endif
-    // _WX_CW__
+// _WX_CW__

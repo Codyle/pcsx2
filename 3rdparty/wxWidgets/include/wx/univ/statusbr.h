@@ -20,90 +20,94 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxStatusBarUniv : public wxStatusBarBase,
-                                    public wxInputConsumer
+	public wxInputConsumer
 {
 public:
-    wxStatusBarUniv() { Init(); }
+	wxStatusBarUniv()
+	{
+		Init();
+	}
 
-    wxStatusBarUniv(wxWindow *parent,
-                    wxWindowID id = wxID_ANY,
-                    long style = 0,
-                    const wxString& name = wxPanelNameStr)
-    {
-        Init();
+	wxStatusBarUniv(wxWindow *parent,
+	                wxWindowID id = wxID_ANY,
+	                long style = 0,
+	                const wxString &name = wxPanelNameStr)
+	{
+		Init();
+		(void)Create(parent, id, style, name);
+	}
 
-        (void)Create(parent, id, style, name);
-    }
+	bool Create(wxWindow *parent,
+	            wxWindowID id = wxID_ANY,
+	            long style = 0,
+	            const wxString &name = wxPanelNameStr);
 
-    bool Create(wxWindow *parent,
-                wxWindowID id = wxID_ANY,
-                long style = 0,
-                const wxString& name = wxPanelNameStr);
+	// set field count/widths
+	virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
+	virtual void SetStatusWidths(int n, const int widths[]);
 
-    // set field count/widths
-    virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
-    virtual void SetStatusWidths(int n, const int widths[]);
+	// get/set the text of the given field
+	virtual void SetStatusText(const wxString &text, int number = 0);
+	virtual wxString GetStatusText(int number = 0) const;
 
-    // get/set the text of the given field
-    virtual void SetStatusText(const wxString& text, int number = 0);
-    virtual wxString GetStatusText(int number = 0) const;
+	// Get the position and size of the field's internal bounding rectangle
+	virtual bool GetFieldRect(int i, wxRect &rect) const;
 
-    // Get the position and size of the field's internal bounding rectangle
-    virtual bool GetFieldRect(int i, wxRect& rect) const;
+	// sets the minimal vertical size of the status bar
+	virtual void SetMinHeight(int height);
 
-    // sets the minimal vertical size of the status bar
-    virtual void SetMinHeight(int height);
+	// get the dimensions of the horizontal and vertical borders
+	virtual int GetBorderX() const;
+	virtual int GetBorderY() const;
 
-    // get the dimensions of the horizontal and vertical borders
-    virtual int GetBorderX() const;
-    virtual int GetBorderY() const;
-
-    // wxInputConsumer pure virtual
-    virtual wxWindow *GetInputWindow() const
-        { return wx_const_cast(wxStatusBar*, this); }
+	// wxInputConsumer pure virtual
+	virtual wxWindow *GetInputWindow() const
+	{
+		return wx_const_cast(wxStatusBar*, this);
+	}
 
 protected:
-    // recalculate the field widths
-    void OnSize(wxSizeEvent& event);
+	// recalculate the field widths
+	void OnSize(wxSizeEvent &event);
 
-    // draw the statusbar
-    virtual void DoDraw(wxControlRenderer *renderer);
+	// draw the statusbar
+	virtual void DoDraw(wxControlRenderer *renderer);
 
-    // tell them about our preferred height
-    virtual wxSize DoGetBestSize() const;
+	// tell them about our preferred height
+	virtual wxSize DoGetBestSize() const;
 
-    // override DoSetSize() to prevent the status bar height from changing
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+	// override DoSetSize() to prevent the status bar height from changing
+	virtual void DoSetSize(int x, int y,
+	                       int width, int height,
+	                       int sizeFlags = wxSIZE_AUTO);
 
-    // get the (fixed) status bar height
-    wxCoord GetHeight() const;
+	// get the (fixed) status bar height
+	wxCoord GetHeight() const;
 
-    // get the rectangle containing all the fields and the border between them
-    //
-    // also updates m_widthsAbs if necessary
-    wxRect GetTotalFieldRect(wxCoord *borderBetweenFields);
+	// get the rectangle containing all the fields and the border between them
+	//
+	// also updates m_widthsAbs if necessary
+	wxRect GetTotalFieldRect(wxCoord *borderBetweenFields);
 
-    // get the rect for this field without ani side effects (see code)
-    wxRect DoGetFieldRect(int n) const;
+	// get the rect for this field without ani side effects (see code)
+	wxRect DoGetFieldRect(int n) const;
 
-    // refresh the given field
-    void RefreshField(int i);
+	// refresh the given field
+	void RefreshField(int i);
 
-    // common part of all ctors
-    void Init();
+	// common part of all ctors
+	void Init();
 
 private:
-    // the status fields strings
-    wxArrayString m_statusText;
+	// the status fields strings
+	wxArrayString m_statusText;
 
-    // the absolute status fields widths
-    wxArrayInt m_widthsAbs;
+	// the absolute status fields widths
+	wxArrayInt m_widthsAbs;
 
-    DECLARE_DYNAMIC_CLASS(wxStatusBarUniv)
-    DECLARE_EVENT_TABLE()
-    WX_DECLARE_INPUT_CONSUMER()
+	DECLARE_DYNAMIC_CLASS(wxStatusBarUniv)
+	DECLARE_EVENT_TABLE()
+	WX_DECLARE_INPUT_CONSUMER()
 };
 
 #endif // _WX_UNIV_STATUSBR_H_

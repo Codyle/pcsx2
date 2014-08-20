@@ -33,25 +33,25 @@ extern "C" {
 #define IOCTL_DVD_BASE                    FILE_DEVICE_DVD
 
 #define IOCTL_DVD_END_SESSION \
-  CTL_CODE(IOCTL_DVD_BASE, 0x0403, METHOD_BUFFERED, FILE_READ_ACCESS)
+	CTL_CODE(IOCTL_DVD_BASE, 0x0403, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #define IOCTL_DVD_GET_REGION \
-  CTL_CODE(IOCTL_DVD_BASE, 0x0405, METHOD_BUFFERED, FILE_READ_ACCESS)
+	CTL_CODE(IOCTL_DVD_BASE, 0x0405, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #define IOCTL_DVD_READ_KEY \
-  CTL_CODE(IOCTL_DVD_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS)
+	CTL_CODE(IOCTL_DVD_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #define IOCTL_DVD_READ_STRUCTURE \
-  CTL_CODE(IOCTL_DVD_BASE, 0x0450, METHOD_BUFFERED, FILE_READ_ACCESS)
+	CTL_CODE(IOCTL_DVD_BASE, 0x0450, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #define IOCTL_DVD_SEND_KEY \
-  CTL_CODE(IOCTL_DVD_BASE, 0x0402, METHOD_BUFFERED, FILE_READ_ACCESS)
+	CTL_CODE(IOCTL_DVD_BASE, 0x0402, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #define IOCTL_DVD_START_SESSION \
-  CTL_CODE(IOCTL_DVD_BASE, 0x0400, METHOD_BUFFERED, FILE_READ_ACCESS)
+	CTL_CODE(IOCTL_DVD_BASE, 0x0400, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #define IOCTL_DVD_SET_READ_AHEAD \
-  CTL_CODE(IOCTL_DVD_BASE, 0x0404, METHOD_BUFFERED, FILE_READ_ACCESS)
+	CTL_CODE(IOCTL_DVD_BASE, 0x0404, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 
 typedef ULONG DVD_SESSION_ID, *PDVD_SESSION_ID;
@@ -62,58 +62,58 @@ typedef struct _STORAGE_SET_READ_AHEAD {
 } STORAGE_SET_READ_AHEAD, *PSTORAGE_SET_READ_AHEAD;
 
 typedef enum DVD_STRUCTURE_FORMAT {
-  DvdPhysicalDescriptor,
-  DvdCopyrightDescriptor,
-  DvdDiskKeyDescriptor,
-  DvdBCADescriptor,
-  DvdManufacturerDescriptor,
-  DvdMaxDescriptor
+	DvdPhysicalDescriptor,
+	DvdCopyrightDescriptor,
+	DvdDiskKeyDescriptor,
+	DvdBCADescriptor,
+	DvdManufacturerDescriptor,
+	DvdMaxDescriptor
 } DVD_STRUCTURE_FORMAT, *PDVD_STRUCTURE_FORMAT;
 
 #include <pshpack1.h>
 typedef struct DVD_READ_STRUCTURE {
-  LARGE_INTEGER  BlockByteOffset;
-  DVD_STRUCTURE_FORMAT  Format;
-  DVD_SESSION_ID  SessionId;
-  UCHAR  LayerNumber;
+	LARGE_INTEGER  BlockByteOffset;
+	DVD_STRUCTURE_FORMAT  Format;
+	DVD_SESSION_ID  SessionId;
+	UCHAR  LayerNumber;
 } DVD_READ_STRUCTURE, *PDVD_READ_STRUCTURE;
 #include <poppack.h>
 
 typedef struct _DVD_DESCRIPTOR_HEADER {
-    USHORT Length;
-    UCHAR Reserved[2];
-    UCHAR Data[0];
+	USHORT Length;
+	UCHAR Reserved[2];
+	UCHAR Data[0];
 } DVD_DESCRIPTOR_HEADER, *PDVD_DESCRIPTOR_HEADER;
 
 #include <pshpack1.h>
 typedef struct _DVD_LAYER_DESCRIPTOR {
-  UCHAR  BookVersion : 4;
-  UCHAR  BookType : 4;
-  UCHAR  MinimumRate : 4;
-  UCHAR  DiskSize : 4;
-  UCHAR  LayerType : 4;
-  UCHAR  TrackPath : 1;
-  UCHAR  NumberOfLayers : 2;
-  UCHAR  Reserved1 : 1;
-  UCHAR  TrackDensity : 4;
-  UCHAR  LinearDensity : 4;
-  ULONG  StartingDataSector;
-  ULONG  EndDataSector;
-  ULONG  EndLayerZeroSector;
-  UCHAR  Reserved5 : 7;
-  UCHAR  BCAFlag : 1;
-  UCHAR  Reserved6;
+	UCHAR  BookVersion : 4;
+	UCHAR  BookType : 4;
+	UCHAR  MinimumRate : 4;
+	UCHAR  DiskSize : 4;
+	UCHAR  LayerType : 4;
+	UCHAR  TrackPath : 1;
+	UCHAR  NumberOfLayers : 2;
+	UCHAR  Reserved1 : 1;
+	UCHAR  TrackDensity : 4;
+	UCHAR  LinearDensity : 4;
+	ULONG  StartingDataSector;
+	ULONG  EndDataSector;
+	ULONG  EndLayerZeroSector;
+	UCHAR  Reserved5 : 7;
+	UCHAR  BCAFlag : 1;
+	UCHAR  Reserved6;
 } DVD_LAYER_DESCRIPTOR, *PDVD_LAYER_DESCRIPTOR;
 #include <poppack.h>
 
 typedef struct _DVD_COPYRIGHT_DESCRIPTOR {
-  UCHAR  CopyrightProtectionType;
-  UCHAR  RegionManagementInformation;
-  USHORT  Reserved;
+	UCHAR  CopyrightProtectionType;
+	UCHAR  RegionManagementInformation;
+	USHORT  Reserved;
 } DVD_COPYRIGHT_DESCRIPTOR, *PDVD_COPYRIGHT_DESCRIPTOR;
 
 typedef struct _DVD_DISK_KEY_DESCRIPTOR {
-  UCHAR  DiskKeyData[2048];
+	UCHAR  DiskKeyData[2048];
 } DVD_DISK_KEY_DESCRIPTOR, *PDVD_DISK_KEY_DESCRIPTOR;
 
 typedef enum _DVD_KEY_TYPE {
@@ -168,31 +168,31 @@ typedef struct _DVD_COPY_PROTECT_KEY {
 
 
 typedef struct _DVD_BCA_DESCRIPTOR {
-  UCHAR  BCAInformation[0];
+	UCHAR  BCAInformation[0];
 } DVD_BCA_DESCRIPTOR, *PDVD_BCA_DESCRIPTOR;
 
 typedef struct _DVD_MANUFACTURER_DESCRIPTOR {
-  UCHAR  ManufacturingInformation[2048];
+	UCHAR  ManufacturingInformation[2048];
 } DVD_MANUFACTURER_DESCRIPTOR, *PDVD_MANUFACTURER_DESCRIPTOR;
 
 typedef struct _DVD_RPC_KEY {
-  UCHAR  UserResetsAvailable : 3;
-  UCHAR  ManufacturerResetsAvailable : 3;
-  UCHAR  TypeCode : 2;
-  UCHAR  RegionMask;
-  UCHAR  RpcScheme;
-  UCHAR  Reserved2[1];
+	UCHAR  UserResetsAvailable : 3;
+	UCHAR  ManufacturerResetsAvailable : 3;
+	UCHAR  TypeCode : 2;
+	UCHAR  RegionMask;
+	UCHAR  RpcScheme;
+	UCHAR  Reserved2[1];
 } DVD_RPC_KEY, *PDVD_RPC_KEY;
 
 typedef struct _DVD_SET_RPC_KEY {
-  UCHAR  PreferredDriveRegionCode;
-  UCHAR  Reserved[3];
+	UCHAR  PreferredDriveRegionCode;
+	UCHAR  Reserved[3];
 } DVD_SET_RPC_KEY, *PDVD_SET_RPC_KEY;
 
 typedef struct _DVD_ASF {
-  UCHAR  Reserved0[3];
-  UCHAR  SuccessFlag : 1;
-  UCHAR  Reserved1 : 7;
+	UCHAR  Reserved0[3];
+	UCHAR  SuccessFlag : 1;
+	UCHAR  Reserved1 : 7;
 } DVD_ASF, *PDVD_ASF;
 
 typedef struct _DVD_REGION {

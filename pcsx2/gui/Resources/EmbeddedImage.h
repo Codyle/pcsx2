@@ -25,9 +25,9 @@
 class IEmbeddedImage
 {
 public:
-	virtual const wxImage& Get()=0;
-	virtual wxImage Rescale( int width, int height )=0;
-	virtual wxImage Resample( int width, int height )=0;
+	virtual const wxImage &Get() = 0;
+	virtual wxImage Rescale(int width, int height) = 0;
+	virtual wxImage Resample(int width, int height) = 0;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ public:
 // Note: Get() only loads the image once.  All subsequent calls to Get will use the
 // previously loaded image data.
 //
-template< typename ImageType >
+template<typename ImageType>
 class EmbeddedImage : public IEmbeddedImage
 {
 protected:
@@ -53,20 +53,18 @@ protected:
 	//
 	void _loadImage()
 	{
-		if( !m_Image.Ok() )
-		{
-			wxMemoryInputStream joe( ImageType::Data, ImageType::Length );
-			m_Image.LoadFile( joe, ImageType::GetFormat() );
-
-			if( m_ResampleTo.IsFullySpecified() && ( m_ResampleTo.GetWidth() != m_Image.GetWidth() || m_ResampleTo.GetHeight() != m_Image.GetHeight() ) )
-				m_Image = m_Image.ResampleBox( m_ResampleTo.GetWidth(), m_ResampleTo.GetHeight() );
+		if (!m_Image.Ok()) {
+			wxMemoryInputStream joe(ImageType::Data, ImageType::Length);
+			m_Image.LoadFile(joe, ImageType::GetFormat());
+			if (m_ResampleTo.IsFullySpecified() && (m_ResampleTo.GetWidth() != m_Image.GetWidth() || m_ResampleTo.GetHeight() != m_Image.GetHeight()))
+				m_Image = m_Image.ResampleBox(m_ResampleTo.GetWidth(), m_ResampleTo.GetHeight());
 		}
 	}
 
 public:
 	EmbeddedImage() :
 		m_Image()
-	,	m_ResampleTo( wxDefaultSize )
+		,	m_ResampleTo(wxDefaultSize)
 	{
 	}
 
@@ -79,9 +77,9 @@ public:
 	// sampling images (basically resembles a pixel resize).  ResampleBox produces much cleaner
 	// results.
 	//
-	EmbeddedImage( int newWidth, int newHeight ) :
+	EmbeddedImage(int newWidth, int newHeight) :
 		m_Image()
-	,	m_ResampleTo( newWidth, newHeight )
+		,	m_ResampleTo(newWidth, newHeight)
 	{
 	}
 
@@ -92,7 +90,7 @@ public:
 	// and only happens when the image is actually fetched.  Simply creating an instance
 	// of an EmbeddedImage object uses no excess memory nor cpu overhead. :)
 	//
-	const wxImage& Get()
+	const wxImage &Get()
 	{
 		_loadImage();
 		return m_Image;
@@ -101,7 +99,7 @@ public:
 	wxIcon GetIcon()
 	{
 		wxIcon retval;
-		retval.CopyFromBitmap( Get() );
+		retval.CopyFromBitmap(Get());
 		return retval;
 	}
 
@@ -112,11 +110,11 @@ public:
 	//
 	// (this method included for sake of completeness only).
 	//
-	wxImage Rescale( int width, int height )
+	wxImage Rescale(int width, int height)
 	{
 		_loadImage();
-		if( width != m_Image.GetWidth() || height != m_Image.GetHeight() )
-			return m_Image.Rescale( width, height );
+		if (width != m_Image.GetWidth() || height != m_Image.GetHeight())
+			return m_Image.Rescale(width, height);
 		else
 			return m_Image;
 	}
@@ -127,11 +125,11 @@ public:
 	// sampling images (basically resembles a pixel resize).  ResampleBox produces much cleaner
 	// results.
 	//
-	wxImage Resample( int width, int height )
+	wxImage Resample(int width, int height)
 	{
 		_loadImage();
-		if( width != m_Image.GetWidth() || height != m_Image.GetHeight() )
-			return m_Image.ResampleBox( width, height );
+		if (width != m_Image.GetWidth() || height != m_Image.GetHeight())
+			return m_Image.ResampleBox(width, height);
 		else
 			return m_Image;
 	}

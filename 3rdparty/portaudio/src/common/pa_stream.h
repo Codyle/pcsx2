@@ -29,13 +29,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -65,36 +65,36 @@ extern "C"
  valid stream parameter.
 */
 typedef struct {
-    PaError (*Close)( PaStream* stream );
-    PaError (*Start)( PaStream *stream );
-    PaError (*Stop)( PaStream *stream );
-    PaError (*Abort)( PaStream *stream );
-    PaError (*IsStopped)( PaStream *stream );
-    PaError (*IsActive)( PaStream *stream );
-    PaTime (*GetTime)( PaStream *stream );
-    double (*GetCpuLoad)( PaStream* stream );
-    PaError (*Read)( PaStream* stream, void *buffer, unsigned long frames );
-    PaError (*Write)( PaStream* stream, const void *buffer, unsigned long frames );
-    signed long (*GetReadAvailable)( PaStream* stream );
-    signed long (*GetWriteAvailable)( PaStream* stream );
+	PaError(*Close)(PaStream* stream);
+	PaError(*Start)(PaStream *stream);
+	PaError(*Stop)(PaStream *stream);
+	PaError(*Abort)(PaStream *stream);
+	PaError(*IsStopped)(PaStream *stream);
+	PaError(*IsActive)(PaStream *stream);
+	PaTime(*GetTime)(PaStream *stream);
+	double(*GetCpuLoad)(PaStream* stream);
+	PaError(*Read)(PaStream* stream, void *buffer, unsigned long frames);
+	PaError(*Write)(PaStream* stream, const void *buffer, unsigned long frames);
+	signed long(*GetReadAvailable)(PaStream* stream);
+	signed long(*GetWriteAvailable)(PaStream* stream);
 } PaUtilStreamInterface;
 
 
 /** Initialize the fields of a PaUtilStreamInterface structure.
 */
-void PaUtil_InitializeStreamInterface( PaUtilStreamInterface *streamInterface,
-    PaError (*Close)( PaStream* ),
-    PaError (*Start)( PaStream* ),
-    PaError (*Stop)( PaStream* ),
-    PaError (*Abort)( PaStream* ),
-    PaError (*IsStopped)( PaStream* ),
-    PaError (*IsActive)( PaStream* ),
-    PaTime (*GetTime)( PaStream* ),
-    double (*GetCpuLoad)( PaStream* ),
-    PaError (*Read)( PaStream* stream, void *buffer, unsigned long frames ),
-    PaError (*Write)( PaStream* stream, const void *buffer, unsigned long frames ),
-    signed long (*GetReadAvailable)( PaStream* stream ),
-    signed long (*GetWriteAvailable)( PaStream* stream ) );
+void PaUtil_InitializeStreamInterface(PaUtilStreamInterface *streamInterface,
+                                      PaError(*Close)(PaStream*),
+                                      PaError(*Start)(PaStream*),
+                                      PaError(*Stop)(PaStream*),
+                                      PaError(*Abort)(PaStream*),
+                                      PaError(*IsStopped)(PaStream*),
+                                      PaError(*IsActive)(PaStream*),
+                                      PaTime(*GetTime)(PaStream*),
+                                      double(*GetCpuLoad)(PaStream*),
+                                      PaError(*Read)(PaStream* stream, void *buffer, unsigned long frames),
+                                      PaError(*Write)(PaStream* stream, const void *buffer, unsigned long frames),
+                                      signed long(*GetReadAvailable)(PaStream* stream),
+                                      signed long(*GetWriteAvailable)(PaStream* stream));
 
 
 /** Dummy Read function for use in interfaces to a callback based streams.
@@ -102,9 +102,9 @@ void PaUtil_InitializeStreamInterface( PaUtilStreamInterface *streamInterface,
  @return An error code indicating that the function has no effect
  because the stream is a callback stream.
 */
-PaError PaUtil_DummyRead( PaStream* stream,
-                       void *buffer,
-                       unsigned long frames );
+PaError PaUtil_DummyRead(PaStream* stream,
+                         void *buffer,
+                         unsigned long frames);
 
 
 /** Dummy Write function for use in an interfaces to callback based streams.
@@ -112,9 +112,9 @@ PaError PaUtil_DummyRead( PaStream* stream,
  @return An error code indicating that the function has no effect
  because the stream is a callback stream.
 */
-PaError PaUtil_DummyWrite( PaStream* stream,
-                       const void *buffer,
-                       unsigned long frames );
+PaError PaUtil_DummyWrite(PaStream* stream,
+                          const void *buffer,
+                          unsigned long frames);
 
 
 /** Dummy GetReadAvailable function for use in interfaces to callback based
@@ -122,7 +122,7 @@ PaError PaUtil_DummyWrite( PaStream* stream,
  @return An error code indicating that the function has no effect
  because the stream is a callback stream.
 */
-signed long PaUtil_DummyGetReadAvailable( PaStream* stream );
+signed long PaUtil_DummyGetReadAvailable(PaStream* stream);
 
 
 /** Dummy GetWriteAvailable function for use in interfaces to callback based
@@ -130,7 +130,7 @@ signed long PaUtil_DummyGetReadAvailable( PaStream* stream );
  @return An error code indicating that the function has no effect
  because the stream is a callback stream.
 */
-signed long PaUtil_DummyGetWriteAvailable( PaStream* stream );
+signed long PaUtil_DummyGetWriteAvailable(PaStream* stream);
 
 
 
@@ -138,20 +138,20 @@ signed long PaUtil_DummyGetWriteAvailable( PaStream* stream );
  Pass to the GetCpuLoad parameter of PaUtil_InitializeStreamInterface.
  @return Returns 0.
 */
-double PaUtil_DummyGetCpuLoad( PaStream* stream );
+double PaUtil_DummyGetCpuLoad(PaStream* stream);
 
 
 /** Non host specific data for a stream. This data is used by pa_front to
  forward to the appropriate functions in the streamInterface structure.
 */
 typedef struct PaUtilStreamRepresentation {
-    unsigned long magic;    /**< set to PA_STREAM_MAGIC */
-    struct PaUtilStreamRepresentation *nextOpenStream; /**< field used by multi-api code */
-    PaUtilStreamInterface *streamInterface;
-    PaStreamCallback *streamCallback;
-    PaStreamFinishedCallback *streamFinishedCallback;
-    void *userData;
-    PaStreamInfo streamInfo;
+	unsigned long magic;    /**< set to PA_STREAM_MAGIC */
+	struct PaUtilStreamRepresentation *nextOpenStream; /**< field used by multi-api code */
+	PaUtilStreamInterface *streamInterface;
+	PaStreamCallback *streamCallback;
+	PaStreamFinishedCallback *streamFinishedCallback;
+	void *userData;
+	PaStreamInfo streamInfo;
 } PaUtilStreamRepresentation;
 
 
@@ -163,15 +163,15 @@ void PaUtil_InitializeStreamRepresentation(
         PaUtilStreamRepresentation *streamRepresentation,
         PaUtilStreamInterface *streamInterface,
         PaStreamCallback *streamCallback,
-        void *userData );
-        
+        void *userData);
+
 
 /** Clean up a PaUtilStreamRepresentation structure previously initialized
  by a call to PaUtil_InitializeStreamRepresentation.
 
  @see PaUtil_InitializeStreamRepresentation
 */
-void PaUtil_TerminateStreamRepresentation( PaUtilStreamRepresentation *streamRepresentation );
+void PaUtil_TerminateStreamRepresentation(PaUtilStreamRepresentation *streamRepresentation);
 
 
 /** Check that the stream pointer is valid.
@@ -179,7 +179,7 @@ void PaUtil_TerminateStreamRepresentation( PaUtilStreamRepresentation *streamRep
  @return Returns paNoError if the stream pointer appears to be OK, otherwise
  returns an error indicating the cause of failure.
 */
-PaError PaUtil_ValidateStreamPointer( PaStream *stream );
+PaError PaUtil_ValidateStreamPointer(PaStream *stream);
 
 
 /** Cast an opaque stream pointer into a pointer to a PaUtilStreamRepresentation.
@@ -187,7 +187,7 @@ PaError PaUtil_ValidateStreamPointer( PaStream *stream );
  @see PaUtilStreamRepresentation
 */
 #define PA_STREAM_REP( stream )\
-    ((PaUtilStreamRepresentation*) (stream) )
+	((PaUtilStreamRepresentation*) (stream) )
 
 
 /** Cast an opaque stream pointer into a pointer to a PaUtilStreamInterface.
@@ -195,10 +195,10 @@ PaError PaUtil_ValidateStreamPointer( PaStream *stream );
  @see PaUtilStreamRepresentation, PaUtilStreamInterface
 */
 #define PA_STREAM_INTERFACE( stream )\
-    PA_STREAM_REP( (stream) )->streamInterface
+	PA_STREAM_REP( (stream) )->streamInterface
 
 
-    
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

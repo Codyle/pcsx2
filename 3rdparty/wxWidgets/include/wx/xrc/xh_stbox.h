@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxStaticBoxXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxStaticBoxXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxStaticBoxXmlHandler)
 
 public:
-    wxStaticBoxXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxStaticBoxXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_STATBOX

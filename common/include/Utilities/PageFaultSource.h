@@ -26,11 +26,10 @@
 
 #include "EventSource.h"
 
-struct PageFaultInfo
-{
+struct PageFaultInfo {
 	uptr	addr;
 
-	PageFaultInfo( uptr address )
+	PageFaultInfo(uptr address)
 	{
 		addr = address;
 	}
@@ -47,17 +46,17 @@ public:
 public:
 	virtual ~IEventListener_PageFault() throw() {}
 
-	virtual void DispatchEvent( const PageFaultInfo& evtinfo, bool& handled )
+	virtual void DispatchEvent(const PageFaultInfo &evtinfo, bool &handled)
 	{
-		OnPageFaultEvent( evtinfo, handled );
+		OnPageFaultEvent(evtinfo, handled);
 	}
 
-	virtual void DispatchEvent( const PageFaultInfo& evtinfo )
+	virtual void DispatchEvent(const PageFaultInfo &evtinfo)
 	{
-		pxFailRel( "Don't call me, damnit.  Use DispatchException instead." );
+		pxFailRel("Don't call me, damnit.  Use DispatchException instead.");
 	}
 
-	virtual void OnPageFaultEvent( const PageFaultInfo& evtinfo, bool& handled ) {}
+	virtual void OnPageFaultEvent(const PageFaultInfo &evtinfo, bool &handled) {}
 };
 
 // --------------------------------------------------------------------------------------
@@ -70,19 +69,19 @@ public:
 	virtual ~EventListener_PageFault() throw();
 };
 
-template< typename TypeToDispatchTo >
+template<typename TypeToDispatchTo>
 class EventListenerHelper_PageFault : public EventListener_PageFault
 {
 public:
 	TypeToDispatchTo*	Owner;
 
 public:
-	EventListenerHelper_PageFault( TypeToDispatchTo& dispatchTo )
+	EventListenerHelper_PageFault(TypeToDispatchTo &dispatchTo)
 	{
 		Owner = &dispatchTo;
 	}
 
-	EventListenerHelper_PageFault( TypeToDispatchTo* dispatchTo )
+	EventListenerHelper_PageFault(TypeToDispatchTo* dispatchTo)
 	{
 		Owner = dispatchTo;
 	}
@@ -90,9 +89,9 @@ public:
 	virtual ~EventListenerHelper_PageFault() throw() {}
 
 protected:
-	virtual void OnPageFaultEvent( const PageFaultInfo& info, bool& handled )
+	virtual void OnPageFaultEvent(const PageFaultInfo &info, bool &handled)
 	{
-		Owner->OnPageFaultEvent( info, handled );
+		Owner->OnPageFaultEvent(info, handled);
 	}
 
 };
@@ -112,11 +111,14 @@ public:
 	SrcType_PageFault() {}
 	virtual ~SrcType_PageFault() throw() { }
 
-	bool WasHandled() const { return m_handled; }
-	virtual void Dispatch( const PageFaultInfo& params );
+	bool WasHandled() const
+	{
+		return m_handled;
+	}
+	virtual void Dispatch(const PageFaultInfo &params);
 
 protected:
-	virtual void _DispatchRaw( ListenerIterator iter, const ListenerIterator& iend, const PageFaultInfo& evt );
+	virtual void _DispatchRaw(ListenerIterator iter, const ListenerIterator &iend, const PageFaultInfo &evt);
 };
 
 
@@ -125,7 +127,7 @@ protected:
 // --------------------------------------------------------------------------------------
 class VirtualMemoryReserve
 {
-	DeclareNoncopyableObject( VirtualMemoryReserve );
+	DeclareNoncopyableObject(VirtualMemoryReserve);
 
 protected:
 	wxString m_name;
@@ -146,7 +148,7 @@ protected:
 
 	// Protection mode to be applied to committed blocks.
 	PageProtectionMode m_prot_mode;
-	
+
 	// Controls write access to the entire reserve.  When true (the default), the reserve
 	// operates normally.  When set to false, all committed blocks are re-protected with
 	// write disabled, and accesses to uncommitted blocks (read or write) will cause a GPF
@@ -154,63 +156,105 @@ protected:
 	bool	m_allow_writes;
 
 public:
-	VirtualMemoryReserve( const wxString& name=wxEmptyString, size_t size = 0 );
+	VirtualMemoryReserve(const wxString &name = wxEmptyString, size_t size = 0);
 	virtual ~VirtualMemoryReserve() throw()
 	{
 		Release();
 	}
 
-	virtual void* Reserve( size_t size = 0, uptr base = 0, uptr upper_bounds = 0 );
-	virtual void* ReserveAt( uptr base = 0, uptr upper_bounds = 0 )
+	virtual void* Reserve(size_t size = 0, uptr base = 0, uptr upper_bounds = 0);
+	virtual void* ReserveAt(uptr base = 0, uptr upper_bounds = 0)
 	{
 		return Reserve(m_defsize, base, upper_bounds);
 	}
 
 	virtual void Reset();
 	virtual void Release();
-	virtual bool TryResize( uint newsize );
+	virtual bool TryResize(uint newsize);
 	virtual bool Commit();
-	
+
 	virtual void ForbidModification();
 	virtual void AllowModification();
 
-	bool IsOk() const { return m_baseptr !=  NULL; }
-	wxString GetName() const { return m_name; }
+	bool IsOk() const
+	{
+		return m_baseptr !=  NULL;
+	}
+	wxString GetName() const
+	{
+		return m_name;
+	}
 
-	uptr GetReserveSizeInBytes() const	{ return m_pages_reserved * __pagesize; }
-	uptr GetReserveSizeInPages() const	{ return m_pages_reserved; }
-	uint GetCommittedPageCount() const	{ return m_pages_commited; }
-	uint GetCommittedBytes() const		{ return m_pages_commited * __pagesize; }
+	uptr GetReserveSizeInBytes() const
+	{
+		return m_pages_reserved * __pagesize;
+	}
+	uptr GetReserveSizeInPages() const
+	{
+		return m_pages_reserved;
+	}
+	uint GetCommittedPageCount() const
+	{
+		return m_pages_commited;
+	}
+	uint GetCommittedBytes() const
+	{
+		return m_pages_commited * __pagesize;
+	}
 
-	u8* GetPtr()					{ return (u8*)m_baseptr; }
-	const u8* GetPtr() const		{ return (u8*)m_baseptr; }
-	u8* GetPtrEnd()					{ return (u8*)m_baseptr + (m_pages_reserved * __pagesize); }
-	const u8* GetPtrEnd() const		{ return (u8*)m_baseptr + (m_pages_reserved * __pagesize); }
+	u8* GetPtr()
+	{
+		return (u8*)m_baseptr;
+	}
+	const u8* GetPtr() const
+	{
+		return (u8*)m_baseptr;
+	}
+	u8* GetPtrEnd()
+	{
+		return (u8*)m_baseptr + (m_pages_reserved * __pagesize);
+	}
+	const u8* GetPtrEnd() const
+	{
+		return (u8*)m_baseptr + (m_pages_reserved * __pagesize);
+	}
 
-	VirtualMemoryReserve& SetName( const wxString& newname );
-	VirtualMemoryReserve& SetBaseAddr( uptr newaddr );
-	VirtualMemoryReserve& SetPageAccessOnCommit( const PageProtectionMode& mode );
+	VirtualMemoryReserve &SetName(const wxString &newname);
+	VirtualMemoryReserve &SetBaseAddr(uptr newaddr);
+	VirtualMemoryReserve &SetPageAccessOnCommit(const PageProtectionMode &mode);
 
-	operator void*()				{ return m_baseptr; }
-	operator const void*() const	{ return m_baseptr; }
+	operator void*()
+	{
+		return m_baseptr;
+	}
+	operator const void*() const
+	{
+		return m_baseptr;
+	}
 
-	operator u8*()					{ return (u8*)m_baseptr; }
-	operator const u8*() const		{ return (u8*)m_baseptr; }
+	operator u8*()
+	{
+		return (u8*)m_baseptr;
+	}
+	operator const u8*() const
+	{
+		return (u8*)m_baseptr;
+	}
 
-	u8& operator[](uint idx)
+	u8 &operator[](uint idx)
 	{
 		pxAssert(idx < (m_pages_reserved * __pagesize));
 		return *((u8*)m_baseptr + idx);
 	}
 
-	const u8& operator[](uint idx) const
+	const u8 &operator[](uint idx) const
 	{
 		pxAssert(idx < (m_pages_reserved * __pagesize));
 		return *((u8*)m_baseptr + idx);
 	}
 
 protected:
-	virtual void ReprotectCommittedBlocks( const PageProtectionMode& newmode );
+	virtual void ReprotectCommittedBlocks(const PageProtectionMode &newmode);
 };
 
 // --------------------------------------------------------------------------------------
@@ -218,7 +262,7 @@ protected:
 // --------------------------------------------------------------------------------------
 class BaseVmReserveListener : public VirtualMemoryReserve
 {
-	DeclareNoncopyableObject( BaseVmReserveListener );
+	DeclareNoncopyableObject(BaseVmReserveListener);
 
 	typedef VirtualMemoryReserve _parent;
 
@@ -229,41 +273,53 @@ protected:
 	uptr	m_blocksize;
 
 public:
-	BaseVmReserveListener( const wxString& name, size_t size = 0 );
+	BaseVmReserveListener(const wxString &name, size_t size = 0);
 	virtual ~BaseVmReserveListener() throw() { }
 
-	operator void*()				{ return m_baseptr; }
-	operator const void*() const	{ return m_baseptr; }
+	operator void*()
+	{
+		return m_baseptr;
+	}
+	operator const void*() const
+	{
+		return m_baseptr;
+	}
 
-	operator u8*()					{ return (u8*)m_baseptr; }
-	operator const u8*() const		{ return (u8*)m_baseptr; }
+	operator u8*()
+	{
+		return (u8*)m_baseptr;
+	}
+	operator const u8*() const
+	{
+		return (u8*)m_baseptr;
+	}
 
 	using _parent::operator[];
 
-	void OnPageFaultEvent( const PageFaultInfo& info, bool& handled );
+	void OnPageFaultEvent(const PageFaultInfo &info, bool &handled);
 
-	virtual uptr SetBlockSize( uptr bytes )
+	virtual uptr SetBlockSize(uptr bytes)
 	{
 		m_blocksize = (bytes + __pagesize - 1) / __pagesize;
 		return m_blocksize * __pagesize;
 	}
-	
+
 protected:
 
 	// This function is called from OnPageFaultEvent after the address has been translated
-	// and confirmed to apply to this reserved area in question.  OnPageFaultEvent contains 
+	// and confirmed to apply to this reserved area in question.  OnPageFaultEvent contains
 	// a try/catch exception handler, which ensures "reasonable" error response behavior if
 	// this function throws exceptions.
 	//
 	// Important: This method is called from the context of an exception/signal handler.  On
 	// Windows this isn't a big deal (most operations are ok).  On Linux, however, logging
 	// and other facilities are probably not a good idea.
-	virtual void DoCommitAndProtect( uptr offset )=0;
+	virtual void DoCommitAndProtect(uptr offset) = 0;
 
 	// This function is called for every committed block.
-	virtual void OnCommittedBlock( void* block )=0;
+	virtual void OnCommittedBlock(void* block) = 0;
 
-	virtual void CommitBlocks( uptr page, uint blocks );
+	virtual void CommitBlocks(uptr page, uint blocks);
 };
 
 // --------------------------------------------------------------------------------------
@@ -302,33 +358,45 @@ protected:
 	// or not.  The array length is typically determined via ((numblocks+7) / 8), though the
 	// actual array size may be larger in order to accommodate 32-bit or 128-bit accelerated
 	// operations.
-	ScopedAlignedAlloc<u8,16>	m_blockbits;
+	ScopedAlignedAlloc<u8, 16>	m_blockbits;
 
 public:
-	SpatialArrayReserve( const wxString& name );
+	SpatialArrayReserve(const wxString &name);
 
-	virtual void* Reserve( size_t size = 0, uptr base = 0, uptr upper_bounds = 0 );
+	virtual void* Reserve(size_t size = 0, uptr base = 0, uptr upper_bounds = 0);
 	virtual void Reset();
-	virtual bool TryResize( uint newsize );
+	virtual bool TryResize(uint newsize);
 
-	void OnCommittedBlock( void* block );
-	
-	SpatialArrayReserve& SetBlockCount( uint blocks );
-	SpatialArrayReserve& SetBlockSizeInPages( uint bytes );
+	void OnCommittedBlock(void* block);
 
-	uptr SetBlockSize( uptr bytes );
+	SpatialArrayReserve &SetBlockCount(uint blocks);
+	SpatialArrayReserve &SetBlockSizeInPages(uint bytes);
 
-	operator void*()				{ return m_baseptr; }
-	operator const void*() const	{ return m_baseptr; }
+	uptr SetBlockSize(uptr bytes);
 
-	operator u8*()				{ return (u8*)m_baseptr; }
-	operator const u8*() const	{ return (u8*)m_baseptr; }
-	
+	operator void*()
+	{
+		return m_baseptr;
+	}
+	operator const void*() const
+	{
+		return m_baseptr;
+	}
+
+	operator u8*()
+	{
+		return (u8*)m_baseptr;
+	}
+	operator const u8*() const
+	{
+		return (u8*)m_baseptr;
+	}
+
 	using _parent::operator[];
 
 protected:
-	void ReprotectCommittedBlocks( const PageProtectionMode& newmode );
-	void DoCommitAndProtect( uptr page );
+	void ReprotectCommittedBlocks(const PageProtectionMode &newmode);
+	void DoCommitAndProtect(uptr page);
 	uint _calcBlockBitArrayLength() const;
 };
 

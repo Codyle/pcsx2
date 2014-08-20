@@ -31,9 +31,9 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
 #define wxDD_NEW_DIR_BUTTON     0
 
 #ifdef __WXWINCE__
-    #define wxDD_DEFAULT_STYLE      wxDEFAULT_DIALOG_STYLE
+#define wxDD_DEFAULT_STYLE      wxDEFAULT_DIALOG_STYLE
 #else
-    #define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
+#define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 #endif
 
 //-------------------------------------------------------------------------
@@ -43,85 +43,97 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
 class WXDLLEXPORT wxDirDialogBase : public wxDialog
 {
 public:
-    wxDirDialogBase() {}
-    wxDirDialogBase(wxWindow *parent,
-                    const wxString& title = wxDirSelectorPromptStr,
-                    const wxString& defaultPath = wxEmptyString,
-                    long style = wxDD_DEFAULT_STYLE,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& sz = wxDefaultSize,
-                    const wxString& name = wxDirDialogNameStr)
-    {
-        Create(parent, title, defaultPath, style, pos, sz, name);
-    }
+	wxDirDialogBase() {}
+	wxDirDialogBase(wxWindow *parent,
+	                const wxString &title = wxDirSelectorPromptStr,
+	                const wxString &defaultPath = wxEmptyString,
+	                long style = wxDD_DEFAULT_STYLE,
+	                const wxPoint &pos = wxDefaultPosition,
+	                const wxSize &sz = wxDefaultSize,
+	                const wxString &name = wxDirDialogNameStr)
+	{
+		Create(parent, title, defaultPath, style, pos, sz, name);
+	}
 
-    virtual ~wxDirDialogBase() {}
+	virtual ~wxDirDialogBase() {}
 
 
-    bool Create(wxWindow *parent,
-                const wxString& title = wxDirSelectorPromptStr,
-                const wxString& defaultPath = wxEmptyString,
-                long style = wxDD_DEFAULT_STYLE,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& sz = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr)
-    {
-        if (!wxDialog::Create(parent, wxID_ANY, title, pos, sz, style, name))
-            return false;
-        m_path = defaultPath;
-        m_message = title;
-        return true;
-    }
+	bool Create(wxWindow *parent,
+	            const wxString &title = wxDirSelectorPromptStr,
+	            const wxString &defaultPath = wxEmptyString,
+	            long style = wxDD_DEFAULT_STYLE,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &sz = wxDefaultSize,
+	            const wxString &name = wxDirDialogNameStr)
+	{
+		if (!wxDialog::Create(parent, wxID_ANY, title, pos, sz, style, name))
+			return false;
+		m_path = defaultPath;
+		m_message = title;
+		return true;
+	}
 
 #if WXWIN_COMPATIBILITY_2_6
 
-    wxDEPRECATED( long GetStyle() const );
-    wxDEPRECATED( void SetStyle(long style) );
+	wxDEPRECATED(long GetStyle() const);
+	wxDEPRECATED(void SetStyle(long style));
 
 #endif  // WXWIN_COMPATIBILITY_2_6
 
-    virtual void SetMessage(const wxString& message) { m_message = message; }
-    virtual void SetPath(const wxString& path) { m_path = path; }
+	virtual void SetMessage(const wxString &message)
+	{
+		m_message = message;
+	}
+	virtual void SetPath(const wxString &path)
+	{
+		m_path = path;
+	}
 
-    virtual wxString GetMessage() const { return m_message; }
-    virtual wxString GetPath() const { return m_path; }
+	virtual wxString GetMessage() const
+	{
+		return m_message;
+	}
+	virtual wxString GetPath() const
+	{
+		return m_path;
+	}
 
 protected:
-    wxString m_message;
-    wxString m_path;
+	wxString m_message;
+	wxString m_path;
 };
 
 
 // Universal and non-port related switches with need for generic implementation
 #if defined(__WXUNIVERSAL__)
-    #include "wx/generic/dirdlgg.h"
-    #define wxDirDialog wxGenericDirDialog
+#include "wx/generic/dirdlgg.h"
+#define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMSW__) && (defined(__SALFORDC__)    || \
                              !wxUSE_OLE               || \
                              (defined (__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS))
-    #include "wx/generic/dirdlgg.h"
-    #define wxDirDialog wxGenericDirDialog
+#include "wx/generic/dirdlgg.h"
+#define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMSW__) && defined(__WXWINCE__) && !defined(__HANDHELDPC__)
-    #include "wx/generic/dirdlgg.h"     // MS PocketPC or MS Smartphone
-    #define wxDirDialog wxGenericDirDialog
+#include "wx/generic/dirdlgg.h"     // MS PocketPC or MS Smartphone
+#define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMSW__)
-    #include "wx/msw/dirdlg.h"  // Native MSW
+#include "wx/msw/dirdlg.h"  // Native MSW
 #elif defined(__WXGTK24__)
-    #include "wx/gtk/dirdlg.h"  // Native GTK for gtk2.4
+#include "wx/gtk/dirdlg.h"  // Native GTK for gtk2.4
 #elif defined(__WXGTK__)
-    #include "wx/generic/dirdlgg.h"
-    #define wxDirDialog wxGenericDirDialog
+#include "wx/generic/dirdlgg.h"
+#define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMAC__)
-    #include "wx/mac/dirdlg.h"      // Native Mac
+#include "wx/mac/dirdlg.h"      // Native Mac
 #elif defined(__WXCOCOA__)
-    #include "wx/cocoa/dirdlg.h"    // Native Cocoa
+#include "wx/cocoa/dirdlg.h"    // Native Cocoa
 #elif defined(__WXMOTIF__) || \
       defined(__WXX11__)   || \
       defined(__WXMGL__)   || \
       defined(__WXCOCOA__) || \
       defined(__WXPM__)
-    #include "wx/generic/dirdlgg.h"     // Other ports use generic implementation
-    #define wxDirDialog wxGenericDirDialog
+#include "wx/generic/dirdlgg.h"     // Other ports use generic implementation
+#define wxDirDialog wxGenericDirDialog
 #endif
 
 // ----------------------------------------------------------------------------
@@ -129,13 +141,13 @@ protected:
 // ----------------------------------------------------------------------------
 
 WXDLLEXPORT wxString
-wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
-              const wxString& defaultPath = wxEmptyString,
+wxDirSelector(const wxString &message = wxDirSelectorPromptStr,
+              const wxString &defaultPath = wxEmptyString,
               long style = wxDD_DEFAULT_STYLE,
-              const wxPoint& pos = wxDefaultPosition,
+              const wxPoint &pos = wxDefaultPosition,
               wxWindow *parent = NULL);
 
 #endif // wxUSE_DIRDLG
 
 #endif
-    // _WX_DIRDLG_H_BASE_
+// _WX_DIRDLG_H_BASE_

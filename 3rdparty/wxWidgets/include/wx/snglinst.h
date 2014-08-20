@@ -22,42 +22,48 @@
 class WXDLLIMPEXP_BASE wxSingleInstanceChecker
 {
 public:
-    // default ctor, use Create() after it
-    wxSingleInstanceChecker() { Init(); }
+	// default ctor, use Create() after it
+	wxSingleInstanceChecker()
+	{
+		Init();
+	}
 
-    // like Create() but no error checking (dangerous!)
-    wxSingleInstanceChecker(const wxString& name,
-                            const wxString& path = wxEmptyString)
-    {
-        Init();
-        Create(name, path);
-    }
+	// like Create() but no error checking (dangerous!)
+	wxSingleInstanceChecker(const wxString &name,
+	                        const wxString &path = wxEmptyString)
+	{
+		Init();
+		Create(name, path);
+	}
 
-    // name must be given and be as unique as possible, it is used as the mutex
-    // name under Win32 and the lock file name under Unix -
-    // wxTheApp->GetAppName() may be a good value for this parameter
-    //
-    // path is optional and is ignored under Win32 and used as the directory to
-    // create the lock file in under Unix (default is wxGetHomeDir())
-    //
-    // returns false if initialization failed, it doesn't mean that another
-    // instance is running - use IsAnotherRunning() to check it
-    bool Create(const wxString& name, const wxString& path = wxEmptyString);
+	// name must be given and be as unique as possible, it is used as the mutex
+	// name under Win32 and the lock file name under Unix -
+	// wxTheApp->GetAppName() may be a good value for this parameter
+	//
+	// path is optional and is ignored under Win32 and used as the directory to
+	// create the lock file in under Unix (default is wxGetHomeDir())
+	//
+	// returns false if initialization failed, it doesn't mean that another
+	// instance is running - use IsAnotherRunning() to check it
+	bool Create(const wxString &name, const wxString &path = wxEmptyString);
 
-    // is another copy of this program already running?
-    bool IsAnotherRunning() const;
+	// is another copy of this program already running?
+	bool IsAnotherRunning() const;
 
-    // dtor is not virtual, this class is not meant to be used polymorphically
-    ~wxSingleInstanceChecker();
+	// dtor is not virtual, this class is not meant to be used polymorphically
+	~wxSingleInstanceChecker();
 
 private:
-    // common part of all ctors
-    void Init() { m_impl = NULL; }
+	// common part of all ctors
+	void Init()
+	{
+		m_impl = NULL;
+	}
 
-    // the implementation details (platform specific)
-    class WXDLLIMPEXP_FWD_BASE wxSingleInstanceCheckerImpl *m_impl;
+	// the implementation details (platform specific)
+	class WXDLLIMPEXP_FWD_BASE wxSingleInstanceCheckerImpl *m_impl;
 
-    DECLARE_NO_COPY_CLASS(wxSingleInstanceChecker)
+	DECLARE_NO_COPY_CLASS(wxSingleInstanceChecker)
 };
 
 #endif // wxUSE_SNGLINST_CHECKER

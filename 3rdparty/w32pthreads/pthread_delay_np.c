@@ -78,93 +78,64 @@
  *  intRC = pthread_delay_np(&tsWait);
  */
 int
-pthread_delay_np (struct timespec *interval)
+pthread_delay_np(struct timespec *interval)
 {
-  DWORD wait_time;
-  DWORD secs_in_millisecs;
-  DWORD millisecs;
-  DWORD status;
-  pthread_t self;
-  ptw32_thread_t * sp;
-
-  if (interval == NULL)
-    {
-      return EINVAL;
-    }
-
-  if (interval->tv_sec == 0L && interval->tv_nsec == 0L)
-    {
-      pthread_testcancel ();
-      Sleep (0);
-      pthread_testcancel ();
-      return (0);
-    }
-
-  /* convert secs to millisecs */
-  secs_in_millisecs = interval->tv_sec * 1000L;
-
-  /* convert nanosecs to millisecs (rounding up) */
-  millisecs = (interval->tv_nsec + 999999L) / 1000000L;
-
+	DWORD wait_time;
+	DWORD secs_in_millisecs;
+	DWORD millisecs;
+	DWORD status;
+	pthread_t self;
+	ptw32_thread_t * sp;
+	if (interval == NULL)
+		return EINVAL;
+	if (interval->tv_sec == 0L && interval->tv_nsec == 0L) {
+		pthread_testcancel();
+		Sleep(0);
+		pthread_testcancel();
+		return (0);
+	}
+	/* convert secs to millisecs */
+	secs_in_millisecs = interval->tv_sec * 1000L;
+	/* convert nanosecs to millisecs (rounding up) */
+	millisecs = (interval->tv_nsec + 999999L) / 1000000L;
 #if defined(__WATCOMC__)
 #pragma disable_message (124)
 #endif
-
-  /*
-   * Most compilers will issue a warning 'comparison always 0'
-   * because the variable type is unsigned, but we need to keep this
-   * for some reason I can't recall now.
-   */
-  if (0 > (wait_time = secs_in_millisecs + millisecs))
-    {
-      return EINVAL;
-    }
-
+	/*
+	 * Most compilers will issue a warning 'comparison always 0'
+	 * because the variable type is unsigned, but we need to keep this
+	 * for some reason I can't recall now.
+	 */
+	if (0 > (wait_time = secs_in_millisecs + millisecs))
+		return EINVAL;
 #if defined(__WATCOMC__)
 #pragma enable_message (124)
 #endif
-
-  if (NULL == (self = pthread_self ()).p)
-    {
-      return ENOMEM;
-    }
-
-  sp = (ptw32_thread_t *) self.p;
-
-  if (sp->cancelState == PTHREAD_CANCEL_ENABLE)
-    {
-      /*
-       * Async cancelation won't catch us until wait_time is up.
-       * Deferred cancelation will cancel us immediately.
-       */
-      if (WAIT_OBJECT_0 ==
-	  (status = WaitForSingleObject (sp->cancelEvent, wait_time)))
-	{
-	  /*
-	   * Canceling!
-	   */
-	  (void) pthread_mutex_lock (&sp->cancelLock);
-	  if (sp->state < PThreadStateCanceling)
-	    {
-	      sp->state = PThreadStateCanceling;
-	      sp->cancelState = PTHREAD_CANCEL_DISABLE;
-	      (void) pthread_mutex_unlock (&sp->cancelLock);
-
-	      ptw32_throw (PTW32_EPS_CANCEL);
-	    }
-
-	  (void) pthread_mutex_unlock (&sp->cancelLock);
-	  return ESRCH;
-	}
-      else if (status != WAIT_TIMEOUT)
-	{
-	  return EINVAL;
-	}
-    }
-  else
-    {
-      Sleep (wait_time);
-    }
-
-  return (0);
+	if (NULL == (self = pthread_self()).p)
+		return ENOMEM;
+	sp = (ptw32_thread_t *) self.p;
+	if (sp->cancelState == PTHREAD_CANCEL_ENABLE) {
+		/*
+		 * Async cancelation won't catch us until wait_time is up.
+		 * Deferred cancelation will cancel us immediately.
+		 */
+		if (WAIT_OBJECT_0 ==
+		    (status = WaitForSingleObject(sp->cancelEvent, wait_time))) {
+			/*
+			 * Canceling!
+			 */
+			(void) pthread_mutex_lock(&sp->cancelLock);
+			if (sp->state < PThreadStateCanceling) {
+				sp->state = PThreadStateCanceling;
+				sp->cancelState = PTHREAD_CANCEL_DISABLE;
+				(void) pthread_mutex_unlock(&sp->cancelLock);
+				ptw32_throw(PTW32_EPS_CANCEL);
+			}
+			(void) pthread_mutex_unlock(&sp->cancelLock);
+			return ESRCH;
+		} else if (status != WAIT_TIMEOUT)
+			return EINVAL;
+	} else
+		Sleep(wait_time);
+	return (0);
 }

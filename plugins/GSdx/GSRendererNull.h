@@ -36,14 +36,14 @@ protected:
 	{
 	}
 
-	GSTexture* GetOutput(int i) 
+	GSTexture* GetOutput(int i)
 	{
 		return NULL;
 	}
 
 public:
-	GSRendererNull() 
-		: GSRenderer() 
+	GSRendererNull()
+		: GSRenderer()
 	{
 	}
 };

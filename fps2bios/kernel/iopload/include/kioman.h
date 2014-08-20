@@ -6,7 +6,7 @@
 #define STDIN	0
 #define STDOUT	1
 
-struct ioman_FUNCS{
+struct ioman_FUNCS {
 	int  init(struct ioman_DRV *drv);				//00
 	void term(struct ioman_DRV *drv);				//01
 	int  format(char *filename);					//02
@@ -26,7 +26,7 @@ struct ioman_FUNCS{
 	int  chstat(char *filename, void *buf, unsigned int mask);	//16
 };
 
-struct ioman_DRV{	//struct fileio_driver from ps2lib
+struct ioman_DRV {	//struct fileio_driver from ps2lib
 	char			*driver;	//+00
 	int			unk1;		//+04
 	int			version;	//+08

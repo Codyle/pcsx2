@@ -21,31 +21,30 @@
 class WXDLLEXPORT wxMemoryDCBase
 {
 public:
-    wxMemoryDCBase() { }
+	wxMemoryDCBase() { }
 
-    // avoid warnings about having virtual functions but non virtual dtor
-    virtual ~wxMemoryDCBase() { }
+	// avoid warnings about having virtual functions but non virtual dtor
+	virtual ~wxMemoryDCBase() { }
 
-    // select the given bitmap to draw on it
-    void SelectObject(wxBitmap& bmp)
-    {
-        // make sure that the given wxBitmap is not sharing its data with other
-        // wxBitmap instances as its contents will be modified by any drawing
-        // operation done on this DC
-        if (bmp.IsOk())
-            bmp.UnShare();
+	// select the given bitmap to draw on it
+	void SelectObject(wxBitmap &bmp)
+	{
+		// make sure that the given wxBitmap is not sharing its data with other
+		// wxBitmap instances as its contents will be modified by any drawing
+		// operation done on this DC
+		if (bmp.IsOk())
+			bmp.UnShare();
+		DoSelect(bmp);
+	}
 
-        DoSelect(bmp);
-    }
-
-    // select the given bitmap for read-only
-    virtual void SelectObjectAsSource(const wxBitmap& bmp)
-    {
-        DoSelect(bmp);
-    }
+	// select the given bitmap for read-only
+	virtual void SelectObjectAsSource(const wxBitmap &bmp)
+	{
+		DoSelect(bmp);
+	}
 
 protected:
-    virtual void DoSelect(const wxBitmap& bmp) = 0;
+	virtual void DoSelect(const wxBitmap &bmp) = 0;
 };
 
 #if defined(__WXPALMOS__)
@@ -73,4 +72,4 @@ protected:
 #endif
 
 #endif
-    // _WX_DCMEMORY_H_BASE_
+// _WX_DCMEMORY_H_BASE_

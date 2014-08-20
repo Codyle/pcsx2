@@ -32,107 +32,117 @@ class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxButton : public wxButtonBase
 {
 public:
-    wxButton() { Init(); }
-    wxButton(wxWindow *parent,
-             wxWindowID id,
-             const wxBitmap& bitmap,
-             const wxString& label = wxEmptyString,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxButtonNameStr)
-    {
-        Init();
+	wxButton()
+	{
+		Init();
+	}
+	wxButton(wxWindow *parent,
+	         wxWindowID id,
+	         const wxBitmap &bitmap,
+	         const wxString &label = wxEmptyString,
+	         const wxPoint &pos = wxDefaultPosition,
+	         const wxSize &size = wxDefaultSize,
+	         long style = 0,
+	         const wxValidator &validator = wxDefaultValidator,
+	         const wxString &name = wxButtonNameStr)
+	{
+		Init();
+		Create(parent, id, bitmap, label, pos, size, style, validator, name);
+	}
 
-        Create(parent, id, bitmap, label, pos, size, style, validator, name);
-    }
+	wxButton(wxWindow *parent,
+	         wxWindowID id,
+	         const wxString &label = wxEmptyString,
+	         const wxPoint &pos = wxDefaultPosition,
+	         const wxSize &size = wxDefaultSize,
+	         long style = 0,
+	         const wxValidator &validator = wxDefaultValidator,
+	         const wxString &name = wxButtonNameStr)
+	{
+		Init();
+		Create(parent, id, label, pos, size, style, validator, name);
+	}
 
-    wxButton(wxWindow *parent,
-             wxWindowID id,
-             const wxString& label = wxEmptyString,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxButtonNameStr)
-    {
-        Init();
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            const wxString &label = wxEmptyString,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = 0,
+	            const wxValidator &validator = wxDefaultValidator,
+	            const wxString &name = wxButtonNameStr)
+	{
+		return Create(parent, id, wxNullBitmap, label,
+		              pos, size, style, validator, name);
+	}
 
-        Create(parent, id, label, pos, size, style, validator, name);
-    }
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            const wxBitmap &bitmap,
+	            const wxString &label = wxEmptyString,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = 0,
+	            const wxValidator &validator = wxDefaultValidator,
+	            const wxString &name = wxButtonNameStr);
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxString& label = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr)
-    {
-        return Create(parent, id, wxNullBitmap, label,
-                      pos, size, style, validator, name);
-    }
+	virtual ~wxButton();
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxBitmap& bitmap,
-                const wxString& label = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+	virtual void SetImageLabel(const wxBitmap &bitmap);
+	virtual void SetImageMargins(wxCoord x, wxCoord y);
+	virtual void SetDefault();
 
-    virtual ~wxButton();
+	virtual bool IsPressed() const
+	{
+		return m_isPressed;
+	}
+	virtual bool IsDefault() const
+	{
+		return m_isDefault;
+	}
 
-    virtual void SetImageLabel(const wxBitmap& bitmap);
-    virtual void SetImageMargins(wxCoord x, wxCoord y);
-    virtual void SetDefault();
+	// wxButton actions
+	virtual void Toggle();
+	virtual void Press();
+	virtual void Release();
+	virtual void Click();
 
-    virtual bool IsPressed() const { return m_isPressed; }
-    virtual bool IsDefault() const { return m_isDefault; }
+	virtual bool PerformAction(const wxControlAction &action,
+	                           long numArg = -1,
+	                           const wxString &strArg = wxEmptyString);
 
-    // wxButton actions
-    virtual void Toggle();
-    virtual void Press();
-    virtual void Release();
-    virtual void Click();
+	virtual bool CanBeHighlighted() const
+	{
+		return true;
+	}
 
-    virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = -1,
-                               const wxString& strArg = wxEmptyString);
-
-    virtual bool CanBeHighlighted() const { return true; }
-
-    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
-    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
-    {
-        return GetStdInputHandler(handlerDef);
-    }
+	static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+	virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+	{
+		return GetStdInputHandler(handlerDef);
+	}
 
 
 protected:
-    virtual wxSize DoGetBestClientSize() const;
+	virtual wxSize DoGetBestClientSize() const;
 
-    virtual bool DoDrawBackground(wxDC& dc);
-    virtual void DoDraw(wxControlRenderer *renderer);
+	virtual bool DoDrawBackground(wxDC &dc);
+	virtual void DoDraw(wxControlRenderer *renderer);
 
-    // common part of all ctors
-    void Init();
+	// common part of all ctors
+	void Init();
 
-    // current state
-    bool m_isPressed,
-         m_isDefault;
+	// current state
+	bool m_isPressed,
+	     m_isDefault;
 
-    // the (optional) image to show and the margins around it
-    wxBitmap m_bitmap;
-    wxCoord  m_marginBmpX,
-             m_marginBmpY;
+	// the (optional) image to show and the margins around it
+	wxBitmap m_bitmap;
+	wxCoord  m_marginBmpX,
+	         m_marginBmpY;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxButton)
+	DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
 #endif // _WX_UNIV_BUTTON_H_

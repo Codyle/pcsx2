@@ -32,43 +32,47 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxImage, wxImageArray);
 class WXDLLEXPORT wxANIDecoder : public wxAnimationDecoder
 {
 public:
-    // constructor, destructor, etc.
-    wxANIDecoder();
-    ~wxANIDecoder();
+	// constructor, destructor, etc.
+	wxANIDecoder();
+	~wxANIDecoder();
 
 
-    virtual wxSize GetFrameSize(unsigned int frame) const;
-    virtual wxPoint GetFramePosition(unsigned int frame) const;
-    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
-    virtual long GetDelay(unsigned int frame) const;
-    virtual wxColour GetTransparentColour(unsigned int frame) const;
+	virtual wxSize GetFrameSize(unsigned int frame) const;
+	virtual wxPoint GetFramePosition(unsigned int frame) const;
+	virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
+	virtual long GetDelay(unsigned int frame) const;
+	virtual wxColour GetTransparentColour(unsigned int frame) const;
 
-    // implementation of wxAnimationDecoder's pure virtuals
-    virtual bool CanRead( wxInputStream& stream ) const;
-    virtual bool Load( wxInputStream& stream );
+	// implementation of wxAnimationDecoder's pure virtuals
+	virtual bool CanRead(wxInputStream &stream) const;
+	virtual bool Load(wxInputStream &stream);
 
-    bool ConvertToImage(unsigned int frame, wxImage *image) const;
+	bool ConvertToImage(unsigned int frame, wxImage *image) const;
 
-    wxAnimationDecoder *Clone() const
-        { return new wxANIDecoder; }
-    wxAnimationType GetType() const
-        { return wxANIMATION_TYPE_ANI; }
+	wxAnimationDecoder *Clone() const
+	{
+		return new wxANIDecoder;
+	}
+	wxAnimationType GetType() const
+	{
+		return wxANIMATION_TYPE_ANI;
+	}
 
 private:
-    // frames stored as wxImage(s): ANI files are meant to be used mostly for animated
-    // cursors and thus they do not use any optimization to encode differences between
-    // two frames: they are just a list of images to display sequentially.
-    wxImageArray m_images;
+	// frames stored as wxImage(s): ANI files are meant to be used mostly for animated
+	// cursors and thus they do not use any optimization to encode differences between
+	// two frames: they are just a list of images to display sequentially.
+	wxImageArray m_images;
 
-    // the info about each image stored in m_images.
-    // NB: m_info.GetCount() may differ from m_images.GetCount()!
-    wxANIFrameInfoArray m_info;
+	// the info about each image stored in m_images.
+	// NB: m_info.GetCount() may differ from m_images.GetCount()!
+	wxANIFrameInfoArray m_info;
 
-    // this is the wxCURHandler used to load the ICON chunk of the ANI files
-    static wxCURHandler sm_handler;
+	// this is the wxCURHandler used to load the ICON chunk of the ANI files
+	static wxCURHandler sm_handler;
 
 
-    DECLARE_NO_COPY_CLASS(wxANIDecoder)
+	DECLARE_NO_COPY_CLASS(wxANIDecoder)
 };
 
 

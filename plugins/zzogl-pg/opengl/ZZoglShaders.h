@@ -85,13 +85,13 @@ typedef struct {
 	ZZshPARAMTYPE	type;		// Choose between parameter type
 
 	float 		fvalue[4];
-	GLuint		sampler;	// Number of texture unit in array 
-	GLint		texid;		// Number of texture - texid. 
+	GLuint		sampler;	// Number of texture unit in array
+	GLint		texid;		// Number of texture - texid.
 
 	bool		Constant;	// Uniform could be constants, does not change at program flow
 	bool 		Settled;	// Check if Uniform value was set.
 } ZZshParamInfo;
-const ZZshParamInfo  qZero = {ShName:"", type:ZZ_UNDEFINED, fvalue:{0}, sampler: -1, texid: 0, Constant: false, Settled: false};
+const ZZshParamInfo  qZero = {ShName: "", type: ZZ_UNDEFINED, fvalue: {0}, sampler: -1, texid: 0, Constant: false, Settled: false};
 
 #define SAFE_RELEASE_PROG(x) 	{ /*don't know what to do*/ }
 
@@ -102,7 +102,7 @@ const ZZshParamInfo  qZero = {ShName:"", type:ZZ_UNDEFINED, fvalue:{0}, sampler:
 typedef struct {
 	void*	 	link;
 	bool		isFragment;
-} ZZshShaderLink; 
+} ZZshShaderLink;
 
 #define ZZshProgram 		GLuint
 #define ZZshShader 		GLuint
@@ -141,14 +141,15 @@ struct GlobalUniform {
 			// PS
 			float g_fFogColor[4];
 		};
-		float linear[2*4];
+		float linear[2 * 4];
 	};
-	void SettleFloat(uint indice, const float* v) {
-		assert(indice + 3 < 2*4);
-		linear[indice+0] = v[0];
-		linear[indice+1] = v[1];
-		linear[indice+2] = v[2];
-		linear[indice+3] = v[3];
+	void SettleFloat(uint indice, const float* v)
+	{
+		assert(indice + 3 < 2 * 4);
+		linear[indice + 0] = v[0];
+		linear[indice + 1] = v[1];
+		linear[indice + 2] = v[2];
+		linear[indice + 3] = v[3];
 	}
 };
 struct ConstantUniform {
@@ -164,14 +165,15 @@ struct ConstantUniform {
 			// PS
 			float g_fExactColor[4];
 		};
-		float linear[6*4];
+		float linear[6 * 4];
 	};
-	void SettleFloat(uint indice, const float* v) {
-		assert(indice + 3 < 6*4);
-		linear[indice+0] = v[0];
-		linear[indice+1] = v[1];
-		linear[indice+2] = v[2];
-		linear[indice+3] = v[3];
+	void SettleFloat(uint indice, const float* v)
+	{
+		assert(indice + 3 < 6 * 4);
+		linear[indice + 0] = v[0];
+		linear[indice + 1] = v[1];
+		linear[indice + 2] = v[2];
+		linear[indice + 3] = v[3];
 	}
 };
 struct FragmentUniform {
@@ -191,14 +193,15 @@ struct FragmentUniform {
 			float g_fBitBltZ[4];
 			float g_fOneColor[4];
 		};
-		float linear[13*4];
+		float linear[13 * 4];
 	};
-	void SettleFloat(uint indice, const float* v) {
-		assert(indice + 3 < 13*4);
-		linear[indice+0] = v[0];
-		linear[indice+1] = v[1];
-		linear[indice+2] = v[2];
-		linear[indice+3] = v[3];
+	void SettleFloat(uint indice, const float* v)
+	{
+		assert(indice + 3 < 13 * 4);
+		linear[indice + 0] = v[0];
+		linear[indice + 1] = v[1];
+		linear[indice + 2] = v[2];
+		linear[indice + 3] = v[3];
 	}
 };
 struct VertexUniform {
@@ -208,14 +211,15 @@ struct VertexUniform {
 			float g_fBitBltTex[4];
 			float g_fBitBltTrans[4];
 		};
-		float linear[3*4];
+		float linear[3 * 4];
 	};
-	void SettleFloat(uint indice, const float* v) {
-		assert(indice + 3 <  3*4);
-		linear[indice+0] = v[0];
-		linear[indice+1] = v[1];
-		linear[indice+2] = v[2];
-		linear[indice+3] = v[3];
+	void SettleFloat(uint indice, const float* v)
+	{
+		assert(indice + 3 <  3 * 4);
+		linear[indice + 0] = v[0];
+		linear[indice + 1] = v[1];
+		linear[indice + 2] = v[2];
+		linear[indice + 3] = v[3];
 	}
 };
 #endif
@@ -224,7 +228,7 @@ struct VertexUniform {
 
 enum ZZshShaderType {ZZ_SH_ZERO, ZZ_SH_REGULAR, ZZ_SH_REGULAR_FOG, ZZ_SH_TEXTURE, ZZ_SH_TEXTURE_FOG, ZZ_SH_CRTC, ZZ_SH_NONE};
 // We have "compatible" shaders, as RegularFogVS and RegularFogPS. if don't need to wory about incompatible shaders
-// It used only in GLSL mode. 
+// It used only in GLSL mode.
 
 // ------------------------- Variables -------------------------------
 
@@ -233,15 +237,14 @@ extern ZZshShaderLink 	pvs[16], g_vsprog, g_psprog;
 extern ZZshParameter 	g_vparamPosXY[2], g_fparamFogColor;
 
 #ifndef GLSL4_API
-struct FRAGMENTSHADER
-{
+struct FRAGMENTSHADER {
 	FRAGMENTSHADER() : prog(sZero), Shader(0), sMemory(pZero), sFinal(pZero), sBitwiseANDX(pZero), sBitwiseANDY(pZero), sInterlace(pZero), sCLUT(pZero), sOneColor(pZero), sBitBltZ(pZero),
 		fTexAlpha2(pZero), fTexOffset(pZero), fTexDims(pZero), fTexBlock(pZero), fClampExts(pZero), fTexWrapMode(pZero),
 		fRealTexDims(pZero), fTestBlack(pZero), fPageOffset(pZero), fTexAlpha(pZero)  {}
-	
+
 	ZZshShaderLink prog;						// it link to FRAGMENTSHADER structure, for compability between GLSL and CG
 	ZZshShader Shader;						// GLSL store shader's not as ready programs, but as shaders compilated object. VS and PS should be linked together to
-									// made a program.
+	// made a program.
 	ZZshShaderType ShaderType;					// Not every PS and VS are used together, only compatible ones.
 
 	ZZshParameter sMemory, sFinal, sBitwiseANDX, sBitwiseANDY, sInterlace, sCLUT;
@@ -259,69 +262,52 @@ struct FRAGMENTSHADER
 	{
 		ZZshParameter p;
 		p = cgGetNamedParameter(prog, name);
-
 		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) var = p;
 	}
 
 	bool set_texture(GLuint texobj, const char *name)
 	{
 		ZZshParameter p;
-
 		p = cgGetNamedParameter(prog, name);
-
-		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE)
-		{
+		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) {
 			cgGLSetTextureParameter(p, texobj);
 			cgGLEnableTextureParameter(p);
 			return true;
 		}
-
 		return false;
 	}
 
 	bool connect(ZZshParameter &tex, const char *name)
 	{
 		ZZshParameter p;
-
 		p = cgGetNamedParameter(prog, name);
-
-		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE)
-		{
+		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) {
 			cgConnectParameter(tex, p);
 			return true;
 		}
-
 		return false;
 	}
 
 	bool set_texture(ZZshParameter &tex, const char *name)
 	{
 		ZZshParameter p;
-
 		p = cgGetNamedParameter(prog, name);
-
-		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE)
-		{
+		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) {
 			//cgGLEnableTextureParameter(p);
 			tex = p;
 			return true;
 		}
-
 		return false;
 	}
 
 	bool set_shader_const(float4 v, const char *name)
 	{
 		ZZshParameter p;
-
 		p = cgGetNamedParameter(prog, name);
-
-		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE)
-		{
+		if (p != NULL && cgIsParameterUsed(p, prog) == CG_TRUE) {
 			cgGLSetParameter4fv(p, v);
 			return true;
 		}
-
 		return false;
 	}
 #endif
@@ -337,13 +323,15 @@ struct SamplerParam {
 
 	SamplerParam() : unit(-1), texid(0), target(0) {}
 
-	void set_unit(int new_unit) {
+	void set_unit(int new_unit)
+	{
 		assert(new_unit < 11);
 		unit = new_unit;
 		target = g_texture_target[new_unit];
 	}
 
-	void enable_texture() {
+	void enable_texture()
+	{
 		assert(unit >= 0);
 		assert(unit < 11);
 		if (texid) {
@@ -365,55 +353,54 @@ struct SamplerParam {
 		}
 	}
 
-	void set_texture(GLuint new_texid) {
+	void set_texture(GLuint new_texid)
+	{
 		texid = new_texid;
 	}
 
-	void release_texture() {
+	void release_texture()
+	{
 		texid = 0;
 	}
 };
 
-struct FRAGMENTSHADER
-{
-	FRAGMENTSHADER() : prog(sZero) 
-					  , program(0)
-					  , context(0)
-					  , sMemory(0) // dual context need 2 slots
-					  , sFinal(2)
-					  , sBitwiseANDX(3)
-					  , sBitwiseANDY(4)
-					  , sInterlace(5)
-					  , sCLUT(6)
+struct FRAGMENTSHADER {
+	FRAGMENTSHADER() : prog(sZero)
+		, program(0)
+		, context(0)
+		, sMemory(0) // dual context need 2 slots
+		, sFinal(2)
+		, sBitwiseANDX(3)
+		, sBitwiseANDY(4)
+		, sInterlace(5)
+		, sCLUT(6)
 	{
 		// Uniform
-		sOneColor    = (ZZshParameter)offsetof(struct FragmentUniform, g_fOneColor) /4;
-		sBitBltZ     = (ZZshParameter)offsetof(struct FragmentUniform, g_fBitBltZ) /4;
-		sInvTexDims  = (ZZshParameter)offsetof(struct FragmentUniform, g_fInvTexDims) /4;
-		fTexAlpha    = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexAlpha) /4;
-		fTexAlpha2   = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexAlpha2) /4;
-		fTexOffset   = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexOffset) /4;
-		fTexDims     = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexDims) /4;
-		fTexBlock    = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexBlock) /4;
-		fClampExts   = (ZZshParameter)offsetof(struct FragmentUniform, g_fClampExts) /4; 	// FIXME: There is a bug, that lead FFX-1 to incorrect CLAMP if this uniform have context.
-		fTexWrapMode = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexWrapMode) /4;
-		fRealTexDims = (ZZshParameter)offsetof(struct FragmentUniform, g_fRealTexDims) /4;
-		fTestBlack   = (ZZshParameter)offsetof(struct FragmentUniform, g_fTestBlack) /4;
-		fPageOffset  = (ZZshParameter)offsetof(struct FragmentUniform, g_fPageOffset) /4;
-
+		sOneColor    = (ZZshParameter)offsetof(struct FragmentUniform, g_fOneColor) / 4;
+		sBitBltZ     = (ZZshParameter)offsetof(struct FragmentUniform, g_fBitBltZ) / 4;
+		sInvTexDims  = (ZZshParameter)offsetof(struct FragmentUniform, g_fInvTexDims) / 4;
+		fTexAlpha    = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexAlpha) / 4;
+		fTexAlpha2   = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexAlpha2) / 4;
+		fTexOffset   = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexOffset) / 4;
+		fTexDims     = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexDims) / 4;
+		fTexBlock    = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexBlock) / 4;
+		fClampExts   = (ZZshParameter)offsetof(struct FragmentUniform, g_fClampExts) / 4; 	// FIXME: There is a bug, that lead FFX-1 to incorrect CLAMP if this uniform have context.
+		fTexWrapMode = (ZZshParameter)offsetof(struct FragmentUniform, g_fTexWrapMode) / 4;
+		fRealTexDims = (ZZshParameter)offsetof(struct FragmentUniform, g_fRealTexDims) / 4;
+		fTestBlack   = (ZZshParameter)offsetof(struct FragmentUniform, g_fTestBlack) / 4;
+		fPageOffset  = (ZZshParameter)offsetof(struct FragmentUniform, g_fPageOffset) / 4;
 		//sFinal               = 2;
 		//sBitwiseANDX         = 3;
 		//sBitwiseANDY         = 4;
 		//sInterlace           = 5;
 		//sCLUT                = 6;
 		samplers[sMemory].set_unit(10);
-		samplers[sMemory+1].set_unit(10); // Dual context. Use same unit
+		samplers[sMemory + 1].set_unit(10); // Dual context. Use same unit
 		samplers[sFinal].set_unit(1);
 		samplers[sBitwiseANDX].set_unit(6);
 		samplers[sBitwiseANDY].set_unit(7);
 		samplers[sInterlace].set_unit(8);
 		samplers[sCLUT].set_unit(9);
-
 		prog.isFragment = true;
 		prog.link		= (void*)this;
 	}
@@ -437,36 +424,41 @@ struct FRAGMENTSHADER
 	string filename;
 #endif
 
-	void ZZshSetParameter4fv(ZZshParameter param, const float* v) {
+	void ZZshSetParameter4fv(ZZshParameter param, const float* v)
+	{
 		if (IsDualContext(param))
 			uniform_buffer[context].SettleFloat((int) param, v);
 		else
-			for ( int i = 0; i < ZZSH_CTX_ALL ; i++)
+			for (int i = 0; i < ZZSH_CTX_ALL ; i++)
 				uniform_buffer[i].SettleFloat((int) param, v);
 	}
 
-	bool IsDualContext(ZZshParameter param) {
+	bool IsDualContext(ZZshParameter param)
+	{
 		if (param == sInvTexDims || param == sBitBltZ || param == sOneColor)
 			return false;
 		else
 			return true;
 	}
 
-	void enable_texture() {
-		samplers[sMemory+context].enable_texture(); // sMemory is dual context
+	void enable_texture()
+	{
+		samplers[sMemory + context].enable_texture(); // sMemory is dual context
 		for (int i = 2; i < 7; i++)
 			samplers[i].enable_texture();
 	}
 
-	void set_texture(ZZshParameter param, GLuint texid) {
+	void set_texture(ZZshParameter param, GLuint texid)
+	{
 		if (param == sMemory) // sMemory is dual context
-			samplers[sMemory+context].set_texture(texid);
+			samplers[sMemory + context].set_texture(texid);
 		else
 			samplers[param].set_texture(texid);
 	}
 
-	void release_prog() {
-		if(program) {
+	void release_prog()
+	{
+		if (program) {
 			glDeleteProgram(program);
 			program = 0;
 		}
@@ -474,18 +466,20 @@ struct FRAGMENTSHADER
 			samplers[i].release_texture();
 	}
 
-	void set_context(uint new_context) { context = new_context * NOCONTEXT;}
+	void set_context(uint new_context)
+	{
+		context = new_context * NOCONTEXT;
+	}
 };
 #endif
 
 #ifdef GLSL4_API
-struct COMMONSHADER
-{
+struct COMMONSHADER {
 	COMMONSHADER() : context(0)
-					 , sBlocks(0)
-					 , sBilinearBlocks(1)
-					 , sConv16to32(2)
-				     , sConv32to16(3)
+		, sBlocks(0)
+		, sBilinearBlocks(1)
+		, sConv16to32(2)
+		, sConv32to16(3)
 	{
 		// sBlocks          = 0;
 		// sBilinearBlocks  = 1;
@@ -495,35 +489,26 @@ struct COMMONSHADER
 		samplers[sBilinearBlocks].set_unit(3);
 		samplers[sConv16to32].set_unit(4);
 		samplers[sConv32to16].set_unit(5);
-
-
-		g_fparamFogColor = (ZZshParameter)offsetof(struct GlobalUniform, g_fFogColor) /4;
-		g_vparamPosXY    = (ZZshParameter)offsetof(struct GlobalUniform, g_fPosXY) /4;
-
-		g_fBilinear      = (ZZshParameter)offsetof(struct ConstantUniform, g_fBilinear) /4;
-		g_fZBias         = (ZZshParameter)offsetof(struct ConstantUniform, g_fZbias) /4;
-		g_fc0            = (ZZshParameter)offsetof(struct ConstantUniform, g_fc0) /4;
-		g_fMult          = (ZZshParameter)offsetof(struct ConstantUniform, g_fMult) /4;
-		g_fZ             = (ZZshParameter)offsetof(struct ConstantUniform, g_fZ) /4;
-		g_fExactColor    = (ZZshParameter)offsetof(struct ConstantUniform, g_fExactColor) /4;
-
+		g_fparamFogColor = (ZZshParameter)offsetof(struct GlobalUniform, g_fFogColor) / 4;
+		g_vparamPosXY    = (ZZshParameter)offsetof(struct GlobalUniform, g_fPosXY) / 4;
+		g_fBilinear      = (ZZshParameter)offsetof(struct ConstantUniform, g_fBilinear) / 4;
+		g_fZBias         = (ZZshParameter)offsetof(struct ConstantUniform, g_fZbias) / 4;
+		g_fc0            = (ZZshParameter)offsetof(struct ConstantUniform, g_fc0) / 4;
+		g_fMult          = (ZZshParameter)offsetof(struct ConstantUniform, g_fMult) / 4;
+		g_fZ             = (ZZshParameter)offsetof(struct ConstantUniform, g_fZ) / 4;
+		g_fExactColor    = (ZZshParameter)offsetof(struct ConstantUniform, g_fExactColor) / 4;
 		// Setup the constant buffer
-
 		// Set Z-test, log or no log;
-		if (conf.settings().no_logz) {
-			g_vdepth = float4( 255.0 /256.0f,  255.0/65536.0f, 255.0f/(65535.0f*256.0f), 1.0f/(65536.0f*65536.0f));
-		}
-		else {
-			g_vdepth = float4( 256.0f*65536.0f, 65536.0f, 256.0f, 65536.0f*65536.0f);
-		}
-		uniform_buffer_constant.SettleFloat(g_fZ, g_vdepth );
-
-		uniform_buffer_constant.SettleFloat(g_fBilinear, float4(-0.2f, -0.65f, 0.9f, 1.0f / 32767.0f ) );
-		uniform_buffer_constant.SettleFloat(g_fZBias, float4(1.0f/256.0f, 1.0004f, 1, 0.5f) );
-		uniform_buffer_constant.SettleFloat(g_fc0, float4(0,1, 0.001f, 0.5f) );
-
-		uniform_buffer_constant.SettleFloat(g_fExactColor, float4(0.5f, (conf.settings().exact_color)?0.9f/256.0f:0.5f/256.0f, 0,1/255.0f) );
-		uniform_buffer_constant.SettleFloat(g_fMult, float4(1/1024.0f, 0.2f/1024.0f, 1/128.0f, 1/512.0f));
+		if (conf.settings().no_logz)
+			g_vdepth = float4(255.0 / 256.0f,  255.0 / 65536.0f, 255.0f / (65535.0f * 256.0f), 1.0f / (65536.0f * 65536.0f));
+		else
+			g_vdepth = float4(256.0f * 65536.0f, 65536.0f, 256.0f, 65536.0f * 65536.0f);
+		uniform_buffer_constant.SettleFloat(g_fZ, g_vdepth);
+		uniform_buffer_constant.SettleFloat(g_fBilinear, float4(-0.2f, -0.65f, 0.9f, 1.0f / 32767.0f));
+		uniform_buffer_constant.SettleFloat(g_fZBias, float4(1.0f / 256.0f, 1.0004f, 1, 0.5f));
+		uniform_buffer_constant.SettleFloat(g_fc0, float4(0, 1, 0.001f, 0.5f));
+		uniform_buffer_constant.SettleFloat(g_fExactColor, float4(0.5f, (conf.settings().exact_color) ? 0.9f / 256.0f : 0.5f / 256.0f, 0, 1 / 255.0f));
+		uniform_buffer_constant.SettleFloat(g_fMult, float4(1 / 1024.0f, 0.2f / 1024.0f, 1 / 128.0f, 1 / 512.0f));
 	}
 
 	ZZshParameter g_fparamFogColor, g_vparamPosXY;
@@ -537,37 +522,43 @@ struct COMMONSHADER
 	const ZZshParameter sBlocks, sBilinearBlocks, sConv16to32, sConv32to16;
 	SamplerParam samplers[4];
 
-	void ZZshSetParameter4fv(ZZshParameter param, const float* v) {
+	void ZZshSetParameter4fv(ZZshParameter param, const float* v)
+	{
 		if (IsDualContext(param))
 			uniform_buffer[context].SettleFloat((int) param, v);
 		else
-			for ( int i = 0; i < ZZSH_CTX_ALL ; i++)
+			for (int i = 0; i < ZZSH_CTX_ALL ; i++)
 				uniform_buffer[i].SettleFloat((int) param, v);
 	}
 
-	bool IsDualContext(ZZshParameter param) {
+	bool IsDualContext(ZZshParameter param)
+	{
 		if (param == g_vparamPosXY) return true;
 		else return false;
 	}
 
-	void set_texture(ZZshParameter param, GLuint texid) {
+	void set_texture(ZZshParameter param, GLuint texid)
+	{
 		samplers[param].set_texture(texid);
 	}
 
-	void enable_texture() {
+	void enable_texture()
+	{
 		for (int i = 0; i < 4; i++)
 			samplers[i].enable_texture();
 	}
 
-	void set_context(uint new_context) { context = new_context * NOCONTEXT;}
+	void set_context(uint new_context)
+	{
+		context = new_context * NOCONTEXT;
+	}
 };
 #endif
 
 #ifndef GLSL4_API
-struct VERTEXSHADER
-{
+struct VERTEXSHADER {
 	VERTEXSHADER() : prog(sZero), Shader(0), sBitBltPos(pZero), sBitBltTex(pZero) {}
-	
+
 	ZZshShaderLink prog;
 	ZZshShader Shader;
 	ZZshShaderType ShaderType;
@@ -577,19 +568,16 @@ struct VERTEXSHADER
 	int ParametersStart, ParametersFinish;
 };
 #else
-struct VERTEXSHADER
-{
+struct VERTEXSHADER {
 
 	VERTEXSHADER() : prog(sZero), program(0), context(0)
 	{
-		sBitBltPos = (ZZshParameter)offsetof(struct VertexUniform, g_fBitBltPos) /4;
-		sBitBltTex = (ZZshParameter)offsetof(struct VertexUniform, g_fBitBltTex) /4;
-		fBitBltTrans = (ZZshParameter)offsetof(struct VertexUniform, g_fBitBltTrans) /4;
-
+		sBitBltPos = (ZZshParameter)offsetof(struct VertexUniform, g_fBitBltPos) / 4;
+		sBitBltTex = (ZZshParameter)offsetof(struct VertexUniform, g_fBitBltTex) / 4;
+		fBitBltTrans = (ZZshParameter)offsetof(struct VertexUniform, g_fBitBltTrans) / 4;
 		// Default value not sure it is needed
-		uniform_buffer[0].SettleFloat(fBitBltTrans, float4(0.5f, -0.5f, 0.5, 0.5 + 0.4/416.0f ) );
-		uniform_buffer[1].SettleFloat(fBitBltTrans, float4(0.5f, -0.5f, 0.5, 0.5 + 0.4/416.0f ) );
-
+		uniform_buffer[0].SettleFloat(fBitBltTrans, float4(0.5f, -0.5f, 0.5, 0.5 + 0.4 / 416.0f));
+		uniform_buffer[1].SettleFloat(fBitBltTrans, float4(0.5f, -0.5f, 0.5, 0.5 + 0.4 / 416.0f));
 		prog.isFragment = false;
 		prog.link		= (void*)this;
 	}
@@ -602,20 +590,28 @@ struct VERTEXSHADER
 
 	ZZshParameter sBitBltPos, sBitBltTex, fBitBltTrans;		 // vertex shader constants
 
-	void ZZshSetParameter4fv(ZZshParameter param, const float* v) {
+	void ZZshSetParameter4fv(ZZshParameter param, const float* v)
+	{
 		if (IsDualContext(param))
 			uniform_buffer[context].SettleFloat((int) param, v);
 		else
-			for ( int i = 0; i < ZZSH_CTX_ALL ; i++)
+			for (int i = 0; i < ZZSH_CTX_ALL ; i++)
 				uniform_buffer[i].SettleFloat((int) param, v);
 	}
 
-	bool IsDualContext(ZZshParameter param) { return false;}
+	bool IsDualContext(ZZshParameter param)
+	{
+		return false;
+	}
 
-	void set_context(uint new_context) { context = new_context * NOCONTEXT;}
+	void set_context(uint new_context)
+	{
+		context = new_context * NOCONTEXT;
+	}
 
-	void release_prog() {
-		if(program) {
+	void release_prog()
+	{
+		if (program) {
 			glDeleteProgram(program);
 			program = 0;
 		}
@@ -625,83 +621,119 @@ struct VERTEXSHADER
 
 #ifdef GLSL4_API
 #define SAFE_RELEASE_PROG(x) 	{ \
-	if ((x.link) != NULL) { \
-		if (x.isFragment) { \
-			FRAGMENTSHADER* shader = (FRAGMENTSHADER*)x.link; \
-			shader->release_prog(); \
-		} else { \
-			VERTEXSHADER* shader = (VERTEXSHADER*)x.link; \
-			shader->release_prog(); \
+		if ((x.link) != NULL) { \
+			if (x.isFragment) { \
+				FRAGMENTSHADER* shader = (FRAGMENTSHADER*)x.link; \
+				shader->release_prog(); \
+			} else { \
+				VERTEXSHADER* shader = (VERTEXSHADER*)x.link; \
+				shader->release_prog(); \
+			} \
 		} \
-	} \
-}
-#endif
-
-	extern VERTEXSHADER pvsBitBlt;
-	extern FRAGMENTSHADER ppsBitBlt[2], ppsBitBltDepth, ppsOne;					// ppsOne used to stop using shaders for draw
-	extern FRAGMENTSHADER ppsBaseTexture, ppsConvert16to32, ppsConvert32to16;
-
-	extern FRAGMENTSHADER ppsRegular[4], ppsTexture[NUM_SHADERS];
-	extern FRAGMENTSHADER ppsCRTC[2], /*ppsCRTC24[2],*/ ppsCRTCTarg[2];
-#ifdef GLSL4_API
-	extern COMMONSHADER g_cs;
-#endif
-
-	extern int interlace_mode;
-
-	enum CRTC_TYPE
-	{
-		CRTC_RENDER,
-		//CRTC_RENDER_24,
-		CRTC_RENDER_TARG
-	};
-
-	static __forceinline FRAGMENTSHADER* curr_ppsCRTC() { return &ppsCRTC[interlace_mode]; }
-	//static __forceinline FRAGMENTSHADER* curr_ppsCRTC24() { return &ppsCRTC24[interlace_mode]; }
-	static __forceinline FRAGMENTSHADER* curr_ppsCRTCTarg() { return &ppsCRTCTarg[interlace_mode]; }
-	
-	static __forceinline FRAGMENTSHADER* curr_pps(CRTC_TYPE render_type) 
-	{
-		switch (render_type)
-		{
-			case CRTC_RENDER: return curr_ppsCRTC();
-			//case CRTC_RENDER_24: return curr_ppsCRTC24();
-			case CRTC_RENDER_TARG: return curr_ppsCRTCTarg();
-			default: return NULL;
-		}
-		
 	}
+#endif
+
+extern VERTEXSHADER pvsBitBlt;
+extern FRAGMENTSHADER ppsBitBlt[2], ppsBitBltDepth, ppsOne;					// ppsOne used to stop using shaders for draw
+extern FRAGMENTSHADER ppsBaseTexture, ppsConvert16to32, ppsConvert32to16;
+
+extern FRAGMENTSHADER ppsRegular[4], ppsTexture[NUM_SHADERS];
+extern FRAGMENTSHADER ppsCRTC[2], /*ppsCRTC24[2],*/ ppsCRTCTarg[2];
+#ifdef GLSL4_API
+extern COMMONSHADER g_cs;
+#endif
+
+extern int interlace_mode;
+
+enum CRTC_TYPE {
+	CRTC_RENDER,
+	//CRTC_RENDER_24,
+	CRTC_RENDER_TARG
+};
+
+static __forceinline FRAGMENTSHADER* curr_ppsCRTC()
+{
+	return &ppsCRTC[interlace_mode];
+}
+//static __forceinline FRAGMENTSHADER* curr_ppsCRTC24() { return &ppsCRTC24[interlace_mode]; }
+static __forceinline FRAGMENTSHADER* curr_ppsCRTCTarg()
+{
+	return &ppsCRTCTarg[interlace_mode];
+}
+
+static __forceinline FRAGMENTSHADER* curr_pps(CRTC_TYPE render_type)
+{
+	switch (render_type) {
+		case CRTC_RENDER:
+			return curr_ppsCRTC();
+		//case CRTC_RENDER_24: return curr_ppsCRTC24();
+		case CRTC_RENDER_TARG:
+			return curr_ppsCRTCTarg();
+		default:
+			return NULL;
+	}
+}
 // ------------------------- Functions -------------------------------
 
 #ifdef NVIDIA_CG_API
-inline bool ZZshExistProgram(FRAGMENTSHADER* pf) {return (pf->prog != NULL); };			// We don't check ps != NULL, so be warned,
-inline bool ZZshExistProgram(VERTEXSHADER* pf) {return (pf->prog != NULL); };
-inline bool ZZshExistProgram(ZZshShaderLink prog) {return (prog != NULL); };
+inline bool ZZshExistProgram(FRAGMENTSHADER* pf)
+{
+	return (pf->prog != NULL);
+};			// We don't check ps != NULL, so be warned,
+inline bool ZZshExistProgram(VERTEXSHADER* pf)
+{
+	return (pf->prog != NULL);
+};
+inline bool ZZshExistProgram(ZZshShaderLink prog)
+{
+	return (prog != NULL);
+};
 #endif
 #if defined(GLSL_API) && !defined(GLSL4_API)
-inline bool ZZshExistProgram(FRAGMENTSHADER* pf) {return (pf->Shader != 0); };
-inline bool ZZshExistProgram(VERTEXSHADER* pf) {return (pf->Shader != 0); };
-inline bool ZZshExistProgram(ZZshShaderLink prog) {return (prog.link != NULL); }		// This is used for pvs mainly. No NULL means that we do LOAD_VS
+inline bool ZZshExistProgram(FRAGMENTSHADER* pf)
+{
+	return (pf->Shader != 0);
+};
+inline bool ZZshExistProgram(VERTEXSHADER* pf)
+{
+	return (pf->Shader != 0);
+};
+inline bool ZZshExistProgram(ZZshShaderLink prog)
+{
+	return (prog.link != NULL);        // This is used for pvs mainly. No NULL means that we do LOAD_VS
+}
 #endif
 #if defined(GLSL4_API)
-inline bool ZZshExistProgram(FRAGMENTSHADER* pf) {return (pf->program != 0); };
-inline bool ZZshExistProgram(VERTEXSHADER* pf) {return (pf->program != 0); };
-inline bool ZZshExistProgram(ZZshShaderLink prog) {return (prog.link != NULL); }		// This is used for pvs mainly. No NULL means that we do LOAD_VS
+inline bool ZZshExistProgram(FRAGMENTSHADER* pf)
+{
+	return (pf->program != 0);
+};
+inline bool ZZshExistProgram(VERTEXSHADER* pf)
+{
+	return (pf->program != 0);
+};
+inline bool ZZshExistProgram(ZZshShaderLink prog)
+{
+	return (prog.link != NULL);        // This is used for pvs mainly. No NULL means that we do LOAD_VS
+}
 #endif
 
 extern const char* ShaderCallerName;
 extern const char* ShaderHandleName;
 
-inline void SetShaderCaller(const char* Name) {	
+inline void SetShaderCaller(const char* Name)
+{
 	ShaderCallerName = Name;
 }
 
-inline void SetHandleName(const char* Name) {
+inline void SetHandleName(const char* Name)
+{
 	ShaderHandleName = Name;
 }
-		
-inline void ResetShaderCounters() {
-//	g_vsprog = g_psprog = sZero;
+
+inline void ResetShaderCounters()
+{
+	//	g_vsprog = g_psprog = sZero;
 }
 
 
@@ -730,16 +762,16 @@ extern void ZZshGLEnableProfile();
 
 // Set the Uniform parameter in host (NOT GL)
 // Param seem to be an absolute index inside a table of uniform
-extern void ZZshSetParameter4fv(ZZshShaderLink& prog, ZZshParameter param, const float* v, const char* name);
+extern void ZZshSetParameter4fv(ZZshShaderLink &prog, ZZshParameter param, const float* v, const char* name);
 extern void ZZshSetParameter4fv(ZZshParameter param, const float* v, const char* name);
-extern void ZZshSetParameter4fvWithRetry(ZZshParameter* param, ZZshShaderLink& prog, const float* v, const char* name);
+extern void ZZshSetParameter4fvWithRetry(ZZshParameter* param, ZZshShaderLink &prog, const float* v, const char* name);
 
 // Set the Texture parameter in host (NOT GL)
 extern void ZZshGLSetTextureParameter(ZZshShaderLink prog, ZZshParameter param, GLuint texobj, const char* name);
 extern void ZZshGLSetTextureParameter(ZZshParameter param, GLuint texobj, const char* name);
 
 // Set a default value for 1 uniform in host (NOT GL)
-extern void ZZshDefaultOneColor( FRAGMENTSHADER& ptr );
+extern void ZZshDefaultOneColor(FRAGMENTSHADER &ptr);
 
 // Link then run with the new Vertex/Fragment Shader
 extern void ZZshSetVertexShader(ZZshShaderLink prog);
@@ -752,10 +784,10 @@ extern bool ZZshLoadExtraEffects();
 // Clean some stuff on exit
 extern void ZZshExitCleaning();
 
-extern FRAGMENTSHADER* ZZshLoadShadeEffect(int type, int texfilter, int fog, int testaem, int exactcolor, const clampInfo& clamp, int context, bool* pbFailed);
+extern FRAGMENTSHADER* ZZshLoadShadeEffect(int type, int texfilter, int fog, int testaem, int exactcolor, const clampInfo &clamp, int context, bool* pbFailed);
 
 // only sets a limited amount of state (for Update)
-void SetTexVariablesInt(int context, int bilinear, const tex0Info& tex0, bool CheckVB, FRAGMENTSHADER* pfragment, int force);
+void SetTexVariablesInt(int context, int bilinear, const tex0Info &tex0, bool CheckVB, FRAGMENTSHADER* pfragment, int force);
 
 extern u32 ptexBlocks;		// holds information on block tiling. It's texture number in OpenGL -- if 0 than such texture
 extern u32 ptexConv16to32;	// does not exists. This textures should be created on start and released on finish.

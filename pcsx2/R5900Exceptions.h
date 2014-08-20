@@ -32,115 +32,124 @@ public:
 	cpuRegisters cpuState;
 
 public:
-	u32 GetPc() const { return cpuState.pc; }
-	bool IsDelaySlot() const { return !!cpuState.IsDelaySlot; }
+	u32 GetPc() const
+	{
+		return cpuState.pc;
+	}
+	bool IsDelaySlot() const
+	{
+		return !!cpuState.IsDelaySlot;
+	}
 
-	wxString& Message() { return m_message; }
+	wxString &Message()
+	{
+		return m_message;
+	}
 	wxString FormatMessage() const
 	{
 		return wxsFormat(L"(EE pc:%8.8X) ", cpuRegs.pc) + m_message;
 	}
 
 protected:
-	void Init( const wxString& msg )
+	void Init(const wxString &msg)
 	{
 		m_message = msg;;
 		cpuState = cpuRegs;
 	}
 
-	void Init( const char* msg )
+	void Init(const char* msg)
 	{
-		m_message = fromUTF8( msg );
+		m_message = fromUTF8(msg);
 		cpuState = cpuRegs;
 	}
 };
 
 namespace R5900Exception
 {
-	// --------------------------------------------------------------------------------------
-	//  BaseAddressError
-	// --------------------------------------------------------------------------------------
-	class BaseAddressError : public BaseR5900Exception
+// --------------------------------------------------------------------------------------
+//  BaseAddressError
+// --------------------------------------------------------------------------------------
+class BaseAddressError : public BaseR5900Exception
+{
+	DEFINE_EXCEPTION_COPYTORS(BaseAddressError, BaseR5900Exception)
+
+public:
+	bool OnWrite;
+	u32 Address;
+
+protected:
+	void Init(u32 ps2addr, bool onWrite, const wxString &msg)
 	{
-		DEFINE_EXCEPTION_COPYTORS(BaseAddressError, BaseR5900Exception)
-
-	public:
-		bool OnWrite;
-		u32 Address;
-
-	protected:
-		void Init( u32 ps2addr, bool onWrite, const wxString& msg )
-		{
-			_parent::Init( wxsFormat( msg+L", addr=0x%x [%s]", ps2addr, onWrite ? L"store" : L"load" ) );
-			OnWrite = onWrite;
-			Address = ps2addr;
-		}
-	};
+		_parent::Init(wxsFormat(msg + L", addr=0x%x [%s]", ps2addr, onWrite ? L"store" : L"load"));
+		OnWrite = onWrite;
+		Address = ps2addr;
+	}
+};
 
 
-	class AddressError : public BaseAddressError
+class AddressError : public BaseAddressError
+{
+public:
+	AddressError(u32 ps2addr, bool onWrite)
 	{
-	public:
-		AddressError( u32 ps2addr, bool onWrite )
-		{
-			BaseAddressError::Init( ps2addr, onWrite, L"Address error" );
-		}
-	};
+		BaseAddressError::Init(ps2addr, onWrite, L"Address error");
+	}
+};
 
-	class TLBMiss : public BaseAddressError
+class TLBMiss : public BaseAddressError
+{
+	DEFINE_EXCEPTION_COPYTORS(TLBMiss, BaseAddressError)
+
+public:
+	TLBMiss(u32 ps2addr, bool onWrite)
 	{
-		DEFINE_EXCEPTION_COPYTORS(TLBMiss, BaseAddressError)
+		BaseAddressError::Init(ps2addr, onWrite, L"TLB Miss");
+	}
+};
 
-	public:
-		TLBMiss( u32 ps2addr, bool onWrite )
-		{
-			BaseAddressError::Init( ps2addr, onWrite, L"TLB Miss" );
-		}
-	};
+class BusError : public BaseAddressError
+{
+	DEFINE_EXCEPTION_COPYTORS(BusError, BaseAddressError)
 
-	class BusError : public BaseAddressError
+public:
+	BusError(u32 ps2addr, bool onWrite)
 	{
-		DEFINE_EXCEPTION_COPYTORS(BusError, BaseAddressError)
+		BaseAddressError::Init(ps2addr, onWrite, L"Bus Error");
+	}
+};
 
-	public:
-		BusError( u32 ps2addr, bool onWrite )
-		{
-			BaseAddressError::Init( ps2addr, onWrite, L"Bus Error" );
-		}
-	};
+class Trap : public BaseR5900Exception
+{
+	DEFINE_EXCEPTION_COPYTORS(Trap, BaseR5900Exception)
 
-	class Trap : public BaseR5900Exception
+public:
+	u16 TrapCode;
+
+public:
+	// Generates a trap for immediate-style Trap opcodes
+	Trap()
 	{
-		DEFINE_EXCEPTION_COPYTORS(Trap, BaseR5900Exception)
+		_parent::Init("Trap");
+		TrapCode = 0;
+	}
 
-	public:
-		u16 TrapCode;
-
-	public:
-		// Generates a trap for immediate-style Trap opcodes
-		Trap()
-		{
-			_parent::Init( "Trap" );
-			TrapCode = 0;
-		}
-
-		// Generates a trap for register-style Trap instructions, which contain an
-		// error code in the opcode
-		explicit Trap( u16 trapcode )
-		{
-			_parent::Init( "Trap" ),
-			TrapCode = trapcode;
-		}
-	};
-
-	class DebugBreakpoint : public BaseR5900Exception
+	// Generates a trap for register-style Trap instructions, which contain an
+	// error code in the opcode
+	explicit Trap(u16 trapcode)
 	{
-		DEFINE_EXCEPTION_COPYTORS(DebugBreakpoint, BaseR5900Exception)
-		
-	public:
-		explicit DebugBreakpoint()
-		{
-			_parent::Init( "Debug Breakpoint" );
-		}
-	};
+		_parent::Init("Trap"),
+		        TrapCode = trapcode;
+	}
+};
+
+class DebugBreakpoint : public BaseR5900Exception
+{
+	DEFINE_EXCEPTION_COPYTORS(DebugBreakpoint, BaseR5900Exception)
+
+public:
+	explicit DebugBreakpoint()
+	{
+		_parent::Init("Debug Breakpoint");
+	}
+};
 }

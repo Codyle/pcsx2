@@ -24,15 +24,15 @@
 class WXDLLEXPORT wxPostScriptPrinter : public wxPrinterBase
 {
 public:
-    wxPostScriptPrinter(wxPrintDialogData *data = (wxPrintDialogData *) NULL);
-    virtual ~wxPostScriptPrinter();
+	wxPostScriptPrinter(wxPrintDialogData *data = (wxPrintDialogData *) NULL);
+	virtual ~wxPostScriptPrinter();
 
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true);
-    virtual wxDC* PrintDialog(wxWindow *parent);
-    virtual bool Setup(wxWindow *parent);
+	virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true);
+	virtual wxDC* PrintDialog(wxWindow *parent);
+	virtual bool Setup(wxWindow *parent);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPostScriptPrinter)
+	DECLARE_DYNAMIC_CLASS(wxPostScriptPrinter)
 };
 
 // ----------------------------------------------------------------------------
@@ -43,23 +43,23 @@ private:
 class WXDLLEXPORT wxPostScriptPrintPreview : public wxPrintPreviewBase
 {
 public:
-    wxPostScriptPrintPreview(wxPrintout *printout,
-                             wxPrintout *printoutForPrinting = (wxPrintout *) NULL,
-                             wxPrintDialogData *data = (wxPrintDialogData *) NULL);
-    wxPostScriptPrintPreview(wxPrintout *printout,
-                             wxPrintout *printoutForPrinting,
-                             wxPrintData *data);
+	wxPostScriptPrintPreview(wxPrintout *printout,
+	                         wxPrintout *printoutForPrinting = (wxPrintout *) NULL,
+	                         wxPrintDialogData *data = (wxPrintDialogData *) NULL);
+	wxPostScriptPrintPreview(wxPrintout *printout,
+	                         wxPrintout *printoutForPrinting,
+	                         wxPrintData *data);
 
-    virtual ~wxPostScriptPrintPreview();
+	virtual ~wxPostScriptPrintPreview();
 
-    virtual bool Print(bool interactive);
-    virtual void DetermineScaling();
-
-private:
-    void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);
+	virtual bool Print(bool interactive);
+	virtual void DetermineScaling();
 
 private:
-    DECLARE_CLASS(wxPostScriptPrintPreview)
+	void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);
+
+private:
+	DECLARE_CLASS(wxPostScriptPrintPreview)
 };
 
 #endif

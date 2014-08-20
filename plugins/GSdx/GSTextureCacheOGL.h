@@ -28,9 +28,12 @@
 class GSTextureCacheOGL : public GSTextureCache
 {
 protected:
-	int Get8bitFormat() { return GL_R8; /* TODO return DXGI_FORMAT_A8_UNORM;*/}
+	int Get8bitFormat()
+	{
+		return GL_R8; /* TODO return DXGI_FORMAT_A8_UNORM;*/
+	}
 
-	void Read(Target* t, const GSVector4i& r);
+	void Read(Target* t, const GSVector4i &r);
 
 public:
 	GSTextureCacheOGL(GSRenderer* r);

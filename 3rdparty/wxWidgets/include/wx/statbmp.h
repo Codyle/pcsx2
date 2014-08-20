@@ -26,49 +26,55 @@ extern WXDLLEXPORT_DATA(const wxChar) wxStaticBitmapNameStr[];
 class WXDLLEXPORT wxStaticBitmapBase : public wxControl
 {
 public:
-    wxStaticBitmapBase() { }
-    virtual ~wxStaticBitmapBase();
+	wxStaticBitmapBase() { }
+	virtual ~wxStaticBitmapBase();
 
-    // our interface
-    virtual void SetIcon(const wxIcon& icon) = 0;
-    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
-    virtual wxBitmap GetBitmap() const = 0;
-    virtual wxIcon GetIcon() const /* = 0 -- should be pure virtual */
-    {
-        // stub it out here for now as not all ports implement it (but they
-        // should)
-        return wxIcon();
-    }
+	// our interface
+	virtual void SetIcon(const wxIcon &icon) = 0;
+	virtual void SetBitmap(const wxBitmap &bitmap) = 0;
+	virtual wxBitmap GetBitmap() const = 0;
+	virtual wxIcon GetIcon() const /* = 0 -- should be pure virtual */
+	{
+		// stub it out here for now as not all ports implement it (but they
+		// should)
+		return wxIcon();
+	}
 
-    // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return false; }
-    virtual bool HasTransparentBackground() { return true; }
+	// overriden base class virtuals
+	virtual bool AcceptsFocus() const
+	{
+		return false;
+	}
+	virtual bool HasTransparentBackground()
+	{
+		return true;
+	}
 
 protected:
-    virtual wxSize DoGetBestSize() const;
+	virtual wxSize DoGetBestSize() const;
 
-    DECLARE_NO_COPY_CLASS(wxStaticBitmapBase)
+	DECLARE_NO_COPY_CLASS(wxStaticBitmapBase)
 };
 
 #if defined(__WXUNIVERSAL__)
-    #include "wx/univ/statbmp.h"
+#include "wx/univ/statbmp.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/statbmp.h"
+#include "wx/msw/statbmp.h"
 #elif defined(__WXMOTIF__)
-    #include "wx/motif/statbmp.h"
+#include "wx/motif/statbmp.h"
 #elif defined(__WXGTK20__)
-    #include "wx/gtk/statbmp.h"
+#include "wx/gtk/statbmp.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/statbmp.h"
+#include "wx/gtk1/statbmp.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/statbmp.h"
+#include "wx/mac/statbmp.h"
 #elif defined(__WXCOCOA__)
-    #include "wx/cocoa/statbmp.h"
+#include "wx/cocoa/statbmp.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/statbmp.h"
+#include "wx/os2/statbmp.h"
 #endif
 
 #endif // wxUSE_STATBMP
 
 #endif
-    // _WX_STATBMP_H_BASE_
+// _WX_STATBMP_H_BASE_

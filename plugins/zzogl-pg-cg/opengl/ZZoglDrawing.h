@@ -33,34 +33,35 @@
 #define NoHighlights(I) (!(conf.settings().xenosaga_spec) || !vb[(I)].zbuf.zmsk || prim->iip)
 
 enum PRIM_TYPE {
-    PRIM_POINT = 0,
-    PRIM_LINE,
-    PRIM_LINE_STRIP,
-    PRIM_TRIANGLE,
-    PRIM_TRIANGLE_STRIP,
-    PRIM_TRIANGLE_FAN,
-    PRIM_SPRITE,
-    PRIM_DUMMY
+	PRIM_POINT = 0,
+	PRIM_LINE,
+	PRIM_LINE_STRIP,
+	PRIM_TRIANGLE,
+	PRIM_TRIANGLE_STRIP,
+	PRIM_TRIANGLE_FAN,
+	PRIM_SPRITE,
+	PRIM_DUMMY
 };
 
 class Kick
 {
-	private:
-        // template<bool DO_Z_FOG> void Set_Vertex(VertexGPU *p, int i);
-        template<bool DO_Z_FOG> void Set_Vertex(VertexGPU *p, Vertex &gsvertex);
-		void Output_Vertex(VertexGPU vert, u32 id);
-        bool ValidPrevPrim;
-	public:
-		Kick() { }
-		~Kick() { }
-		
-		void KickVertex(bool adc);
+private:
+	// template<bool DO_Z_FOG> void Set_Vertex(VertexGPU *p, int i);
+	template<bool DO_Z_FOG> void Set_Vertex(VertexGPU *p, Vertex &gsvertex);
+	void Output_Vertex(VertexGPU vert, u32 id);
+	bool ValidPrevPrim;
+public:
+	Kick() { }
+	~Kick() { }
 
-		void DrawPrim(u32 i);
+	void KickVertex(bool adc);
 
-        inline void DirtyValidPrevPrim() {
-            ValidPrevPrim = 0;
-        }
+	void DrawPrim(u32 i);
+
+	inline void DirtyValidPrevPrim()
+	{
+		ValidPrevPrim = 0;
+	}
 };
 extern Kick* ZZKick;
 

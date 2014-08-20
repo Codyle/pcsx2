@@ -41,11 +41,10 @@
  * The possible states of a 3-state checkbox (Compatible
  * with the 2-state checkbox).
  */
-enum wxCheckBoxState
-{
-    wxCHK_UNCHECKED,
-    wxCHK_CHECKED,
-    wxCHK_UNDETERMINED /* 3-state checkbox only */
+enum wxCheckBoxState {
+	wxCHK_UNCHECKED,
+	wxCHK_CHECKED,
+	wxCHK_UNDETERMINED /* 3-state checkbox only */
 };
 
 
@@ -58,99 +57,100 @@ extern WXDLLEXPORT_DATA(const wxChar) wxCheckBoxNameStr[];
 class WXDLLEXPORT wxCheckBoxBase : public wxControl
 {
 public:
-    wxCheckBoxBase() { }
+	wxCheckBoxBase() { }
 
-    // set/get the checked status of the listbox
-    virtual void SetValue(bool value) = 0;
-    virtual bool GetValue() const = 0;
+	// set/get the checked status of the listbox
+	virtual void SetValue(bool value) = 0;
+	virtual bool GetValue() const = 0;
 
-    bool IsChecked() const
-    {
-        wxASSERT_MSG( !Is3State(), wxT("Calling IsChecked() doesn't make sense for")
-            wxT(" a three state checkbox, Use Get3StateValue() instead") );
+	bool IsChecked() const
+	{
+		wxASSERT_MSG(!Is3State(), wxT("Calling IsChecked() doesn't make sense for")
+		             wxT(" a three state checkbox, Use Get3StateValue() instead"));
+		return GetValue();
+	}
 
-        return GetValue();
-    }
+	wxCheckBoxState Get3StateValue() const
+	{
+		wxCheckBoxState state = DoGet3StateValue();
+		if (state == wxCHK_UNDETERMINED && !Is3State()) {
+			// Undetermined state with a 2-state checkbox??
+			wxFAIL_MSG(wxT("DoGet3StateValue() says the 2-state checkbox is ")
+			           wxT("in an undetermined/third state"));
+			state = wxCHK_UNCHECKED;
+		}
+		return state;
+	}
 
-    wxCheckBoxState Get3StateValue() const
-    {
-        wxCheckBoxState state = DoGet3StateValue();
+	void Set3StateValue(wxCheckBoxState state)
+	{
+		if (state == wxCHK_UNDETERMINED && !Is3State()) {
+			wxFAIL_MSG(wxT("Setting a 2-state checkbox to undetermined state"));
+			state = wxCHK_UNCHECKED;
+		}
+		DoSet3StateValue(state);
+	}
 
-        if ( state == wxCHK_UNDETERMINED && !Is3State() )
-        {
-            // Undetermined state with a 2-state checkbox??
-            wxFAIL_MSG( wxT("DoGet3StateValue() says the 2-state checkbox is ")
-                wxT("in an undetermined/third state") );
+	bool Is3State() const
+	{
+		return HasFlag(wxCHK_3STATE);
+	}
 
-            state = wxCHK_UNCHECKED;
-        }
+	bool Is3rdStateAllowedForUser() const
+	{
+		return HasFlag(wxCHK_ALLOW_3RD_STATE_FOR_USER);
+	}
 
-        return state;
-    }
+	virtual bool HasTransparentBackground()
+	{
+		return true;
+	}
 
-    void Set3StateValue(wxCheckBoxState state)
-    {
-        if ( state == wxCHK_UNDETERMINED && !Is3State() )
-        {
-            wxFAIL_MSG(wxT("Setting a 2-state checkbox to undetermined state"));
-            state = wxCHK_UNCHECKED;
-        }
-
-        DoSet3StateValue(state);
-    }
-
-    bool Is3State() const { return HasFlag(wxCHK_3STATE); }
-
-    bool Is3rdStateAllowedForUser() const
-    {
-        return HasFlag(wxCHK_ALLOW_3RD_STATE_FOR_USER);
-    }
-
-    virtual bool HasTransparentBackground() { return true; }
-
-    // wxCheckBox-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event)
-    {
-        wxControl::DoUpdateWindowUI(event);
-
-        if ( event.GetSetChecked() )
-            SetValue(event.GetChecked());
-    }
+	// wxCheckBox-specific processing after processing the update event
+	virtual void DoUpdateWindowUI(wxUpdateUIEvent &event)
+	{
+		wxControl::DoUpdateWindowUI(event);
+		if (event.GetSetChecked())
+			SetValue(event.GetChecked());
+	}
 
 protected:
-    virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) { wxFAIL; }
+	virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state))
+	{
+		wxFAIL;
+	}
 
-    virtual wxCheckBoxState DoGet3StateValue() const
-    {
-        wxFAIL;
-        return wxCHK_UNCHECKED;
-    }
+	virtual wxCheckBoxState DoGet3StateValue() const
+	{
+		wxFAIL;
+		return wxCHK_UNCHECKED;
+	}
 
 private:
-    DECLARE_NO_COPY_CLASS(wxCheckBoxBase)
+	DECLARE_NO_COPY_CLASS(wxCheckBoxBase)
 };
 
 #if defined(__WXUNIVERSAL__)
-    #include "wx/univ/checkbox.h"
+#include "wx/univ/checkbox.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/checkbox.h"
+#include "wx/msw/checkbox.h"
 #elif defined(__WXMOTIF__)
-    #include "wx/motif/checkbox.h"
+#include "wx/motif/checkbox.h"
 #elif defined(__WXGTK20__)
-    #include "wx/gtk/checkbox.h"
+#include "wx/gtk/checkbox.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/checkbox.h"
+#include "wx/gtk1/checkbox.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/checkbox.h"
+#include "wx/mac/checkbox.h"
 #elif defined(__WXCOCOA__)
-    #include "wx/cocoa/checkbox.h"
+#include "wx/cocoa/checkbox.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/checkbox.h"
+#include "wx/os2/checkbox.h"
 #elif defined(__WXPALMOS__)
-    #include "wx/palmos/checkbox.h"
+#include "wx/palmos/checkbox.h"
 #endif
 
 #endif // wxUSE_CHECKBOX
 
 #endif
-    // _WX_CHECKBOX_H_BASE_
+// _WX_CHECKBOX_H_BASE_

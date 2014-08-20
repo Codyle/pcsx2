@@ -29,8 +29,8 @@ extern void DeviceBoxDestroy();
 extern void DeviceBoxRefocus();
 extern void DeviceBoxDisplay();
 extern BOOL CALLBACK DeviceBoxCallback(HWND window,
-	                                       UINT msg,
-	                                       WPARAM param,
-	                                       LPARAM param2);
+                                       UINT msg,
+                                       WPARAM param,
+                                       LPARAM param2);
 
 #endif /* DEVICEBOX_H */

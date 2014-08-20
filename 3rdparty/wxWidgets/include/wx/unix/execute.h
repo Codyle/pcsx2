@@ -18,48 +18,44 @@ class wxStreamTempInputBuffer;
 // if pid > 0, the execution is async and the data is freed in the callback
 // executed when the process terminates, if pid < 0, the execution is
 // synchronous and the caller (wxExecute) frees the data
-struct wxEndProcessData
-{
-    int pid,                // pid of the process
-        tag;                // port dependent value
-    wxProcess *process;     // if !NULL: notified on process termination
-    int  exitcode;          // the exit code
+struct wxEndProcessData {
+	int pid,                // pid of the process
+	    tag;                // port dependent value
+	wxProcess *process;     // if !NULL: notified on process termination
+	int  exitcode;          // the exit code
 };
 
 // struct in which information is passed from wxExecute() to wxAppTraits
 // methods
-struct wxExecuteData
-{
-    wxExecuteData()
-    {
-        flags =
-        pid = 0;
-
-        process = NULL;
-
+struct wxExecuteData {
+	wxExecuteData()
+	{
+		flags =
+		        pid = 0;
+		process = NULL;
 #if wxUSE_STREAMS
-        bufOut =
-        bufErr = NULL;
+		bufOut =
+		        bufErr = NULL;
 #endif // wxUSE_STREAMS
-    }
+	}
 
-    // wxExecute() flags
-    int flags;
+	// wxExecute() flags
+	int flags;
 
-    // the pid of the child process
-    int pid;
+	// the pid of the child process
+	int pid;
 
-    // the associated process object or NULL
-    wxProcess *process;
+	// the associated process object or NULL
+	wxProcess *process;
 
-    // pipe used for end process detection
-    wxPipe pipeEndProcDetect;
+	// pipe used for end process detection
+	wxPipe pipeEndProcDetect;
 
 #if wxUSE_STREAMS
-    // the input buffer bufOut is connected to stdout, this is why it is
-    // called bufOut and not bufIn
-    wxStreamTempInputBuffer *bufOut,
-                            *bufErr;
+	// the input buffer bufOut is connected to stdout, this is why it is
+	// called bufOut and not bufIn
+	wxStreamTempInputBuffer *bufOut,
+	                        *bufErr;
 #endif // wxUSE_STREAMS
 };
 

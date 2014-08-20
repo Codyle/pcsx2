@@ -40,17 +40,12 @@
 
 int main(int argc, char *argv[])
 {
-	if (argc != 2)  return(1);
-
+	if (argc != 2)  return (1);
 	gtk_init(NULL, NULL);
-
-	if (!strcmp(argv[1], "about"))
-	{
+	if (!strcmp(argv[1], "about")) {
 		AboutBoxDisplay();
-		return(0);
-	}
-	else if (!strcmp(argv[1], "configure"))
-	{
+		return (0);
+	} else if (!strcmp(argv[1], "configure")) {
 		OpenLog();
 		InitConf();
 		LoadConf();
@@ -60,12 +55,10 @@ int main(int argc, char *argv[])
 		ProgressBoxDisplay();
 		MessageBoxDisplay();
 		SelectionBoxDisplay();
-
 		gtk_widget_show_all(mainbox.window);
 		gtk_main();
 		CloseLog();
-		return(0);
+		return (0);
 	} // ENDLONGIF- Which display would you like to see?
-
-	return(1); // No Displays chosen? Abort!
+	return (1); // No Displays chosen? Abort!
 } // END main()

@@ -65,8 +65,8 @@
 // 2048-4095 are reserved for customers.
 //
 #define CTL_CODE( DeviceType, Function, Method, Access ) (                 \
-    ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
-)
+                ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
+                                                         )
 //
 // Define the method codes for how buffers are passed for I/O and FS controls
 //

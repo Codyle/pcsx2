@@ -15,11 +15,11 @@
 
 #pragma once
 
-namespace x86Emitter {
-
-enum G1Type
+namespace x86Emitter
 {
-	G1Type_ADD=0,
+
+enum G1Type {
+	G1Type_ADD = 0,
 	G1Type_OR,
 	G1Type_ADC,
 	G1Type_SBB,
@@ -29,56 +29,55 @@ enum G1Type
 	G1Type_CMP
 };
 
-extern void _g1_EmitOp( G1Type InstType, const xRegisterInt& to, const xRegisterInt& from );
+extern void _g1_EmitOp(G1Type InstType, const xRegisterInt &to, const xRegisterInt &from);
 
 // --------------------------------------------------------------------------------------
 //  xImpl_Group1
 // --------------------------------------------------------------------------------------
-struct xImpl_Group1
-{
+struct xImpl_Group1 {
 	G1Type	InstType;
 
-	void operator()( const xRegister8& to, const xRegister8& from ) const;
-	void operator()( const xRegister16& to, const xRegister16& from ) const;
-	void operator()( const xRegister32& to, const xRegister32& from ) const;
+	void operator()(const xRegister8 &to, const xRegister8 &from) const;
+	void operator()(const xRegister16 &to, const xRegister16 &from) const;
+	void operator()(const xRegister32 &to, const xRegister32 &from) const;
 
-	void operator()( const xIndirectVoid& to, const xRegisterInt& from ) const;
-	void operator()( const xRegisterInt& to, const xIndirectVoid& from ) const;
-	void operator()( const xRegisterInt& to, int imm ) const;
-	void operator()( const xIndirect32orLess& to, int imm ) const;
+	void operator()(const xIndirectVoid &to, const xRegisterInt &from) const;
+	void operator()(const xRegisterInt &to, const xIndirectVoid &from) const;
+	void operator()(const xRegisterInt &to, int imm) const;
+	void operator()(const xIndirect32orLess &to, int imm) const;
 
 #if 0
 	// ------------------------------------------------------------------------
-	template< typename T > __noinline void operator()( const ModSibBase& to, const xImmReg<T>& immOrReg ) const
+	template<typename T> __noinline void operator()(const ModSibBase &to, const xImmReg<T> &immOrReg) const
 	{
-		_DoI_helpermess( *this, to, immOrReg );
+		_DoI_helpermess(*this, to, immOrReg);
 	}
 
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, const xImmReg<T>& immOrReg ) const
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, const xImmReg<T> &immOrReg) const
 	{
-		_DoI_helpermess( *this, to, immOrReg );
+		_DoI_helpermess(*this, to, immOrReg);
 	}
 
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, int imm ) const
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, int imm) const
 	{
-		_DoI_helpermess( *this, to, imm );
+		_DoI_helpermess(*this, to, imm);
 	}
 
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, const xDirectOrIndirect<T>& from ) const
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, const xDirectOrIndirect<T> &from) const
 	{
-		_DoI_helpermess( *this, to, from );
-	}
-
-	// FIXME : Make this struct to 8, 16, and 32 bit registers
-	template< typename T > __noinline void operator()( const xRegisterBase& to, const xDirectOrIndirect<T>& from ) const
-	{
-		_DoI_helpermess( *this, xDirectOrIndirect<T>( to ), from );
+		_DoI_helpermess(*this, to, from);
 	}
 
 	// FIXME : Make this struct to 8, 16, and 32 bit registers
-	template< typename T > __noinline void operator()( const xDirectOrIndirect<T>& to, const xRegisterBase& from ) const
+	template<typename T> __noinline void operator()(const xRegisterBase &to, const xDirectOrIndirect<T> &from) const
 	{
-		_DoI_helpermess( *this, to, xDirectOrIndirect<T>( from ) );
+		_DoI_helpermess(*this, xDirectOrIndirect<T>(to), from);
+	}
+
+	// FIXME : Make this struct to 8, 16, and 32 bit registers
+	template<typename T> __noinline void operator()(const xDirectOrIndirect<T> &to, const xRegisterBase &from) const
+	{
+		_DoI_helpermess(*this, to, xDirectOrIndirect<T>(from));
 	}
 #endif
 };
@@ -87,19 +86,18 @@ struct xImpl_Group1
 // This class combines x86 with SSE/SSE2 logic operations (ADD, OR, and NOT).
 // Note: ANDN [AndNot] is handled below separately.
 //
-struct xImpl_G1Logic
-{
+struct xImpl_G1Logic {
 	G1Type	InstType;
 
-	void operator()( const xRegister8& to, const xRegister8& from ) const;
-	void operator()( const xRegister16& to, const xRegister16& from ) const;
-	void operator()( const xRegister32& to, const xRegister32& from ) const;
+	void operator()(const xRegister8 &to, const xRegister8 &from) const;
+	void operator()(const xRegister16 &to, const xRegister16 &from) const;
+	void operator()(const xRegister32 &to, const xRegister32 &from) const;
 
-	void operator()( const xIndirectVoid& to, const xRegisterInt& from ) const;
-	void operator()( const xRegisterInt& to, const xIndirectVoid& from ) const;
-	void operator()( const xRegisterInt& to, int imm ) const;
+	void operator()(const xIndirectVoid &to, const xRegisterInt &from) const;
+	void operator()(const xRegisterInt &to, const xIndirectVoid &from) const;
+	void operator()(const xRegisterInt &to, int imm) const;
 
-	void operator()( const xIndirect32orLess& to, int imm ) const;
+	void operator()(const xIndirect32orLess &to, int imm) const;
 
 	xImplSimd_DestRegSSE PS;			// packed single precision
 	xImplSimd_DestRegSSE PD;			// packed double precision
@@ -108,19 +106,18 @@ struct xImpl_G1Logic
 // ------------------------------------------------------------------------
 // This class combines x86 with SSE/SSE2 arithmetic operations (ADD/SUB).
 //
-struct xImpl_G1Arith
-{
+struct xImpl_G1Arith {
 	G1Type	InstType;
 
-	void operator()( const xRegister8& to, const xRegister8& from ) const;
-	void operator()( const xRegister16& to, const xRegister16& from ) const;
-	void operator()( const xRegister32& to, const xRegister32& from ) const;
+	void operator()(const xRegister8 &to, const xRegister8 &from) const;
+	void operator()(const xRegister16 &to, const xRegister16 &from) const;
+	void operator()(const xRegister32 &to, const xRegister32 &from) const;
 
-	void operator()( const xIndirectVoid& to, const xRegisterInt& from ) const;
-	void operator()( const xRegisterInt& to, const xIndirectVoid& from ) const;
-	void operator()( const xRegisterInt& to, int imm ) const;
+	void operator()(const xIndirectVoid &to, const xRegisterInt &from) const;
+	void operator()(const xRegisterInt &to, const xIndirectVoid &from) const;
+	void operator()(const xRegisterInt &to, int imm) const;
 
-	void operator()( const xIndirect32orLess& to, int imm ) const;
+	void operator()(const xIndirect32orLess &to, int imm) const;
 
 	xImplSimd_DestRegSSE PS;			// packed single precision
 	xImplSimd_DestRegSSE PD;			// packed double precision
@@ -129,17 +126,16 @@ struct xImpl_G1Arith
 };
 
 // ------------------------------------------------------------------------
-struct xImpl_G1Compare
-{
-	void operator()( const xRegister8& to, const xRegister8& from ) const;
-	void operator()( const xRegister16& to, const xRegister16& from ) const;
-	void operator()( const xRegister32& to, const xRegister32& from ) const;
+struct xImpl_G1Compare {
+	void operator()(const xRegister8 &to, const xRegister8 &from) const;
+	void operator()(const xRegister16 &to, const xRegister16 &from) const;
+	void operator()(const xRegister32 &to, const xRegister32 &from) const;
 
-	void operator()( const xIndirectVoid& to, const xRegisterInt& from ) const;
-	void operator()( const xRegisterInt& to, const xIndirectVoid& from ) const;
-	void operator()( const xRegisterInt& to, int imm ) const;
+	void operator()(const xIndirectVoid &to, const xRegisterInt &from) const;
+	void operator()(const xRegisterInt &to, const xIndirectVoid &from) const;
+	void operator()(const xRegisterInt &to, int imm) const;
 
-	void operator()( const xIndirect32orLess& to, int imm ) const;
+	void operator()(const xIndirect32orLess &to, int imm) const;
 
 	xImplSimd_DestSSE_CmpImm	PS;
 	xImplSimd_DestSSE_CmpImm	PD;

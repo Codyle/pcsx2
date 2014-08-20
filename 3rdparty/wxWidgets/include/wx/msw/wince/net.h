@@ -16,6 +16,6 @@
 struct servent * WINSOCKAPI getservbyport(int port, const char * proto) ;
 
 struct servent * WINSOCKAPI getservbyname(const char * name,
-                                          const char * proto) ;
+                const char * proto) ;
 struct protoent * WINSOCKAPI getprotobynumber(int proto) ;
 

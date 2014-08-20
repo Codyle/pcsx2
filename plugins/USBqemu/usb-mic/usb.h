@@ -24,11 +24,11 @@
 
 
 typedef union {
-  WORD W;
-  struct {
-    BYTE L;
-    BYTE H;
-  } WB;
+	WORD W;
+	struct {
+		BYTE L;
+		BYTE H;
+	} WB;
 } WORD_BYTE;
 
 
@@ -50,12 +50,12 @@ typedef union {
 
 /* bmRequestType Definition */
 typedef union _REQUEST_TYPE {
-  struct _BM {
-    BYTE Recipient : 5;
-    BYTE Type      : 2;
-    BYTE Dir       : 1;
-  } BM;
-  BYTE B;
+	struct _BM {
+		BYTE Recipient : 5;
+		BYTE Type      : 2;
+		BYTE Dir       : 1;
+	} BM;
+	BYTE B;
 } REQUEST_TYPE;
 
 /* USB Standard Request Codes */
@@ -82,11 +82,11 @@ typedef union _REQUEST_TYPE {
 
 /* USB Default Control Pipe Setup Packet */
 typedef struct _USB_SETUP_PACKET {
-  REQUEST_TYPE bmRequestType;
-  BYTE         bRequest;
-  WORD_BYTE    wValue;
-  WORD_BYTE    wIndex;
-  WORD         wLength;
+	REQUEST_TYPE bmRequestType;
+	BYTE         bRequest;
+	WORD_BYTE    wValue;
+	WORD_BYTE    wIndex;
+	WORD         wLength;
 } USB_SETUP_PACKET;
 
 
@@ -146,81 +146,81 @@ typedef struct _USB_SETUP_PACKET {
 
 /* USB Standard Device Descriptor */
 typedef struct _USB_DEVICE_DESCRIPTOR {
-  BYTE  bLength;
-  BYTE  bDescriptorType;
-  WORD  bcdUSB;
-  BYTE  bDeviceClass;
-  BYTE  bDeviceSubClass;
-  BYTE  bDeviceProtocol;
-  BYTE  bMaxPacketSize0;
-  WORD  idVendor;
-  WORD  idProduct;
-  WORD  bcdDevice;
-  BYTE  iManufacturer;
-  BYTE  iProduct;
-  BYTE  iSerialNumber;
-  BYTE  bNumConfigurations;
+	BYTE  bLength;
+	BYTE  bDescriptorType;
+	WORD  bcdUSB;
+	BYTE  bDeviceClass;
+	BYTE  bDeviceSubClass;
+	BYTE  bDeviceProtocol;
+	BYTE  bMaxPacketSize0;
+	WORD  idVendor;
+	WORD  idProduct;
+	WORD  bcdDevice;
+	BYTE  iManufacturer;
+	BYTE  iProduct;
+	BYTE  iSerialNumber;
+	BYTE  bNumConfigurations;
 } USB_DEVICE_DESCRIPTOR;
 
 /* USB 2.0 Device Qualifier Descriptor */
 typedef struct _USB_DEVICE_QUALIFIER_DESCRIPTOR {
-  BYTE  bLength;
-  BYTE  bDescriptorType;
-  WORD  bcdUSB;
-  BYTE  bDeviceClass;
-  BYTE  bDeviceSubClass;
-  BYTE  bDeviceProtocol;
-  BYTE  bMaxPacketSize0;
-  BYTE  bNumConfigurations;
-  BYTE  bReserved;
+	BYTE  bLength;
+	BYTE  bDescriptorType;
+	WORD  bcdUSB;
+	BYTE  bDeviceClass;
+	BYTE  bDeviceSubClass;
+	BYTE  bDeviceProtocol;
+	BYTE  bMaxPacketSize0;
+	BYTE  bNumConfigurations;
+	BYTE  bReserved;
 } USB_DEVICE_QUALIFIER_DESCRIPTOR;
 
 /* USB Standard Configuration Descriptor */
 typedef struct _USB_CONFIGURATION_DESCRIPTOR {
-  BYTE  bLength;
-  BYTE  bDescriptorType;
-  WORD  wTotalLength;
-  BYTE  bNumInterfaces;
-  BYTE  bConfigurationValue;
-  BYTE  iConfiguration;
-  BYTE  bmAttributes;
-  BYTE  MaxPower;
+	BYTE  bLength;
+	BYTE  bDescriptorType;
+	WORD  wTotalLength;
+	BYTE  bNumInterfaces;
+	BYTE  bConfigurationValue;
+	BYTE  iConfiguration;
+	BYTE  bmAttributes;
+	BYTE  MaxPower;
 } USB_CONFIGURATION_DESCRIPTOR;
 
 /* USB Standard Interface Descriptor */
 typedef struct _USB_INTERFACE_DESCRIPTOR {
-  BYTE  bLength;
-  BYTE  bDescriptorType;
-  BYTE  bInterfaceNumber;
-  BYTE  bAlternateSetting;
-  BYTE  bNumEndpoints;
-  BYTE  bInterfaceClass;
-  BYTE  bInterfaceSubClass;
-  BYTE  bInterfaceProtocol;
-  BYTE  iInterface;
+	BYTE  bLength;
+	BYTE  bDescriptorType;
+	BYTE  bInterfaceNumber;
+	BYTE  bAlternateSetting;
+	BYTE  bNumEndpoints;
+	BYTE  bInterfaceClass;
+	BYTE  bInterfaceSubClass;
+	BYTE  bInterfaceProtocol;
+	BYTE  iInterface;
 } USB_INTERFACE_DESCRIPTOR;
 
 /* USB Standard Endpoint Descriptor */
 typedef struct _USB_ENDPOINT_DESCRIPTOR {
-  BYTE  bLength;
-  BYTE  bDescriptorType;
-  BYTE  bEndpointAddress;
-  BYTE  bmAttributes;
-  WORD  wMaxPacketSize;
-  BYTE  bInterval;
+	BYTE  bLength;
+	BYTE  bDescriptorType;
+	BYTE  bEndpointAddress;
+	BYTE  bmAttributes;
+	WORD  wMaxPacketSize;
+	BYTE  bInterval;
 } USB_ENDPOINT_DESCRIPTOR;
 
 /* USB String Descriptor */
 typedef struct _USB_STRING_DESCRIPTOR {
-  BYTE  bLength;
-  BYTE  bDescriptorType;
-  WORD  bString/*[]*/;
+	BYTE  bLength;
+	BYTE  bDescriptorType;
+	WORD  bString/*[]*/;
 } USB_STRING_DESCRIPTOR;
 
 /* USB Common Descriptor */
 typedef struct _USB_COMMON_DESCRIPTOR {
-  BYTE  bLength;
-  BYTE  bDescriptorType;
+	BYTE  bLength;
+	BYTE  bDescriptorType;
 } USB_COMMON_DESCRIPTOR;
 
 

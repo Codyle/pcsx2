@@ -30,62 +30,62 @@
 
 class wxRichTextStylePage: public wxPanel
 {
-    DECLARE_DYNAMIC_CLASS( wxRichTextStylePage )
-    DECLARE_EVENT_TABLE()
+	DECLARE_DYNAMIC_CLASS(wxRichTextStylePage)
+	DECLARE_EVENT_TABLE()
 
 public:
-    /// Constructors
-    wxRichTextStylePage( );
-    wxRichTextStylePage( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = SYMBOL_WXRICHTEXTSTYLEPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTSTYLEPAGE_STYLE );
+	/// Constructors
+	wxRichTextStylePage();
+	wxRichTextStylePage(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint &pos = SYMBOL_WXRICHTEXTSTYLEPAGE_POSITION, const wxSize &size = SYMBOL_WXRICHTEXTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTSTYLEPAGE_STYLE);
 
-    /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = SYMBOL_WXRICHTEXTSTYLEPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTSTYLEPAGE_STYLE );
+	/// Creation
+	bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint &pos = SYMBOL_WXRICHTEXTSTYLEPAGE_POSITION, const wxSize &size = SYMBOL_WXRICHTEXTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTSTYLEPAGE_STYLE);
 
-    /// Initialise members
-    void Init();
+	/// Initialise members
+	void Init();
 
-    /// Creates the controls and sizers
-    void CreateControls();
+	/// Creates the controls and sizers
+	void CreateControls();
 
-    /// Transfer data from/to window
-    virtual bool TransferDataFromWindow();
-    virtual bool TransferDataToWindow();
+	/// Transfer data from/to window
+	virtual bool TransferDataFromWindow();
+	virtual bool TransferDataToWindow();
 
-    /// Gets the attributes associated with the main formatting dialog
-    wxTextAttrEx* GetAttributes();
+	/// Gets the attributes associated with the main formatting dialog
+	wxTextAttrEx* GetAttributes();
 
-////@begin wxRichTextStylePage event handler declarations
+	////@begin wxRichTextStylePage event handler declarations
 
-    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEPAGE_NEXT_STYLE
-    void OnNextStyleUpdate( wxUpdateUIEvent& event );
+	/// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEPAGE_NEXT_STYLE
+	void OnNextStyleUpdate(wxUpdateUIEvent &event);
 
-////@end wxRichTextStylePage event handler declarations
+	////@end wxRichTextStylePage event handler declarations
 
-////@begin wxRichTextStylePage member function declarations
+	////@begin wxRichTextStylePage member function declarations
 
-    /// Retrieves bitmap resources
-    wxBitmap GetBitmapResource( const wxString& name );
+	/// Retrieves bitmap resources
+	wxBitmap GetBitmapResource(const wxString &name);
 
-    /// Retrieves icon resources
-    wxIcon GetIconResource( const wxString& name );
-////@end wxRichTextStylePage member function declarations
+	/// Retrieves icon resources
+	wxIcon GetIconResource(const wxString &name);
+	////@end wxRichTextStylePage member function declarations
 
-    /// Should we show tooltips?
-    static bool ShowToolTips();
+	/// Should we show tooltips?
+	static bool ShowToolTips();
 
-////@begin wxRichTextStylePage member variables
-    wxTextCtrl* m_styleName;
-    wxComboBox* m_basedOn;
-    wxComboBox* m_nextStyle;
-    /// Control identifiers
-    enum {
-        ID_RICHTEXTSTYLEPAGE = 10403,
-        ID_RICHTEXTSTYLEPAGE_STYLE_NAME = 10404,
-        ID_RICHTEXTSTYLEPAGE_BASED_ON = 10405,
-        ID_RICHTEXTSTYLEPAGE_NEXT_STYLE = 10406
-    };
-////@end wxRichTextStylePage member variables
+	////@begin wxRichTextStylePage member variables
+	wxTextCtrl* m_styleName;
+	wxComboBox* m_basedOn;
+	wxComboBox* m_nextStyle;
+	/// Control identifiers
+	enum {
+		ID_RICHTEXTSTYLEPAGE = 10403,
+		ID_RICHTEXTSTYLEPAGE_STYLE_NAME = 10404,
+		ID_RICHTEXTSTYLEPAGE_BASED_ON = 10405,
+		ID_RICHTEXTSTYLEPAGE_NEXT_STYLE = 10406
+	};
+	////@end wxRichTextStylePage member variables
 };
 
 #endif
-    // _RICHTEXTSTYLEPAGE_H_
+// _RICHTEXTSTYLEPAGE_H_

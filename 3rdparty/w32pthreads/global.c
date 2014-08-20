@@ -60,10 +60,10 @@ int ptw32_features = 0;
  * functionality but may be architecture specific.
  */
 PTW32_INTERLOCKED_LONG
-  (WINAPI * ptw32_interlocked_compare_exchange) (PTW32_INTERLOCKED_LPLONG,
-						 PTW32_INTERLOCKED_LONG,
-						 PTW32_INTERLOCKED_LONG) =
-  NULL;
+(WINAPI * ptw32_interlocked_compare_exchange)(PTW32_INTERLOCKED_LPLONG,
+                PTW32_INTERLOCKED_LONG,
+                PTW32_INTERLOCKED_LONG) =
+                        NULL;
 #endif
 
 /*
@@ -71,7 +71,7 @@ PTW32_INTERLOCKED_LONG
  * it will be set at runtime to a substitute routine which cannot unblock
  * blocked threads.
  */
-DWORD (*ptw32_register_cancelation) (PAPCFUNC, HANDLE, DWORD) = NULL;
+DWORD (*ptw32_register_cancelation)(PAPCFUNC, HANDLE, DWORD) = NULL;
 
 /*
  * Global lock for managing pthread_t struct reuse.

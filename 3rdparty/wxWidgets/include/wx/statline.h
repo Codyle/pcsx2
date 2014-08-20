@@ -37,43 +37,48 @@ extern WXDLLEXPORT_DATA(const wxChar) wxStaticLineNameStr[];
 class WXDLLEXPORT wxStaticLineBase : public wxControl
 {
 public:
-    // constructor
-    wxStaticLineBase() { }
+	// constructor
+	wxStaticLineBase() { }
 
-    // is the line vertical?
-    bool IsVertical() const { return (GetWindowStyle() & wxLI_VERTICAL) != 0; }
+	// is the line vertical?
+	bool IsVertical() const
+	{
+		return (GetWindowStyle() & wxLI_VERTICAL) != 0;
+	}
 
-    // get the default size for the "lesser" dimension of the static line
-    static int GetDefaultSize() { return 2; }
+	// get the default size for the "lesser" dimension of the static line
+	static int GetDefaultSize()
+	{
+		return 2;
+	}
 
-    // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return false; }
+	// overriden base class virtuals
+	virtual bool AcceptsFocus() const
+	{
+		return false;
+	}
 
 protected:
-    // set the right size for the right dimension
-    wxSize AdjustSize(const wxSize& size) const
-    {
-        wxSize sizeReal(size);
-        if ( IsVertical() )
-        {
-            if ( size.x == wxDefaultCoord )
-                sizeReal.x = GetDefaultSize();
-        }
-        else
-        {
-            if ( size.y == wxDefaultCoord )
-                sizeReal.y = GetDefaultSize();
-        }
+	// set the right size for the right dimension
+	wxSize AdjustSize(const wxSize &size) const
+	{
+		wxSize sizeReal(size);
+		if (IsVertical()) {
+			if (size.x == wxDefaultCoord)
+				sizeReal.x = GetDefaultSize();
+		} else {
+			if (size.y == wxDefaultCoord)
+				sizeReal.y = GetDefaultSize();
+		}
+		return sizeReal;
+	}
 
-        return sizeReal;
-    }
+	virtual wxSize DoGetBestSize() const
+	{
+		return AdjustSize(wxDefaultSize);
+	}
 
-    virtual wxSize DoGetBestSize() const
-    {
-        return AdjustSize(wxDefaultSize);
-    }
-
-    DECLARE_NO_COPY_CLASS(wxStaticLineBase)
+	DECLARE_NO_COPY_CLASS(wxStaticLineBase)
 };
 
 // ----------------------------------------------------------------------------
@@ -81,21 +86,21 @@ protected:
 // ----------------------------------------------------------------------------
 
 #if defined(__WXUNIVERSAL__)
-    #include "wx/univ/statline.h"
+#include "wx/univ/statline.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/statline.h"
+#include "wx/msw/statline.h"
 #elif defined(__WXGTK20__)
-    #include "wx/gtk/statline.h"
+#include "wx/gtk/statline.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/statline.h"
+#include "wx/gtk1/statline.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/statline.h"
+#include "wx/os2/statline.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/statline.h"
+#include "wx/mac/statline.h"
 #elif defined(__WXCOCOA__)
-    #include "wx/cocoa/statline.h"
+#include "wx/cocoa/statline.h"
 #else // use generic implementation for all other platforms
-    #include "wx/generic/statline.h"
+#include "wx/generic/statline.h"
 #endif
 
 #endif // wxUSE_STATLINE

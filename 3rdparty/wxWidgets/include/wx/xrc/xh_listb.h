@@ -17,16 +17,16 @@
 
 class WXDLLIMPEXP_XRC wxListBoxXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxListBoxXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxListBoxXmlHandler)
 
 public:
-    wxListBoxXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxListBoxXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_insideBox;
-    wxArrayString strList;
+	bool m_insideBox;
+	wxArrayString strList;
 };
 
 #endif // wxUSE_XRC && wxUSE_LISTBOX

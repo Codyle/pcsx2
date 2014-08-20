@@ -15,52 +15,55 @@
 class WXDLLEXPORT wxStaticText : public wxStaticTextBase
 {
 public:
-    wxStaticText() { }
+	wxStaticText() { }
 
-    // usual ctor
-    wxStaticText(wxWindow *parent,
-                 const wxString& label,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize)
-    {
-        Create(parent, wxID_ANY, label, pos, size, 0, wxStaticTextNameStr);
-    }
+	// usual ctor
+	wxStaticText(wxWindow *parent,
+	             const wxString &label,
+	             const wxPoint &pos = wxDefaultPosition,
+	             const wxSize &size = wxDefaultSize)
+	{
+		Create(parent, wxID_ANY, label, pos, size, 0, wxStaticTextNameStr);
+	}
 
-    // full form
-    wxStaticText(wxWindow *parent,
-                 wxWindowID id,
-                 const wxString& label,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = 0,
-                 const wxString &name = wxStaticTextNameStr)
-    {
-        Create(parent, id, label, pos, size, style, name);
-    }
+	// full form
+	wxStaticText(wxWindow *parent,
+	             wxWindowID id,
+	             const wxString &label,
+	             const wxPoint &pos = wxDefaultPosition,
+	             const wxSize &size = wxDefaultSize,
+	             long style = 0,
+	             const wxString &name = wxStaticTextNameStr)
+	{
+		Create(parent, id, label, pos, size, style, name);
+	}
 
-    // function ctor
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxString &label,
-                const wxPoint &pos = wxDefaultPosition,
-                const wxSize &size = wxDefaultSize,
-                long style = 0,
-                const wxString &name = wxStaticTextNameStr);
+	// function ctor
+	bool Create(wxWindow *parent,
+	            wxWindowID id,
+	            const wxString &label,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = 0,
+	            const wxString &name = wxStaticTextNameStr);
 
-    // implementation only from now on
+	// implementation only from now on
 
-    virtual void SetLabel(const wxString& label);
+	virtual void SetLabel(const wxString &label);
 
-    virtual bool IsFocused() const { return false; }
+	virtual bool IsFocused() const
+	{
+		return false;
+	}
 
 protected:
-    // calculate the optimal size for the label
-    virtual wxSize DoGetBestClientSize() const;
+	// calculate the optimal size for the label
+	virtual wxSize DoGetBestClientSize() const;
 
-    // draw the control
-    virtual void DoDraw(wxControlRenderer *renderer);
+	// draw the control
+	virtual void DoDraw(wxControlRenderer *renderer);
 
-    DECLARE_ABSTRACT_CLASS(wxStaticText)
+	DECLARE_ABSTRACT_CLASS(wxStaticText)
 };
 
 #endif // _WX_UNIV_STATTEXT_H_

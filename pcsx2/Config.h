@@ -19,8 +19,7 @@
 
 class IniInterface;
 
-enum PluginsEnum_t
-{
+enum PluginsEnum_t {
 	PluginId_GS = 0,
 	PluginId_PAD,
 	PluginId_SPU2,
@@ -37,8 +36,7 @@ enum PluginsEnum_t
 	PluginId_Mcd
 };
 
-enum GamefixId
-{
+enum GamefixId {
 	GamefixId_FIRST = 0,
 
 	Fix_VuAddSub = GamefixId_FIRST,
@@ -61,7 +59,7 @@ enum GamefixId
 	GamefixId_COUNT
 };
 
-ImplementEnumOperators( GamefixId );
+ImplementEnumOperators(GamefixId);
 
 //------------ DEFAULT sseMXCSR VALUES ---------------
 #define DEFAULT_sseMXCSR	0xffc0 //FPU rounding > DaZ, FtZ, "chop"
@@ -70,14 +68,13 @@ ImplementEnumOperators( GamefixId );
 // --------------------------------------------------------------------------------------
 //  TraceFiltersEE
 // --------------------------------------------------------------------------------------
-struct TraceFiltersEE
-{
+struct TraceFiltersEE {
 	BITFIELD32()
 	bool
-		m_EnableAll		:1,		// Master Enable switch (if false, no logs at all)
-		m_EnableDisasm	:1,
-		m_EnableRegisters:1,
-		m_EnableEvents	:1;		// Enables logging of event-driven activity -- counters, DMAs, etc.
+	m_EnableAll		: 1,		// Master Enable switch (if false, no logs at all)
+	                        m_EnableDisasm	: 1,
+	                        m_EnableRegisters: 1,
+	                        m_EnableEvents	: 1;		// Enables logging of event-driven activity -- counters, DMAs, etc.
 	BITFIELD_END
 
 	TraceFiltersEE()
@@ -85,28 +82,27 @@ struct TraceFiltersEE
 		bitset = 0;
 	}
 
-	bool operator ==( const TraceFiltersEE& right ) const
+	bool operator ==(const TraceFiltersEE &right) const
 	{
-		return OpEqu( bitset );
+		return OpEqu(bitset);
 	}
 
-	bool operator !=( const TraceFiltersEE& right ) const
+	bool operator !=(const TraceFiltersEE &right) const
 	{
-		return !this->operator ==( right );
+		return !this->operator ==(right);
 	}
 };
 
 // --------------------------------------------------------------------------------------
 //  TraceFiltersIOP
 // --------------------------------------------------------------------------------------
-struct TraceFiltersIOP
-{
+struct TraceFiltersIOP {
 	BITFIELD32()
 	bool
-		m_EnableAll		:1,		// Master Enable switch (if false, no logs at all)
-		m_EnableDisasm	:1,
-		m_EnableRegisters:1,
-		m_EnableEvents	:1;		// Enables logging of event-driven activity -- counters, DMAs, etc.
+	m_EnableAll		: 1,		// Master Enable switch (if false, no logs at all)
+	                        m_EnableDisasm	: 1,
+	                        m_EnableRegisters: 1,
+	                        m_EnableEvents	: 1;		// Enables logging of event-driven activity -- counters, DMAs, etc.
 	BITFIELD_END
 
 	TraceFiltersIOP()
@@ -114,22 +110,21 @@ struct TraceFiltersIOP
 		bitset = 0;
 	}
 
-	bool operator ==( const TraceFiltersIOP& right ) const
+	bool operator ==(const TraceFiltersIOP &right) const
 	{
-		return OpEqu( bitset );
+		return OpEqu(bitset);
 	}
 
-	bool operator !=( const TraceFiltersIOP& right ) const
+	bool operator !=(const TraceFiltersIOP &right) const
 	{
-		return !this->operator ==( right );
+		return !this->operator ==(right);
 	}
 };
 
 // --------------------------------------------------------------------------------------
 //  TraceLogFilters
 // --------------------------------------------------------------------------------------
-struct TraceLogFilters
-{
+struct TraceLogFilters {
 	// Enabled - global toggle for high volume logging.  This is effectively the equivalent to
 	// (EE.Enabled() || IOP.Enabled() || SIF) -- it's cached so that we can use the macros
 	// below to inline the conditional check.  This is desirable because these logs are
@@ -146,16 +141,16 @@ struct TraceLogFilters
 		Enabled	= false;
 	}
 
-	void LoadSave( IniInterface& ini );
+	void LoadSave(IniInterface &ini);
 
-	bool operator ==( const TraceLogFilters& right ) const
+	bool operator ==(const TraceLogFilters &right) const
 	{
-		return OpEqu( Enabled ) && OpEqu( EE ) && OpEqu( IOP );
+		return OpEqu(Enabled) && OpEqu(EE) && OpEqu(IOP);
 	}
 
-	bool operator !=( const TraceLogFilters& right ) const
+	bool operator !=(const TraceLogFilters &right) const
 	{
-		return !this->operator ==( right );
+		return !this->operator ==(right);
 	}
 };
 
@@ -172,110 +167,105 @@ struct TraceLogFilters
 // use the provided functions to lock the emulation into a safe state and then apply
 // chances on the necessary scope (see Core_Pause, Core_ApplySettings, and Core_Resume).
 //
-struct Pcsx2Config
-{
-	struct ProfilerOptions
-	{
+struct Pcsx2Config {
+	struct ProfilerOptions {
 		BITFIELD32()
-			bool
-				Enabled:1,			// universal toggle for the profiler.
-				RecBlocks_EE:1,		// Enables per-block profiling for the EE recompiler [unimplemented]
-				RecBlocks_IOP:1,	// Enables per-block profiling for the IOP recompiler [unimplemented]
-				RecBlocks_VU0:1,	// Enables per-block profiling for the VU0 recompiler [unimplemented]
-				RecBlocks_VU1:1;	// Enables per-block profiling for the VU1 recompiler [unimplemented]
+		bool
+		Enabled: 1,			// universal toggle for the profiler.
+		         RecBlocks_EE: 1,		// Enables per-block profiling for the EE recompiler [unimplemented]
+		         RecBlocks_IOP: 1,	// Enables per-block profiling for the IOP recompiler [unimplemented]
+		         RecBlocks_VU0: 1,	// Enables per-block profiling for the VU0 recompiler [unimplemented]
+		         RecBlocks_VU1: 1;	// Enables per-block profiling for the VU1 recompiler [unimplemented]
 		BITFIELD_END
 
 		// Default is Disabled, with all recs enabled underneath.
-		ProfilerOptions() : bitset( 0xfffffffe ) {}
-		void LoadSave( IniInterface& conf );
+		ProfilerOptions() : bitset(0xfffffffe) {}
+		void LoadSave(IniInterface &conf);
 
-		bool operator ==( const ProfilerOptions& right ) const
+		bool operator ==(const ProfilerOptions &right) const
 		{
-			return OpEqu( bitset );
+			return OpEqu(bitset);
 		}
 
-		bool operator !=( const ProfilerOptions& right ) const
+		bool operator !=(const ProfilerOptions &right) const
 		{
-			return !OpEqu( bitset );
+			return !OpEqu(bitset);
 		}
 	};
 
 	// ------------------------------------------------------------------------
-	struct RecompilerOptions
-	{
+	struct RecompilerOptions {
 		BITFIELD32()
-			bool
-				EnableEE		:1,
-				EnableIOP		:1,
-				EnableVU0		:1,
-				EnableVU1		:1;
+		bool
+		EnableEE		: 1,
+		                        EnableIOP		: 1,
+		                        EnableVU0		: 1,
+		                        EnableVU1		: 1;
 
-			bool
-				UseMicroVU0		:1,
-				UseMicroVU1		:1;
+		bool
+		UseMicroVU0		: 1,
+		                        UseMicroVU1		: 1;
 
-			bool
-				vuOverflow		:1,
-				vuExtraOverflow	:1,
-				vuSignOverflow	:1,
-				vuUnderflow		:1;
+		bool
+		vuOverflow		: 1,
+		                        vuExtraOverflow	: 1,
+		                        vuSignOverflow	: 1,
+		                        vuUnderflow		: 1;
 
-			bool
-				fpuOverflow		:1,
-				fpuExtraOverflow:1,
-				fpuFullMode		:1;
+		bool
+		fpuOverflow		: 1,
+		                        fpuExtraOverflow: 1,
+		                        fpuFullMode		: 1;
 
-			bool
-				StackFrameChecks:1,
-				PreBlockCheckEE	:1,
-				PreBlockCheckIOP:1;
-			bool
-				EnableEECache   :1;
+		bool
+		StackFrameChecks: 1,
+		                  PreBlockCheckEE	: 1,
+		                  PreBlockCheckIOP: 1;
+		bool
+		EnableEECache   : 1;
 		BITFIELD_END
 
 		RecompilerOptions();
 		void ApplySanityCheck();
 
-		void LoadSave( IniInterface& conf );
+		void LoadSave(IniInterface &conf);
 
-		bool operator ==( const RecompilerOptions& right ) const
+		bool operator ==(const RecompilerOptions &right) const
 		{
-			return OpEqu( bitset );
+			return OpEqu(bitset);
 		}
 
-		bool operator !=( const RecompilerOptions& right ) const
+		bool operator !=(const RecompilerOptions &right) const
 		{
-			return !OpEqu( bitset );
+			return !OpEqu(bitset);
 		}
 
 	};
 
 	// ------------------------------------------------------------------------
-	struct CpuOptions
-	{
+	struct CpuOptions {
 		RecompilerOptions Recompiler;
 
 		SSE_MXCSR sseMXCSR;
 		SSE_MXCSR sseVUMXCSR;
 
 		CpuOptions();
-		void LoadSave( IniInterface& conf );
+		void LoadSave(IniInterface &conf);
 		void ApplySanityCheck();
 
-		bool operator ==( const CpuOptions& right ) const
+		bool operator ==(const CpuOptions &right) const
 		{
-			return OpEqu( sseMXCSR ) && OpEqu( sseVUMXCSR ) && OpEqu( Recompiler );
+			return OpEqu(sseMXCSR) && OpEqu(sseVUMXCSR) && OpEqu(Recompiler);
 		}
 
-		bool operator !=( const CpuOptions& right ) const
+		bool operator !=(const CpuOptions &right) const
 		{
-			return !this->operator ==( right );
+			return !this->operator ==(right);
 		}
 	};
 
 	// ------------------------------------------------------------------------
-	struct GSOptions
-	{
+	struct GSOptions {
 		// forces the MTGS to execute tags/tasks in fully blocking/synchronous
 		// style.  Useful for debugging potential bugs in the MTGS pipeline.
 		bool	SynchronousMTGS;
@@ -300,155 +290,155 @@ struct Pcsx2Config
 		Fixed100	FrameratePAL;
 
 		GSOptions();
-		void LoadSave( IniInterface& conf );
+		void LoadSave(IniInterface &conf);
 
-		bool operator ==( const GSOptions& right ) const
+		bool operator ==(const GSOptions &right) const
 		{
 			return
-				OpEqu( SynchronousMTGS )		&&
-				OpEqu( DisableOutput )			&&
-				OpEqu( VsyncQueueSize )			&&
-				
-				OpEqu( FrameSkipEnable )		&&
-				OpEqu( FrameLimitEnable )		&&
-				OpEqu( VsyncEnable )			&&
-				OpEqu( ManagedVsync )			&&
-
-				OpEqu( LimitScalar )			&&
-				OpEqu( FramerateNTSC )			&&
-				OpEqu( FrameratePAL )			&&
-
-				OpEqu( DefaultRegionMode )		&&
-				OpEqu( FramesToDraw )			&&
-				OpEqu( FramesToSkip );
+			        OpEqu(SynchronousMTGS)		&&
+			        OpEqu(DisableOutput)			&&
+			        OpEqu(VsyncQueueSize)			&&
+			        OpEqu(FrameSkipEnable)		&&
+			        OpEqu(FrameLimitEnable)		&&
+			        OpEqu(VsyncEnable)			&&
+			        OpEqu(ManagedVsync)			&&
+			        OpEqu(LimitScalar)			&&
+			        OpEqu(FramerateNTSC)			&&
+			        OpEqu(FrameratePAL)			&&
+			        OpEqu(DefaultRegionMode)		&&
+			        OpEqu(FramesToDraw)			&&
+			        OpEqu(FramesToSkip);
 		}
 
-		bool operator !=( const GSOptions& right ) const
+		bool operator !=(const GSOptions &right) const
 		{
-			return !this->operator ==( right );
+			return !this->operator ==(right);
 		}
 
 	};
 
 	// ------------------------------------------------------------------------
 	// NOTE: The GUI's GameFixes panel is dependent on the order of bits in this structure.
-	struct GamefixOptions
-	{
+	struct GamefixOptions {
 		BITFIELD32()
-			bool
-				VuAddSubHack	:1,		// Tri-ace games, they use an encryption algorithm that requires VU ADDI opcode to be bit-accurate.
-				VuClipFlagHack	:1,		// Persona games, maybe others. It's to do with the VU clip flag (again).
-				FpuCompareHack	:1,		// Digimon Rumble Arena 2, fixes spinning/hanging on intro-menu.
-				FpuMulHack		:1,		// Tales of Destiny hangs.
-				FpuNegDivHack	:1,		// Gundam games messed up camera-view.
-				XgKickHack		:1,		// Erementar Gerad, adds more delay to VU XGkick instructions. Corrects the color of some graphics, but breaks Tri-ace games and others.
-				IPUWaitHack     :1,		// FFX FMV, makes GIF flush before doing IPU work. Fixes bad graphics overlay.
-				EETimingHack	:1,		// General purpose timing hack.
-				SkipMPEGHack	:1,		// Skips MPEG videos (Katamari and other games need this)
-				OPHFlagHack		:1,		// Bleach Blade Battlers
-				DMABusyHack		:1,		// Denies writes to the DMAC when it's busy. This is correct behaviour but bad timing can cause problems.
-				VIFFIFOHack		:1,     // Pretends to fill the non-existant VIF FIFO Buffer.
-				VIF1StallHack   :1,     // Like above, processes FIFO data before the stall is allowed (to make sure data goes over).
-				GIFReverseHack  :1,		// Allows PATH3 to continue even if the FIFO is reversed.
-				FMVinSoftwareHack:1,	// Toggle in and out of software rendering when an FMV runs.
-				GoemonTlbHack:1;		// Gomeon tlb miss hack. The game need to access unmapped virtual address. Instead to handle it as exception, tlb are preloaded at startup
+		bool
+		VuAddSubHack	: 1,		// Tri-ace games, they use an encryption algorithm that requires VU ADDI opcode to be bit-accurate.
+		                VuClipFlagHack	: 1,		// Persona games, maybe others. It's to do with the VU clip flag (again).
+		                FpuCompareHack	: 1,		// Digimon Rumble Arena 2, fixes spinning/hanging on intro-menu.
+		                FpuMulHack		: 1,		// Tales of Destiny hangs.
+		                FpuNegDivHack	: 1,		// Gundam games messed up camera-view.
+		                XgKickHack		: 1,		// Erementar Gerad, adds more delay to VU XGkick instructions. Corrects the color of some graphics, but breaks Tri-ace games and others.
+		                IPUWaitHack     : 1,		// FFX FMV, makes GIF flush before doing IPU work. Fixes bad graphics overlay.
+		                EETimingHack	: 1,		// General purpose timing hack.
+		                SkipMPEGHack	: 1,		// Skips MPEG videos (Katamari and other games need this)
+		                OPHFlagHack		: 1,		// Bleach Blade Battlers
+		                DMABusyHack		: 1,		// Denies writes to the DMAC when it's busy. This is correct behaviour but bad timing can cause problems.
+		                VIFFIFOHack		: 1,    // Pretends to fill the non-existant VIF FIFO Buffer.
+		                VIF1StallHack   : 1,    // Like above, processes FIFO data before the stall is allowed (to make sure data goes over).
+		                GIFReverseHack  : 1,		// Allows PATH3 to continue even if the FIFO is reversed.
+		                FMVinSoftwareHack: 1,	// Toggle in and out of software rendering when an FMV runs.
+		                GoemonTlbHack: 1;		// Gomeon tlb miss hack. The game need to access unmapped virtual address. Instead to handle it as exception, tlb are preloaded at startup
 		BITFIELD_END
 
 		GamefixOptions();
-		void LoadSave( IniInterface& conf );
-		GamefixOptions& DisableAll();
+		void LoadSave(IniInterface &conf);
+		GamefixOptions &DisableAll();
 
-		void Set( const wxString& list, bool enabled=true );
-		void Clear( const wxString& list ) { Set( list, false ); }
-
-		bool Get( GamefixId id ) const;
-		void Set( GamefixId id, bool enabled=true );
-		void Clear( GamefixId id ) { Set( id, false ); }
-
-		bool operator ==( const GamefixOptions& right ) const
+		void Set(const wxString &list, bool enabled = true);
+		void Clear(const wxString &list)
 		{
-			return OpEqu( bitset );
+			Set(list, false);
 		}
 
-		bool operator !=( const GamefixOptions& right ) const
+		bool Get(GamefixId id) const;
+		void Set(GamefixId id, bool enabled = true);
+		void Clear(GamefixId id)
 		{
-			return !OpEqu( bitset );
+			Set(id, false);
+		}
+
+		bool operator ==(const GamefixOptions &right) const
+		{
+			return OpEqu(bitset);
+		}
+
+		bool operator !=(const GamefixOptions &right) const
+		{
+			return !OpEqu(bitset);
 		}
 	};
 
 	// ------------------------------------------------------------------------
-	struct SpeedhackOptions
-	{
+	struct SpeedhackOptions {
 		BITFIELD32()
-			bool
-				fastCDVD		:1,		// enables fast CDVD access
-				IntcStat		:1,		// tells Pcsx2 to fast-forward through intc_stat waits.
-				WaitLoop		:1,		// enables constant loop detection and fast-forwarding
-				vuFlagHack		:1,		// microVU specific flag hack
-				vuThread        :1;		// Enable Threaded VU1
+		bool
+		fastCDVD		: 1,		// enables fast CDVD access
+		                        IntcStat		: 1,		// tells Pcsx2 to fast-forward through intc_stat waits.
+		                        WaitLoop		: 1,		// enables constant loop detection and fast-forwarding
+		                        vuFlagHack		: 1,		// microVU specific flag hack
+		                        vuThread        : 1;		// Enable Threaded VU1
 		BITFIELD_END
 
 		u8	EECycleRate;		// EE cycle rate selector (1.0, 1.5, 2.0)
 		u8	VUCycleSteal;		// VU Cycle Stealer factor (0, 1, 2, or 3)
 
 		SpeedhackOptions();
-		void LoadSave( IniInterface& conf );
-		SpeedhackOptions& DisableAll();
+		void LoadSave(IniInterface &conf);
+		SpeedhackOptions &DisableAll();
 
-		bool operator ==( const SpeedhackOptions& right ) const
+		bool operator ==(const SpeedhackOptions &right) const
 		{
-			return OpEqu( bitset ) && OpEqu( EECycleRate ) && OpEqu( VUCycleSteal );
+			return OpEqu(bitset) && OpEqu(EECycleRate) && OpEqu(VUCycleSteal);
 		}
 
-		bool operator !=( const SpeedhackOptions& right ) const
+		bool operator !=(const SpeedhackOptions &right) const
 		{
-			return !this->operator ==( right );
+			return !this->operator ==(right);
 		}
 	};
 
-	struct DebugOptions
-	{
+	struct DebugOptions {
 		BITFIELD32()
-			bool
-				EnableDebugger		:1,
-				ShowDebuggerOnStart	:1;
+		bool
+		EnableDebugger		: 1,
+		                        ShowDebuggerOnStart	: 1;
 		BITFIELD_END
 
 		u8 FontWidth;
 		u8 FontHeight;
 
 		DebugOptions();
-		void LoadSave( IniInterface& conf );
-		
-		bool operator ==( const DebugOptions& right ) const
+		void LoadSave(IniInterface &conf);
+
+		bool operator ==(const DebugOptions &right) const
 		{
-			return OpEqu( bitset ) && OpEqu( FontWidth ) && OpEqu( FontHeight );
+			return OpEqu(bitset) && OpEqu(FontWidth) && OpEqu(FontHeight);
 		}
 
-		bool operator !=( const DebugOptions& right ) const
+		bool operator !=(const DebugOptions &right) const
 		{
-			return !this->operator ==( right );
+			return !this->operator ==(right);
 		}
 	};
 
 	BITFIELD32()
-		bool
-			CdvdVerboseReads	:1,		// enables cdvd read activity verbosely dumped to the console
-			CdvdDumpBlocks		:1,		// enables cdvd block dumping
-			EnablePatches		:1,		// enables patch detection and application
-			EnableCheats		:1,		// enables cheat detection and application
-			EnableWideScreenPatches		:1,
-		// when enabled uses BOOT2 injection, skipping sony bios splashes
-			UseBOOT2Injection	:1,
-			BackupSavestate		:1,
-		// enables simulated ejection of memory cards when loading savestates
-			McdEnableEjection	:1,
+	bool
+	CdvdVerboseReads	: 1,		// enables cdvd read activity verbosely dumped to the console
+	                        CdvdDumpBlocks		: 1,		// enables cdvd block dumping
+	                        EnablePatches		: 1,		// enables patch detection and application
+	                        EnableCheats		: 1,		// enables cheat detection and application
+	                        EnableWideScreenPatches		: 1,
+	                        // when enabled uses BOOT2 injection, skipping sony bios splashes
+	                        UseBOOT2Injection	: 1,
+	                        BackupSavestate		: 1,
+	                        // enables simulated ejection of memory cards when loading savestates
+	                        McdEnableEjection	: 1,
 
-			MultitapPort0_Enabled:1,
-			MultitapPort1_Enabled:1,
+	                        MultitapPort0_Enabled: 1,
+	                        MultitapPort1_Enabled: 1,
 
-			ConsoleToStdio		:1,
-			HostFs				:1;
+	                        ConsoleToStdio		: 1,
+	                        HostFs				: 1;
 	BITFIELD_END
 
 	CpuOptions			Cpu;
@@ -463,40 +453,40 @@ struct Pcsx2Config
 	wxFileName			BiosFilename;
 
 	Pcsx2Config();
-	void LoadSave( IniInterface& ini );
+	void LoadSave(IniInterface &ini);
 
-	void Load( const wxString& srcfile );
-	void Load( const wxInputStream& srcstream );
-	void Save( const wxString& dstfile );
-	void Save( const wxOutputStream& deststream );
+	void Load(const wxString &srcfile);
+	void Load(const wxInputStream &srcstream);
+	void Save(const wxString &dstfile);
+	void Save(const wxOutputStream &deststream);
 
-	bool MultitapEnabled( uint port ) const;
+	bool MultitapEnabled(uint port) const;
 
-	bool operator ==( const Pcsx2Config& right ) const
+	bool operator ==(const Pcsx2Config &right) const
 	{
 		return
-			OpEqu( bitset )		&&
-			OpEqu( Cpu )		&&
-			OpEqu( GS )			&&
-			OpEqu( Speedhacks )	&&
-			OpEqu( Gamefixes )	&&
-			OpEqu( Profiler )	&&
-			OpEqu( Trace )		&&
-			OpEqu( BiosFilename );
+		        OpEqu(bitset)		&&
+		        OpEqu(Cpu)		&&
+		        OpEqu(GS)			&&
+		        OpEqu(Speedhacks)	&&
+		        OpEqu(Gamefixes)	&&
+		        OpEqu(Profiler)	&&
+		        OpEqu(Trace)		&&
+		        OpEqu(BiosFilename);
 	}
 
-	bool operator !=( const Pcsx2Config& right ) const
+	bool operator !=(const Pcsx2Config &right) const
 	{
-		return !this->operator ==( right );
+		return !this->operator ==(right);
 	}
 };
 
 extern const Pcsx2Config EmuConfig;
 
-Pcsx2Config::GSOptions&			SetGSConfig();
-Pcsx2Config::RecompilerOptions& SetRecompilerConfig();
-Pcsx2Config::GamefixOptions&	SetGameFixConfig();
-TraceLogFilters&				SetTraceConfig();
+Pcsx2Config::GSOptions			&SetGSConfig();
+Pcsx2Config::RecompilerOptions &SetRecompilerConfig();
+Pcsx2Config::GamefixOptions	&SetGameFixConfig();
+TraceLogFilters				&SetTraceConfig();
 
 
 /////////////////////////////////////////////////////////////////////////////////////////

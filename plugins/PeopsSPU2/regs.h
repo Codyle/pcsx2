@@ -28,15 +28,15 @@
 //*************************************************************************//
 
 
-void SoundOn(int start,int end,unsigned short val);
-void SoundOff(int start,int end,unsigned short val);
-void VolumeOn(int start,int end,unsigned short val,int iRight);
-void FModOn(int start,int end,unsigned short val);
-void NoiseOn(int start,int end,unsigned short val);
-void SetVolumeL(unsigned char ch,short vol);
-void SetVolumeR(unsigned char ch,short vol);
-void SetPitch(int ch,unsigned short val);
-void ReverbOn(int start,int end,unsigned short val,int iRight);
+void SoundOn(int start, int end, unsigned short val);
+void SoundOff(int start, int end, unsigned short val);
+void VolumeOn(int start, int end, unsigned short val, int iRight);
+void FModOn(int start, int end, unsigned short val);
+void NoiseOn(int start, int end, unsigned short val);
+void SetVolumeL(unsigned char ch, short vol);
+void SetVolumeR(unsigned char ch, short vol);
+void SetPitch(int ch, unsigned short val);
+void ReverbOn(int start, int end, unsigned short val, int iRight);
 void SetReverbAddr(int core);
 
 EXPORT_GCC void CALLBACK SPU2write(unsigned long reg, unsigned short val);

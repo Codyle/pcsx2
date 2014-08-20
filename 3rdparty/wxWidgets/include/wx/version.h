@@ -47,26 +47,26 @@
 
 /*  helpers for wxVERSION_NUM_XXX */
 #define wxMAKE_VERSION_STRING(x, y, z) \
-    wxSTRINGIZE(x) wxSTRINGIZE(y) wxSTRINGIZE(z)
+	wxSTRINGIZE(x) wxSTRINGIZE(y) wxSTRINGIZE(z)
 #define wxMAKE_VERSION_DOT_STRING(x, y, z) \
-    wxSTRINGIZE(x) "." wxSTRINGIZE(y) "." wxSTRINGIZE(z)
+	wxSTRINGIZE(x) "." wxSTRINGIZE(y) "." wxSTRINGIZE(z)
 
 #define wxMAKE_VERSION_STRING_T(x, y, z) \
-    wxSTRINGIZE_T(x) wxSTRINGIZE_T(y) wxSTRINGIZE_T(z)
+	wxSTRINGIZE_T(x) wxSTRINGIZE_T(y) wxSTRINGIZE_T(z)
 #define wxMAKE_VERSION_DOT_STRING_T(x, y, z) \
-    wxSTRINGIZE_T(x) _T(".") wxSTRINGIZE_T(y) _T(".") wxSTRINGIZE_T(z)
+	wxSTRINGIZE_T(x) _T(".") wxSTRINGIZE_T(y) _T(".") wxSTRINGIZE_T(z)
 
 /*  these are used by src/msw/version.rc and should always be ASCII, not Unicode */
 #define wxVERSION_NUM_STRING \
-  wxMAKE_VERSION_STRING(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+	wxMAKE_VERSION_STRING(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
 #define wxVERSION_NUM_DOT_STRING \
-  wxMAKE_VERSION_DOT_STRING(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+	wxMAKE_VERSION_DOT_STRING(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
 
 /* those are Unicode-friendly */
 #define wxVERSION_NUM_STRING_T \
-  wxMAKE_VERSION_STRING_T(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+	wxMAKE_VERSION_STRING_T(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
 #define wxVERSION_NUM_DOT_STRING_T \
-  wxMAKE_VERSION_DOT_STRING_T(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+	wxMAKE_VERSION_DOT_STRING_T(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
 
 /*  some more defines, not really sure if they're [still] useful */
 #define wxVERSION_NUMBER ( (wxMAJOR_VERSION * 1000) + (wxMINOR_VERSION * 100) + wxRELEASE_NUMBER )
@@ -75,17 +75,17 @@
 
 /*  check if the current version is at least major.minor.release */
 #define wxCHECK_VERSION(major,minor,release) \
-    (wxMAJOR_VERSION > (major) || \
-    (wxMAJOR_VERSION == (major) && wxMINOR_VERSION > (minor)) || \
-    (wxMAJOR_VERSION == (major) && wxMINOR_VERSION == (minor) && wxRELEASE_NUMBER >= (release)))
+	(wxMAJOR_VERSION > (major) || \
+	 (wxMAJOR_VERSION == (major) && wxMINOR_VERSION > (minor)) || \
+	 (wxMAJOR_VERSION == (major) && wxMINOR_VERSION == (minor) && wxRELEASE_NUMBER >= (release)))
 
 /* the same but check the subrelease also */
 #define wxCHECK_VERSION_FULL(major,minor,release,subrel) \
-    (wxCHECK_VERSION(major, minor, release) && \
-        ((major) != wxMAJOR_VERSION || \
-            (minor) != wxMINOR_VERSION || \
-                (release) != wxRELEASE_NUMBER || \
-                    (subrel) <= wxSUBRELEASE_NUMBER))
+	(wxCHECK_VERSION(major, minor, release) && \
+	 ((major) != wxMAJOR_VERSION || \
+	  (minor) != wxMINOR_VERSION || \
+	  (release) != wxRELEASE_NUMBER || \
+	  (subrel) <= wxSUBRELEASE_NUMBER))
 
 #endif /*  _WX_VERSION_H_ */
 

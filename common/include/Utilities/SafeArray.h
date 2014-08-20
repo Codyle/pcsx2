@@ -32,7 +32,7 @@
 // Handy little class for allocating a resizable memory block, complete with exception
 // error handling and automatic cleanup.  A lightweight alternative to std::vector.
 //
-template< typename T >
+template<typename T>
 class SafeArray
 {
 	DeclareNoncopyableObject(SafeArray);
@@ -49,56 +49,83 @@ protected:
 	int			m_size;			// size of the allocation of memory
 
 protected:
-	SafeArray( const wxChar* name, T* allocated_mem, int initSize );
-	virtual T* _virtual_realloc( int newsize );
+	SafeArray(const wxChar* name, T* allocated_mem, int initSize);
+	virtual T* _virtual_realloc(int newsize);
 
 	// A safe array index fetcher.  Asserts if the index is out of bounds (dev and debug
 	// builds only -- no bounds checking is done in release builds).
-	T* _getPtr( uint i ) const;
+	T* _getPtr(uint i) const;
 
 public:
 	virtual ~SafeArray() throw();
 
-	explicit SafeArray( const wxChar* name=L"Unnamed" );
-	explicit SafeArray( int initialSize, const wxChar* name=L"Unnamed" );
-	
+	explicit SafeArray(const wxChar* name = L"Unnamed");
+	explicit SafeArray(int initialSize, const wxChar* name = L"Unnamed");
+
 	void Dispose();
-	void ExactAlloc( int newsize );
-	void MakeRoomFor( int newsize )
+	void ExactAlloc(int newsize);
+	void MakeRoomFor(int newsize)
 	{
-		if( newsize > m_size )
-			ExactAlloc( newsize );
+		if (newsize > m_size)
+			ExactAlloc(newsize);
 	}
 
-	bool IsDisposed() const { return (m_ptr==NULL); }
+	bool IsDisposed() const
+	{
+		return (m_ptr == NULL);
+	}
 
 	// Returns the size of the memory allocation, as according to the array type.
-	int GetLength() const { return m_size; }
+	int GetLength() const
+	{
+		return m_size;
+	}
 	// Returns the size of the memory allocation in bytes.
-	int GetSizeInBytes() const { return m_size * sizeof(T); }
+	int GetSizeInBytes() const
+	{
+		return m_size * sizeof(T);
+	}
 
 	// Extends the containment area of the array.  Extensions are performed
 	// in chunks.
-	void GrowBy( int items )
+	void GrowBy(int items)
 	{
-		MakeRoomFor( m_size + ChunkSize + items + 1 );
+		MakeRoomFor(m_size + ChunkSize + items + 1);
 	}
 
 	// Gets a pointer to the requested allocation index.
 	// DevBuilds : Generates assertion if the index is invalid.
-	T* GetPtr( uint idx=0 )				{ return _getPtr( idx ); }
-	const T* GetPtr( uint idx=0 ) const	{ return _getPtr( idx ); }
+	T* GetPtr(uint idx = 0)
+	{
+		return _getPtr(idx);
+	}
+	const T* GetPtr(uint idx = 0) const
+	{
+		return _getPtr(idx);
+	}
 
 	// Gets a pointer to the element directly after the last element in the array.
 	// This is equivalent to doing GetPtr(GetLength()), except that this call *avoids*
 	// the out-of-bounds assertion check that typically occurs when you do that. :)
-	T* GetPtrEnd()				{ return &m_ptr[m_size]; }
-	const T* GetPtrEnd() const	{ return &m_ptr[m_size]; }
+	T* GetPtrEnd()
+	{
+		return &m_ptr[m_size];
+	}
+	const T* GetPtrEnd() const
+	{
+		return &m_ptr[m_size];
+	}
 
 	// Gets an element of this memory allocation much as if it were an array.
 	// DevBuilds : Generates assertion if the index is invalid.
-	T& operator[]( int idx ) { return *_getPtr( (uint)idx ); }
-	const T& operator[]( int idx ) const { return *_getPtr( (uint)idx ); }
+	T &operator[](int idx)
+	{
+		return *_getPtr((uint)idx);
+	}
+	const T &operator[](int idx) const
+	{
+		return *_getPtr((uint)idx);
+	}
 
 	virtual SafeArray<T>* Clone() const;
 };
@@ -113,7 +140,7 @@ public:
 //  * Classes with copy constructors (copying is done using performance memcpy)
 //  * Classes with destructors (they're not called, sorry!)
 //
-template< typename T >
+template<typename T>
 class SafeList
 {
 	DeclareNoncopyableObject(SafeList);
@@ -131,40 +158,46 @@ protected:
 	uint	m_length;			// length of the array (active items, not buffer allocation)
 
 protected:
-	virtual T* _virtual_realloc( int newsize );
-	void _MakeRoomFor_threshold( int newsize );
+	virtual T* _virtual_realloc(int newsize);
+	void _MakeRoomFor_threshold(int newsize);
 
-	T* _getPtr( uint i ) const;
+	T* _getPtr(uint i) const;
 
 public:
 	virtual ~SafeList() throw();
-	explicit SafeList( const wxChar* name=L"Unnamed" );
-	explicit SafeList( int initialSize, const wxChar* name=L"Unnamed" );
+	explicit SafeList(const wxChar* name = L"Unnamed");
+	explicit SafeList(int initialSize, const wxChar* name = L"Unnamed");
 	virtual SafeList<T>* Clone() const;
 
-	void Remove( int index );
-	void MakeRoomFor( int blockSize );
+	void Remove(int index);
+	void MakeRoomFor(int blockSize);
 
-	T& New();
-	int Add( const T& src );
-	T& AddNew( const T& src );
+	T &New();
+	int Add(const T &src);
+	T &AddNew(const T &src);
 
 	// Returns the size of the list, as according to the array type.  This includes
 	// mapped items only.  The actual size of the allocation may differ.
-	int GetLength() const { return m_length; }
+	int GetLength() const
+	{
+		return m_length;
+	}
 
 	// Returns the size of the list, in bytes.  This includes mapped items only.
 	// The actual size of the allocation may differ.
-	int GetSizeInBytes() const { return m_length * sizeof(T); }
+	int GetSizeInBytes() const
+	{
+		return m_length * sizeof(T);
+	}
 
 	void MatchLengthToAllocatedSize()
 	{
 		m_length = m_allocsize;
 	}
 
-	void GrowBy( int items )
+	void GrowBy(int items)
 	{
-		MakeRoomFor( m_length + ChunkSize + items + 1 );
+		MakeRoomFor(m_length + ChunkSize + items + 1);
 	}
 
 	// Sets the item length to zero.  Does not free memory allocations.
@@ -175,14 +208,32 @@ public:
 
 	// Gets an element of this memory allocation much as if it were an array.
 	// DevBuilds : Generates assertion if the index is invalid.
-	T& operator[]( int idx )				{ return *_getPtr( (uint)idx ); }
-	const T& operator[]( int idx ) const	{ return *_getPtr( (uint)idx ); }
+	T &operator[](int idx)
+	{
+		return *_getPtr((uint)idx);
+	}
+	const T &operator[](int idx) const
+	{
+		return *_getPtr((uint)idx);
+	}
 
-	T* GetPtr()				{ return m_ptr; }
-	const T* GetPtr() const	{ return m_ptr; }
+	T* GetPtr()
+	{
+		return m_ptr;
+	}
+	const T* GetPtr() const
+	{
+		return m_ptr;
+	}
 
-	T& GetLast()			{ return m_ptr[m_length-1]; }
-	const T& GetLast() const{ return m_ptr[m_length-1]; }
+	T &GetLast()
+	{
+		return m_ptr[m_length - 1];
+	}
+	const T &GetLast() const
+	{
+		return m_ptr[m_length - 1];
+	}
 };
 
 // --------------------------------------------------------------------------------------
@@ -192,25 +243,25 @@ public:
 // exception-based error handling and automatic cleanup.
 // This one supports aligned data allocations too!
 
-template< typename T, uint Alignment >
+template<typename T, uint Alignment>
 class SafeAlignedArray : public SafeArray<T>
 {
 	typedef SafeArray<T> _parent;
 
 protected:
-	T* _virtual_realloc( int newsize );
+	T* _virtual_realloc(int newsize);
 
 public:
 	using _parent::operator[];
 
 	virtual ~SafeAlignedArray() throw();
 
-	explicit SafeAlignedArray( const wxChar* name=L"Unnamed" ) :
-		SafeArray<T>::SafeArray( name )
+	explicit SafeAlignedArray(const wxChar* name = L"Unnamed") :
+		SafeArray<T>::SafeArray(name)
 	{
 	}
 
-	explicit SafeAlignedArray( int initialSize, const wxChar* name=L"Unnamed" );
-	virtual SafeAlignedArray<T,Alignment>* Clone() const;
+	explicit SafeAlignedArray(int initialSize, const wxChar* name = L"Unnamed");
+	virtual SafeAlignedArray<T, Alignment>* Clone() const;
 };
 

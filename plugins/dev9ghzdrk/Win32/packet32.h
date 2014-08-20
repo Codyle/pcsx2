@@ -31,7 +31,7 @@
  */
 
 /** @ingroup packetapi
- *  @{ 
+ *  @{
  */
 
 /** @defgroup packet32h Packet.dll definitions and data structures
@@ -91,7 +91,7 @@
 
 /// Alignment macro. Defines the alignment size.
 #define Packet_ALIGNMENT sizeof(int)
-/// Alignment macro. Rounds up to the next even multiple of Packet_ALIGNMENT. 
+/// Alignment macro. Rounds up to the next even multiple of Packet_ALIGNMENT.
 #define Packet_WORDALIGN(x) (((x)+(Packet_ALIGNMENT-1))&~(Packet_ALIGNMENT-1))
 
 
@@ -104,11 +104,10 @@
 
   This structure is used by the PacketGetNetType() function to return information on the current adapter's type and speed.
 */
-typedef struct NetType
-{
+typedef struct NetType {
 	UINT LinkType;	///< The MAC of the current network adapter (see function PacketGetNetType() for more information)
 	ULONGLONG LinkSpeed;	///< The speed of the network in bits per second
-}NetType;
+} NetType;
 
 
 //some definitions stolen from libpcap
@@ -118,10 +117,9 @@ typedef struct NetType
 /*!
   \brief A BPF pseudo-assembly program.
 
-  The program will be injected in the kernel by the PacketSetBPF() function and applied to every incoming packet. 
+  The program will be injected in the kernel by the PacketSetBPF() function and applied to every incoming packet.
 */
-struct bpf_program 
-{
+struct bpf_program {
 	UINT bf_len;				///< Indicates the number of instructions of the program, i.e. the number of struct bpf_insn that will follow.
 	struct bpf_insn *bf_insns;	///< A pointer to the first instruction of the program.
 };
@@ -131,8 +129,7 @@ struct bpf_program
 
   bpf_insn contains a single instruction for the BPF register-machine. It is used to send a filter program to the driver.
 */
-struct bpf_insn 
-{
+struct bpf_insn {
 	USHORT	code;		///< Instruction type and addressing mode.
 	UCHAR 	jt;			///< Jump if true
 	UCHAR 	jf;			///< Jump if false
@@ -144,17 +141,16 @@ struct bpf_insn
 
   It is used by packet.dll to return statistics about a capture session.
 */
-struct bpf_stat 
-{
-	UINT bs_recv;		///< Number of packets that the driver received from the network adapter 
-						///< from the beginning of the current capture. This value includes the packets 
-						///< lost by the driver.
-	UINT bs_drop;		///< number of packets that the driver lost from the beginning of a capture. 
-						///< Basically, a packet is lost when the the buffer of the driver is full. 
-						///< In this situation the packet cannot be stored and the driver rejects it.
+struct bpf_stat {
+	UINT bs_recv;		///< Number of packets that the driver received from the network adapter
+	///< from the beginning of the current capture. This value includes the packets
+	///< lost by the driver.
+	UINT bs_drop;		///< number of packets that the driver lost from the beginning of a capture.
+	///< Basically, a packet is lost when the the buffer of the driver is full.
+	///< In this situation the packet cannot be stored and the driver rejects it.
 	UINT ps_ifdrop;		///< drops by interface. XXX not yet supported
 	UINT bs_capt;		///< number of packets that pass the filter, find place in the kernel buffer and
-						///< thus reach the application.
+	///< thus reach the application.
 };
 
 /*!
@@ -162,18 +158,17 @@ struct bpf_stat
 
   This structure defines the header associated with every packet delivered to the application.
 */
-struct bpf_hdr 
-{
-	struct timeval	bh_tstamp;	///< The timestamp associated with the captured packet. 
-								///< It is stored in a TimeVal structure.
+struct bpf_hdr {
+	struct timeval	bh_tstamp;	///< The timestamp associated with the captured packet.
+	///< It is stored in a TimeVal structure.
 	UINT	bh_caplen;			///< Length of captured portion. The captured portion <b>can be different</b>
-								///< from the original packet, because it is possible (with a proper filter)
-								///< to instruct the driver to capture only a portion of the packets.
+	///< from the original packet, because it is possible (with a proper filter)
+	///< to instruct the driver to capture only a portion of the packets.
 	UINT	bh_datalen;			///< Original length of packet
 	USHORT		bh_hdrlen;		///< Length of bpf header (this struct plus alignment padding). In some cases,
-								///< a padding could be added between the end of this structure and the packet
-								///< data for performance reasons. This filed can be used to retrieve the actual data 
-								///< of the packet.
+	///< a padding could be added between the end of this structure and the packet
+	///< data for performance reasons. This filed can be used to retrieve the actual data
+	///< of the packet.
 };
 
 /*!
@@ -183,12 +178,12 @@ struct bpf_hdr
   It is simpler than the bpf_hdr, because it corresponds to the header associated by WinPcap and libpcap to a
   packet in a dump file. This makes straightforward sending WinPcap dump files to the network.
 */
-struct dump_bpf_hdr{
-    struct timeval	ts;			///< Time stamp of the packet
-    UINT			caplen;		///< Length of captured portion. The captured portion can smaller than the 
-								///< the original packet, because it is possible (with a proper filter) to 
-								///< instruct the driver to capture only a portion of the packets. 
-    UINT			len;		///< Length of the original packet (off wire).
+struct dump_bpf_hdr {
+	struct timeval	ts;			///< Time stamp of the packet
+	UINT			caplen;		///< Length of captured portion. The captured portion can smaller than the
+	///< the original packet, because it is possible (with a proper filter) to
+	///< instruct the driver to capture only a portion of the packets.
+	UINT			len;		///< Length of the original packet (off wire).
 };
 
 
@@ -210,7 +205,7 @@ struct dump_bpf_hdr{
  */
 #define _SS_PAD1SIZE (_SS_ALIGNSIZE - sizeof (short))
 #define _SS_PAD2SIZE (_SS_MAXSIZE - (sizeof (short) + _SS_PAD1SIZE \
-                                                    + _SS_ALIGNSIZE))
+                                     + _SS_ALIGNSIZE))
 /*
 struct sockaddr_storage {
     short ss_family;               // Address family.
@@ -228,14 +223,14 @@ struct sockaddr_storage {
 /*!
   \brief Addresses of a network adapter.
 
-  This structure is used by the PacketGetNetInfoEx() function to return the IP addresses associated with 
+  This structure is used by the PacketGetNetInfoEx() function to return the IP addresses associated with
   an adapter.
 */
 typedef struct npf_if_addr {
 	struct sockaddr_storage IPAddress;	///< IP address.
 	struct sockaddr_storage SubnetMask;	///< Netmask for that address.
 	struct sockaddr_storage Broadcast;	///< Broadcast address.
-}npf_if_addr;
+} npf_if_addr;
 
 
 #define ADAPTER_NAME_LENGTH 256 + 12	///<  Maximum length for the name of an adapter. The value is the same used by the IP Helper API.
@@ -259,8 +254,7 @@ typedef WAN_ADAPTER *PWAN_ADAPTER; ///< Describes an opened wan (dialup, VPN...)
   This structure is filled with all the accessory information that the user can need about an adapter installed
   on his system.
 */
-typedef struct _ADAPTER_INFO  
-{
+typedef struct _ADAPTER_INFO {
 	struct _ADAPTER_INFO *Next;				///< Pointer to the next adapter in the list.
 	CHAR Name[ADAPTER_NAME_LENGTH + 1];		///< Name of the device representing the adapter.
 	CHAR Description[ADAPTER_DESC_LENGTH + 1];	///< Human understandable description of the adapter
@@ -279,21 +273,21 @@ ADAPTER_INFO, *PADAPTER_INFO;
   This structure is the most important for the functioning of packet.dll, but the great part of its fields
   should be ignored by the user, since the library offers functions that avoid to cope with low-level parameters
 */
-typedef struct _ADAPTER  { 
+typedef struct _ADAPTER  {
 	HANDLE hFile;				///< \internal Handle to an open instance of the NPF driver.
 	CHAR  SymbolicLink[MAX_LINK_NAME_LENGTH]; ///< \internal A string containing the name of the network adapter currently opened.
-	int NumWrites;				///< \internal Number of times a packets written on this adapter will be repeated 
-								///< on the wire.
+	int NumWrites;				///< \internal Number of times a packets written on this adapter will be repeated
+	///< on the wire.
 	HANDLE ReadEvent;			///< A notification event associated with the read calls on the adapter.
-								///< It can be passed to standard Win32 functions (like WaitForSingleObject
-								///< or WaitForMultipleObjects) to wait until the driver's buffer contains some 
-								///< data. It is particularly useful in GUI applications that need to wait 
-								///< concurrently on several events. In Windows NT/2000 the PacketSetMinToCopy()
-								///< function can be used to define the minimum amount of data in the kernel buffer
-								///< that will cause the event to be signalled. 
-	
-	UINT ReadTimeOut;			///< \internal The amount of time after which a read on the driver will be released and 
-								///< ReadEvent will be signaled, also if no packets were captured
+	///< It can be passed to standard Win32 functions (like WaitForSingleObject
+	///< or WaitForMultipleObjects) to wait until the driver's buffer contains some
+	///< data. It is particularly useful in GUI applications that need to wait
+	///< concurrently on several events. In Windows NT/2000 the PacketSetMinToCopy()
+	///< function can be used to define the minimum amount of data in the kernel buffer
+	///< that will cause the event to be signalled.
+
+	UINT ReadTimeOut;			///< \internal The amount of time after which a read on the driver will be released and
+	///< ReadEvent will be signaled, also if no packets were captured
 	CHAR Name[ADAPTER_NAME_LENGTH];
 	PWAN_ADAPTER pWanAdapter;
 	UINT Flags;					///< Adapter's flags. Tell if this adapter must be treated in a different way, using the Netmon API or the dagc API.
@@ -311,31 +305,31 @@ typedef struct _ADAPTER  {
 
   This structure defines the header associated with every packet delivered to the application.
 */
-typedef struct _PACKET {  
+typedef struct _PACKET {
 	HANDLE       hEvent;		///< \deprecated Still present for compatibility with old applications.
 	OVERLAPPED   OverLapped;	///< \deprecated Still present for compatibility with old applications.
 	PVOID        Buffer;		///< Buffer with containing the packets. See the PacketReceivePacket() for
-								///< details about the organization of the data in this buffer
+	///< details about the organization of the data in this buffer
 	UINT         Length;		///< Length of the buffer
 	DWORD        ulBytesReceived;	///< Number of valid bytes present in the buffer, i.e. amount of data
-									///< received by the last call to PacketReceivePacket()
+	///< received by the last call to PacketReceivePacket()
 	BOOLEAN      bIoComplete;	///< \deprecated Still present for compatibility with old applications.
 }  PACKET, *LPPACKET;
 
 /*!
   \brief Structure containing an OID request.
 
-  It is used by the PacketRequest() function to send an OID to the interface card driver. 
-  It can be used, for example, to retrieve the status of the error counters on the adapter, its MAC address, 
+  It is used by the PacketRequest() function to send an OID to the interface card driver.
+  It can be used, for example, to retrieve the status of the error counters on the adapter, its MAC address,
   the list of the multicast groups defined on it, and so on.
 */
 struct _PACKET_OID_DATA {
-    ULONG Oid;					///< OID code. See the Microsoft DDK documentation or the file ntddndis.h
-								///< for a complete list of valid codes.
-    ULONG Length;				///< Length of the data field
-    UCHAR Data[1];				///< variable-lenght field that contains the information passed to or received 
-								///< from the adapter.
-}; 
+	ULONG Oid;					///< OID code. See the Microsoft DDK documentation or the file ntddndis.h
+	///< for a complete list of valid codes.
+	ULONG Length;				///< Length of the data field
+	UCHAR Data[1];				///< variable-lenght field that contains the information passed to or received
+	///< from the adapter.
+};
 typedef struct _PACKET_OID_DATA PACKET_OID_DATA, *PPACKET_OID_DATA;
 
 
@@ -344,31 +338,31 @@ typedef struct _PACKET_OID_DATA PACKET_OID_DATA, *PPACKET_OID_DATA;
 #define ODSEx(_x, _y)
 #else
 #ifdef _DEBUG_TO_FILE
-/*! 
+/*!
   \brief Macro to print a debug string. The behavior differs depending on the debug level
 */
 #define ODS(_x) { \
-	FILE *f; \
-	f = fopen("winpcap_debug.txt", "a"); \
-	fprintf(f, "%s", _x); \
-	fclose(f); \
-}
-/*! 
-  \brief Macro to print debug data with the printf convention. The behavior differs depending on 
+		FILE *f; \
+		f = fopen("winpcap_debug.txt", "a"); \
+		fprintf(f, "%s", _x); \
+		fclose(f); \
+	}
+/*!
+  \brief Macro to print debug data with the printf convention. The behavior differs depending on
   the debug level
 */
 #define ODSEx(_x, _y) { \
-	FILE *f; \
-	f = fopen("winpcap_debug.txt", "a"); \
-	fprintf(f, _x, _y); \
-	fclose(f); \
-}
+		FILE *f; \
+		f = fopen("winpcap_debug.txt", "a"); \
+		fprintf(f, _x, _y); \
+		fclose(f); \
+	}
 
 
 
 LONG PacketDumpRegistryKey(PCHAR KeyName, PCHAR FileName);
 #else
-#define ODS(_x)		
+#define ODS(_x)
 #define ODSEx(_x, _y)
 #endif
 #endif
@@ -380,7 +374,7 @@ typedef void (*dagc_close_handler)(dagc_t *dagcfd);										///< prototype used
 typedef int (*dagc_getlinktype_handler)(dagc_t *dagcfd);								///< prototype used to dynamically load the dag dll
 typedef int (*dagc_getlinkspeed_handler)(dagc_t *dagcfd);								///< prototype used to dynamically load the dag dll
 typedef int (*dagc_setsnaplen_handler)(dagc_t *dagcfd, unsigned snaplen);				///< prototype used to dynamically load the dag dll
-typedef unsigned (*dagc_getfcslen_handler)(dagc_t *dagcfd);								///< prototype used to dynamically load the dag dll
+typedef unsigned(*dagc_getfcslen_handler)(dagc_t *dagcfd);								///< prototype used to dynamically load the dag dll
 typedef int (*dagc_receive_handler)(dagc_t *dagcfd, u_char **buffer, u_int *bufsize);	///< prototype used to dynamically load the dag dll
 typedef int (*dagc_stats_handler)(dagc_t *dagcfd, dagc_stats_t *ps);					///< prototype used to dynamically load the dag dll
 typedef int (*dagc_wait_handler)(dagc_t *dagcfd, struct timeval *timeout);				///< prototype used to dynamically load the dag dll
@@ -396,8 +390,8 @@ extern "C" {
  *  @}
  */
 
-// The following is used to check the adapter name in PacketOpenAdapterNPF and prevent 
-// opening of firewire adapters 
+// The following is used to check the adapter name in PacketOpenAdapterNPF and prevent
+// opening of firewire adapters
 #define FIREWIRE_SUBSTR L"1394"
 
 void PacketPopulateAdaptersInfoList();
@@ -415,27 +409,27 @@ BOOLEAN IsFireWire(TCHAR *AdapterDesc);
 
 PCHAR PacketGetVersion();
 PCHAR PacketGetDriverVersion();
-BOOLEAN PacketSetMinToCopy(LPADAPTER AdapterObject,int nbytes);
-BOOLEAN PacketSetNumWrites(LPADAPTER AdapterObject,int nwrites);
-BOOLEAN PacketSetMode(LPADAPTER AdapterObject,int mode);
-BOOLEAN PacketSetReadTimeout(LPADAPTER AdapterObject,int timeout);
-BOOLEAN PacketSetBpf(LPADAPTER AdapterObject,struct bpf_program *fp);
-INT PacketSetSnapLen(LPADAPTER AdapterObject,int snaplen);
-BOOLEAN PacketGetStats(LPADAPTER AdapterObject,struct bpf_stat *s);
-BOOLEAN PacketGetStatsEx(LPADAPTER AdapterObject,struct bpf_stat *s);
-BOOLEAN PacketSetBuff(LPADAPTER AdapterObject,int dim);
-BOOLEAN PacketGetNetType (LPADAPTER AdapterObject,NetType *type);
+BOOLEAN PacketSetMinToCopy(LPADAPTER AdapterObject, int nbytes);
+BOOLEAN PacketSetNumWrites(LPADAPTER AdapterObject, int nwrites);
+BOOLEAN PacketSetMode(LPADAPTER AdapterObject, int mode);
+BOOLEAN PacketSetReadTimeout(LPADAPTER AdapterObject, int timeout);
+BOOLEAN PacketSetBpf(LPADAPTER AdapterObject, struct bpf_program *fp);
+INT PacketSetSnapLen(LPADAPTER AdapterObject, int snaplen);
+BOOLEAN PacketGetStats(LPADAPTER AdapterObject, struct bpf_stat *s);
+BOOLEAN PacketGetStatsEx(LPADAPTER AdapterObject, struct bpf_stat *s);
+BOOLEAN PacketSetBuff(LPADAPTER AdapterObject, int dim);
+BOOLEAN PacketGetNetType(LPADAPTER AdapterObject, NetType *type);
 LPADAPTER PacketOpenAdapter(PCHAR AdapterName);
-BOOLEAN PacketSendPacket(LPADAPTER AdapterObject,LPPACKET pPacket,BOOLEAN Sync);
-INT PacketSendPackets(LPADAPTER AdapterObject,PVOID PacketBuff,ULONG Size, BOOLEAN Sync);
+BOOLEAN PacketSendPacket(LPADAPTER AdapterObject, LPPACKET pPacket, BOOLEAN Sync);
+INT PacketSendPackets(LPADAPTER AdapterObject, PVOID PacketBuff, ULONG Size, BOOLEAN Sync);
 LPPACKET PacketAllocatePacket(void);
-VOID PacketInitPacket(LPPACKET lpPacket,PVOID  Buffer,UINT  Length);
+VOID PacketInitPacket(LPPACKET lpPacket, PVOID  Buffer, UINT  Length);
 VOID PacketFreePacket(LPPACKET lpPacket);
-BOOLEAN PacketReceivePacket(LPADAPTER AdapterObject,LPPACKET lpPacket,BOOLEAN Sync);
-BOOLEAN PacketSetHwFilter(LPADAPTER AdapterObject,ULONG Filter);
-BOOLEAN PacketGetAdapterNames(PTSTR pStr,PULONG  BufferSize);
+BOOLEAN PacketReceivePacket(LPADAPTER AdapterObject, LPPACKET lpPacket, BOOLEAN Sync);
+BOOLEAN PacketSetHwFilter(LPADAPTER AdapterObject, ULONG Filter);
+BOOLEAN PacketGetAdapterNames(PTSTR pStr, PULONG  BufferSize);
 BOOLEAN PacketGetNetInfoEx(PCHAR AdapterName, npf_if_addr* buffer, PLONG NEntries);
-BOOLEAN PacketRequest(LPADAPTER  AdapterObject,BOOLEAN Set,PPACKET_OID_DATA  OidData);
+BOOLEAN PacketRequest(LPADAPTER  AdapterObject, BOOLEAN Set, PPACKET_OID_DATA  OidData);
 HANDLE PacketGetReadEvent(LPADAPTER AdapterObject);
 BOOLEAN PacketSetDumpName(LPADAPTER AdapterObject, void *name, int len);
 BOOLEAN PacketSetDumpLimits(LPADAPTER AdapterObject, UINT maxfilesize, UINT maxnpacks);
@@ -445,6 +439,6 @@ VOID PacketCloseAdapter(LPADAPTER lpAdapter);
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif //__PACKET32

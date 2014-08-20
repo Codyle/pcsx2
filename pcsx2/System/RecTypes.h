@@ -37,32 +37,44 @@ protected:
 	bool		m_profiler_registered;
 
 public:
-	RecompiledCodeReserve( const wxString& name=wxEmptyString, uint defCommit = 0 );
+	RecompiledCodeReserve(const wxString &name = wxEmptyString, uint defCommit = 0);
 	virtual ~RecompiledCodeReserve() throw();
 
-	virtual void* Reserve( size_t size, uptr base=0, uptr upper_bounds=0 );
-	virtual void OnCommittedBlock( void* block );
+	virtual void* Reserve(size_t size, uptr base = 0, uptr upper_bounds = 0);
+	virtual void OnCommittedBlock(void* block);
 
-	virtual RecompiledCodeReserve& SetProfilerName( const wxString& shortname );
-	virtual RecompiledCodeReserve& SetProfilerName( const char* shortname )
+	virtual RecompiledCodeReserve &SetProfilerName(const wxString &shortname);
+	virtual RecompiledCodeReserve &SetProfilerName(const char* shortname)
 	{
-		return SetProfilerName( fromUTF8(shortname) );
+		return SetProfilerName(fromUTF8(shortname));
 	}
-	
+
 	void ThrowIfNotOk() const;
 
-	operator void*()				{ return m_baseptr; }
-	operator const void*() const	{ return m_baseptr; }
+	operator void*()
+	{
+		return m_baseptr;
+	}
+	operator const void*() const
+	{
+		return m_baseptr;
+	}
 
-	operator u8*()				{ return (u8*)m_baseptr; }
-	operator const u8*() const	{ return (u8*)m_baseptr; }
+	operator u8*()
+	{
+		return (u8*)m_baseptr;
+	}
+	operator const u8*() const
+	{
+		return (u8*)m_baseptr;
+	}
 
 protected:
 	void ResetProcessReserves() const;
-	void DoCommitAndProtect( uptr page );
+	void DoCommitAndProtect(uptr page);
 
 	void _registerProfiler();
 	void _termProfiler();
-	
+
 	uint _calcDefaultCommitInBlocks() const;
 };

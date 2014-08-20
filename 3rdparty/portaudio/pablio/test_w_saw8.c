@@ -32,13 +32,13 @@
  */
 
 /*
- * The text above constitutes the entire PortAudio license; however, 
+ * The text above constitutes the entire PortAudio license; however,
  * the PortAudio community also makes the following non-binding requests:
  *
  * Any person wishing to distribute modifications to the Software is
  * requested to send the modifications to the original developer so that
- * they can be incorporated into the canonical version. It is also 
- * requested that these non-binding requests be included along with the 
+ * they can be incorporated into the canonical version. It is also
+ * requested that these non-binding requests be included along with the
  * license above.
  */
 
@@ -62,51 +62,40 @@ unsigned char   phases[SAMPLES_PER_FRAME];
 int main(void);
 int main(void)
 {
-    int             i,j;
-    PaError         err;
-    PABLIO_Stream  *aOutStream;
-
-    printf("Generate unsigned 8 bit sawtooth waves using PABLIO.\n");
-    fflush(stdout);
-
-    /* Open simplified blocking I/O layer on top of PortAudio. */
-    err = OpenAudioStream( &aOutStream, SAMPLE_RATE, paUInt8,
-                           (PABLIO_WRITE | PABLIO_STEREO) );
-    if( err != paNoError ) goto error;
-
-    /* Initialize oscillator phases to "ground" level for paUInt8. */
-    phases[0] = 128;
-    phases[1] = 128;
-
-    for( i=0; i<(NUM_SECONDS * SAMPLE_RATE); i += FRAMES_PER_BLOCK )
-    {
-        /* Generate sawtooth waveforms in a block for efficiency. */
-        for( j=0; j<FRAMES_PER_BLOCK; j++ )
-        {
-            /* Generate a sawtooth wave by incrementing a variable. */
-            phases[0] += 1;
-            /* We don't have to do anything special to wrap when using paUint8 because
-             * 8 bit arithmetic automatically wraps. */
-            samples[j][0] = phases[0];
-
-            /* On the second channel, generate a higher sawtooth wave. */
-            phases[1] += 3;
-            samples[j][1] = phases[1];
-        }
-
-        /* Write samples to output. */
-        WriteAudioStream( aOutStream, samples, FRAMES_PER_BLOCK );
-    }
-
-    CloseAudioStream( aOutStream );
-
-    printf("Sawtooth sound test complete.\n" );
-    fflush(stdout);
-    return 0;
-
+	int             i, j;
+	PaError         err;
+	PABLIO_Stream  *aOutStream;
+	printf("Generate unsigned 8 bit sawtooth waves using PABLIO.\n");
+	fflush(stdout);
+	/* Open simplified blocking I/O layer on top of PortAudio. */
+	err = OpenAudioStream(&aOutStream, SAMPLE_RATE, paUInt8,
+	                      (PABLIO_WRITE | PABLIO_STEREO));
+	if (err != paNoError) goto error;
+	/* Initialize oscillator phases to "ground" level for paUInt8. */
+	phases[0] = 128;
+	phases[1] = 128;
+	for (i = 0; i < (NUM_SECONDS * SAMPLE_RATE); i += FRAMES_PER_BLOCK) {
+		/* Generate sawtooth waveforms in a block for efficiency. */
+		for (j = 0; j < FRAMES_PER_BLOCK; j++) {
+			/* Generate a sawtooth wave by incrementing a variable. */
+			phases[0] += 1;
+			/* We don't have to do anything special to wrap when using paUint8 because
+			 * 8 bit arithmetic automatically wraps. */
+			samples[j][0] = phases[0];
+			/* On the second channel, generate a higher sawtooth wave. */
+			phases[1] += 3;
+			samples[j][1] = phases[1];
+		}
+		/* Write samples to output. */
+		WriteAudioStream(aOutStream, samples, FRAMES_PER_BLOCK);
+	}
+	CloseAudioStream(aOutStream);
+	printf("Sawtooth sound test complete.\n");
+	fflush(stdout);
+	return 0;
 error:
-    fprintf( stderr, "An error occured while using PABLIO\n" );
-    fprintf( stderr, "Error number: %d\n", err );
-    fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( err ) );
-    return -1;
+	fprintf(stderr, "An error occured while using PABLIO\n");
+	fprintf(stderr, "Error number: %d\n", err);
+	fprintf(stderr, "Error message: %s\n", Pa_GetErrorText(err));
+	return -1;
 }

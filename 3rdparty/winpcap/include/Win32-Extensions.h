@@ -12,9 +12,9 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
  * documentation and/or other materials provided with the distribution.
- * 3. Neither the name of the Politecnico di Torino, CACE Technologies 
- * nor the names of its contributors may be used to endorse or promote 
- * products derived from this software without specific prior written 
+ * 3. Neither the name of the Politecnico di Torino, CACE Technologies
+ * nor the names of its contributors may be used to endorse or promote
+ * products derived from this software without specific prior written
  * permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -43,8 +43,7 @@ extern "C" {
 /*!
   \brief A queue of raw packets that will be sent to the network with pcap_sendqueue_transmit().
 */
-struct pcap_send_queue
-{
+struct pcap_send_queue {
 	u_int maxlen;		///< Maximum size of the the queue, in bytes. This variable contains the size of the buffer field.
 	u_int len;			///< Current size of the queue, in bytes.
 	char *buffer;		///< Buffer containing the packets to be sent.
@@ -67,7 +66,7 @@ typedef struct _AirpcapHandle *PAirpcapHandle;
 #define		BPF_MEM_EX		0xc0
 #define		BPF_TME					0x08
 
-#define		BPF_LOOKUP				0x90   
+#define		BPF_LOOKUP				0x90
 #define		BPF_EXECUTE				0xa0
 #define		BPF_INIT				0xb0
 #define		BPF_VALIDATE			0xc0

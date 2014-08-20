@@ -40,8 +40,7 @@
 // ANALOG CONTROLLER SCPH-1150
 #define PSE_PAD_TYPE_ANALOGPAD		7
 
-struct PadDataS
-{
+struct PadDataS {
 	// controler type - fill it withe predefined values above
 	BYTE type;
 
@@ -64,8 +63,7 @@ struct PadDataS
 #define PS2E_LT_PAD 0x02
 #define PS2E_PAD_VERSION 0x0002
 
-struct KeyEvent
-{
+struct KeyEvent {
 	UINT32 key;
 	UINT32 event;
 };
@@ -77,29 +75,48 @@ struct KeyEvent
 
 class CCritSec
 {
-    CCritSec(const CCritSec &refCritSec);
-    CCritSec &operator=(const CCritSec &refCritSec);
+	CCritSec(const CCritSec &refCritSec);
+	CCritSec &operator=(const CCritSec &refCritSec);
 
-    CRITICAL_SECTION m_CritSec;
+	CRITICAL_SECTION m_CritSec;
 
 public:
-    CCritSec() {InitializeCriticalSection(&m_CritSec);};
-	~CCritSec() {DeleteCriticalSection(&m_CritSec);};
+	CCritSec()
+	{
+		InitializeCriticalSection(&m_CritSec);
+	};
+	~CCritSec()
+	{
+		DeleteCriticalSection(&m_CritSec);
+	};
 
-    void Lock() {EnterCriticalSection(&m_CritSec);};
-    void Unlock() {LeaveCriticalSection(&m_CritSec);};
+	void Lock()
+	{
+		EnterCriticalSection(&m_CritSec);
+	};
+	void Unlock()
+	{
+		LeaveCriticalSection(&m_CritSec);
+	};
 };
 
 class CAutoLock
 {
-    CAutoLock(const CAutoLock &refAutoLock);
-    CAutoLock &operator=(const CAutoLock &refAutoLock);
+	CAutoLock(const CAutoLock &refAutoLock);
+	CAutoLock &operator=(const CAutoLock &refAutoLock);
 
 protected:
-    CCritSec * m_pLock;
+	CCritSec * m_pLock;
 
 public:
-    CAutoLock(CCritSec * plock) {m_pLock = plock; m_pLock->Lock();};
-    ~CAutoLock() {m_pLock->Unlock();};
+	CAutoLock(CCritSec * plock)
+	{
+		m_pLock = plock;
+		m_pLock->Lock();
+	};
+	~CAutoLock()
+	{
+		m_pLock->Unlock();
+	};
 };
 

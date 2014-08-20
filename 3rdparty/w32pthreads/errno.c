@@ -68,26 +68,19 @@ static int reallyBad = ENOMEM;
  */
 
 int *
-_errno (void)
+_errno(void)
 {
-  pthread_t self;
-  int *result;
-
-  if ((self = pthread_self ()) == NULL)
-    {
-      /*
-       * Yikes! unable to allocate a thread!
-       * Throw an exception? return an error?
-       */
-      result = &reallyBad;
-    }
-  else
-    {
-      result = &(self->ptErrno);
-    }
-
-  return (result);
-
+	pthread_t self;
+	int *result;
+	if ((self = pthread_self()) == NULL) {
+		/*
+		 * Yikes! unable to allocate a thread!
+		 * Throw an exception? return an error?
+		 */
+		result = &reallyBad;
+	} else
+		result = &(self->ptErrno);
+	return (result);
 }				/* _errno */
 
 #endif /* (NEED_ERRNO) */

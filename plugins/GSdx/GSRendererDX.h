@@ -41,7 +41,7 @@ protected:
 	float UserHacks_TCO_x, UserHacks_TCO_y;
 
 public:
-	GSRendererDX(GSTextureCache* tc, const GSVector2& pixelcenter = GSVector2(0, 0));
+	GSRendererDX(GSTextureCache* tc, const GSVector2 &pixelcenter = GSVector2(0, 0));
 	virtual ~GSRendererDX();
 
 };

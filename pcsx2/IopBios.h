@@ -36,18 +36,29 @@
 #define IOP_SEEK_CUR 1
 #define IOP_SEEK_END 2
 
-class IOManFile {
+class IOManFile
+{
 public:
 	// int open(IOManFile **file, char *name, s32 flags, u16 mode);
 
 	virtual void close() = 0;
 
-	virtual int lseek(s32 offset, s32 whence) { return -IOP_EIO; }
-	virtual int read(void *buf, u32 count) { return -IOP_EIO; }
-	virtual int write(void *buf, u32 count) { return -IOP_EIO; }
+	virtual int lseek(s32 offset, s32 whence)
+	{
+		return -IOP_EIO;
+	}
+	virtual int read(void *buf, u32 count)
+	{
+		return -IOP_EIO;
+	}
+	virtual int write(void *buf, u32 count)
+	{
+		return -IOP_EIO;
+	}
 };
 
-class IOManDir {
+class IOManDir
+{
 	// Don't think about it until we know the loaded ioman version.
 	// The dirent structure changed between versions.
 public:
@@ -59,17 +70,17 @@ typedef void (*irxDEBUG)();
 
 namespace R3000A
 {
-	const char* irxImportLibname(u32 entrypc);
-	const char* irxImportFuncname(const char libname[8], u16 index);
-	irxHLE irxImportHLE(const char libname[8], u16 index);
-	irxDEBUG irxImportDebug(const char libname[8], u16 index);
-	void __fastcall irxImportLog(const char libname[8], u16 index, const char *funcname);
-	int __fastcall irxImportExec(const char libname[8], u16 index);
+const char* irxImportLibname(u32 entrypc);
+const char* irxImportFuncname(const char libname[8], u16 index);
+irxHLE irxImportHLE(const char libname[8], u16 index);
+irxDEBUG irxImportDebug(const char libname[8], u16 index);
+void __fastcall irxImportLog(const char libname[8], u16 index, const char *funcname);
+int __fastcall irxImportExec(const char libname[8], u16 index);
 
-	namespace ioman
-	{
-		void reset();
-	}
+namespace ioman
+{
+void reset();
+}
 }
 
 extern void Hle_SetElfPath(const char* elfFileName);

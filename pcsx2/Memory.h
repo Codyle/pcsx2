@@ -27,19 +27,19 @@
 // uses _mm_store and _mm_load internally.  However, there are alignment concerns --
 // u128 is not alignment strict.  (we would need a u128 and u128a for types known to
 // be strictly 128-bit aligned).
-static __fi void CopyQWC( void* dest, const void* src )
+static __fi void CopyQWC(void* dest, const void* src)
 {
-	_mm_store_ps( (float*)dest, _mm_load_ps((const float*)src) );
+	_mm_store_ps((float*)dest, _mm_load_ps((const float*)src));
 }
 
-static __fi void ZeroQWC( void* dest )
+static __fi void ZeroQWC(void* dest)
 {
-	_mm_store_ps( (float*)dest, _mm_setzero_ps() );
+	_mm_store_ps((float*)dest, _mm_setzero_ps());
 }
 
-static __fi void ZeroQWC( u128& dest )
+static __fi void ZeroQWC(u128 &dest)
 {
-	_mm_store_ps( (float*)&dest, _mm_setzero_ps() );
+	_mm_store_ps((float*)&dest, _mm_setzero_ps());
 }
 
 #define PSM(mem)	(vtlb_GetPhyPtr((mem)&0x1fffffff)) //pcsx2 is a competition.The one with most hacks wins :D
@@ -116,8 +116,8 @@ extern void memBindConditionalHandlers();
 
 extern void memMapVUmicro();
 
-extern int mmap_GetRamPageInfo( u32 paddr );
-extern void mmap_MarkCountedRamPage( u32 paddr );
+extern int mmap_GetRamPageInfo(u32 paddr);
+extern void mmap_MarkCountedRamPage(u32 paddr);
 extern void mmap_ResetBlockTracking();
 
 #define memRead8 vtlb_memRead<mem8_t>
@@ -128,16 +128,40 @@ extern void mmap_ResetBlockTracking();
 #define memWrite16 vtlb_memWrite<mem16_t>
 #define memWrite32 vtlb_memWrite<mem32_t>
 
-static __fi void memRead64(u32 mem, mem64_t* out)	{ vtlb_memRead64(mem, out); }
-static __fi void memRead64(u32 mem, mem64_t& out)	{ vtlb_memRead64(mem, &out); }
+static __fi void memRead64(u32 mem, mem64_t* out)
+{
+	vtlb_memRead64(mem, out);
+}
+static __fi void memRead64(u32 mem, mem64_t &out)
+{
+	vtlb_memRead64(mem, &out);
+}
 
-static __fi void memRead128(u32 mem, mem128_t* out) { vtlb_memRead128(mem, out); }
-static __fi void memRead128(u32 mem, mem128_t& out) { vtlb_memRead128(mem, &out); }
+static __fi void memRead128(u32 mem, mem128_t* out)
+{
+	vtlb_memRead128(mem, out);
+}
+static __fi void memRead128(u32 mem, mem128_t &out)
+{
+	vtlb_memRead128(mem, &out);
+}
 
-static __fi void memWrite64(u32 mem, const mem64_t* val)	{ vtlb_memWrite64(mem, val); }
-static __fi void memWrite64(u32 mem, const mem64_t& val)	{ vtlb_memWrite64(mem, &val); }
-static __fi void memWrite128(u32 mem, const mem128_t* val)	{ vtlb_memWrite128(mem, val); }
-static __fi void memWrite128(u32 mem, const mem128_t& val)	{ vtlb_memWrite128(mem, &val); }
+static __fi void memWrite64(u32 mem, const mem64_t* val)
+{
+	vtlb_memWrite64(mem, val);
+}
+static __fi void memWrite64(u32 mem, const mem64_t &val)
+{
+	vtlb_memWrite64(mem, &val);
+}
+static __fi void memWrite128(u32 mem, const mem128_t* val)
+{
+	vtlb_memWrite128(mem, val);
+}
+static __fi void memWrite128(u32 mem, const mem128_t &val)
+{
+	vtlb_memWrite128(mem, &val);
+}
 
 
 extern u16 ba0R16(u32 mem);

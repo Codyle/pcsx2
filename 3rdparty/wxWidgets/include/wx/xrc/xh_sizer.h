@@ -22,55 +22,55 @@ class WXDLLIMPEXP_FWD_CORE wxSizer;
 
 class WXDLLIMPEXP_XRC wxSizerXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxSizerXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxSizerXmlHandler)
 
 public:
-    wxSizerXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxSizerXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_isInside;
-    bool m_isGBS;
+	bool m_isInside;
+	bool m_isGBS;
 
-    wxSizer *m_parentSizer;
+	wxSizer *m_parentSizer;
 
-    bool IsSizerNode(wxXmlNode *node);
+	bool IsSizerNode(wxXmlNode *node);
 
-    wxObject* Handle_sizeritem();
-    wxObject* Handle_spacer();
-    wxObject* Handle_sizer();
-    wxSizer*  Handle_wxBoxSizer();
+	wxObject* Handle_sizeritem();
+	wxObject* Handle_spacer();
+	wxObject* Handle_sizer();
+	wxSizer*  Handle_wxBoxSizer();
 #if wxUSE_STATBOX
-    wxSizer*  Handle_wxStaticBoxSizer();
+	wxSizer*  Handle_wxStaticBoxSizer();
 #endif
-    wxSizer*  Handle_wxGridSizer();
-    wxSizer*  Handle_wxFlexGridSizer();
-    wxSizer*  Handle_wxGridBagSizer();
+	wxSizer*  Handle_wxGridSizer();
+	wxSizer*  Handle_wxFlexGridSizer();
+	wxSizer*  Handle_wxGridBagSizer();
 
-    void SetGrowables(wxFlexGridSizer* fsizer, const wxChar* param, bool rows);
-    wxGBPosition GetGBPos(const wxString& param);
-    wxGBSpan GetGBSpan(const wxString& param);
-    wxSizerItem* MakeSizerItem();
-    void SetSizerItemAttributes(wxSizerItem* sitem);
-    void AddSizerItem(wxSizerItem* sitem);
+	void SetGrowables(wxFlexGridSizer* fsizer, const wxChar* param, bool rows);
+	wxGBPosition GetGBPos(const wxString &param);
+	wxGBSpan GetGBSpan(const wxString &param);
+	wxSizerItem* MakeSizerItem();
+	void SetSizerItemAttributes(wxSizerItem* sitem);
+	void AddSizerItem(wxSizerItem* sitem);
 };
 
 #if wxUSE_BUTTON
 
 class WXDLLIMPEXP_XRC wxStdDialogButtonSizerXmlHandler
-    : public wxXmlResourceHandler
+	: public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxStdDialogButtonSizerXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxStdDialogButtonSizerXmlHandler)
 
 public:
-    wxStdDialogButtonSizerXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxStdDialogButtonSizerXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_isInside;
-    wxStdDialogButtonSizer *m_parentSizer;
+	bool m_isInside;
+	wxStdDialogButtonSizer *m_parentSizer;
 };
 
 #endif // wxUSE_BUTTON

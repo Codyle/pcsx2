@@ -27,30 +27,28 @@
 #define spu2Ru16(mmem)	(*(u16 *)((s8 *)spu2regs + ((mmem) & 0x1fff)))
 
 extern s16*	GetMemPtr(u32 addr);
-extern s16	spu2M_Read( u32 addr );
-extern void	spu2M_Write( u32 addr, s16 value );
-extern void	spu2M_Write( u32 addr, u16 value );
+extern s16	spu2M_Read(u32 addr);
+extern void	spu2M_Write(u32 addr, s16 value);
+extern void	spu2M_Write(u32 addr, u16 value);
 
 
-struct V_VolumeLR
-{
+struct V_VolumeLR {
 	static V_VolumeLR Max;
 
 	s32		Left;
 	s32		Right;
 
 	V_VolumeLR() {}
-	V_VolumeLR( s32 both ) :
-		Left( both ),
-		Right( both )
+	V_VolumeLR(s32 both) :
+		Left(both),
+		Right(both)
 	{
 	}
 
-	void DebugDump( FILE* dump, const char* title );
+	void DebugDump(FILE* dump, const char* title);
 };
 
-struct V_VolumeSlide
-{
+struct V_VolumeSlide {
 	// Holds the "original" value of the volume for this voice, prior to slides.
 	// (ie, the volume as written to the register)
 
@@ -61,21 +59,20 @@ struct V_VolumeSlide
 
 public:
 	V_VolumeSlide() {}
-	V_VolumeSlide( s16 regval, s32 fullvol ) :
-		Reg_VOL( regval ),
-		Value( fullvol ),
-		Increment( 0 ),
-		Mode( 0 )
+	V_VolumeSlide(s16 regval, s32 fullvol) :
+		Reg_VOL(regval),
+		Value(fullvol),
+		Increment(0),
+		Mode(0)
 	{
 	}
 
 	void Update();
-	void RegSet( u16 src );		// used to set the volume from a register source (16 bit signed)
-	void DebugDump( FILE* dump, const char* title, const char* nameLR );
+	void RegSet(u16 src);		// used to set the volume from a register source (16 bit signed)
+	void DebugDump(FILE* dump, const char* title, const char* nameLR);
 };
 
-struct V_VolumeSlideLR
-{
+struct V_VolumeSlideLR {
 	static V_VolumeSlideLR Max;
 
 	V_VolumeSlide Left;
@@ -84,9 +81,9 @@ struct V_VolumeSlideLR
 public:
 	V_VolumeSlideLR() {}
 
-	V_VolumeSlideLR( s16 regval, s32 bothval ) :
-		Left( regval, bothval ),
-		Right( regval, bothval )
+	V_VolumeSlideLR(s16 regval, s32 bothval) :
+		Left(regval, bothval),
+		Right(regval, bothval)
 	{
 	}
 
@@ -96,32 +93,28 @@ public:
 		Right.Update();
 	}
 
-	void DebugDump( FILE* dump, const char* title );
+	void DebugDump(FILE* dump, const char* title);
 };
 
-struct V_ADSR
-{
-	union
-	{
+struct V_ADSR {
+	union {
 		u32	reg32;
 
-		struct
-		{
+		struct {
 			u16 regADSR1;
 			u16 regADSR2;
 		};
 
-		struct
-		{
-			u32	SustainLevel:4,
-				DecayRate:4,
-				AttackRate:7,
-				AttackMode:1,	// 0 for linear (+lin), 1 for pseudo exponential (+exp)
+		struct {
+			u32	SustainLevel: 4,
+			        DecayRate: 4,
+			        AttackRate: 7,
+			        AttackMode: 1,	// 0 for linear (+lin), 1 for pseudo exponential (+exp)
 
-				ReleaseRate:5,
-				ReleaseMode:1,	// 0 for linear (-lin), 1 for exponential (-exp)
-				SustainRate:7,
-				SustainMode:3;	// 0 = +lin, 1 = -lin, 2 = +exp, 3 = -exp
+			        ReleaseRate: 5,
+			        ReleaseMode: 1,	// 0 for linear (-lin), 1 for exponential (-exp)
+			        SustainRate: 7,
+			        SustainMode: 3;	// 0 = +lin, 1 = -lin, 2 = +exp, 3 = -exp
 		};
 	};
 
@@ -134,23 +127,22 @@ public:
 };
 
 
-struct V_Voice
-{
+struct V_Voice {
 	u32 PlayCycle;		// SPU2 cycle where the Playing started
 
 	V_VolumeSlideLR Volume;
 
-// Envelope
+	// Envelope
 	V_ADSR ADSR;
-// Pitch (also Reg_PITCH)
+	// Pitch (also Reg_PITCH)
 	u16 Pitch;
-// Loop Start address (also Reg_LSAH/L)
+	// Loop Start address (also Reg_LSAH/L)
 	u32 LoopStartA;
-// Sound Start address (also Reg_SSAH/L)
+	// Sound Start address (also Reg_SSAH/L)
 	u32 StartA;
-// Next Read Data address (also Reg_NAXH/L)
+	// Next Read Data address (also Reg_NAXH/L)
 	u32 NextA;
-// Voice Decoding State
+	// Voice Decoding State
 	s32 Prev1;
 	s32 Prev2;
 
@@ -162,31 +154,31 @@ struct V_Voice
 	s8 LoopMode;
 	s8 LoopFlags;
 
-// Sample pointer (19:12 bit fixed point)
+	// Sample pointer (19:12 bit fixed point)
 	s32 SP;
 
-// Sample pointer for Cubic Interpolation
-// Cubic interpolation mixes a sample behind Linear, so that it
-// can have sample data to either side of the end points from which
-// to extrapolate.  This SP represents that late sample position.
+	// Sample pointer for Cubic Interpolation
+	// Cubic interpolation mixes a sample behind Linear, so that it
+	// can have sample data to either side of the end points from which
+	// to extrapolate.  This SP represents that late sample position.
 	s32 SPc;
 
-// Previous sample values - used for interpolation
-// Inverted order of these members to match the access order in the
-//   code (might improve cache hits).
+	// Previous sample values - used for interpolation
+	// Inverted order of these members to match the access order in the
+	//   code (might improve cache hits).
 	s32 PV4;
 	s32 PV3;
 	s32 PV2;
 	s32 PV1;
 
-// Last outputted audio value, used for voice modulation.
+	// Last outputted audio value, used for voice modulation.
 	s32 OutX;
 	s32 NextCrest; // temp value for Crest calculation
 
-// SBuffer now points directly to an ADPCM cache entry.
+	// SBuffer now points directly to an ADPCM cache entry.
 	s16 *SBuffer;
 
-// sample position within the current decoded packet.
+	// sample position within the current decoded packet.
 	s32 SCurrent;
 
 	// it takes a few ticks for voices to start on the real SPU2?
@@ -198,8 +190,7 @@ struct V_Voice
 // ** Begin Debug-only variables section **
 // Separated from the V_Voice struct to improve cache performance of
 // the Public Release build.
-struct V_VoiceDebug
-{
+struct V_VoiceDebug {
 	s8 FirstBlock;
 	s32 SampleData;
 	s32 PeakX;
@@ -207,10 +198,9 @@ struct V_VoiceDebug
 	s32 lastSetStartA;
 };
 
-struct V_CoreDebug
-{
+struct V_CoreDebug {
 	V_VoiceDebug Voices[24];
-// Last Transfer Size
+	// Last Transfer Size
 	u32 lastsize;
 
 	// draw adma waveform in the visual debugger
@@ -224,8 +214,7 @@ struct V_CoreDebug
 // Debug tracking information - 24 voices and 2 cores.
 extern V_CoreDebug DebugCores[2];
 
-struct V_Reverb
-{
+struct V_Reverb {
 	s16 IN_COEF_L;
 	s16 IN_COEF_R;
 
@@ -267,8 +256,7 @@ struct V_Reverb
 	u32 MIX_DEST_B1;
 };
 
-struct V_ReverbBuffers
-{
+struct V_ReverbBuffers {
 	s32 FB_SRC_A0;
 	s32 FB_SRC_B0;
 	s32 FB_SRC_A1;
@@ -300,8 +288,7 @@ struct V_ReverbBuffers
 	bool NeedsUpdated;
 };
 
-struct V_SPDIF
-{
+struct V_SPDIF {
 	u16 Out;
 	u16 Info;
 	u16 Unknown1;
@@ -311,8 +298,7 @@ struct V_SPDIF
 	u16 Protection;
 };
 
-struct V_CoreRegs
-{
+struct V_CoreRegs {
 	u32 PMON;
 	u32 NON;
 	u32 VMIXL;
@@ -327,22 +313,18 @@ struct V_CoreRegs
 	u16 _1AC;
 };
 
-struct V_VoiceGates
-{
+struct V_VoiceGates {
 	s16 DryL;	// 'AND Gate' for Direct Output to Left Channel
 	s16 DryR;	// 'AND Gate' for Direct Output for Right Channel
 	s16 WetL;	// 'AND Gate' for Effect Output for Left Channel
 	s16 WetR;	// 'AND Gate' for Effect Output for Right Channel
 };
 
-struct V_CoreGates
-{
-	union
-	{
+struct V_CoreGates {
+	union {
 		u128 v128;
 
-		struct
-		{
+		struct {
 			s16 InpL;	// Sound Data Input to Direct Output (Left)
 			s16 InpR;	// Sound Data Input to Direct Output (Right)
 			s16 SndL;	// Voice Data to Direct Output (Left)
@@ -354,21 +336,19 @@ struct V_CoreGates
 
 };
 
-struct VoiceMixSet
-{
+struct VoiceMixSet {
 	static const VoiceMixSet Empty;
 	StereoOut32 Dry, Wet;
 
 	VoiceMixSet() {}
-	VoiceMixSet( const StereoOut32& dry, const StereoOut32& wet ) :
-		Dry( dry ),
-		Wet( wet )
+	VoiceMixSet(const StereoOut32 &dry, const StereoOut32 &wet) :
+		Dry(dry),
+		Wet(wet)
 	{
 	}
 };
 
-struct V_Core
-{
+struct V_Core {
 	static const uint NumVoices = 24;
 
 	int				Index;			// Core index identifier.
@@ -450,41 +430,41 @@ struct V_Core
 	// is an area mapped to SPU2 main memory.
 	//s16				ADMATempBuffer[0x1000];
 
-// ----------------------------------------------------------------------------------
-//  V_Core Methods
-// ----------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------
+	//  V_Core Methods
+	// ----------------------------------------------------------------------------------
 
 	// uninitialized constructor
-	V_Core() : Index( -1 ), DMAPtr( NULL ) {}
-	V_Core( int idx );			// our badass constructor
+	V_Core() : Index(-1), DMAPtr(NULL) {}
+	V_Core(int idx);			// our badass constructor
 	~V_Core() throw();
 
-	void	Init( int index );
+	void	Init(int index);
 	void	UpdateEffectsBufferSize();
 	void	AnalyzeReverbPreset();
 
-	s32		EffectsBufferIndexer( s32 offset ) const;
+	s32		EffectsBufferIndexer(s32 offset) const;
 	void	UpdateFeedbackBuffersA();
 	void	UpdateFeedbackBuffersB();
 
-	void	WriteRegPS1( u32 mem, u16 value );
-	u16		ReadRegPS1( u32 mem );
+	void	WriteRegPS1(u32 mem, u16 value);
+	u16		ReadRegPS1(u32 mem);
 
-// --------------------------------------------------------------------------------------
-//  Mixer Section
-// --------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------
+	//  Mixer Section
+	// --------------------------------------------------------------------------------------
 
-	StereoOut32 Mix( const VoiceMixSet& inVoices, const StereoOut32& Input, const StereoOut32& Ext );
+	StereoOut32 Mix(const VoiceMixSet &inVoices, const StereoOut32 &Input, const StereoOut32 &Ext);
 	void		Reverb_AdvanceBuffer();
-	StereoOut32 DoReverb( const StereoOut32& Input );
-	s32			RevbGetIndexer( s32 offset );
+	StereoOut32 DoReverb(const StereoOut32 &Input);
+	s32			RevbGetIndexer(s32 offset);
 
 	StereoOut32 ReadInput();
 	StereoOut32 ReadInput_HiFi();
 
-// --------------------------------------------------------------------------
-//  DMA Section
-// --------------------------------------------------------------------------
+	// --------------------------------------------------------------------------
+	//  DMA Section
+	// --------------------------------------------------------------------------
 
 	// Returns the index of the DMA channel (4 for Core 0, or 7 for Core 1)
 	int GetDmaIndex() const
@@ -501,17 +481,19 @@ struct V_Core
 	__forceinline u16 DmaRead()
 	{
 		const u16 ret = (u16)spu2M_Read(TSA);
-		++TSA; TSA &= 0xfffff;
+		++TSA;
+		TSA &= 0xfffff;
 		return ret;
 	}
 
 	__forceinline void DmaWrite(u16 value)
 	{
-		spu2M_Write( TSA, value );
-		++TSA; TSA &= 0xfffff;
+		spu2M_Write(TSA, value);
+		++TSA;
+		TSA &= 0xfffff;
 	}
 
-	void LogAutoDMA( FILE* fp );
+	void LogAutoDMA(FILE* fp);
 
 	s32  NewDmaRead(u32* data, u32 bytesLeft, u32* bytesProcessed);
 	s32  NewDmaWrite(u32* data, u32 bytesLeft, u32* bytesProcessed);
@@ -544,16 +526,16 @@ extern void SetIrqCall(int core);
 extern void StartVoices(int core, u32 value);
 extern void StopVoices(int core, u32 value);
 extern void InitADSR();
-extern void CalculateADSR( V_Voice& vc );
+extern void CalculateADSR(V_Voice &vc);
 extern void UpdateSpdifMode();
 
 namespace Savestate
 {
-	struct DataBlock;
+struct DataBlock;
 
-	extern s32 __fastcall FreezeIt( DataBlock& spud );
-	extern s32 __fastcall ThawIt( DataBlock& spud );
-	extern s32 __fastcall SizeIt();
+extern s32 __fastcall FreezeIt(DataBlock &spud);
+extern s32 __fastcall ThawIt(DataBlock &spud);
+extern s32 __fastcall SizeIt();
 }
 
 // --------------------------------------------------------------------------------------
@@ -574,8 +556,7 @@ static const int pcm_BlockCount = 0x100000 / pcm_WordsPerBlock;
 // 28 samples per decoded PCM block (as stored in our cache)
 static const int pcm_DecodedSamplesPerBlock = 28;
 
-struct PcmCacheEntry
-{
+struct PcmCacheEntry {
 	bool Validated;
 	s16 Sampledata[pcm_DecodedSamplesPerBlock];
 };

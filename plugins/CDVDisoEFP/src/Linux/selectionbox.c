@@ -33,8 +33,7 @@ struct SelectionBoxData selectionbox;
 
 void SelectionBoxDestroy()
 {
-	if (selectionbox.window != NULL)
-	{
+	if (selectionbox.window != NULL) {
 		gtk_widget_destroy(selectionbox.window);
 		selectionbox.window = NULL;
 	} // ENDIF- Do we have a Main Window still?
@@ -57,8 +56,7 @@ void SelectionBoxRefocus()
 gint SelectionBoxCancelEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 {
 	SelectionBoxUnfocus();
-	switch (selectionbox.wherefrom)
-	{
+	switch (selectionbox.wherefrom) {
 		case 1:
 			gtk_entry_set_text(GTK_ENTRY(mainbox.file),
 			                   gtk_file_selection_get_filename(GTK_FILE_SELECTION(selectionbox.window)));
@@ -75,7 +73,7 @@ gint SelectionBoxCancelEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 			ConversionBoxRefocus();
 			break;
 	} // ENDSWITCH wherefrom- What Box called us?
-	return(TRUE);
+	return (TRUE);
 } // END SelectionBoxCancelEvent()
 
 gint SelectionBoxOKEvent(GtkWidget *widget, GdkEvent event, gpointer data)
@@ -83,7 +81,7 @@ gint SelectionBoxOKEvent(GtkWidget *widget, GdkEvent event, gpointer data)
 	// Validate listed file(?)
 	// Transfer file name to calling window?
 	SelectionBoxCancelEvent(widget, event, data);
-	return(TRUE);
+	return (TRUE);
 } // END SelectionBoxOKEvent()
 
 void SelectionBoxDisplay()

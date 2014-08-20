@@ -15,4 +15,4 @@
 #include "wx/generic/panelg.h"
 
 #endif
-    // _WX_PANELH_BASE_
+// _WX_PANELH_BASE_

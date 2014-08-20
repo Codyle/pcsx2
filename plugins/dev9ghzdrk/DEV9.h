@@ -17,7 +17,7 @@
 #define __DEV9_H__
 
 #include <stdio.h>
-#ifndef EXTERN 
+#ifndef EXTERN
 #define EXTERN  extern
 #endif
 #define DEV9defs
@@ -56,7 +56,7 @@ bool rx_fifo_can_rx();
 #define ETH_DEF		"eth0"
 #define HDD_DEF		"DEV9hdd.raw"
 
- typedef struct {
+typedef struct {
 	char Eth[256];
 	char Hdd[256];
 	int HddSize;
@@ -75,13 +75,13 @@ typedef struct {
 	u8 eeprom_bit;
 	u8 eeprom_dir;
 	u16 *eeprom;//[32];
-	
+
 	u32 rxbdi;
-	u8 rxfifo[16*1024];
+	u8 rxfifo[16 * 1024];
 	u16 rxfifo_wr_ptr;
-	
+
 	u32 txbdi;
-	u8 txfifo[16*1024];
+	u8 txfifo[16 * 1024];
 	u16 txfifo_rd_ptr;
 
 	u8 bd_swap;
@@ -145,9 +145,9 @@ void SysMessage(char *fmt, ...);
 
 #define SPD_R_REV			(SPD_REGBASE + 0x00)
 #define SPD_R_REV_1			(SPD_REGBASE + 0x02)
-				// bit 0: smap
-				// bit 1: hdd
-				// bit 5: flash
+// bit 0: smap
+// bit 1: hdd
+// bit 5: flash
 #define SPD_R_REV_3			(SPD_REGBASE + 0x04)
 #define SPD_R_0e			(SPD_REGBASE + 0x0e)
 
@@ -222,7 +222,7 @@ void SysMessage(char *fmt, ...);
 #define	SMAP_R_RXFIFO_FRAME_CNT		(SMAP_REGBASE + 0xf3C)
 #define	SMAP_R_RXFIFO_FRAME_DEC		(SMAP_REGBASE + 0xf40)
 #define	SMAP_R_RXFIFO_DATA		(SMAP_REGBASE + 0x1100)
- 
+
 #define	SMAP_R_FIFO_ADDR		(SMAP_REGBASE + 0x1200)
 #define	  SMAP_FIFO_CMD_READ	(1<<1)
 #define	  SMAP_FIFO_DATA_SWAP	(1<<0)
@@ -460,7 +460,7 @@ typedef struct _smap_bd {
 #define	SMAP_BD_TX_SQE		(1<<0)	/* SQE */
 
 #define SMAP_BD_TX_ERROR (SMAP_BD_TX_LOSSCR|SMAP_BD_TX_EDEFER|SMAP_BD_TX_ECOLL|	\
-		SMAP_BD_TX_LCOLL|SMAP_BD_TX_UNDERRUN)
+                          SMAP_BD_TX_LCOLL|SMAP_BD_TX_UNDERRUN)
 
 /* RX Control */
 #define	SMAP_BD_RX_EMPTY	(1<<15)	/* set:driver, clear:HW */
@@ -479,8 +479,8 @@ typedef struct _smap_bd {
 #define	SMAP_BD_RX_INRANGE	(1<<0)	/* in range error */
 
 #define SMAP_BD_RX_ERROR (SMAP_BD_RX_OVERRUN|SMAP_BD_RX_RUNTFRM|SMAP_BD_RX_SHORTEVNT|	\
-		SMAP_BD_RX_ALIGNERR|SMAP_BD_RX_BADFCS|SMAP_BD_RX_FRMTOOLONG|		\
-		SMAP_BD_RX_OUTRANGE|SMAP_BD_RX_INRANGE)
+                          SMAP_BD_RX_ALIGNERR|SMAP_BD_RX_BADFCS|SMAP_BD_RX_FRMTOOLONG|		\
+                          SMAP_BD_RX_OUTRANGE|SMAP_BD_RX_INRANGE)
 
 /* PHY registers (National Semiconductor DP83846A).  */
 
@@ -509,7 +509,7 @@ typedef struct _smap_bd {
 #define	SMAP_DsPHYTER_PHYIDR2		0x03
 #define	  SMAP_PHY_IDR2_VMDL	0x2		/* Vendor MoDeL number */
 #define	  SMAP_PHY_IDR2_VAL	\
-		(((SMAP_NS_OUI<<10)&0xFC00)|((SMAP_PHY_IDR2_VMDL<<4)&0x3F0))
+	(((SMAP_NS_OUI<<10)&0xFC00)|((SMAP_PHY_IDR2_VMDL<<4)&0x3F0))
 #define	  SMAP_PHY_IDR2_MSK	0xFFF0
 #define	  SMAP_PHY_IDR2_REV_MSK	0x000F
 

@@ -29,9 +29,8 @@ class GSRendererSW : public GSRenderer
 {
 	class SharedData : public GSDrawScanline::SharedData
 	{
-		__aligned(struct, 16) TextureLevel 
-		{
-			GSVector4i r; 
+		__aligned(struct, 16) TextureLevel {
+			GSVector4i r;
 			GSTextureCacheSW::Texture* t;
 		};
 
@@ -52,7 +51,7 @@ class GSRendererSW : public GSRenderer
 		void UsePages(const uint32* fb_pages, int fpsm, const uint32* zb_pages, int zpsm);
 		void ReleasePages();
 
-		void SetSource(GSTextureCacheSW::Texture* t, const GSVector4i& r, int level);
+		void SetSource(GSTextureCacheSW::Texture* t, const GSVector4i &r, int level);
 		void UpdateSource();
 	};
 
@@ -81,15 +80,15 @@ protected:
 	GSTexture* GetOutput(int i);
 
 	void Draw();
-	void Queue(shared_ptr<GSRasterizerData>& item);
+	void Queue(shared_ptr<GSRasterizerData> &item);
 	void Sync(int reason);
-	void InvalidateVideoMem(const GIFRegBITBLTBUF& BITBLTBUF, const GSVector4i& r);
-	void InvalidateLocalMem(const GIFRegBITBLTBUF& BITBLTBUF, const GSVector4i& r, bool clut = false);
+	void InvalidateVideoMem(const GIFRegBITBLTBUF &BITBLTBUF, const GSVector4i &r);
+	void InvalidateLocalMem(const GIFRegBITBLTBUF &BITBLTBUF, const GSVector4i &r, bool clut = false);
 
 	void UsePages(const uint32* pages, int type);
 	void ReleasePages(const uint32* pages, int type);
 
-	bool CheckTargetPages(const uint32* fb_pages, const uint32* zb_pages, const GSVector4i& r);
+	bool CheckTargetPages(const uint32* fb_pages, const uint32* zb_pages, const GSVector4i &r);
 	bool CheckSourcePages(SharedData* sd);
 
 	bool GetScanlineGlobalData(SharedData* data);

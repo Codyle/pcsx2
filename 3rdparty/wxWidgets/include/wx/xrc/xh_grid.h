@@ -17,13 +17,13 @@
 
 class WXDLLIMPEXP_XRC wxGridXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxGridXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxGridXmlHandler)
 
 public:
-    wxGridXmlHandler();
+	wxGridXmlHandler();
 
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_GRID

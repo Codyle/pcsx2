@@ -17,12 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxStaticLineXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxStaticLineXmlHandler)
+	DECLARE_DYNAMIC_CLASS(wxStaticLineXmlHandler)
 
 public:
-    wxStaticLineXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxStaticLineXmlHandler();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif // wxUSE_XRC && wxUSE_STATLINE

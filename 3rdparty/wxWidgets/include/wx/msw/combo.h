@@ -19,10 +19,10 @@
 #if wxUSE_COMBOCTRL
 
 #if !defined(__WXWINCE__) && wxUSE_TIMER
-    #include "wx/timer.h"
-    #define wxUSE_COMBOCTRL_POPUP_ANIMATION     1
+#include "wx/timer.h"
+#define wxUSE_COMBOCTRL_POPUP_ANIMATION     1
 #else
-    #define wxUSE_COMBOCTRL_POPUP_ANIMATION     0
+#define wxUSE_COMBOCTRL_POPUP_ANIMATION     0
 #endif
 
 
@@ -38,74 +38,79 @@ extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxComboBoxNameStr[];
 class WXDLLEXPORT wxComboCtrl : public wxComboCtrlBase
 {
 public:
-    // ctors and such
-    wxComboCtrl() : wxComboCtrlBase() { Init(); }
+	// ctors and such
+	wxComboCtrl() : wxComboCtrlBase()
+	{
+		Init();
+	}
 
-    wxComboCtrl(wxWindow *parent,
-                   wxWindowID id = wxID_ANY,
-                   const wxString& value = wxEmptyString,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = 0,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxComboBoxNameStr)
-        : wxComboCtrlBase()
-    {
-        Init();
+	wxComboCtrl(wxWindow *parent,
+	            wxWindowID id = wxID_ANY,
+	            const wxString &value = wxEmptyString,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = 0,
+	            const wxValidator &validator = wxDefaultValidator,
+	            const wxString &name = wxComboBoxNameStr)
+		: wxComboCtrlBase()
+	{
+		Init();
+		(void)Create(parent, id, value, pos, size, style, validator, name);
+	}
 
-        (void)Create(parent, id, value, pos, size, style, validator, name);
-    }
+	bool Create(wxWindow *parent,
+	            wxWindowID id = wxID_ANY,
+	            const wxString &value = wxEmptyString,
+	            const wxPoint &pos = wxDefaultPosition,
+	            const wxSize &size = wxDefaultSize,
+	            long style = 0,
+	            const wxValidator &validator = wxDefaultValidator,
+	            const wxString &name = wxComboBoxNameStr);
 
-    bool Create(wxWindow *parent,
-                wxWindowID id = wxID_ANY,
-                const wxString& value = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+	virtual ~wxComboCtrl();
 
-    virtual ~wxComboCtrl();
+	virtual void PrepareBackground(wxDC &dc, const wxRect &rect, int flags) const;
+	virtual bool IsKeyPopupToggle(const wxKeyEvent &event) const;
 
-    virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const;
-    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
-
-    static int GetFeatures() { return wxComboCtrlFeatures::All; }
+	static int GetFeatures()
+	{
+		return wxComboCtrlFeatures::All;
+	}
 
 #if wxUSE_COMBOCTRL_POPUP_ANIMATION
-    void OnTimerEvent( wxTimerEvent& event );
+	void OnTimerEvent(wxTimerEvent &event);
 protected:
-    virtual bool AnimateShow( const wxRect& rect, int flags );
+	virtual bool AnimateShow(const wxRect &rect, int flags);
 #endif
 
 protected:
 
-    // customization
-    virtual void OnResize();
-    virtual wxCoord GetNativeTextIndent() const;
-    virtual void OnThemeChange();
+	// customization
+	virtual void OnResize();
+	virtual wxCoord GetNativeTextIndent() const;
+	virtual void OnThemeChange();
 
-    // event handlers
-    void OnPaintEvent( wxPaintEvent& event );
-    void OnMouseEvent( wxMouseEvent& event );
+	// event handlers
+	void OnPaintEvent(wxPaintEvent &event);
+	void OnMouseEvent(wxMouseEvent &event);
 
 private:
-    void Init();
+	void Init();
 
 #if wxUSE_COMBOCTRL_POPUP_ANIMATION
-    // Popup animation related
-    wxLongLong  m_animStart;
-    wxTimer     m_animTimer;
-    wxRect      m_animRect;
-    int         m_animFlags;
+	// Popup animation related
+	wxLongLong  m_animStart;
+	wxTimer     m_animTimer;
+	wxRect      m_animRect;
+	int         m_animFlags;
 #endif
 
-    DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 
-    DECLARE_DYNAMIC_CLASS(wxComboCtrl)
+	DECLARE_DYNAMIC_CLASS(wxComboCtrl)
 };
 
 
 #endif // wxUSE_COMBOCTRL
 #endif
-    // _WX_COMBOCONTROL_H_
+// _WX_COMBOCONTROL_H_

@@ -31,13 +31,13 @@ class DisassemblyDialog;
 #include "System.h"
 #include "System/SysThreads.h"
 
-typedef void FnType_OnThreadComplete(const wxCommandEvent& evt);
+typedef void FnType_OnThreadComplete(const wxCommandEvent &evt);
 typedef void (Pcsx2App::*FnPtr_Pcsx2App)();
 
 BEGIN_DECLARE_EVENT_TYPES()
-	DECLARE_EVENT_TYPE( pxEvt_LoadPluginsComplete, -1 )
-	DECLARE_EVENT_TYPE( pxEvt_LogicalVsync, -1 )
-	DECLARE_EVENT_TYPE( pxEvt_ThreadTaskTimeout_SysExec, -1 )
+DECLARE_EVENT_TYPE(pxEvt_LoadPluginsComplete, -1)
+DECLARE_EVENT_TYPE(pxEvt_LogicalVsync, -1)
+DECLARE_EVENT_TYPE(pxEvt_ThreadTaskTimeout_SysExec, -1)
 END_DECLARE_EVENT_TYPES()
 
 // This is used when the GS plugin is handling its own window.  Messages from the PAD
@@ -66,8 +66,7 @@ static const bool CloseViewportWithPlugins = false;
 // All Menu Options for the Main Window! :D
 // ------------------------------------------------------------------------
 
-enum MenuIdentifiers
-{
+enum MenuIdentifiers {
 	// Main Menu Section
 	MenuId_Boot = 1,
 	MenuId_Emulation,
@@ -110,12 +109,12 @@ enum MenuIdentifiers
 	MenuId_State_Load,
 	MenuId_State_LoadOther,
 	MenuId_State_Load01,		// first of many load slots
-	MenuId_State_LoadBackup = MenuId_State_Load01+20,
+	MenuId_State_LoadBackup = MenuId_State_Load01 + 20,
 	MenuId_State_Save,
 	MenuId_State_SaveOther,
 	MenuId_State_Save01,		// first of many save slots
 
-	MenuId_State_EndSlotSection = MenuId_State_Save01+20,
+	MenuId_State_EndSlotSection = MenuId_State_Save01 + 20,
 
 	// Config Subsection
 	MenuId_Config_SysSettings,
@@ -166,63 +165,60 @@ enum MenuIdentifiers
 
 namespace Exception
 {
-	// --------------------------------------------------------------------------
-	// Exception used to perform an "errorless" termination of the app during OnInit
-	// procedures.  This happens when a user cancels out of startup prompts/wizards.
-	//
-	class StartupAborted : public CancelEvent
-	{
-		DEFINE_RUNTIME_EXCEPTION( StartupAborted, CancelEvent, L"Startup initialization was aborted by the user." )
+// --------------------------------------------------------------------------
+// Exception used to perform an "errorless" termination of the app during OnInit
+// procedures.  This happens when a user cancels out of startup prompts/wizards.
+//
+class StartupAborted : public CancelEvent
+{
+	DEFINE_RUNTIME_EXCEPTION(StartupAborted, CancelEvent, L"Startup initialization was aborted by the user.")
 
-	public:
-		StartupAborted( const wxString& reason )
-		{
-			m_message_diag = L"Startup aborted: " + reason;
-		}
-	};
+public:
+	StartupAborted(const wxString &reason)
+	{
+		m_message_diag = L"Startup aborted: " + reason;
+	}
+};
 
 }
 
 // --------------------------------------------------------------------------------------
 //  AppImageIds  - Config and Toolbar Images and Icons
 // --------------------------------------------------------------------------------------
-struct AppImageIds
-{
-	struct ConfigIds
-	{
+struct AppImageIds {
+	struct ConfigIds {
 		int	Paths,
-			Plugins,
-			Speedhacks,
-			Gamefixes,
-			MemoryCard,
-			Video,
-			Cpu,
-			Appearance;
+		        Plugins,
+		        Speedhacks,
+		        Gamefixes,
+		        MemoryCard,
+		        Video,
+		        Cpu,
+		        Appearance;
 
 		ConfigIds()
 		{
 			Paths		= Plugins		=
-			Speedhacks	= Gamefixes		=
-			Video		= Cpu			= 
-			MemoryCard	= Appearance	= -1;
+			                          Speedhacks	= Gamefixes		=
+			                                          Video		= Cpu			=
+			                                                          MemoryCard	= Appearance	= -1;
 		}
 	} Config;
 
-	struct ToolbarIds
-	{
+	struct ToolbarIds {
 		int Settings,
-			Play,
-			Resume,
-			PluginVideo,
-			PluginAudio,
-			PluginPad;
+		    Play,
+		    Resume,
+		    PluginVideo,
+		    PluginAudio,
+		    PluginPad;
 
 		ToolbarIds()
 		{
 			Settings	= Play	=
-			PluginVideo	=
-			PluginAudio	=
-			PluginPad	= -1;
+			                          PluginVideo	=
+			                                  PluginAudio	=
+			                                                  PluginPad	= -1;
 		}
 	} Toolbars;
 };
@@ -264,7 +260,10 @@ protected:
 	uint m_FrameCounter;
 
 public:
-	FramerateManager() { Reset(); }
+	FramerateManager()
+	{
+		Reset();
+	}
 	virtual ~FramerateManager() throw() {}
 
 	void Reset();
@@ -305,8 +304,7 @@ public:
 	}
 };
 
-enum GsWindowMode_t
-{
+enum GsWindowMode_t {
 	GsWinMode_Unspecified = 0,
 	GsWinMode_Windowed,
 	GsWinMode_Fullscreen,
@@ -335,13 +333,13 @@ public:
 		ApplyCustomGamefixes	= false;
 		GsWindowMode			= GsWinMode_Unspecified;
 	}
-	
+
 	// Returns TRUE if either speedhacks or gamefixes are being overridden.
 	bool HasCustomHacks() const
 	{
 		return DisableSpeedhacks || ApplyCustomGamefixes;
 	}
-	
+
 	void RemoveCustomHacks()
 	{
 		DisableSpeedhacks = false;
@@ -355,9 +353,8 @@ public:
 
 	bool HasPluginsOverride() const
 	{
-		for( int i=0; i<PluginId_Count; ++i )
-			if( Filenames.Plugins[i].IsOk() ) return true;
-
+		for (int i = 0; i < PluginId_Count; ++i)
+			if (Filenames.Plugins[i].IsOk()) return true;
 		return false;
 	}
 };
@@ -379,7 +376,7 @@ public:
 	wxMessageOutput* CreateMessageOutput();
 
 #ifdef wxUSE_STDPATHS
-	wxStandardPathsBase& GetStandardPaths();
+	wxStandardPathsBase &GetStandardPaths();
 #endif
 };
 
@@ -401,71 +398,71 @@ protected:
 	EventSource<IEventListener_AppStatus>	m_evtsrc_AppStatus;
 
 public:
-	void AddListener( IEventListener_Plugins& listener )
+	void AddListener(IEventListener_Plugins &listener)
 	{
-		m_evtsrc_CorePluginStatus.Add( listener );	
+		m_evtsrc_CorePluginStatus.Add(listener);
 	}
 
-	void AddListener( IEventListener_CoreThread& listener )
+	void AddListener(IEventListener_CoreThread &listener)
 	{
-		m_evtsrc_CoreThreadStatus.Add( listener );
+		m_evtsrc_CoreThreadStatus.Add(listener);
 	}
 
-	void AddListener( IEventListener_AppStatus& listener )
+	void AddListener(IEventListener_AppStatus &listener)
 	{
-		m_evtsrc_AppStatus.Add( listener );
+		m_evtsrc_AppStatus.Add(listener);
 	}
 
-	void RemoveListener( IEventListener_Plugins& listener )
+	void RemoveListener(IEventListener_Plugins &listener)
 	{
-		m_evtsrc_CorePluginStatus.Remove( listener );	
+		m_evtsrc_CorePluginStatus.Remove(listener);
 	}
 
-	void RemoveListener( IEventListener_CoreThread& listener )
+	void RemoveListener(IEventListener_CoreThread &listener)
 	{
-		m_evtsrc_CoreThreadStatus.Remove( listener );
+		m_evtsrc_CoreThreadStatus.Remove(listener);
 	}
 
-	void RemoveListener( IEventListener_AppStatus& listener )
+	void RemoveListener(IEventListener_AppStatus &listener)
 	{
-		m_evtsrc_AppStatus.Remove( listener );
+		m_evtsrc_AppStatus.Remove(listener);
 	}
 
-	void AddListener( IEventListener_Plugins* listener )
+	void AddListener(IEventListener_Plugins* listener)
 	{
-		m_evtsrc_CorePluginStatus.Add( listener );	
+		m_evtsrc_CorePluginStatus.Add(listener);
 	}
 
-	void AddListener( IEventListener_CoreThread* listener )
+	void AddListener(IEventListener_CoreThread* listener)
 	{
-		m_evtsrc_CoreThreadStatus.Add( listener );
+		m_evtsrc_CoreThreadStatus.Add(listener);
 	}
 
-	void AddListener( IEventListener_AppStatus* listener )
+	void AddListener(IEventListener_AppStatus* listener)
 	{
-		m_evtsrc_AppStatus.Add( listener );
+		m_evtsrc_AppStatus.Add(listener);
 	}
 
-	void RemoveListener( IEventListener_Plugins* listener )
+	void RemoveListener(IEventListener_Plugins* listener)
 	{
-		m_evtsrc_CorePluginStatus.Remove( listener );	
+		m_evtsrc_CorePluginStatus.Remove(listener);
 	}
 
-	void RemoveListener( IEventListener_CoreThread* listener )
+	void RemoveListener(IEventListener_CoreThread* listener)
 	{
-		m_evtsrc_CoreThreadStatus.Remove( listener );
+		m_evtsrc_CoreThreadStatus.Remove(listener);
 	}
 
-	void RemoveListener( IEventListener_AppStatus* listener )
+	void RemoveListener(IEventListener_AppStatus* listener)
 	{
-		m_evtsrc_AppStatus.Remove( listener );
+		m_evtsrc_AppStatus.Remove(listener);
 	}
-	
-	void DispatchEvent( PluginEventType evt );
-	void DispatchEvent( AppEventType evt );
-	void DispatchEvent( CoreThreadStatus evt );
-	void DispatchUiSettingsEvent( IniInterface& ini );
-	void DispatchVmSettingsEvent( IniInterface& ini );
+
+	void DispatchEvent(PluginEventType evt);
+	void DispatchEvent(AppEventType evt);
+	void DispatchEvent(CoreThreadStatus evt);
+	void DispatchUiSettingsEvent(IniInterface &ini);
+	void DispatchVmSettingsEvent(IniInterface &ini);
 
 	// ----------------------------------------------------------------------------
 protected:
@@ -513,34 +510,46 @@ public:
 	Pcsx2App();
 	virtual ~Pcsx2App();
 
-	void PostMenuAction( MenuIdentifiers menu_id ) const;
-	void PostAppMethod( FnPtr_Pcsx2App method );
-	void PostIdleAppMethod( FnPtr_Pcsx2App method );
+	void PostMenuAction(MenuIdentifiers menu_id) const;
+	void PostAppMethod(FnPtr_Pcsx2App method);
+	void PostIdleAppMethod(FnPtr_Pcsx2App method);
 
 	void SysApplySettings();
 	void SysExecute();
-	void SysExecute( CDVD_SourceType cdvdsrc, const wxString& elf_override=wxEmptyString );
+	void SysExecute(CDVD_SourceType cdvdsrc, const wxString &elf_override = wxEmptyString);
 	void LogicalVsync();
-	
-	SysMainMemory& GetVmReserve();
-	
-	GSFrame&			GetGsFrame() const;
-	MainEmuFrame&		GetMainFrame() const;
 
-	GSFrame*			GetGsFramePtr() const		{ return (GSFrame*)wxWindow::FindWindowById( m_id_GsFrame ); }
-	MainEmuFrame*		GetMainFramePtr() const		{ return (MainEmuFrame*)wxWindow::FindWindowById( m_id_MainFrame ); }
-	DisassemblyDialog*	GetDisassemblyPtr() const	{ return m_id_Disassembler ? (DisassemblyDialog*)wxWindow::FindWindowById( m_id_Disassembler ) : NULL; }
-	
+	SysMainMemory &GetVmReserve();
+
+	GSFrame			&GetGsFrame() const;
+	MainEmuFrame		&GetMainFrame() const;
+
+	GSFrame*			GetGsFramePtr() const
+	{
+		return (GSFrame*)wxWindow::FindWindowById(m_id_GsFrame);
+	}
+	MainEmuFrame*		GetMainFramePtr() const
+	{
+		return (MainEmuFrame*)wxWindow::FindWindowById(m_id_MainFrame);
+	}
+	DisassemblyDialog*	GetDisassemblyPtr() const
+	{
+		return m_id_Disassembler ? (DisassemblyDialog*)wxWindow::FindWindowById(m_id_Disassembler) : NULL;
+	}
+
 	void enterDebugMode();
 	void leaveDebugMode();
 	void resetDebugger();
 
-	bool HasMainFrame() const	{ return GetMainFramePtr() != NULL; }
+	bool HasMainFrame() const
+	{
+		return GetMainFramePtr() != NULL;
+	}
 
 	void OpenGsPanel();
 	void CloseGsPanel();
-	void OnGsFrameClosed( wxWindowID id );
-	void OnMainFrameClosed( wxWindowID id );
+	void OnGsFrameClosed(wxWindowID id);
+	void OnMainFrameClosed(wxWindowID id);
 
 	// --------------------------------------------------------------------------
 	//  Startup / Shutdown Helpers
@@ -553,7 +562,7 @@ public:
 	void CleanupRestartable();
 	void CleanupResources();
 	void WipeUserModeSettings();
-	bool TestUserPermissionsRights( const wxDirName& testFolder, wxString& createFailedStr, wxString& accessFailedStr );
+	bool TestUserPermissionsRights(const wxDirName &testFolder, wxString &createFailedStr, wxString &accessFailedStr);
 	void EstablishAppUserMode();
 	void ForceFirstTimeWizardOnNextRun();
 
@@ -563,23 +572,23 @@ public:
 	bool HasPendingSaves() const;
 	void StartPendingSave();
 	void ClearPendingSave();
-	
+
 	// --------------------------------------------------------------------------
 	//  App-wide Resources
 	// --------------------------------------------------------------------------
 	// All of these accessors cache the resources on first use and retain them in
 	// memory until the program exits.
 
-	wxMenu&				GetRecentIsoMenu();
-	RecentIsoManager&	GetRecentIsoManager();
+	wxMenu				&GetRecentIsoMenu();
+	RecentIsoManager	&GetRecentIsoManager();
 
-	pxAppResources&		GetResourceCache();
-	const wxIconBundle&	GetIconBundle();
-	const wxBitmap&		GetLogoBitmap();
-	wxImageList&		GetImgList_Config();
-	wxImageList&		GetImgList_Toolbars();
+	pxAppResources		&GetResourceCache();
+	const wxIconBundle	&GetIconBundle();
+	const wxBitmap		&GetLogoBitmap();
+	wxImageList		&GetImgList_Config();
+	wxImageList		&GetImgList_Toolbars();
 
-	const AppImageIds& GetImgId() const;
+	const AppImageIds &GetImgId() const;
 	AppGameDatabase* GetGameDatabase();
 
 	// --------------------------------------------------------------------------
@@ -590,13 +599,13 @@ public:
 	int  OnExit();
 	void CleanUp();
 
-	void OnInitCmdLine( wxCmdLineParser& parser );
-	bool OnCmdLineParsed( wxCmdLineParser& parser );
-	bool OnCmdLineError( wxCmdLineParser& parser );
-	bool ParseOverrides( wxCmdLineParser& parser );
+	void OnInitCmdLine(wxCmdLineParser &parser);
+	bool OnCmdLineParsed(wxCmdLineParser &parser);
+	bool OnCmdLineError(wxCmdLineParser &parser);
+	bool ParseOverrides(wxCmdLineParser &parser);
 
 #ifdef __WXDEBUG__
-	void OnAssertFailure( const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg );
+	void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg);
 #endif
 
 	Threading::MutexRecursive	m_mtx_ProgramLog;
@@ -607,17 +616,17 @@ public:
 	// ----------------------------------------------------------------------------
 	ConsoleLogFrame* GetProgramLog();
 	const ConsoleLogFrame* GetProgramLog() const;
-	void ProgramLog_PostEvent( wxEvent& evt );
-	Threading::Mutex& GetProgramLogLock();
+	void ProgramLog_PostEvent(wxEvent &evt);
+	Threading::Mutex &GetProgramLogLock();
 
 	void EnableAllLogging();
 	void DisableWindowLogging() const;
 	void DisableDiskLogging() const;
-	void OnProgramLogClosed( wxWindowID id );
+	void OnProgramLogClosed(wxWindowID id);
 
 protected:
-	bool AppRpc_TryInvoke( FnPtr_Pcsx2App method );
-	bool AppRpc_TryInvokeAsync( FnPtr_Pcsx2App method );
+	bool AppRpc_TryInvoke(FnPtr_Pcsx2App method);
+	bool AppRpc_TryInvokeAsync(FnPtr_Pcsx2App method);
 
 	void AllocateCoreStuffs();
 	void InitDefaultGlobalAccelerators();
@@ -625,15 +634,15 @@ protected:
 	bool TryOpenConfigCwd();
 	void CleanupOnExit();
 	void OpenWizardConsole();
-	void PadKeyDispatch( const keyEvent& ev );
-	
-	void HandleEvent(wxEvtHandler* handler, wxEventFunction func, wxEvent& event) const;
-	void HandleEvent(wxEvtHandler* handler, wxEventFunction func, wxEvent& event);
+	void PadKeyDispatch(const keyEvent &ev);
 
-	void OnScheduledTermination( wxTimerEvent& evt );
-	void OnEmuKeyDown( wxKeyEvent& evt );
-	void OnSysExecutorTaskTimeout( wxTimerEvent& evt );
-	void OnDestroyWindow( wxWindowDestroyEvent& evt );
+	void HandleEvent(wxEvtHandler* handler, wxEventFunction func, wxEvent &event) const;
+	void HandleEvent(wxEvtHandler* handler, wxEventFunction func, wxEvent &event);
+
+	void OnScheduledTermination(wxTimerEvent &evt);
+	void OnEmuKeyDown(wxKeyEvent &evt);
+	void OnSysExecutorTaskTimeout(wxTimerEvent &evt);
+	void OnDestroyWindow(wxWindowDestroyEvent &evt);
 
 	// ----------------------------------------------------------------------------
 	//      Override wx default exception handling behavior
@@ -644,10 +653,16 @@ protected:
 	// in wx?  Why would anyone ever want a generic catch-all exception handler that *isn't*
 	// the unhandled exception handler?  Using this as anything besides a re-throw is terrible
 	// program design and shouldn't even be allowed -- air)
-	bool OnExceptionInMainLoop() { throw; }
+	bool OnExceptionInMainLoop()
+	{
+		throw;
+	}
 
 	// Just rethrow unhandled exceptions to cause immediate debugger fail.
-	void OnUnhandledException() { throw; }
+	void OnUnhandledException()
+	{
+		throw;
+	}
 };
 
 
@@ -694,12 +709,10 @@ DECLARE_APP(Pcsx2App)
 // Returns a wxWindow handle to the opened window.
 //
 template<typename DialogType>
-wxWindow* AppOpenDialog( wxWindow* parent=NULL )
+wxWindow* AppOpenDialog(wxWindow* parent = NULL)
 {
-	wxWindow* window = wxFindWindowByName( L"Dialog:" + DialogType::GetNameStatic() );
-	
-	if( !window ) window = new DialogType( parent );
-
+	wxWindow* window = wxFindWindowByName(L"Dialog:" + DialogType::GetNameStatic());
+	if (!window) window = new DialogType(parent);
 	window->Show();
 	window->SetFocus();
 	return window;
@@ -711,18 +724,18 @@ extern pxDoAssertFnType AppDoAssert;
 //  External App-related Globals and Shortcuts
 // --------------------------------------------------------------------------------------
 
-extern int  EnumeratePluginsInFolder( const wxDirName& searchPath, wxArrayString* dest );
+extern int  EnumeratePluginsInFolder(const wxDirName &searchPath, wxArrayString* dest);
 extern void LoadPluginsPassive();
 extern void LoadPluginsImmediate();
 extern void UnloadPlugins();
 extern void ShutdownPlugins();
 
 extern bool SysHasValidState();
-extern void SysUpdateIsoSrcFile( const wxString& newIsoFile );
-extern void SysStatus( const wxString& text );
+extern void SysUpdateIsoSrcFile(const wxString &newIsoFile);
+extern void SysStatus(const wxString &text);
 
 extern bool				HasMainFrame();
-extern MainEmuFrame&	GetMainFrame();
+extern MainEmuFrame	&GetMainFrame();
 extern MainEmuFrame*	GetMainFramePtr();
 
 extern __aligned16 AppCoreThread CoreThread;
@@ -747,6 +760,6 @@ extern void UI_DisableSysShutdown();
 #define AffinityAssert_DisallowFrom_SysExecutor() \
 	pxAssertMsg( !wxGetApp().SysExecutorThread.IsSelf(), "Thread affinity violation: Call is *not* allowed from SysExecutor thread." )
 
-extern ExecutorThread& GetSysExecutorThread();
+extern ExecutorThread &GetSysExecutorThread();
 
 extern bool g_ConfigPanelChanged; //Indicates that the main config panel is open and holds unapplied changes.

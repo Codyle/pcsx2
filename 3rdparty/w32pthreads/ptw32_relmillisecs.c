@@ -41,76 +41,58 @@
 
 
 INLINE DWORD
-ptw32_relmillisecs (const struct timespec * abstime)
+ptw32_relmillisecs(const struct timespec * abstime)
 {
-  const int64_t NANOSEC_PER_MILLISEC = 1000000;
-  const int64_t MILLISEC_PER_SEC = 1000;
-  DWORD milliseconds;
-  int64_t tmpAbsMilliseconds;
-  int64_t tmpCurrMilliseconds;
+	const int64_t NANOSEC_PER_MILLISEC = 1000000;
+	const int64_t MILLISEC_PER_SEC = 1000;
+	DWORD milliseconds;
+	int64_t tmpAbsMilliseconds;
+	int64_t tmpCurrMilliseconds;
 #ifdef NEED_FTIME
-  struct timespec currSysTime;
-  FILETIME ft;
-  SYSTEMTIME st;
+	struct timespec currSysTime;
+	FILETIME ft;
+	SYSTEMTIME st;
 #else /* ! NEED_FTIME */
-  struct _timeb currSysTime;
+	struct _timeb currSysTime;
 #endif /* NEED_FTIME */
-
-
-  /*
-   * Calculate timeout as milliseconds from current system time.
-   */
-
-  /*
-   * subtract current system time from abstime in a way that checks
-   * that abstime is never in the past, or is never equivalent to the
-   * defined INFINITE value (0xFFFFFFFF).
-   *
-   * Assume all integers are unsigned, i.e. cannot test if less than 0.
-   */
-  tmpAbsMilliseconds =  (int64_t)abstime->tv_sec * MILLISEC_PER_SEC;
-  tmpAbsMilliseconds += ((int64_t)abstime->tv_nsec + (NANOSEC_PER_MILLISEC/2)) / NANOSEC_PER_MILLISEC;
-
-  /* get current system time */
-
+	/*
+	 * Calculate timeout as milliseconds from current system time.
+	 */
+	/*
+	 * subtract current system time from abstime in a way that checks
+	 * that abstime is never in the past, or is never equivalent to the
+	 * defined INFINITE value (0xFFFFFFFF).
+	 *
+	 * Assume all integers are unsigned, i.e. cannot test if less than 0.
+	 */
+	tmpAbsMilliseconds = (int64_t)abstime->tv_sec * MILLISEC_PER_SEC;
+	tmpAbsMilliseconds += ((int64_t)abstime->tv_nsec + (NANOSEC_PER_MILLISEC / 2)) / NANOSEC_PER_MILLISEC;
+	/* get current system time */
 #ifdef NEED_FTIME
-
-  GetSystemTime(&st);
-  SystemTimeToFileTime(&st, &ft);
-  /*
-   * GetSystemTimeAsFileTime(&ft); would be faster,
-   * but it does not exist on WinCE
-   */
-
-  ptw32_filetime_to_timespec(&ft, &currSysTime);
-
-  tmpCurrMilliseconds = (int64_t)currSysTime.tv_sec * MILLISEC_PER_SEC;
-  tmpCurrMilliseconds += ((int64_t)currSysTime.tv_nsec + (NANOSEC_PER_MILLISEC/2))
-			   / NANOSEC_PER_MILLISEC;
-
+	GetSystemTime(&st);
+	SystemTimeToFileTime(&st, &ft);
+	/*
+	 * GetSystemTimeAsFileTime(&ft); would be faster,
+	 * but it does not exist on WinCE
+	 */
+	ptw32_filetime_to_timespec(&ft, &currSysTime);
+	tmpCurrMilliseconds = (int64_t)currSysTime.tv_sec * MILLISEC_PER_SEC;
+	tmpCurrMilliseconds += ((int64_t)currSysTime.tv_nsec + (NANOSEC_PER_MILLISEC / 2))
+	                       / NANOSEC_PER_MILLISEC;
 #else /* ! NEED_FTIME */
-
-  _ftime64_s(&currSysTime);
-
-  tmpCurrMilliseconds = (int64_t) currSysTime.time * MILLISEC_PER_SEC;
-  tmpCurrMilliseconds += (int64_t) currSysTime.millitm;
-
+	_ftime64_s(&currSysTime);
+	tmpCurrMilliseconds = (int64_t) currSysTime.time * MILLISEC_PER_SEC;
+	tmpCurrMilliseconds += (int64_t) currSysTime.millitm;
 #endif /* NEED_FTIME */
-
-  if (tmpAbsMilliseconds > tmpCurrMilliseconds)
-    {
-      milliseconds = (DWORD) (tmpAbsMilliseconds - tmpCurrMilliseconds);
-      if (milliseconds == INFINITE)
-        {
-          /* Timeouts must be finite */
-          milliseconds--;
-        }
-    }
-  else
-    {
-      /* The abstime given is in the past */
-      milliseconds = 0;
-    }
-
-  return milliseconds;
+	if (tmpAbsMilliseconds > tmpCurrMilliseconds) {
+		milliseconds = (DWORD)(tmpAbsMilliseconds - tmpCurrMilliseconds);
+		if (milliseconds == INFINITE) {
+			/* Timeouts must be finite */
+			milliseconds--;
+		}
+	} else {
+		/* The abstime given is in the past */
+		milliseconds = 0;
+	}
+	return milliseconds;
 }

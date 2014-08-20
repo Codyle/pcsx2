@@ -18,8 +18,7 @@
 #include "Utilities/EventSource.h"
 #include "Utilities/pxEvents.h"
 
-enum CoreThreadStatus
-{
+enum CoreThreadStatus {
 	CoreThread_Indeterminate,
 	CoreThread_Started,
 	CoreThread_Resumed,
@@ -28,8 +27,7 @@ enum CoreThreadStatus
 	CoreThread_Stopped,
 };
 
-enum AppEventType
-{
+enum AppEventType {
 	AppStatus_UiSettingsLoaded,
 	AppStatus_UiSettingsSaved,
 	AppStatus_VmSettingsLoaded,
@@ -39,8 +37,7 @@ enum AppEventType
 	AppStatus_Exiting
 };
 
-enum PluginEventType
-{
+enum PluginEventType {
 	CorePlugins_Loaded,
 	CorePlugins_Init,
 	CorePlugins_Opening,		// dispatched prior to plugins being opened
@@ -51,25 +48,23 @@ enum PluginEventType
 	CorePlugins_Unloaded,
 };
 
-struct AppEventInfo
-{
+struct AppEventInfo {
 	AppEventType	evt_type;
 
-	AppEventInfo( AppEventType type )
+	AppEventInfo(AppEventType type)
 	{
 		evt_type = type;
 	}
 };
 
-struct AppSettingsEventInfo : AppEventInfo
-{
-	IniInterface&	m_ini;
+struct AppSettingsEventInfo : AppEventInfo {
+	IniInterface	&m_ini;
 
-	AppSettingsEventInfo( IniInterface&	ini, AppEventType evt_type );
+	AppSettingsEventInfo(IniInterface	&ini, AppEventType evt_type);
 
-	IniInterface& GetIni() const
+	IniInterface &GetIni() const
 	{
-		return const_cast<IniInterface&>(m_ini);
+		return const_cast<IniInterface &>(m_ini);
 	}
 };
 
@@ -84,7 +79,7 @@ public:
 public:
 	virtual ~IEventListener_CoreThread() throw() {}
 
-	virtual void DispatchEvent( const CoreThreadStatus& status );
+	virtual void DispatchEvent(const CoreThreadStatus &status);
 
 protected:
 	virtual void CoreThread_OnStarted() {}
@@ -112,7 +107,7 @@ public:
 public:
 	virtual ~IEventListener_Plugins() throw() {}
 
-	virtual void DispatchEvent( const PluginEventType& pevt );
+	virtual void DispatchEvent(const PluginEventType &pevt);
 
 protected:
 	virtual void CorePlugins_OnLoaded() {}
@@ -143,11 +138,11 @@ public:
 public:
 	virtual ~IEventListener_AppStatus() throw() {}
 
-	virtual void DispatchEvent( const AppEventInfo& evtinfo );
+	virtual void DispatchEvent(const AppEventInfo &evtinfo);
 
 protected:
-	virtual void AppStatusEvent_OnUiSettingsLoadSave( const AppSettingsEventInfo& evtinfo ) {}
-	virtual void AppStatusEvent_OnVmSettingsLoadSave( const AppSettingsEventInfo& evtinfo ) {}
+	virtual void AppStatusEvent_OnUiSettingsLoadSave(const AppSettingsEventInfo &evtinfo) {}
+	virtual void AppStatusEvent_OnVmSettingsLoadSave(const AppSettingsEventInfo &evtinfo) {}
 
 	virtual void AppStatusEvent_OnSettingsApplied() {}
 	virtual void AppStatusEvent_OnExit() {}
@@ -175,18 +170,18 @@ public:
 // and when events are dispatched to the listener, it forwards the event to the main class.
 //  --air
 
-template< typename TypeToDispatchTo >
+template<typename TypeToDispatchTo>
 class EventListenerHelper_CoreThread : public EventListener_CoreThread
 {
 public:
-	TypeToDispatchTo&	Owner;
+	TypeToDispatchTo	&Owner;
 
 public:
-	EventListenerHelper_CoreThread( TypeToDispatchTo& dispatchTo )
-		: Owner( dispatchTo ) { }
+	EventListenerHelper_CoreThread(TypeToDispatchTo &dispatchTo)
+		: Owner(dispatchTo) { }
 
-	EventListenerHelper_CoreThread( TypeToDispatchTo* dispatchTo )
-		: Owner( *dispatchTo )
+	EventListenerHelper_CoreThread(TypeToDispatchTo* dispatchTo)
+		: Owner(*dispatchTo)
 	{
 		pxAssert(dispatchTo != NULL);
 	}
@@ -194,26 +189,44 @@ public:
 	virtual ~EventListenerHelper_CoreThread() throw() {}
 
 protected:
-	void CoreThread_OnIndeterminate()	{ Owner.OnCoreThread_Indeterminate(); }
-	void CoreThread_OnStarted()			{ Owner.OnCoreThread_Started(); }
-	void CoreThread_OnResumed()			{ Owner.OnCoreThread_Resumed(); }
-	void CoreThread_OnSuspended()		{ Owner.OnCoreThread_Suspended(); }
-	void CoreThread_OnReset()			{ Owner.OnCoreThread_Reset(); }
-	void CoreThread_OnStopped()			{ Owner.OnCoreThread_Stopped(); }
+	void CoreThread_OnIndeterminate()
+	{
+		Owner.OnCoreThread_Indeterminate();
+	}
+	void CoreThread_OnStarted()
+	{
+		Owner.OnCoreThread_Started();
+	}
+	void CoreThread_OnResumed()
+	{
+		Owner.OnCoreThread_Resumed();
+	}
+	void CoreThread_OnSuspended()
+	{
+		Owner.OnCoreThread_Suspended();
+	}
+	void CoreThread_OnReset()
+	{
+		Owner.OnCoreThread_Reset();
+	}
+	void CoreThread_OnStopped()
+	{
+		Owner.OnCoreThread_Stopped();
+	}
 };
 
-template< typename TypeToDispatchTo >
+template<typename TypeToDispatchTo>
 class EventListenerHelper_Plugins : public EventListener_Plugins
 {
 public:
-	TypeToDispatchTo&	Owner;
+	TypeToDispatchTo	&Owner;
 
 public:
-	EventListenerHelper_Plugins( TypeToDispatchTo& dispatchTo )
-		: Owner( dispatchTo ) { }
+	EventListenerHelper_Plugins(TypeToDispatchTo &dispatchTo)
+		: Owner(dispatchTo) { }
 
-	EventListenerHelper_Plugins( TypeToDispatchTo* dispatchTo )
-		: Owner( *dispatchTo )
+	EventListenerHelper_Plugins(TypeToDispatchTo* dispatchTo)
+		: Owner(*dispatchTo)
 	{
 		pxAssert(dispatchTo != NULL);
 	}
@@ -221,28 +234,52 @@ public:
 	virtual ~EventListenerHelper_Plugins() throw() {}
 
 protected:
-	void CorePlugins_OnLoaded()		{ Owner.OnCorePlugins_Loaded(); }
-	void CorePlugins_OnInit()		{ Owner.OnCorePlugins_Init(); }
-	void CorePlugins_OnOpening()	{ Owner.OnCorePlugins_Opening(); }
-	void CorePlugins_OnOpened()		{ Owner.OnCorePlugins_Opened(); }
-	void CorePlugins_OnClosing()	{ Owner.OnCorePlugins_Closing(); }
-	void CorePlugins_OnClosed()		{ Owner.OnCorePlugins_Closed(); }
-	void CorePlugins_OnShutdown()	{ Owner.OnCorePlugins_Shutdown(); }
-	void CorePlugins_OnUnloaded()	{ Owner.OnCorePlugins_Unloaded(); }
+	void CorePlugins_OnLoaded()
+	{
+		Owner.OnCorePlugins_Loaded();
+	}
+	void CorePlugins_OnInit()
+	{
+		Owner.OnCorePlugins_Init();
+	}
+	void CorePlugins_OnOpening()
+	{
+		Owner.OnCorePlugins_Opening();
+	}
+	void CorePlugins_OnOpened()
+	{
+		Owner.OnCorePlugins_Opened();
+	}
+	void CorePlugins_OnClosing()
+	{
+		Owner.OnCorePlugins_Closing();
+	}
+	void CorePlugins_OnClosed()
+	{
+		Owner.OnCorePlugins_Closed();
+	}
+	void CorePlugins_OnShutdown()
+	{
+		Owner.OnCorePlugins_Shutdown();
+	}
+	void CorePlugins_OnUnloaded()
+	{
+		Owner.OnCorePlugins_Unloaded();
+	}
 };
 
-template< typename TypeToDispatchTo >
+template<typename TypeToDispatchTo>
 class EventListenerHelper_AppStatus : public EventListener_AppStatus
 {
 public:
-	TypeToDispatchTo&	Owner;
+	TypeToDispatchTo	&Owner;
 
 public:
-	EventListenerHelper_AppStatus( TypeToDispatchTo& dispatchTo )
-		: Owner( dispatchTo ) { }
+	EventListenerHelper_AppStatus(TypeToDispatchTo &dispatchTo)
+		: Owner(dispatchTo) { }
 
-	EventListenerHelper_AppStatus( TypeToDispatchTo* dispatchTo )
-		: Owner( *dispatchTo )
+	EventListenerHelper_AppStatus(TypeToDispatchTo* dispatchTo)
+		: Owner(*dispatchTo)
 	{
 		pxAssert(dispatchTo != NULL);
 	}
@@ -250,10 +287,22 @@ public:
 	virtual ~EventListenerHelper_AppStatus() throw() {}
 
 protected:
-	virtual void AppStatusEvent_OnUiSettingsLoadSave( const AppSettingsEventInfo& evtinfo ) { Owner.AppStatusEvent_OnUiSettingsLoadSave( evtinfo ); }
-	virtual void AppStatusEvent_OnVmSettingsLoadSave( const AppSettingsEventInfo& evtinfo ) { Owner.AppStatusEvent_OnVmSettingsLoadSave( evtinfo ); }
-	virtual void AppStatusEvent_OnSettingsApplied() { Owner.AppStatusEvent_OnSettingsApplied(); }
-	virtual void AppStatusEvent_OnExit() { Owner.AppStatusEvent_OnExit(); }
+	virtual void AppStatusEvent_OnUiSettingsLoadSave(const AppSettingsEventInfo &evtinfo)
+	{
+		Owner.AppStatusEvent_OnUiSettingsLoadSave(evtinfo);
+	}
+	virtual void AppStatusEvent_OnVmSettingsLoadSave(const AppSettingsEventInfo &evtinfo)
+	{
+		Owner.AppStatusEvent_OnVmSettingsLoadSave(evtinfo);
+	}
+	virtual void AppStatusEvent_OnSettingsApplied()
+	{
+		Owner.AppStatusEvent_OnSettingsApplied();
+	}
+	virtual void AppStatusEvent_OnExit()
+	{
+		Owner.AppStatusEvent_OnExit();
+	}
 };
 
 
@@ -269,13 +318,22 @@ protected:
 
 public:
 	virtual ~CoreThreadStatusEvent() throw() {}
-	CoreThreadStatusEvent* Clone() const { return new CoreThreadStatusEvent( *this ); }
+	CoreThreadStatusEvent* Clone() const
+	{
+		return new CoreThreadStatusEvent(*this);
+	}
 
-	explicit CoreThreadStatusEvent( CoreThreadStatus evt, SynchronousActionState* sema=NULL );
-	explicit CoreThreadStatusEvent( CoreThreadStatus evt, SynchronousActionState& sema );
+	explicit CoreThreadStatusEvent(CoreThreadStatus evt, SynchronousActionState* sema = NULL);
+	explicit CoreThreadStatusEvent(CoreThreadStatus evt, SynchronousActionState &sema);
 
-	void SetEventType( CoreThreadStatus evt ) { m_evt = evt; }
-	CoreThreadStatus GetEventType() { return m_evt; }
+	void SetEventType(CoreThreadStatus evt)
+	{
+		m_evt = evt;
+	}
+	CoreThreadStatus GetEventType()
+	{
+		return m_evt;
+	}
 
 protected:
 	void InvokeEvent();

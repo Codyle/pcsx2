@@ -39,21 +39,17 @@ const char ECMA119VolumeIDstdid[] = "CD001\0";
 int ValidateECMA119PrimaryVolume(struct ECMA119PrimaryVolume *volume)
 {
 	int i;
-
-	if (volume == NULL)  return(-1);
-
+	if (volume == NULL)  return (-1);
 	// Volume ID
-	if (volume->id.voltype != 1)  return(-1); // Incorrect volume type
-	if (volume->id.version != 1)  return(-1); // Not a Standard Version?
+	if (volume->id.voltype != 1)  return (-1); // Incorrect volume type
+	if (volume->id.version != 1)  return (-1); // Not a Standard Version?
 	i = 0;
 	while ((ECMA119VolumeIDstdid[i] != 0) &&
-	        (ECMA119VolumeIDstdid[i] == volume->id.stdid[i]))  i++;
-	if (ECMA119VolumeIDstdid[i] != 0)  return(-1); // "CD001" did not match?
-
+	       (ECMA119VolumeIDstdid[i] == volume->id.stdid[i]))  i++;
+	if (ECMA119VolumeIDstdid[i] != 0)  return (-1); // "CD001" did not match?
 	// Looks like numblocksle might give us maximum sector count...
 	// Looks like blocksizele can be compared to blocksize stored in isofile...
-
-	return(0);
+	return (0);
 } // END ValidateECMA119PrimaryVolume()
 
 

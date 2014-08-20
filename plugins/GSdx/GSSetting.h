@@ -23,8 +23,7 @@
 
 #include "stdafx.h"
 
-struct GSSetting
-{
+struct GSSetting {
 	uint32 id;
 	std::string name;
 	std::string note;
